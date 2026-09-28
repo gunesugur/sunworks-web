@@ -8,6 +8,12 @@ const MAX_CELLS = 420;
 const PHASE_MS = 430;
 const SPREAD = 0.62;
 
+/** Deterministic per-cell jitter (0..1): looks random, no RNG needed. */
+const jitter = (n: number) => {
+  const v = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return v - Math.floor(v);
+};
+
 export function pixelSwap(origin: { x: number; y: number }, colour: string, accent: string, commit: () => void) {
   const w = window.innerWidth;
   const h = window.innerHeight;
@@ -21,7 +27,8 @@ export function pixelSwap(origin: { x: number; y: number }, colour: string, acce
       const x = c * cell;
       const y = r * cell;
       const d = Math.hypot(x + cell / 2 - origin.x, y + cell / 2 - origin.y) / far;
-      cells.push({ x, y, delay: d * SPREAD + Math.random() * (1 - SPREAD), fill: Math.random() < 0.06 ? accent : colour });
+      const i = r * cols + c;
+      cells.push({ x, y, delay: d * SPREAD + jitter(i + 1) * (1 - SPREAD), fill: jitter(i + 7.3) < 0.06 ? accent : colour });
     }
   }
 
