@@ -8,11 +8,15 @@ test.describe('theme', () => {
     await page.addInitScript(SKIP_INTRO);
   });
 
-  test('follows the system setting until the visitor picks one', async ({ page }) => {
-    await page.emulateMedia({ colorScheme: 'dark' });
-    await page.goto('/');
-    await expect(html(page)).toHaveAttribute('data-theme', 'dark');
-    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#12100d');
+  test.describe('with a dark system setting', () => {
+    // Set on the context: a per-page emulateMedia colour scheme is not reliable in Firefox.
+    test.use({ colorScheme: 'dark' });
+
+    test('follows the system setting until the visitor picks one', async ({ page }) => {
+      await page.goto('/');
+      await expect(html(page)).toHaveAttribute('data-theme', 'dark');
+      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#12100d');
+    });
   });
 
   test('the toggle switches theme and the choice survives navigation and reload', async ({ page }) => {

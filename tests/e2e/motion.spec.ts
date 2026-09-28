@@ -19,7 +19,8 @@ test('reduced motion: no intro, all reveal content visible', async ({ page }) =>
 });
 
 test('without JavaScript every section is visible', async ({ browser }) => {
-  const ctx = await browser.newContext({ javaScriptEnabled: false });
+  // No preset storage: seeding localStorage needs script, which would stall this context in Firefox.
+  const ctx = await browser.newContext({ javaScriptEnabled: false, storageState: { cookies: [], origins: [] } });
   const page = await ctx.newPage();
   await page.goto('/');
   await expect(page.locator('#services-title')).toBeVisible();
