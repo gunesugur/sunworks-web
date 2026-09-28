@@ -48,7 +48,7 @@ const pageAnim = {
   new: { name: 'vt-in', duration: '0.6s', easing: 'cubic-bezier(0.22, 1, 0.36, 1)', delay: '0.08s', fillMode: 'both' },
 };
 const pageTransition = { forwards: pageAnim, backwards: pageAnim };
-const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', String.raw`<`));
+const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u003c'));
 ---
 
 <!doctype html>
@@ -59,7 +59,7 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', Stri
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
     {noindex && <meta name="robots" content="noindex" />}
-    <link rel="canonical" href={canonical} />
+    {!noindex && <link rel="canonical" href={canonical} />}
     {
       (Object.entries(alternates) as [Locale, string][]).map(([l, href]) => (
         <link rel="alternate" hreflang={l} href={new URL(href, site).href} />

@@ -49,7 +49,10 @@ export const newsletterSchema = z.object({
 });
 export type NewsletterInput = z.infer<typeof newsletterSchema>;
 
+/** Only user-editable fields are reported; hidden/technical fields (honeypot, lang, token) never are. */
+const REPORTABLE = new Set(['name', 'email', 'topic', 'message', 'consent']);
+
 /** Field names (top-level) that failed validation; never echoes user input back. */
 export function failedFields(error: z.ZodError): string[] {
-  return [...new Set(error.issues.map((i) => String(i.path[0] ?? '')).filter((f) => f && f !== 'turnstileToken'))];
+  return [...new Set(error.issues.map((i) => String(i.path[0] ?? '')).filter((f) => REPORTABLE.has(f)))];
 }

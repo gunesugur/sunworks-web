@@ -41,7 +41,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
           <Img image={home.hero.smallImage} widths={[360, 720]} sizes="(max-width: 900px) 1px, 360px" class="hero__small" priority />
         </div>
         <p class="hero__note">
-          <button type="button" class="hero__star" data-spin aria-hidden="true" tabindex="-1"><Asterisk size="100%" /></button>
+          <span class="hero__star" data-spin aria-hidden="true"><Asterisk size="100%" /></span>
           <span>{home.hero.note}</span>
         </p>
       </div>
@@ -51,7 +51,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       <div class="hero__img" data-parallax="0.06">
         <Img image={home.hero.image} widths={[640, 960, 1284, 1920, 2400]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
       </div>
-      <ul class="hero__tags" slot="overlay" aria-label="Tags">
+      <ul class="hero__tags" slot="overlay" aria-label={s.tags}>
         {
           home.hero.tags.map((tag, i) => (
             <li data-reveal style={`--reveal-i:${i}`}>
@@ -66,7 +66,11 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   <!-- Tools band -->
   <section class="tools" aria-labelledby="tools-title">
     <h2 id="tools-title" class="tools__title">{home.tools.title}</h2>
-    <div class="tools__viewport">
+    <button type="button" class="tools__toggle" aria-pressed="false" data-marquee-toggle data-label-pause={s.pause} data-label-play={s.play}>
+      <span class="sr-only" data-marquee-label>{s.pause}</span>
+      <span class="tools__toggle-icon" aria-hidden="true"></span>
+    </button>
+    <div class="tools__viewport" data-marquee>
       <ul class="tools__track" aria-label={s.toolsLabel}>
         {
           home.tools.items.map((item) => (
@@ -287,6 +291,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   }
 
   .hero__star {
+    display: inline-block;
     flex: none;
     width: 1.4em;
     height: 1.4em;
@@ -343,8 +348,54 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     animation: marquee 32s linear infinite;
   }
 
-  .tools__viewport:hover .tools__track {
+  .tools {
+    position: relative;
+  }
+
+  .tools__viewport:hover .tools__track,
+  .tools__viewport.is-paused .tools__track {
     animation-play-state: paused;
+  }
+
+  :global(html:not(.js)) .tools__track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1;
+  }
+
+  :global(html:not(.js)) .tools__track--clone,
+  :global(html:not(.js)) .tools__toggle {
+    display: none;
+  }
+
+  .tools__toggle {
+    position: absolute;
+    right: var(--gutter);
+    top: clamp(2rem, 3.5vw, 2.5rem);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--c-dark);
+    border-radius: 50%;
+    background: var(--c-light);
+    cursor: pointer;
+  }
+
+  .tools__toggle-icon {
+    width: 12px;
+    height: 12px;
+    border-inline: 3px solid var(--c-dark);
+  }
+
+  .tools__toggle[aria-pressed='true'] .tools__toggle-icon {
+    width: 0;
+    height: 0;
+    border-inline: 0;
+    border-block: 7px solid transparent;
+    border-left: 11px solid var(--c-dark);
+    margin-left: 3px;
   }
 
   .tools__track li {
@@ -373,7 +424,8 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       flex: 1;
     }
 
-    .tools__track--clone {
+    .tools__track--clone,
+    .tools__toggle {
       display: none;
     }
   }

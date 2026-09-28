@@ -10,7 +10,7 @@ export const ui = {
     footerNav: 'Alt menü',
     langSwitch: 'English',
     langSwitchShort: 'EN',
-    langSwitchLabel: 'Sayfanın İngilizce sürümü',
+    langSwitchLabel: 'English version',
     home: 'Ana sayfa',
     breadcrumb: 'Sayfa yolu',
     servicesTitle: 'Hizmetler',
@@ -49,6 +49,11 @@ export const ui = {
     privacyLink: 'Gizlilik politikası',
     send: 'Gönder',
     sending: 'Gönderiliyor…',
+    verify: 'Lütfen aşağıdaki güvenlik doğrulamasını tamamlayın.',
+    tags: 'Etiketler',
+    pause: 'Kaydırmayı durdur',
+    play: 'Kaydırmayı başlat',
+    newsletterPrivacy: 'Kayıt olarak e-posta adresinizin saklanmasını kabul edersiniz.',
     required: 'zorunlu',
     emailUs: 'E-posta',
     location: 'Konum',
@@ -94,7 +99,7 @@ export const ui = {
     footerNav: 'Footer navigation',
     langSwitch: 'Türkçe',
     langSwitchShort: 'TR',
-    langSwitchLabel: 'Turkish version of this page',
+    langSwitchLabel: 'Türkçe sürüm',
     home: 'Home',
     breadcrumb: 'Breadcrumb',
     servicesTitle: 'Services',
@@ -132,6 +137,11 @@ export const ui = {
     privacyLink: 'Privacy policy',
     send: 'Send',
     sending: 'Sending…',
+    verify: 'Please complete the security check below.',
+    tags: 'Tags',
+    pause: 'Pause scrolling',
+    play: 'Resume scrolling',
+    newsletterPrivacy: 'By signing up you agree to your email address being stored.',
     required: 'required',
     emailUs: 'Email',
     location: 'Location',
@@ -175,5 +185,5 @@ export const t = (lang: Locale): UI => ui[lang];
 /** Serialized messages for the client-side form enhancer (scripts/forms.ts). */
 export function formMessages(lang: Locale, kind: 'contact' | 'newsletter'): string {
   const s = ui[lang];
-  return JSON.stringify({ ok: s.ok[kind], sending: s.sending, err: s.err, fields: s.fields });
+  return JSON.stringify({ ok: s.ok[kind], sending: s.sending, verify: s.verify, err: s.err, fields: s.fields });
 }

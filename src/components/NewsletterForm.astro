@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '@/content/schema';
 import { formMessages, t } from '@/i18n/ui';
+import { pagePath } from '@/i18n/routes';
 import Icon from './Icon.astro';
 import FormExtras from './FormExtras.astro';
 
@@ -31,8 +32,12 @@ const s = t(lang);
       <Icon name="arrow" size={18} />
     </button>
   </div>
+  <p class="nl__privacy">
+    {s.newsletterPrivacy} <a href={pagePath(lang, lang === 'tr' ? 'gizlilik' : 'privacy')}>{s.privacyLink}</a>
+  </p>
   <FormExtras idPrefix="nl" />
   <p id="nl-status" class="form-status" role="status" aria-live="polite" data-status></p>
+  <noscript><p class="form-status">{s.err.unavailable}<a href={`mailto:${email}`}>{email}</a></p></noscript>
 </form>
 
 <style>
@@ -83,6 +88,18 @@ const s = t(lang);
 
   .nl__submit:hover {
     transform: rotate(45deg);
+  }
+
+  .nl__privacy {
+    margin-top: 0.75rem;
+    color: var(--c-muted-on-dark);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .nl__privacy a {
+    color: var(--c-light);
+    font-size: inherit;
   }
 
   .nl__submit:focus-visible {

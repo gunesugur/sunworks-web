@@ -65,7 +65,7 @@ const ld = [
     <div class="container">
       <Notched corner="bl" nw="clamp(160px, 18vw, 240px)" nh="clamp(56px, 5vw, 68px)" ratio="1284 / 540" hover={false}>
         <Img image={post.image} widths={[640, 960, 1284, 1920]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
-        <ul slot="corner" class="tags" aria-label="Tags">
+        <ul slot="corner" class="tags" aria-label={s.tags}>
           {post.tags.map((tag) => <li>{tag}</li>)}
         </ul>
       </Notched>

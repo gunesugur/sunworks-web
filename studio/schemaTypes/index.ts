@@ -30,7 +30,12 @@ const siteSettings = defineType({
           type: 'object',
           fields: [
             defineField({ name: 'platform', type: 'string', options: { list: ['instagram', 'linkedin', 'github', 'x'] } }),
-            defineField({ name: 'url', type: 'string', description: 'Use # until the profile exists' }),
+            defineField({
+              name: 'url',
+              type: 'string',
+              description: 'Use # until the profile exists',
+              validation: (r) => r.required().regex(/^(https:\/\/|#$)/),
+            }),
           ],
         }),
       ],

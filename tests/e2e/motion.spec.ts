@@ -65,3 +65,20 @@ test('page transitions keep the router working (back/forward)', async ({ page },
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator('#hero-title')).toBeVisible();
 });
+
+test('any key skips the intro and the page is not inert afterwards', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('html')).toHaveClass(/intro/);
+  await page.keyboard.press('Tab');
+  await expect(page.locator('html')).not.toHaveClass(/intro/);
+  await expect(page.locator('main')).not.toHaveAttribute('inert', '');
+});
+
+test('tools marquee can be paused with a button (WCAG 2.2.2)', async ({ page }) => {
+  await page.addInitScript(() => sessionStorage.setItem('sw-intro', '1'));
+  await page.goto('/');
+  const toggle = page.locator('[data-marquee-toggle]');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('[data-marquee]')).toHaveClass(/is-paused/);
+});

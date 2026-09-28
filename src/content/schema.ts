@@ -50,10 +50,12 @@ export const linkSchema = z.object({
 });
 export type Link = z.infer<typeof linkSchema>;
 
-export const seoSchema = z.object({
-  title: z.string().max(70).optional(),
-  description: z.string().max(170).optional(),
-});
+export const seoSchema = z
+  .object({
+    title: z.string().max(70).optional(),
+    description: z.string().max(170).optional(),
+  })
+  .default({});
 
 const isSlug = (v: string) => /^[a-z0-9-]+$/.test(v) && !v.startsWith('-') && !v.endsWith('-') && !v.includes('--');
 const slugSchema = z.object({
@@ -92,7 +94,7 @@ export const siteSettingsSchema = z.object({
   socials: z.array(
     z.object({
       platform: z.enum(['instagram', 'linkedin', 'github', 'x']),
-      url: z.string(),
+      url: z.string().regex(/^(https:\/\/|#$)/, 'Use an https:// URL or # as a placeholder'),
     }),
   ),
   map: z.object({

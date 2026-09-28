@@ -2,12 +2,12 @@
   "ci": {
     "collect": {
       "url": [
-        "http://localhost:8788/",
-        "http://localhost:8788/en",
-        "http://localhost:8788/hizmetler",
-        "http://localhost:8788/hizmetler/shopify-magaza-kurulumu",
-        "http://localhost:8788/blog/wordpress-yayin-oncesi-kontrol-listesi",
-        "http://localhost:8788/iletisim"
+        "http://127.0.0.1:8788/",
+        "http://127.0.0.1:8788/en",
+        "http://127.0.0.1:8788/hizmetler",
+        "http://127.0.0.1:8788/hizmetler/shopify-magaza-kurulumu",
+        "http://127.0.0.1:8788/blog/wordpress-yayin-oncesi-kontrol-listesi",
+        "http://127.0.0.1:8788/iletisim"
       ],
       "numberOfRuns": 1,
       "settings": {

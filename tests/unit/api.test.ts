@@ -7,19 +7,23 @@ import { beforeEach, test } from 'node:test';
 import type { DatabaseSync } from 'node:sqlite';
 import { contactForm, handleForm, newsletterForm, type FormEnv } from '../../src/server/forms';
 import { clean } from '../../src/server/validation';
+import { ipBucket } from '../../src/server/rate-limit';
 import { createTestDb } from './d1-sqlite';
 
 const ORIGIN = 'https://sunworks.studio';
 let raw: DatabaseSync;
 let env: FormEnv;
 let turnstileOk = true;
-const fetcher = (async () => new Response(JSON.stringify({ success: turnstileOk }), { status: 200 })) as unknown as typeof fetch;
+let turnstileHost = 'sunworks.studio';
+const fetcher = (async () =>
+  new Response(JSON.stringify({ success: turnstileOk, hostname: turnstileHost }), { status: 200 })) as unknown as typeof fetch;
 
 beforeEach(() => {
   const t = createTestDb();
   raw = t.raw;
   env = { DB: t.db, TURNSTILE_SECRET_KEY: 'secret', RATE_LIMIT_SALT: 'salt', FORMS_ENABLED: 'true' };
   turnstileOk = true;
+  turnstileHost = 'sunworks.studio';
 });
 
 const valid = {
@@ -33,13 +37,26 @@ const valid = {
   turnstileToken: 'token',
 };
 
-function req(body: unknown, init: { origin?: string | null; type?: string; ip?: string; method?: string; site?: string; raw?: string } = {}) {
+interface ReqInit {
+  origin?: string | null;
+  type?: string;
+  ip?: string;
+  method?: string;
+  site?: string;
+  raw?: string;
+  length?: string | null;
+}
+
+function req(body: unknown, init: ReqInit = {}) {
+  const payload = init.raw ?? JSON.stringify(body);
   const headers = new Headers();
   if (init.origin !== null) headers.set('Origin', init.origin ?? ORIGIN);
   headers.set('Content-Type', init.type ?? 'application/json');
   headers.set('CF-Connecting-IP', init.ip ?? '203.0.113.7');
   if (init.site) headers.set('Sec-Fetch-Site', init.site);
-  return new Request(`${ORIGIN}/api/contact`, { method: init.method ?? 'POST', headers, body: init.raw ?? JSON.stringify(body) });
+  const length = init.length === undefined ? String(new TextEncoder().encode(payload).byteLength) : init.length;
+  if (length !== null) headers.set('Content-Length', length);
+  return new Request(`${ORIGIN}/api/contact`, { method: init.method ?? 'POST', headers, body: payload });
 }
 
 const send = (r: Request, form = contactForm) => handleForm(form as typeof contactForm, r, env, { fetcher });
@@ -63,11 +80,50 @@ test('rejects form-encoded bodies (no simple cross-site form posts)', async () =
   assert.equal(res.status, 403);
 });
 
-test('rejects oversize and malformed bodies', async () => {
+test('rejects oversize, unsized, lying and malformed bodies', async () => {
   const big = await send(req({ ...valid, message: 'a'.repeat(20_000) }));
-  assert.equal(big.status, 400);
+  assert.equal(big.status, 413);
+  const unsized = await send(req(valid, { length: null }));
+  assert.equal(unsized.status, 411);
+  const lying = await send(req({ ...valid, message: 'a'.repeat(40_000) }, { length: '100' }));
+  assert.equal(lying.status, 400);
   const broken = await send(req(null, { raw: '{"lang":' }));
   assert.equal(broken.status, 400);
+});
+
+test('explicitly allowed same-site origins are accepted, others still refused', async () => {
+  env.ALLOWED_ORIGINS = 'https://www.sunworks.studio';
+  assert.equal((await send(req(valid, { origin: 'https://www.sunworks.studio', site: 'same-site' }))).status, 200);
+  assert.equal((await send(req(valid, { origin: 'https://evil.example', site: 'cross-site' }))).status, 403);
+});
+
+test('Turnstile hostname mismatch is refused', async () => {
+  turnstileHost = 'evil.example';
+  assert.equal((await send(req(valid))).status, 403);
+});
+
+test('production refuses the always-pass test secret; dummy tokens with a real secret mean misconfiguration', async () => {
+  env.ENVIRONMENT = 'production';
+  env.TURNSTILE_SECRET_KEY = '1x0000000000000000000000000000000AA';
+  assert.equal((await send(req(valid))).status, 503);
+  env.TURNSTILE_SECRET_KEY = '0x4AAAAAAAreal-secret';
+  assert.equal((await send(req({ ...valid, turnstileToken: 'XXXX.DUMMY.TOKEN.XXXX' }))).status, 503);
+});
+
+test('IPv6 addresses are bucketed by /64', () => {
+  assert.equal(ipBucket('2001:db8:1:2:aaaa::1'), '2001:db8:1:2::/64');
+  // eslint-disable-next-line sonarjs/no-hardcoded-ip -- RFC 3849 documentation prefix, test data only
+  assert.equal(ipBucket('2001:0db8:0001:0002:ffff:0:0:9'), '2001:db8:1:2::/64');
+  assert.equal(ipBucket('2001:db8::1'), '2001:db8:0:0::/64');
+  assert.equal(ipBucket('203.0.113.7'), '203.0.113.7');
+});
+
+test('old rate-limit rows are purged even when requests fail', async () => {
+  raw.prepare('INSERT INTO rate_limits (key, window_start, count) VALUES (?, ?, 1)').run('old', 1000);
+  await send(req(valid, { origin: ORIGIN }));
+  turnstileOk = false;
+  await send(req(valid));
+  assert.equal(raw.prepare("SELECT count(*) AS n FROM rate_limits WHERE key = 'old'").get()?.['n'], 0);
 });
 
 test('reports invalid fields without echoing input', async () => {
@@ -79,9 +135,10 @@ test('reports invalid fields without echoing input', async () => {
   assert.ok(!JSON.stringify(body).includes('script'));
 });
 
-test('honeypot filled → rejected (no fake success)', async () => {
+test('honeypot filled → rejected without naming the field (no fake success)', async () => {
   const res = await send(req({ ...valid, website: 'http://spam.example' }));
   assert.equal(res.status, 400);
+  assert.deepEqual(await res.json(), { ok: false, error: 'validation' });
   assert.equal(raw.prepare('SELECT count(*) AS n FROM contact_messages').get()?.['n'], 0);
 });
 
