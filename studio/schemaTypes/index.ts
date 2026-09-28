@@ -219,7 +219,7 @@ const post = defineType({
     slugField(),
     defineField({ name: 'publishedAt', type: 'date', validation: (r) => r.required() }),
     defineField({ name: 'updatedAt', type: 'date' }),
-    defineField({ name: 'author', type: 'string', initialValue: 'Uğur Güneş' }),
+    defineField({ name: 'author', type: 'string', initialValue: 'SUN | WORKS' }),
     defineField({ name: 'excerpt', type: 'text', rows: 3, validation: (r) => r.required().max(260) }),
     imageField('image', 'Cover image'),
     defineField({ name: 'tags', type: 'array', of: [defineArrayMember({ type: 'string' })] }),

@@ -1,6 +1,6 @@
 ---
 import type { Locale, Navigation } from '@/content/schema';
-import { cleanPath, routes } from '@/i18n/routes';
+import { cleanPath, otherLocale, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Button from './Button.astro';
 import Logo from './Logo.astro';
@@ -18,7 +18,7 @@ const isActive = (href: string) => {
   if (href === routes.home[lang]) return path === href;
   return path === href || path.startsWith(`${href}/`);
 };
-const altLang: Locale = lang === 'tr' ? 'en' : 'tr';
+const altLang = otherLocale(lang);
 ---
 
 <header class="site-header" transition:name="site-header" data-header>

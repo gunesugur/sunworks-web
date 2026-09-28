@@ -1,8 +1,8 @@
 ---
 import type { Locale, Service } from '@/content/schema';
-import { getServices, getTranslation } from '@/lib/cms';
+import { getServices, getSettings, getTranslation } from '@/lib/cms';
 import { breadcrumbLd } from '@/lib/seo';
-import { routes, servicePath } from '@/i18n/routes';
+import { otherLocale, routes, servicePath } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
@@ -19,8 +19,12 @@ interface Props {
 }
 const { lang, service } = Astro.props;
 const s = t(lang);
-const other: Locale = lang === 'tr' ? 'en' : 'tr';
-const [translation, all] = await Promise.all([getTranslation('service', service.translationKey, other), getServices(lang)]);
+const other = otherLocale(lang);
+const [translation, all, settings] = await Promise.all([
+  getTranslation('service', service.translationKey, other),
+  getServices(lang),
+  getSettings(lang),
+]);
 const alternates: Partial<Record<Locale, string>> = { [lang]: servicePath(lang, service.slug.current) };
 if (translation) alternates[other] = servicePath(other, translation.slug.current);
 const others = all.filter((x) => x._id !== service._id);
@@ -38,7 +42,7 @@ const ld = [
     '@type': 'Service',
     name: service.title,
     description: service.excerpt,
-    provider: { '@type': 'Person', name: 'Uğur Güneş' },
+    provider: { '@type': 'ProfessionalService', name: settings.siteName, url: new URL(routes.home[lang], site).href },
     areaServed: 'TR',
     url: new URL(servicePath(lang, service.slug.current), site).href,
   },

@@ -1,6 +1,6 @@
 ---
 import type { Locale, Navigation, SiteSettings } from '@/content/schema';
-import { routes } from '@/i18n/routes';
+import { otherLocale, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Asterisk from './Asterisk.astro';
 import Logo from './Logo.astro';
@@ -15,7 +15,7 @@ interface Props {
 const { lang, nav, settings, altHref } = Astro.props;
 const s = t(lang);
 const year = new Date().getUTCFullYear();
-const altLang: Locale = lang === 'tr' ? 'en' : 'tr';
+const altLang = otherLocale(lang);
 const word = 'SUN | WORKS'.split('');
 ---
 

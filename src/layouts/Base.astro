@@ -4,7 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import fontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
 import type { Locale } from '@/content/schema';
 import { getNavigation, getSettings } from '@/lib/cms';
-import { cleanPath, htmlLang, ogLocale, routes } from '@/i18n/routes';
+import { cleanPath, htmlLang, ogLocale, otherLocale, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -28,7 +28,7 @@ const site = Astro.site ?? new URL('https://sunworks.studio');
 const fullTitle = title ? `${title} — ${settings.siteName}` : settings.seo.title;
 const desc = description ?? settings.seo.description;
 const canonical = new URL(cleanPath(Astro.url.pathname), site).href;
-const altLang: Locale = lang === 'tr' ? 'en' : 'tr';
+const altLang = otherLocale(lang);
 const altHref = alternates[altLang] ?? routes.home[altLang];
 const ogImage = new URL(`/og/${lang}.png`, site).href;
 
@@ -39,7 +39,6 @@ const baseLd = {
   description: settings.seo.description,
   url: new URL(routes.home[lang], site).href,
   email: settings.email,
-  founder: { '@type': 'Person', name: 'Uğur Güneş' },
   address: { '@type': 'PostalAddress', addressLocality: settings.city, addressCountry: 'TR' },
   areaServed: 'TR',
 };
