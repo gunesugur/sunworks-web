@@ -14,7 +14,7 @@ export const ui = {
     home: 'Ana sayfa',
     breadcrumb: 'Sayfa yolu',
     servicesTitle: 'Hizmetler',
-    servicesIntro: 'WordPress, Shopify ve web sitenizin günlük işleri için sunduğum hizmetler.',
+    servicesIntro: 'WordPress, Shopify ve web sitenizin günlük işleri için sunduğumuz hizmetler.',
     allServices: 'Tüm hizmetler',
     viewService: 'Hizmet ayrıntıları',
     included: 'Neler dahil',
@@ -65,7 +65,7 @@ export const ui = {
     subscribe: 'Kaydol',
     // Form states
     ok: {
-      contact: 'Teşekkürler, mesajınız kaydedildi. En kısa sürede e-postayla dönüş yapacağım.',
+      contact: 'Teşekkürler, mesajınız bize ulaştı. En kısa sürede e-postayla dönüş yapacağız.',
       newsletter: 'Kaydınız alındı. Teşekkürler!',
     },
     err: {
@@ -103,7 +103,7 @@ export const ui = {
     home: 'Home',
     breadcrumb: 'Breadcrumb',
     servicesTitle: 'Services',
-    servicesIntro: 'What I offer for WordPress, Shopify and the day-to-day work of keeping a website running.',
+    servicesIntro: 'What we offer for WordPress, Shopify and the day-to-day work of keeping a website running.',
     allServices: 'All services',
     viewService: 'Service details',
     included: "What's included",
@@ -151,14 +151,14 @@ export const ui = {
     newsletterEmail: 'Email address',
     subscribe: 'Subscribe',
     ok: {
-      contact: 'Thank you, your message has been saved. I will reply by email as soon as I can.',
+      contact: 'Thank you, your message has reached us. We will reply by email as soon as we can.',
       newsletter: 'You are signed up. Thank you!',
     },
     err: {
       validation: 'Please check the highlighted fields.',
       rate: 'Too many attempts. Please try again in a little while.',
       captcha: 'The security check could not be completed. Please try again.',
-      unavailable: 'The form is not working right now. Please email me directly: ',
+      unavailable: 'The form is not working right now. Please email us directly: ',
       network: 'Connection problem. Please try again.',
       generic: 'Something went wrong. Please try again.',
     },

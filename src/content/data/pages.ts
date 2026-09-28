@@ -14,11 +14,10 @@ export const pages: Page[] = [
     kind: 'contact',
     title: 'İletişim',
     slug: slug('iletisim'),
-    intro:
-      'Projenizi, mevcut sitenizdeki bir sorunu ya da yalnızca bir sorunuzu yazın. Mesajınızı okuyup e-postayla dönüş yaparım.',
+    intro: 'Projenizi, mevcut sitenizdeki bir sorunu ya da aklınızdaki bir soruyu yazın; en kısa sürede e-postayla dönüş yaparız.',
     body: pt(
       'c',
-      `Mesajınıza sitenizin adresini ve kullandığınız platformu (WordPress, Shopify ya da başka) eklerseniz daha hızlı yardımcı olabilirim.`,
+      `Mesajınıza sitenizin adresini ve kullandığınız platformu (WordPress, Shopify ya da başka) eklerseniz size daha hızlı yardımcı olabiliriz.`,
     ),
     legalReviewRequired: false,
     updatedAt: UPDATED,
@@ -32,11 +31,10 @@ export const pages: Page[] = [
     kind: 'contact',
     title: 'Contact',
     slug: slug('contact'),
-    intro:
-      'Tell me about your project, a problem with your current site, or just ask a question. I read every message and reply by email.',
+    intro: 'Tell us about your project, a problem with your current site, or a question you have. We reply by email as soon as we can.',
     body: pt(
       'c',
-      `If you include your site's address and the platform you use (WordPress, Shopify or something else), I can help you faster.`,
+      `If you include your site's address and the platform you use (WordPress, Shopify or something else), we can help you faster.`,
     ),
     legalReviewRequired: false,
     updatedAt: UPDATED,
@@ -52,44 +50,45 @@ export const pages: Page[] = [
     kind: 'legal',
     title: 'Gizlilik politikası',
     slug: slug('gizlilik'),
-    intro: 'Bu sayfa, bu sitede gerçekten işlenen verileri ve bunların nerede saklandığını anlatır.',
+    intro: '6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) kapsamında, bu sitede hangi kişisel verileri neden işlediğimizi açıklar.',
     body: pt(
       'p',
       `## Veri sorumlusu
 
-Bu site, Bursa'da serbest çalışan Uğur Güneş tarafından işletilir. Kişisel verilerinizle ilgili her talep için [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine yazabilirsiniz.
+Veri sorumlusu: Uğur Güneş (SUN | WORKS). Kişisel verilerinizle ilgili tüm talepleriniz için [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine yazabilirsiniz.
 
-## Barındırma ve sunucu kayıtları
+## İşlediğimiz veriler ve amaçları
 
-Site Cloudflare Workers üzerinde barındırılır. Her istekte IP adresiniz, tarayıcı bilgileriniz ve istenen sayfa gibi teknik veriler Cloudflare tarafından işlenir. Hata ayıklama amacıyla Cloudflare'in sağladığı çalışma kayıtları (observability) açıktır; bu kayıtlar Cloudflare'in saklama sürelerine tabidir.
+- **İletişim formu:** Ad, e-posta adresi, konu ve mesajınız; yalnızca talebinize yanıt vermek için.
+- **Bülten:** E-posta adresiniz; yalnızca yeni yazılarımızı duyurmak için.
+- **Güvenlik:** Formların kötüye kullanımını önlemek için Cloudflare Turnstile doğrulaması ve IP adresinizin geri döndürülemez bir özeti.
+- **Barındırma:** Siteyi size ulaştırmak için sunucunun işlediği IP adresi, tarayıcı bilgisi ve ziyaret edilen sayfa gibi teknik veriler.
 
-## İletişim formu
+Sitede analiz, reklam ya da takip aracı kullanmıyoruz.
 
-Formu gönderdiğinizde adınız, e-posta adresiniz, seçtiğiniz konu, mesajınız ve sayfa dili Cloudflare D1 veritabanında saklanır. Bu veriler yalnızca size dönüş yapmak için kullanılır. Talebiniz sonuçlandıktan sonra en geç 12 ay içinde elle silinir. Şu anda form mesajları e-postayla iletilmez; yalnızca veritabanına kaydedilir.
+## Hukuki sebep
 
-## Bülten
+Formlardaki veriler açık rızanıza ve talebinize yanıt verebilmemiz için meşru menfaatimize; güvenlik ve barındırma verileri ise hizmetin güvenli şekilde sunulmasına dayanır (KVKK m. 5).
 
-Bültene kaydolduğunuzda e-posta adresiniz ve sayfa dili aynı veritabanında saklanır. Şu anda bülten e-postası gönderilmemektedir. Listeden çıkmak için [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine yazmanız yeterlidir; kaydınız silinir.
+## Aktarım
 
-## Kötüye kullanımı önleme
+Site ve form verileri, barındırma hizmeti aldığımız Cloudflare'in altyapısında saklanır; bu nedenle verileriniz yurt dışındaki sunucularda işlenebilir. Verilerinizi başka hiçbir üçüncü kişiyle paylaşmayız ve satmayız.
 
-Formlar Cloudflare Turnstile ile korunur. Turnstile, bir insan tarafından gönderildiğini doğrulamak için tarayıcınızdan bazı teknik sinyalleri Cloudflare'e iletir; doğrulama sırasında sunucumuz da IP adresinizi Cloudflare'e gönderir. Ayrıca aşırı istekleri sınırlamak için IP adresinizin gizli bir anahtarla oluşturulmuş tek yönlü özeti (hash) en fazla 24 saat saklanır; IP adresinin kendisi saklanmaz.
+## Saklama süresi
 
-## Harita
-
-İletişim sayfasındaki harita, siz "Haritayı yükle" düğmesine basmadan yüklenmez. Yüklediğinizde harita OpenStreetMap sunucularından gelir ve IP adresiniz OpenStreetMap'e iletilir.
-
-## Yazı tipleri, analiz ve reklam
-
-Yazı tipleri bu sitenin kendi sunucusundan yüklenir. Sitede analiz, reklam ya da izleme aracı kullanılmaz.
+- İletişim mesajları, talebiniz sonuçlandıktan sonra en geç 12 ay içinde silinir.
+- Bülten kaydınız, listeden çıkana kadar saklanır.
+- Güvenlik amaçlı IP özetleri 24 saat içinde silinir.
 
 ## Haklarınız
 
-Hakkınızda saklanan verilere erişmek, düzeltilmesini ya da silinmesini istemek için [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine yazabilirsiniz.`,
+KVKK'nın 11. maddesi uyarınca verilerinizin işlenip işlenmediğini öğrenme, bilgi talep etme, düzeltilmesini ya da silinmesini isteme ve işlemeye itiraz etme haklarına sahipsiniz. Taleplerinizi [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine iletebilirsiniz; en geç 30 gün içinde yanıtlarız.
+
+Çerezler ve tarayıcı depolaması için [çerez politikasına](/cerez-politikasi) bakabilirsiniz.`,
     ),
     legalReviewRequired: true,
     updatedAt: UPDATED,
-    seo: { description: 'SUN | WORKS gizlilik politikası: iletişim formu, bülten, Turnstile ve barındırma sırasında işlenen veriler.' },
+    seo: { description: 'SUN | WORKS gizlilik politikası: hangi kişisel verileri, hangi amaçla ve ne kadar süre işlediğimiz.' },
   },
   {
     _id: 'page-privacy-en',
@@ -99,44 +98,45 @@ Hakkınızda saklanan verilere erişmek, düzeltilmesini ya da silinmesini istem
     kind: 'legal',
     title: 'Privacy policy',
     slug: slug('privacy'),
-    intro: 'This page describes the data this site actually processes and where it is stored.',
+    intro: 'Which personal data this site processes, why, and for how long — under Turkish data protection law (KVKK No. 6698).',
     body: pt(
       'p',
-      `## Who is responsible
+      `## Data controller
 
-This site is run by Uğur Güneş, a freelancer based in Bursa, Türkiye. For any request about your personal data, write to [hello@sunworks.studio](mailto:hello@sunworks.studio).
+The data controller is Uğur Güneş (SUN | WORKS). For any request about your personal data, write to [hello@sunworks.studio](mailto:hello@sunworks.studio).
 
-## Hosting and server logs
+## Data we process and why
 
-The site is hosted on Cloudflare Workers. On every request, technical data such as your IP address, browser details and the requested page are processed by Cloudflare. Cloudflare's runtime logs (observability) are enabled for debugging and are subject to Cloudflare's retention periods.
+- **Contact form:** Your name, email address, topic and message, only to reply to your request.
+- **Newsletter:** Your email address, only to announce new articles.
+- **Security:** Cloudflare Turnstile verification and a one-way hash of your IP address, to prevent abuse of the forms.
+- **Hosting:** Technical data such as your IP address, browser details and the page you visit, processed by the server to deliver the site.
 
-## Contact form
+We use no analytics, advertising or tracking tools.
 
-When you submit the form, your name, email address, chosen topic, message and page language are stored in a Cloudflare D1 database. This data is only used to reply to you. It is deleted manually within 12 months after your request is closed. Form messages are currently not forwarded by email; they are only stored in the database.
+## Legal basis
 
-## Newsletter
+Form data is processed with your explicit consent and our legitimate interest in replying to you; security and hosting data is processed to provide the service securely (KVKK Art. 5).
 
-When you sign up, your email address and page language are stored in the same database. No newsletter emails are being sent yet. To leave the list, write to [hello@sunworks.studio](mailto:hello@sunworks.studio) and your entry will be deleted.
+## Transfers
 
-## Abuse prevention
+The site and form data are stored on the infrastructure of Cloudflare, our hosting provider, so your data may be processed on servers outside Türkiye. We do not share your data with anyone else and we never sell it.
 
-Forms are protected by Cloudflare Turnstile, which sends some technical signals from your browser to Cloudflare to check that a person is submitting the form; during verification our server also sends your IP address to Cloudflare. To limit excessive requests, a one-way hash of your IP address created with a secret key is stored for up to 24 hours; the IP address itself is not stored.
+## Retention
 
-## Map
-
-The map on the contact page is not loaded until you press "Load map". When you do, the map is served by OpenStreetMap and your IP address is sent to OpenStreetMap.
-
-## Fonts, analytics and ads
-
-Fonts are served from this site's own server. The site uses no analytics, advertising or tracking tools.
+- Contact messages are deleted within 12 months after your request is closed.
+- Your newsletter sign-up is kept until you unsubscribe.
+- IP hashes used for security are deleted within 24 hours.
 
 ## Your rights
 
-To access, correct or delete data stored about you, write to [hello@sunworks.studio](mailto:hello@sunworks.studio).`,
+Under Article 11 of the KVKK you can ask whether your data is processed, request information, ask for it to be corrected or deleted, and object to its processing. Send requests to [hello@sunworks.studio](mailto:hello@sunworks.studio); we reply within 30 days.
+
+For cookies and browser storage, see the [cookie policy](/en/cookies).`,
     ),
     legalReviewRequired: true,
     updatedAt: UPDATED,
-    seo: { description: 'SUN | WORKS privacy policy: data processed by the contact form, newsletter, Turnstile and hosting.' },
+    seo: { description: 'SUN | WORKS privacy policy: which personal data we process, why, and for how long.' },
   },
 
   // ---------- Terms ----------
@@ -148,28 +148,28 @@ To access, correct or delete data stored about you, write to [hello@sunworks.stu
     kind: 'legal',
     title: 'Kullanım koşulları',
     slug: slug('kullanim-kosullari'),
-    intro: 'Bu siteyi kullanırken geçerli olan temel koşullar.',
+    intro: 'Bu siteyi kullanırken geçerli olan koşullar.',
     body: pt(
       't',
-      `## Sitenin amacı
+      `## Bilgilendirme
 
-Bu site, Uğur Güneş'in serbest çalışan olarak sunduğu web hizmetlerini tanıtmak ve iletişim kurmak için hazırlanmıştır. Sitedeki bilgiler genel bilgilendirme amaçlıdır ve bir teklif niteliği taşımaz. Her iş için kapsam, süre ve ücret ayrıca yazılı olarak kararlaştırılır.
+Sitedeki bilgiler SUN | WORKS hizmetlerini tanıtmak amacıyla hazırlanmıştır ve teklif niteliği taşımaz. Her projenin kapsamı, süresi ve ücreti ayrıca yazılı olarak belirlenir.
 
-## İçerik
+## Fikri haklar
 
-Sitedeki metinler Uğur Güneş'e aittir. Fotoğraflar Unsplash lisansı kapsamında kullanılan görsellerdir. Blog yazılarındaki öneriler genel niteliktedir; kendi sitenize uygulamadan önce yedek almanızı öneririm.
+Sitedeki metinler, tasarım ve logo SUN | WORKS'e aittir; izinsiz kopyalanamaz. Fotoğraflar Unsplash lisansı kapsamında kullanılmaktadır.
 
-## Formların kullanımı
+## Blog içerikleri
 
-İletişim ve bülten formlarını yalnızca gerçek talepler için kullanmanız beklenir. Otomatik veya kötüye kullanım amaçlı gönderimler engellenebilir.
+Blog yazılarındaki öneriler genel niteliktedir. Kendi sitenizde uygulamadan önce yedek almanızı öneririz.
 
-## Dış bağlantılar
+## Formlar
 
-Site, üçüncü taraf sitelere bağlantılar içerebilir. Bu sitelerin içeriğinden ve gizlilik uygulamalarından ilgili siteler sorumludur.
+Formları yalnızca gerçek talepler için kullanın. Otomatik ya da kötüye kullanım amaçlı gönderimler engellenir.
 
 ## Değişiklikler
 
-Bu koşullar zaman zaman güncellenebilir. Güncel sürüm her zaman bu sayfada yer alır.`,
+Bu koşulları gerektiğinde güncelleyebiliriz. Güncel sürüm her zaman bu sayfadadır.`,
     ),
     legalReviewRequired: true,
     updatedAt: UPDATED,
@@ -183,28 +183,28 @@ Bu koşullar zaman zaman güncellenebilir. Güncel sürüm her zaman bu sayfada 
     kind: 'legal',
     title: 'Terms of use',
     slug: slug('terms'),
-    intro: 'The basic terms that apply when you use this site.',
+    intro: 'The terms that apply when you use this site.',
     body: pt(
       't',
-      `## Purpose of the site
+      `## Information only
 
-This site presents the web services Uğur Güneş offers as a freelancer and makes it possible to get in touch. The information here is general and is not an offer. Scope, timeline and fees for each job are agreed separately in writing.
+The information on this site presents SUN | WORKS services and is not an offer. The scope, timeline and fee of each project are agreed separately in writing.
 
-## Content
+## Intellectual property
 
-The text on this site belongs to Uğur Güneş. Photos are used under the Unsplash license. Advice in blog posts is general; I recommend taking a backup before applying it to your own site.
+The text, design and logo on this site belong to SUN | WORKS and may not be copied without permission. Photos are used under the Unsplash license.
 
-## Using the forms
+## Blog content
 
-Please use the contact and newsletter forms for genuine requests only. Automated or abusive submissions may be blocked.
+Advice in blog posts is general. We recommend taking a backup before applying it to your own site.
 
-## External links
+## Forms
 
-The site may link to third-party sites. Those sites are responsible for their own content and privacy practices.
+Please use the forms for genuine requests only. Automated or abusive submissions are blocked.
 
 ## Changes
 
-These terms may be updated from time to time. The current version is always on this page.`,
+We may update these terms when needed. The current version is always on this page.`,
     ),
     legalReviewRequired: true,
     updatedAt: UPDATED,
@@ -220,28 +220,35 @@ These terms may be updated from time to time. The current version is always on t
     kind: 'legal',
     title: 'Çerez politikası',
     slug: slug('cerez-politikasi'),
-    intro: 'Bu site kendi çerezlerini kullanmaz. Aşağıda tarayıcınızda saklanabilecek her şeyi bulabilirsiniz.',
+    intro: 'Bu sitede reklam ya da takip çerezi kullanmıyoruz. Tarayıcınızda saklanan her şeyin listesi aşağıda.',
     body: pt(
       'k',
-      `## Bu sitenin kendi çerezleri
+      `## Zorunlu
 
-Yok. Oturum açma, analiz ya da reklam çerezi kullanılmaz.
+Sitenin çalışması ve tercihlerinizin hatırlanması için gereklidir; kapatılamaz.
 
-## Tarayıcı depolaması
+- **sw-consent** (bu site, tarayıcı depolaması): Çerez tercihlerinizi saklar. Süre: 12 ay.
+- **sw-prefs** (bu site, tarayıcı depolaması): Tema ve erişilebilirlik ayarlarınızı saklar. Yalnızca bir ayarı değiştirdiğinizde oluşur; siz silene kadar kalır.
+- **sw-intro** (bu site, oturum depolaması): Açılış animasyonunun aynı oturumda tekrar gösterilmemesini sağlar. Sekmeyi kapattığınızda silinir.
+- **Cloudflare ve Turnstile** (üçüncü taraf): Siteyi saldırılara karşı korumak ve formların bir insan tarafından gönderildiğini doğrulamak için güvenlik çerezleri ayarlayabilir.
 
-Açılış animasyonunun aynı oturumda tekrar gösterilmemesi için tarayıcınızın oturum depolamasına (sessionStorage) tek bir işaret yazılır. Bu bilgi sunucuya gönderilmez ve tarayıcı sekmesini kapattığınızda silinir.
+## İşlevsel
 
-## Üçüncü taraflar
+Yalnızca izin verirseniz çalışır.
 
-- **Cloudflare:** Siteyi barındıran ve koruyan Cloudflare, güvenlik amacıyla zorunlu çerezler ayarlayabilir.
-- **Cloudflare Turnstile:** Formların bulunduğu sayfalarda bot korumasını sağlar ve tarayıcınızdan teknik sinyaller toplar.
-- **OpenStreetMap:** Yalnızca iletişim sayfasında "Haritayı yükle" düğmesine bastığınızda yüklenir.
+- **OpenStreetMap** (üçüncü taraf): İletişim sayfasındaki haritayı gösterir. Harita yüklendiğinde IP adresiniz OpenStreetMap'e iletilir.
 
-Ayrıntılar için [gizlilik politikasına](/gizlilik) bakabilirsiniz.`,
+## Analiz ve pazarlama
+
+Kullanmıyoruz.
+
+## Tercihlerinizi değiştirme
+
+Tercihlerinizi istediğiniz zaman sayfanın altındaki **Çerez tercihleri** bağlantısından değiştirebilirsiniz. Ayrıntılar için [gizlilik politikasına](/gizlilik) bakabilirsiniz.`,
     ),
     legalReviewRequired: true,
     updatedAt: UPDATED,
-    seo: { description: 'SUN | WORKS çerez politikası: kendi çerezimiz yok; Cloudflare, Turnstile ve OpenStreetMap hakkında bilgiler.' },
+    seo: { description: 'SUN | WORKS çerez politikası: kullandığımız çerezler, amaçları ve süreleri.' },
   },
   {
     _id: 'page-cookies-en',
@@ -251,27 +258,34 @@ Ayrıntılar için [gizlilik politikasına](/gizlilik) bakabilirsiniz.`,
     kind: 'legal',
     title: 'Cookie policy',
     slug: slug('cookies'),
-    intro: 'This site does not set cookies of its own. Below is everything that may be stored in your browser.',
+    intro: 'We use no advertising or tracking cookies. Below is everything that may be stored in your browser.',
     body: pt(
       'k',
-      `## Cookies set by this site
+      `## Necessary
 
-None. There are no login, analytics or advertising cookies.
+Needed for the site to work and to remember your choices; these cannot be switched off.
 
-## Browser storage
+- **sw-consent** (this site, browser storage): Stores your cookie choices. Duration: 12 months.
+- **sw-prefs** (this site, browser storage): Stores your theme and accessibility settings. Created only when you change a setting; kept until you clear it.
+- **sw-intro** (this site, session storage): Keeps the intro animation from replaying during the same session. Cleared when you close the tab.
+- **Cloudflare and Turnstile** (third party): May set security cookies to protect the site from attacks and to check that forms are sent by a person.
 
-To avoid replaying the intro animation during the same session, a single flag is written to your browser's session storage (sessionStorage). It is never sent to the server and is cleared when you close the tab.
+## Functional
 
-## Third parties
+Only used if you allow them.
 
-- **Cloudflare:** Cloudflare hosts and protects the site and may set strictly necessary security cookies.
-- **Cloudflare Turnstile:** Provides bot protection on pages with forms and collects technical signals from your browser.
-- **OpenStreetMap:** Loaded only when you press "Load map" on the contact page.
+- **OpenStreetMap** (third party): Shows the map on the contact page. When the map loads, your IP address is sent to OpenStreetMap.
 
-See the [privacy policy](/en/privacy) for details.`,
+## Analytics and marketing
+
+We do not use any.
+
+## Changing your choices
+
+You can change your choices at any time with the **Cookie settings** link at the bottom of every page. See the [privacy policy](/en/privacy) for details.`,
     ),
     legalReviewRequired: true,
     updatedAt: UPDATED,
-    seo: { description: 'SUN | WORKS cookie policy: no first-party cookies; details on Cloudflare, Turnstile and OpenStreetMap.' },
+    seo: { description: 'SUN | WORKS cookie policy: the cookies we use, why, and for how long.' },
   },
 ];

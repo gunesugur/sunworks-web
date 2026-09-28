@@ -26,17 +26,17 @@ export const services: Service[] = [
       'wp',
       `## Kimler için?
 
-Kurumsal bir tanıtım sitesine ihtiyacı olan küçük işletmeler, serbest çalışanlar ve dernekler için. Mevcut bir WordPress sitesinin toparlanması da bu kapsamda.
+Kurumsal bir tanıtım sitesine ihtiyacı olan işletmeler, profesyoneller ve dernekler için. Mevcut bir WordPress sitesini toparlamak da bu hizmetin kapsamında.
 
 ## Nasıl ilerliyoruz?
 
-Önce sayfa yapısını ve içerik ihtiyacını konuşuruz. Uygun bir tema seçip markanıza göre özelleştiririm; gerekli eklentileri kurar ve ayarlarım. Site hazır olduğunda birlikte kontrol eder, yayına alırız.
+Önce sayfa yapısını ve içerik ihtiyacını konuşuruz. Uygun bir tema seçip markanıza göre özelleştirir, gerekli eklentileri kurar ve ayarlarız. Site hazır olduğunda birlikte kontrol eder, yayına alırız.
 
 ## Bakım
 
-Yayından sonra WordPress çekirdeği, tema ve eklenti güncellemelerini yedek alarak yapabilirim. Bakımın kapsamını ve sıklığını birlikte belirleriz.`,
+Yayından sonra WordPress çekirdeği, tema ve eklenti güncellemelerini her seferinde yedek alarak yaparız. Bakımın kapsamını ve sıklığını birlikte belirleriz.`,
     ),
-    seo: { description: 'WordPress kurumsal site kurulumu, tema özelleştirme, eklenti yapılandırması ve bakım. Bursa merkezli, uzaktan çalışma.' },
+    seo: { description: 'WordPress kurumsal site kurulumu, tema özelleştirme, eklenti yapılandırması ve bakım.' },
   },
   {
     _id: 'service-wordpress-en',
@@ -60,17 +60,17 @@ Yayından sonra WordPress çekirdeği, tema ve eklenti güncellemelerini yedek a
       'wp',
       `## Who is it for?
 
-Small businesses, freelancers and associations that need a clear company website. Tidying up an existing WordPress site is part of this service too.
+Businesses, professionals and associations that need a clear company website. Tidying up an existing WordPress site is part of this service too.
 
 ## How we work
 
-We start with the page structure and the content you need. I pick a suitable theme and customize it to your brand, then install and configure the plugins the site needs. When it is ready, we review it together and launch.
+We start with the page structure and the content you need. We pick a suitable theme and customize it to your brand, then install and configure the plugins the site needs. When it is ready, we review it together and launch.
 
 ## Maintenance
 
-After launch I can handle WordPress core, theme and plugin updates, always with a backup first. We agree on the scope and frequency together.`,
+After launch we handle WordPress core, theme and plugin updates, always with a backup first. We agree on the scope and frequency together.`,
     ),
-    seo: { description: 'WordPress business website setup, theme customization, plugin configuration and maintenance. Based in Bursa, working remotely.' },
+    seo: { description: 'WordPress business website setup, theme customization, plugin configuration and maintenance.' },
   },
 
   // ---------- Shopify ----------
@@ -99,13 +99,13 @@ After launch I can handle WordPress core, theme and plugin updates, always with 
 
 Ürünlerini çevrim içi satmaya başlamak isteyen ya da mevcut Shopify mağazasını düzenlemek isteyen küçük markalar için.
 
-## Deneyim
+## Neler yapıyoruz?
 
-Shopify ile 2024'te Belçika merkezli BeneluxSoft'ta, 2023–2024 döneminde de Ankara'da On Yazılım'da çalışırken mağaza kurulumu, tema düzenlemeleri ve uygulama entegrasyonları üzerinde çalıştım. Print-on-demand ürünler için kişiselleştirme yapılandırıcılarının kurulumu da bu işlerin arasındaydı.
+Mağaza kurulumu, tema düzenlemeleri ve uygulama entegrasyonlarının yanı sıra print-on-demand ürünler için kişiselleştirme yapılandırıcılarını da kuruyoruz.
 
 ## Nasıl ilerliyoruz?
 
-Ürün yapınızı ve satış kanallarınızı konuşarak başlarız. Temayı kurar ve özelleştiririm, gerekli uygulamaları entegre ederim, ürün ve koleksiyonları düzenlerim. Yayından önce sipariş akışını birlikte test ederiz.`,
+Ürün yapınızı ve satış kanallarınızı konuşarak başlarız. Temayı kurar ve özelleştirir, gerekli uygulamaları entegre eder, ürün ve koleksiyonları düzenleriz. Yayından önce sipariş akışını birlikte test ederiz.`,
     ),
     seo: { description: 'Shopify mağaza kurulumu: tema, uygulama entegrasyonları, ürün ve katalog kurulumu, print-on-demand yapılandırıcıları.' },
   },
@@ -134,13 +134,13 @@ Shopify ile 2024'te Belçika merkezli BeneluxSoft'ta, 2023–2024 döneminde de 
 
 Small brands that want to start selling online, or that want to tidy up an existing Shopify store.
 
-## Experience
+## What we do
 
-I worked with Shopify at BeneluxSoft, a Belgium-based company, in 2024, and at On Yazılım in Ankara in 2023–2024, on store setups, theme changes and app integrations. Setting up personalization configurators for print-on-demand products was part of that work.
+Beyond store setup, theme changes and app integrations, we also set up personalization configurators for print-on-demand products.
 
 ## How we work
 
-We start by talking through your product structure and sales channels. I set up and customize the theme, integrate the apps you need, and organize products and collections. Before launch we test the order flow together.`,
+We start by talking through your product structure and sales channels. We set up and customize the theme, integrate the apps you need, and organize products and collections. Before launch we test the order flow together.`,
     ),
     seo: { description: 'Shopify store setup: themes, app integrations, product and catalog setup, print-on-demand configurators.' },
   },
@@ -173,7 +173,7 @@ Güncellemeden sonra bozulan sayfalar, birbiriyle çakışan eklentiler, değiş
 
 ## Nasıl ilerliyoruz?
 
-Önce sorunu yeniden üretir ve kaynağını bulurum. Mümkünse düzeltmeyi bir test kopyasında denerim; değilse yedek alarak ilerlerim. Sorun bir tema ya da eklentinin kendisinden kaynaklanıyorsa, sağlayıcının destek ekibiyle yazışmayı üstlenirim.
+Önce sorunu yeniden üretir ve kaynağını buluruz. Mümkünse düzeltmeyi bir test kopyasında deneriz; değilse yedek alarak ilerleriz. Sorun bir tema ya da eklentinin kendisinden kaynaklanıyorsa, sağlayıcının destek ekibiyle yazışmayı biz üstleniriz.
 
 ## Sonunda ne alırsınız?
 
@@ -208,7 +208,7 @@ Pages that break after an update, plugins that conflict with each other, a cache
 
 ## How we work
 
-First I reproduce the issue and find where it comes from. Where possible I test the fix on a staging copy; otherwise I take a backup first. If the problem sits in a theme or plugin itself, I take care of the conversation with the vendor's support team.
+First we reproduce the issue and find where it comes from. Where possible we test the fix on a staging copy; otherwise we take a backup first. If the problem sits in a theme or plugin itself, we take care of the conversation with the vendor's support team.
 
 ## What you get at the end
 
@@ -298,9 +298,9 @@ This service covers small fixes that can be done with HTML, CSS and basic JavaSc
     ],
     body: pt(
       'ho',
-      `## Ne yapıyorum?
+      `## Ne yapıyoruz?
 
-Alan adınızı doğru sunucuya yönlendirir, cPanel veya Plesk üzerinde sitenizi kurar, SSL sertifikasını etkinleştiririm. Gerekirse alan adınıza bağlı e-posta hesaplarını açar, mevcut sitenizi yeni bir sunucuya taşırım.
+Alan adınızı doğru sunucuya yönlendirir, cPanel veya Plesk üzerinde sitenizi kurar, SSL sertifikasını etkinleştiririz. Gerekirse alan adınıza bağlı e-posta hesaplarını açar, mevcut sitenizi yeni bir sunucuya taşırız.
 
 ## Hangi sağlayıcı?
 
@@ -328,9 +328,9 @@ Hosting ve alan adı hesapları sizin adınıza açılır ve size ait kalır. Uy
     ],
     body: pt(
       'ho',
-      `## What I do
+      `## What we do
 
-I point your domain to the right server, set up your site on cPanel or Plesk and enable SSL. If needed, I create email accounts on your domain and move an existing site to a new server.
+We point your domain to the right server, set up your site on cPanel or Plesk and enable SSL. If needed, we create email accounts on your domain and move an existing site to a new server.
 
 ## Which provider?
 
@@ -365,7 +365,7 @@ Bir site ancak güncel tutulabildiğinde işe yarar. Teslimden sonra metin, gör
 
 ## Nasıl ilerliyoruz?
 
-Sitenizin yönetim panelinde, sizin en sık yapacağınız işler üzerinden birlikte ilerleriz. Ardından adımları ekran görüntüleriyle anlatan kısa notlar hazırlarım. Bursa'daysanız yüz yüze, değilseniz çevrim içi görüşebiliriz.`,
+Sitenizin yönetim panelinde, en sık yapacağınız işler üzerinden birlikte ilerleriz. Ardından adımları ekran görüntüleriyle anlatan kısa notlar hazırlarız. Eğitimi yüz yüze ya da çevrim içi yapabiliriz.`,
     ),
     seo: { description: 'WordPress ve Shopify siteniz için yayın sonrası birebir eğitim ve yazılı kullanım notları.' },
   },
@@ -394,7 +394,7 @@ A website only helps you if it can be kept up to date. After handover, you shoul
 
 ## How we work
 
-We go through your site's admin panel together, focusing on the tasks you will do most often. Afterwards I write short notes with screenshots of each step. If you are in Bursa we can meet in person; otherwise we meet online.`,
+We go through your site's admin panel together, focusing on the tasks you will do most often. Afterwards we write short notes with screenshots of each step. Training can happen in person or online.`,
     ),
     seo: { description: 'One-to-one post-launch training and written usage notes for your WordPress or Shopify site.' },
   },
