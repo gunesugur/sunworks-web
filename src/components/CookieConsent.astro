@@ -1,0 +1,271 @@
+---
+/**
+ * Cookie consent. Shown on the first visit (after the intro), reopened from the footer.
+ * The choices really gate optional features: see scripts/consent.ts and scripts/map.ts.
+ */
+import type { Locale } from '@/content/schema';
+import { t } from '@/i18n/ui';
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const policy = lang === 'tr' ? '/cerez-politikasi' : '/en/cookies';
+---
+
+<section class="consent scheme-invert" role="dialog" aria-modal="false" aria-labelledby="consent-title" aria-describedby="consent-text" hidden data-consent transition:persist={`consent-${lang}`}>
+  <div class="consent__view" data-consent-view="summary">
+    <p class="consent__title" id="consent-title">
+      <span class="consent__star"><Asterisk size="0.95em" /></span>
+      {s.consentTitle}
+    </p>
+    <p class="consent__text" id="consent-text">
+      {s.consentText} <a href={policy}>{s.consentPolicy}</a>
+    </p>
+    <div class="consent__actions">
+      <button type="button" class="consent__btn consent__btn--primary" data-consent-action="accept">{s.consentAccept}</button>
+      <button type="button" class="consent__btn consent__btn--primary" data-consent-action="reject">{s.consentReject}</button>
+      <button type="button" class="consent__btn consent__btn--link" data-consent-action="manage">{s.consentManage}</button>
+    </div>
+  </div>
+
+  <div class="consent__view" data-consent-view="details" hidden>
+    <p class="consent__title">
+      <span class="consent__star"><Asterisk size="0.95em" /></span>
+      {s.consentTitle}
+    </p>
+    <ul class="consent__groups">
+      <li class="grp">
+        <span class="grp__text">
+          <span class="grp__title" id="consent-necessary">{s.consentGroups.necessary.title}</span>
+          <span class="grp__desc">{s.consentGroups.necessary.desc}</span>
+        </span>
+        <span class="grp__always">{s.consentAlways}</span>
+      </li>
+      <li class="grp">
+        <span class="grp__text">
+          <span class="grp__title" id="consent-functional">{s.consentGroups.functional.title}</span>
+          <span class="grp__desc" id="consent-functional-desc">{s.consentGroups.functional.desc}</span>
+        </span>
+        <button
+          type="button"
+          class="switch"
+          role="switch"
+          aria-checked="false"
+          aria-labelledby="consent-functional"
+          aria-describedby="consent-functional-desc"
+          data-consent-switch="functional"
+        >
+          <span class="switch__knob" aria-hidden="true"></span>
+        </button>
+      </li>
+    </ul>
+    <div class="consent__actions">
+      <button type="button" class="consent__btn consent__btn--primary" data-consent-action="save">{s.consentSave}</button>
+      <button type="button" class="consent__btn consent__btn--link" data-consent-action="back">{s.consentBack}</button>
+    </div>
+  </div>
+  <p class="sr-only" aria-live="polite" data-consent-status data-saved={s.consentSaved}></p>
+</section>
+
+<style>
+  .consent {
+    --consent-edge: clamp(0.85rem, 2vw, 1.75rem);
+    position: fixed;
+    left: var(--consent-edge);
+    bottom: var(--consent-edge);
+    z-index: 70;
+    width: min(27rem, calc(100vw - 2 * var(--consent-edge)));
+    padding: 1.35rem 1.35rem 1.15rem;
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    color: var(--c-dark);
+    box-shadow: 0 30px 70px -30px color-mix(in srgb, var(--ink) 70%, transparent);
+    opacity: 0;
+    transform: translate3d(0, calc(100% + 2rem), 0) rotate(-2deg);
+    transform-origin: 0 100%;
+    transition:
+      transform 0.7s var(--ease-out),
+      opacity 0.4s ease;
+  }
+
+  .consent[data-state='open'] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .consent__view:not([hidden]) {
+    animation: consent-in 0.45s var(--ease-out);
+  }
+
+  .consent__title {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .consent__star {
+    display: inline-grid;
+    color: var(--c-accent);
+    animation: consent-spin 12s linear infinite;
+  }
+
+  .consent__text {
+    margin-top: 0.6rem;
+    color: color-mix(in srgb, var(--c-dark) 82%, var(--c-light));
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .consent__text a {
+    color: var(--c-dark);
+    font-weight: 600;
+    text-underline-offset: 0.2em;
+  }
+
+  .consent__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.1rem;
+  }
+
+  .consent__btn {
+    min-height: 44px;
+    border-radius: var(--r-pill);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) ease,
+      color var(--dur-fast) ease,
+      border-color var(--dur-fast) ease,
+      transform var(--dur) var(--ease-out);
+  }
+
+  .consent__btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Accept and reject carry equal weight, as the KVKK guidance on cookies expects. */
+  .consent__btn--primary {
+    flex: 1 1 9rem;
+    padding: 0.6rem 1.1rem;
+    border: var(--stroke) solid var(--c-dark);
+    background: transparent;
+    color: var(--c-dark);
+  }
+
+  .consent__btn--primary:hover {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  .consent__btn--link {
+    padding: 0.4rem 0.2rem;
+    border: 0;
+    background: none;
+    color: var(--c-dark);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .consent__groups {
+    margin: 0.9rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grp {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .grp__text {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .grp__title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .grp__desc {
+    color: color-mix(in srgb, var(--c-dark) 72%, var(--c-light));
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .grp__always {
+    flex: none;
+    color: var(--c-accent);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .switch {
+    position: relative;
+    flex: none;
+    width: 48px;
+    height: 28px;
+    padding: 0;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: var(--r-pill);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out);
+  }
+
+  .switch__knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--c-dark);
+    transition:
+      transform 0.45s var(--ease-out),
+      background-color var(--dur) ease;
+  }
+
+  .switch[aria-checked='true'] {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+  }
+
+  .switch[aria-checked='true'] .switch__knob {
+    background: var(--c-on-accent);
+    transform: translate3d(20px, 0, 0);
+  }
+
+  .consent :focus-visible {
+    outline-color: var(--c-accent);
+  }
+
+  @keyframes consent-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 8px, 0);
+    }
+  }
+
+  @keyframes consent-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

@@ -7,8 +7,8 @@ const fontLatin = readFileSync('node_modules/@fontsource-variable/plus-jakarta-s
 const sun = readFileSync('public/favicon.svg', 'utf8');
 
 const copy = {
-  tr: { line: 'WordPress ve Shopify için özenli web işçiliği', meta: 'Bursa · Serbest çalışan web stüdyosu' },
-  en: { line: 'Careful web work for WordPress and Shopify', meta: 'Bursa · Solo-led web studio' },
+  tr: { line: 'WordPress ve Shopify için özenli web işçiliği', meta: 'Bursa · Web tasarım ve geliştirme stüdyosu' },
+  en: { line: 'Careful web work for WordPress and Shopify', meta: 'Bursa · Web design and development studio' },
 };
 
 const page = (lang) => `<!doctype html><html><head><style>

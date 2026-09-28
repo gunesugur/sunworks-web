@@ -1,7 +1,7 @@
 ---
 import type { Locale, Page } from '@/content/schema';
 import { getTranslation } from '@/lib/cms';
-import { formatDate, pagePath } from '@/i18n/routes';
+import { formatDate, otherLocale, pagePath } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
@@ -13,7 +13,7 @@ interface Props {
 }
 const { lang, page } = Astro.props;
 const s = t(lang);
-const other: Locale = lang === 'tr' ? 'en' : 'tr';
+const other = otherLocale(lang);
 const translation = await getTranslation('page', page.translationKey, other);
 const alternates: Partial<Record<Locale, string>> = { [lang]: pagePath(lang, page.slug.current) };
 if (translation) alternates[other] = pagePath(other, translation.slug.current);
@@ -46,7 +46,7 @@ if (translation) alternates[other] = pagePath(other, translation.slug.current);
     padding: 1rem 1.25rem;
     border-radius: var(--r-card);
     background: var(--c-accent);
-    color: var(--c-dark);
+    color: var(--c-on-accent);
     font-size: var(--fs-small);
     font-weight: 600;
   }

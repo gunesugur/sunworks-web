@@ -14,7 +14,7 @@ export const ui = {
     home: 'Ana sayfa',
     breadcrumb: 'Sayfa yolu',
     servicesTitle: 'Hizmetler',
-    servicesIntro: 'WordPress, Shopify ve web sitenizin günlük işleri için sunduğum hizmetler.',
+    servicesIntro: 'WordPress, Shopify ve web sitenizin günlük işleri için sunduğumuz hizmetler.',
     allServices: 'Tüm hizmetler',
     viewService: 'Hizmet ayrıntıları',
     included: 'Neler dahil',
@@ -65,7 +65,7 @@ export const ui = {
     subscribe: 'Kaydol',
     // Form states
     ok: {
-      contact: 'Teşekkürler, mesajınız kaydedildi. En kısa sürede e-postayla dönüş yapacağım.',
+      contact: 'Teşekkürler, mesajınız bize ulaştı. En kısa sürede e-postayla dönüş yapacağız.',
       newsletter: 'Kaydınız alındı. Teşekkürler!',
     },
     err: {
@@ -90,6 +90,49 @@ export const ui = {
     socialPending: '(yakında)',
     copyright: 'Tüm hakları saklıdır.',
     introSkip: 'Açılış animasyonu',
+    // Theme
+    themeToggle: 'Temayı değiştir',
+    themeToDark: 'Koyu temaya geç',
+    themeToLight: 'Açık temaya geç',
+    // Accessibility panel
+    a11yOpen: 'Erişilebilirlik ve görünüm ayarları',
+    a11yLabel: 'Erişilebilirlik',
+    a11yTitle: 'Görünümü size göre ayarlayın',
+    close: 'Kapat',
+    theme: 'Tema',
+    themes: { light: 'Açık', dark: 'Koyu', system: 'Sistem' },
+    textSize: 'Yazı boyutu',
+    textSmaller: 'Yazıyı küçült',
+    textLarger: 'Yazıyı büyüt',
+    a11yOptions: {
+      contrast: { title: 'Yüksek kontrast', desc: 'Soluk metinleri ve çizgileri belirginleştirir.' },
+      font: { title: 'Okunaklı yazı tipi', desc: 'Harfleri ayırt etmesi daha kolay bir yazı tipine geçer.' },
+      spacing: { title: 'Geniş aralık', desc: 'Satır, harf ve kelime aralığını artırır.' },
+      links: { title: 'Bağlantıların altını çiz', desc: 'Tüm bağlantıları metinden kolayca ayırt edin.' },
+      motion: { title: 'Animasyonları durdur', desc: 'Kayma, parallax ve geçiş efektlerini kapatır.' },
+    },
+    a11yReset: 'Varsayılana dön',
+    a11yNote: 'Ayarlarınız yalnızca bu tarayıcıda saklanır.',
+    // Cookie consent
+    cookieSettings: 'Çerez tercihleri',
+    consentTitle: 'Çerez tercihleri',
+    consentText:
+      'Sitemiz yalnızca çalışması için gereken depolamayı kullanır; reklam ya da takip yok. İletişim sayfasındaki haritayı göstermek için izninizi istiyoruz.',
+    consentAccept: 'Tümünü kabul et',
+    consentReject: 'Yalnızca zorunlu',
+    consentManage: 'Tercihleri yönet',
+    consentSave: 'Seçimi kaydet',
+    consentBack: 'Geri',
+    consentPolicy: 'Çerez politikası',
+    consentAlways: 'Her zaman açık',
+    consentSaved: 'Tercihleriniz kaydedildi.',
+    consentGroups: {
+      necessary: { title: 'Zorunlu', desc: 'Sitenin çalışması, güvenliği ve tercihlerinizin hatırlanması için gerekir.' },
+      functional: {
+        title: 'İşlevsel',
+        desc: 'İletişim sayfasındaki OpenStreetMap haritası. Harita yüklendiğinde IP adresiniz OpenStreetMap ile paylaşılır.',
+      },
+    },
   },
   en: {
     skip: 'Skip to content',
@@ -103,7 +146,7 @@ export const ui = {
     home: 'Home',
     breadcrumb: 'Breadcrumb',
     servicesTitle: 'Services',
-    servicesIntro: 'What I offer for WordPress, Shopify and the day-to-day work of keeping a website running.',
+    servicesIntro: 'What we offer for WordPress, Shopify and the day-to-day work of keeping a website running.',
     allServices: 'All services',
     viewService: 'Service details',
     included: "What's included",
@@ -151,14 +194,14 @@ export const ui = {
     newsletterEmail: 'Email address',
     subscribe: 'Subscribe',
     ok: {
-      contact: 'Thank you, your message has been saved. I will reply by email as soon as I can.',
+      contact: 'Thank you, your message has reached us. We will reply by email as soon as we can.',
       newsletter: 'You are signed up. Thank you!',
     },
     err: {
       validation: 'Please check the highlighted fields.',
       rate: 'Too many attempts. Please try again in a little while.',
       captcha: 'The security check could not be completed. Please try again.',
-      unavailable: 'The form is not working right now. Please email me directly: ',
+      unavailable: 'The form is not working right now. Please email us directly: ',
       network: 'Connection problem. Please try again.',
       generic: 'Something went wrong. Please try again.',
     },
@@ -176,6 +219,49 @@ export const ui = {
     socialPending: '(coming soon)',
     copyright: 'All rights reserved.',
     introSkip: 'Intro animation',
+    // Theme
+    themeToggle: 'Change theme',
+    themeToDark: 'Switch to dark theme',
+    themeToLight: 'Switch to light theme',
+    // Accessibility panel
+    a11yOpen: 'Accessibility and display settings',
+    a11yLabel: 'Accessibility',
+    a11yTitle: 'Make the site work for you',
+    close: 'Close',
+    theme: 'Theme',
+    themes: { light: 'Light', dark: 'Dark', system: 'System' },
+    textSize: 'Text size',
+    textSmaller: 'Smaller text',
+    textLarger: 'Larger text',
+    a11yOptions: {
+      contrast: { title: 'Higher contrast', desc: 'Makes faint text and lines stand out.' },
+      font: { title: 'Readable font', desc: 'Switches to a typeface with easier-to-tell letters.' },
+      spacing: { title: 'Wider spacing', desc: 'Adds space between lines, letters and words.' },
+      links: { title: 'Underline links', desc: 'Makes every link easy to spot in the text.' },
+      motion: { title: 'Stop animations', desc: 'Turns off scrolling, parallax and transition effects.' },
+    },
+    a11yReset: 'Reset to default',
+    a11yNote: 'Your settings are saved in this browser only.',
+    // Cookie consent
+    cookieSettings: 'Cookie settings',
+    consentTitle: 'Cookie settings',
+    consentText:
+      'We only use the storage this site needs to work — no ads, no tracking. We ask for your permission to show the map on the contact page.',
+    consentAccept: 'Accept all',
+    consentReject: 'Necessary only',
+    consentManage: 'Manage choices',
+    consentSave: 'Save choices',
+    consentBack: 'Back',
+    consentPolicy: 'Cookie policy',
+    consentAlways: 'Always on',
+    consentSaved: 'Your choices have been saved.',
+    consentGroups: {
+      necessary: { title: 'Necessary', desc: 'Needed for the site to work, stay secure and remember your choices.' },
+      functional: {
+        title: 'Functional',
+        desc: 'The OpenStreetMap map on the contact page. When the map loads, your IP address is shared with OpenStreetMap.',
+      },
+    },
   },
 } as const;
 

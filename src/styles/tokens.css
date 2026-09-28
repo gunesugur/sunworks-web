@@ -1,17 +1,19 @@
-/* Design tokens — extracted from Figma (QALdjrTAJQ2wvLlvkPBg2r, nodes 1:81 / 1:9).
-   Palette is fixed; neutrals are mixes of the palette only. */
+/* Design tokens.
+   Palette is fixed; neutrals are mixes of the palette only.
+   --c-dark / --c-light are the page's ink and paper: dark mode swaps them. */
 :root {
-  --c-dark: #12100d;
-  --c-light: #f5f6f7;
+  --ink: #12100d;
+  --paper: #f5f6f7;
   --c-accent: #1cdb9c;
+  --c-on-accent: var(--ink);
+
+  --c-dark: var(--ink);
+  --c-light: var(--paper);
   --c-muted: #61605f; /* on light: 5.8:1 */
   --c-muted-on-dark: #a6a6a5; /* on dark: 7.8:1 */
-  --c-line: color-mix(in srgb, var(--c-dark) 12%, var(--c-light));
-  --c-band: color-mix(in srgb, var(--c-dark) 5%, var(--c-light));
-  --c-dark-soft: color-mix(in srgb, var(--c-light) 8%, var(--c-dark));
-  --c-scrim: color-mix(in srgb, var(--c-dark) 55%, transparent);
 
   --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-readable: Verdana, Tahoma, 'Segoe UI', system-ui, sans-serif;
 
   /* Type scale (1440 canvas: H1 74.5, H2 54, H3 30, body 20, small 16–18) */
   --fs-h1: clamp(2.5rem, 1.55rem + 3.9vw, 4.656rem);
@@ -40,6 +42,52 @@
   --dur-fast: 180ms;
   --dur: 420ms;
   --dur-slow: 900ms;
+}
 
+/* Derived tones are declared on every scheme root so they follow that root's ink and paper. */
+:root,
+.scheme-fixed,
+.scheme-invert {
+  --c-line: color-mix(in srgb, var(--c-dark) 12%, var(--c-light));
+  --c-band: color-mix(in srgb, var(--c-dark) 5%, var(--c-light));
+  --c-dark-soft: color-mix(in srgb, var(--c-light) 8%, var(--c-dark));
+  --c-scrim: color-mix(in srgb, var(--c-dark) 55%, transparent);
   --focus: 3px solid var(--c-dark);
+}
+
+:root[data-theme='dark'] {
+  --c-dark: var(--paper);
+  --c-light: var(--ink);
+  --c-muted: #a6a6a5;
+  --c-muted-on-dark: #61605f;
+}
+
+/* Blocks that keep the brand's dark-on-light look in every theme (footer, intro, photo overlays). */
+.scheme-fixed {
+  --c-dark: var(--ink);
+  --c-light: var(--paper);
+  --c-muted: #61605f;
+  --c-muted-on-dark: #a6a6a5;
+}
+
+/* Surfaces that stand out from the page in either theme (dark card on light, light card on dark). */
+.scheme-invert {
+  --c-dark: var(--paper);
+  --c-light: var(--ink);
+  --c-muted: #a6a6a5;
+  --c-muted-on-dark: #61605f;
+}
+
+:root[data-theme='dark'] .scheme-invert {
+  --c-dark: var(--ink);
+  --c-light: var(--paper);
+  --c-muted: #61605f;
+  --c-muted-on-dark: #a6a6a5;
+}
+
+/* Accessibility: stronger contrast */
+:root[data-contrast='more'] {
+  --c-muted: color-mix(in srgb, var(--c-dark) 88%, var(--c-light));
+  --c-line: color-mix(in srgb, var(--c-dark) 45%, var(--c-light));
+  --stroke: 1.5px;
 }

@@ -19,6 +19,17 @@ export default defineConfig({
   use: {
     baseURL: 'http://127.0.0.1:8788',
     trace: 'retain-on-failure',
+    // A stored cookie choice keeps the consent banner out of the way; tests/e2e/preferences.spec.ts
+    // clears it to cover the first visit.
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: 'http://127.0.0.1:8788',
+          localStorage: [{ name: 'sw-consent', value: JSON.stringify({ v: 1, at: new Date().toISOString(), functional: false }) }],
+        },
+      ],
+    },
   },
   projects: BROWSERS.filter((b) => !only || only.includes(b.name)).flatMap((b) =>
     WIDTHS.map((width) => ({

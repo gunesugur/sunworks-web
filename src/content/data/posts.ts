@@ -11,14 +11,14 @@ export const posts: Post[] = [
     title: 'WordPress sitenizi yayına almadan önce: kısa bir kontrol listesi',
     slug: slug('wordpress-yayin-oncesi-kontrol-listesi'),
     publishedAt: '2026-09-15',
-    author: 'Uğur Güneş',
+    author: 'SUN | WORKS',
     excerpt:
-      'İlk haftalarda çıkan sorunların çoğu birkaç basit kontrolle önlenebilir. Yayın öncesinde üzerinden geçtiğim yedi adım.',
+      'İlk haftalarda çıkan sorunların çoğu birkaç basit kontrolle önlenebilir. Yayın öncesinde üzerinden geçtiğimiz yedi adım.',
     image: img('planning-board', 'Beyaz bir panoya iğnelenmiş planlama kartlarını düzenleyen bir el'),
     tags: ['WordPress', 'Bakım'],
     body: pt(
       'b',
-      `Bir WordPress sitesini yayına almak çoğu zaman "yayınla" düğmesine basmaktan ibaret görünür. Pratikte, ilk haftalarda çıkan sorunların çoğu birkaç basit kontrolle önlenebilir. Aşağıdaki liste, yayın öncesinde üzerinden geçtiğim adımların sadeleştirilmiş hâli.
+      `Bir WordPress sitesini yayına almak çoğu zaman "yayınla" düğmesine basmaktan ibaret görünür. Pratikte, ilk haftalarda çıkan sorunların çoğu birkaç basit kontrolle önlenebilir. Aşağıdaki liste, yayın öncesinde üzerinden geçtiğimiz adımların sadeleştirilmiş hâli.
 
 ## 1. Yedek ve geri dönüş planı
 
@@ -55,7 +55,7 @@ Siteyi en az bir telefonda ve bir masaüstü tarayıcıda baştan sona gezin:
 
 ## Yayından sonra
 
-İlk hafta hata kayıtlarına ve form mesajlarına göz atmak, küçük sorunları büyümeden yakalamanın en kolay yolu. Bu listeyle ilgili bir sorunuz varsa [iletişim sayfasından](/iletisim) yazabilirsiniz.`,
+İlk hafta hata kayıtlarına ve form mesajlarına göz atmak, küçük sorunları büyümeden yakalamanın en kolay yolu. Bu listeyle ilgili bir sorunuz varsa [iletişim sayfasından](/iletisim) bize yazabilirsiniz.`,
     ),
     seo: {
       description: 'WordPress sitesini yayına almadan önce yedek, güncelleme, yönlendirme, arama görünürlüğü, form ve önbellek kontrolleri.',
@@ -69,14 +69,14 @@ Siteyi en az bir telefonda ve bir masaüstü tarayıcıda baştan sona gezin:
     title: 'Before you launch a WordPress site: a short checklist',
     slug: slug('wordpress-pre-launch-checklist'),
     publishedAt: '2026-09-15',
-    author: 'Uğur Güneş',
+    author: 'SUN | WORKS',
     excerpt:
-      'Most problems in the first weeks after launch can be avoided with a few simple checks. Here are the seven steps I go through before going live.',
+      'Most problems in the first weeks after launch can be avoided with a few simple checks. Here are the seven steps we go through before going live.',
     image: img('planning-board', 'A hand arranging planning cards pinned to a white board'),
     tags: ['WordPress', 'Maintenance'],
     body: pt(
       'b',
-      `Launching a WordPress site often looks like nothing more than pressing "Publish". In practice, most problems in the first weeks can be avoided with a few simple checks. The list below is a simplified version of the steps I go through before launch.
+      `Launching a WordPress site often looks like nothing more than pressing "Publish". In practice, most problems in the first weeks can be avoided with a few simple checks. The list below is a simplified version of the steps we go through before launch.
 
 ## 1. Backups and a way back
 
@@ -113,7 +113,7 @@ Go through the whole site on at least one phone and one desktop browser:
 
 ## After launch
 
-Checking error logs and form messages during the first week is the easiest way to catch small problems before they grow. If you have a question about this list, you can write to me from the [contact page](/en/contact).`,
+Checking error logs and form messages during the first week is the easiest way to catch small problems before they grow. If you have a question about this list, you can write to us from the [contact page](/en/contact).`,
     ),
     seo: {
       description: 'Pre-launch WordPress checks: backups, updates, redirects, search visibility, forms and caching.',

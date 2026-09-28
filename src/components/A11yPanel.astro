@@ -1,0 +1,540 @@
+---
+/**
+ * Accessibility & display panel. The launcher is the brand asterisk in a pill; the panel grows
+ * out of it. Behaviour lives in scripts/a11y.ts; settings are applied as attributes on <html>.
+ */
+import type { Locale } from '@/content/schema';
+import { t } from '@/i18n/ui';
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  lang: Locale;
+}
+const s = t(Astro.props.lang);
+const toggles = ['contrast', 'font', 'spacing', 'links', 'motion'] as const;
+const themes = ['light', 'dark', 'system'] as const;
+---
+
+<div class="a11y" data-a11y transition:persist={`a11y-${Astro.props.lang}`}>
+  <button type="button" class="a11y__launcher scheme-invert" aria-expanded="false" aria-controls="a11y-panel" data-a11y-launcher>
+    <span class="a11y__star"><Asterisk size="22" /></span>
+    <span class="a11y__label" aria-hidden="true"><span>{s.a11yLabel}</span></span>
+    <span class="sr-only">{s.a11yOpen}</span>
+  </button>
+
+  <div id="a11y-panel" class="a11y__panel" role="dialog" aria-modal="false" aria-labelledby="a11y-title" hidden data-a11y-panel>
+    <div class="a11y__head">
+      <div>
+        <p class="a11y__eyebrow"><Asterisk size="0.8em" /> {s.a11yLabel}</p>
+        <h2 id="a11y-title" class="a11y__title">{s.a11yTitle}</h2>
+      </div>
+      <button type="button" class="a11y__close" data-a11y-close>
+        <span class="sr-only">{s.close}</span>
+        <span class="a11y__x" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <fieldset class="a11y__group">
+      <legend class="a11y__legend">{s.theme}</legend>
+      <div class="seg" data-a11y-theme>
+        {
+          themes.map((th) => (
+            <label class="seg__opt">
+              <input type="radio" name="a11y-theme" value={th} />
+              <span>{s.themes[th]}</span>
+            </label>
+          ))
+        }
+        <span class="seg__thumb" aria-hidden="true"></span>
+      </div>
+    </fieldset>
+
+    <div class="a11y__group">
+      <p class="a11y__legend" id="a11y-text-label">{s.textSize}</p>
+      <div class="stepper" role="group" aria-labelledby="a11y-text-label">
+        <button type="button" class="stepper__btn" data-a11y-text="-1" aria-label={s.textSmaller}>A−</button>
+        <span class="stepper__track" aria-hidden="true">
+          {[0, 1, 2, 3].map((i) => <span class="stepper__dot" data-step={i}></span>)}
+        </span>
+        <output class="stepper__value" data-a11y-text-value aria-live="polite">100%</output>
+        <button type="button" class="stepper__btn stepper__btn--big" data-a11y-text="1" aria-label={s.textLarger}>A+</button>
+      </div>
+    </div>
+
+    <ul class="a11y__list">
+      {
+        toggles.map((key) => (
+          <li class="opt">
+            <span class="opt__text">
+              <span class="opt__title" id={`a11y-${key}`}>{s.a11yOptions[key].title}</span>
+              <span class="opt__desc" id={`a11y-${key}-desc`}>{s.a11yOptions[key].desc}</span>
+            </span>
+            <button
+              type="button"
+              class="switch"
+              role="switch"
+              aria-checked="false"
+              aria-labelledby={`a11y-${key}`}
+              aria-describedby={`a11y-${key}-desc`}
+              data-a11y-toggle={key}
+            >
+              <span class="switch__knob" aria-hidden="true"></span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="a11y__foot">
+      <button type="button" class="a11y__reset" data-a11y-reset>{s.a11yReset}</button>
+      <p class="a11y__note">{s.a11yNote}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .a11y {
+    --a11y-edge: clamp(0.85rem, 2vw, 1.75rem);
+    position: fixed;
+    right: var(--a11y-edge);
+    bottom: var(--a11y-edge);
+    z-index: 60;
+  }
+
+  /* ---------- Launcher ---------- */
+  .a11y__launcher {
+    display: inline-flex;
+    align-items: center;
+    height: 56px;
+    padding: 0 17px;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: var(--c-light);
+    color: var(--c-dark);
+    box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--ink) 55%, transparent);
+    cursor: pointer;
+    transition:
+      transform var(--dur) var(--ease-out),
+      opacity var(--dur) var(--ease-out),
+      box-shadow var(--dur) var(--ease-out);
+  }
+
+  .a11y__launcher:hover {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  .a11y__star {
+    display: grid;
+    place-items: center;
+    transition:
+      transform var(--dur-slow) var(--ease-out),
+      color var(--dur) ease;
+  }
+
+  .a11y__launcher:hover .a11y__star,
+  .a11y__launcher:focus-visible .a11y__star {
+    transform: rotate(120deg);
+  }
+
+  .a11y__launcher[aria-expanded='true'] .a11y__star {
+    color: var(--c-accent);
+    transform: rotate(180deg) scale(0.9);
+  }
+
+  /* The label slides out of the pill on hover/focus. */
+  .a11y__label {
+    display: grid;
+    grid-template-columns: 0fr;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    white-space: nowrap;
+    transition: grid-template-columns var(--dur) var(--ease-out);
+  }
+
+  .a11y__label > span {
+    overflow: hidden;
+    padding-left: 0;
+    transition: padding var(--dur) var(--ease-out);
+  }
+
+  .a11y__launcher:hover .a11y__label,
+  .a11y__launcher:focus-visible .a11y__label {
+    grid-template-columns: 1fr;
+  }
+
+  .a11y__launcher:hover .a11y__label > span,
+  .a11y__launcher:focus-visible .a11y__label > span {
+    padding: 0 0.35rem 0 0.6rem;
+  }
+
+  :global(html[data-consent-visible]) .a11y__launcher {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(0, 12px, 0);
+  }
+
+  @media (min-width: 720px) {
+    :global(html[data-consent-visible]) .a11y__launcher {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+  }
+
+  /* ---------- Panel ---------- */
+  .a11y__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 0.75rem);
+    width: min(24rem, calc(100vw - 2 * var(--a11y-edge)));
+    max-height: min(46rem, calc(100dvh - 6.5rem));
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding: 1.25rem 1.25rem 1rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    color: var(--c-dark);
+    box-shadow: 0 30px 60px -25px color-mix(in srgb, var(--ink) 45%, transparent);
+    clip-path: circle(0% at calc(100% - 28px) calc(100% + 28px));
+    transition: clip-path 0.6s var(--ease-out);
+  }
+
+  .a11y__panel[data-state='open'] {
+    clip-path: circle(150% at calc(100% - 28px) calc(100% + 28px));
+  }
+
+  .a11y__panel > * {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+    transition:
+      opacity 0.4s ease,
+      transform 0.5s var(--ease-out);
+  }
+
+  .a11y__panel[data-state='open'] > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .a11y__panel[data-state='open'] > :nth-child(2) {
+    transition-delay: 60ms;
+  }
+
+  .a11y__panel[data-state='open'] > :nth-child(3) {
+    transition-delay: 110ms;
+  }
+
+  .a11y__panel[data-state='open'] > :nth-child(4) {
+    transition-delay: 160ms;
+  }
+
+  .a11y__panel[data-state='open'] > :nth-child(5) {
+    transition-delay: 210ms;
+  }
+
+  .a11y__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .a11y__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--c-muted);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .a11y__eyebrow :global(.asterisk) {
+    color: var(--c-accent);
+  }
+
+  .a11y__title {
+    margin-top: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .a11y__close {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border: var(--stroke) solid var(--c-line);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition:
+      transform var(--dur) var(--ease-out),
+      border-color var(--dur-fast) ease;
+  }
+
+  .a11y__close:hover {
+    border-color: var(--c-dark);
+    transform: rotate(90deg);
+  }
+
+  .a11y__x::before,
+  .a11y__x::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 1.6px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .a11y__x::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .a11y__group {
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0;
+  }
+
+  .a11y__legend {
+    margin-bottom: 0.5rem;
+    padding: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* Segmented theme picker with a sliding thumb */
+  .seg {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 4px;
+    border-radius: var(--r-pill);
+    background: var(--c-band);
+  }
+
+  .seg__opt {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    min-height: 40px;
+    border-radius: var(--r-pill);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color var(--dur) var(--ease-out);
+  }
+
+  .seg__opt input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .seg__opt:has(input:checked) {
+    color: var(--c-light);
+  }
+
+  .seg__opt:has(input:focus-visible) {
+    outline: var(--focus);
+    outline-offset: 2px;
+  }
+
+  .seg__thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / 3);
+    border-radius: var(--r-pill);
+    background: var(--c-dark);
+    transform: translate3d(calc(var(--seg, 0) * 100%), 0, 0);
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  /* Text size stepper */
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .stepper__btn {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: 50%;
+    background: transparent;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+      background-color var(--dur-fast) ease,
+      color var(--dur-fast) ease;
+  }
+
+  .stepper__btn--big {
+    font-size: 1.0625rem;
+  }
+
+  .stepper__btn:hover:not(:disabled) {
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  .stepper__btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .stepper__track {
+    display: flex;
+    flex: 1;
+    gap: 6px;
+  }
+
+  .stepper__dot {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--c-line);
+    transition: background-color var(--dur) var(--ease-out);
+  }
+
+  .stepper__dot.is-on {
+    background: var(--c-accent);
+  }
+
+  .stepper__value {
+    min-width: 3.2em;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Toggle rows */
+  .a11y__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .opt {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .opt__text {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .opt__title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .opt__desc {
+    color: var(--c-muted);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+
+  .switch {
+    position: relative;
+    flex: none;
+    width: 48px;
+    height: 28px;
+    padding: 0;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: var(--r-pill);
+    background: transparent;
+    cursor: pointer;
+    transition:
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out);
+  }
+
+  .switch__knob {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--c-dark);
+    transition:
+      transform 0.45s var(--ease-out),
+      background-color var(--dur) ease;
+  }
+
+  .switch[aria-checked='true'] {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+  }
+
+  .switch[aria-checked='true'] .switch__knob {
+    background: var(--c-on-accent);
+    transform: translate3d(20px, 0, 0);
+  }
+
+  .a11y__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 0.9rem;
+  }
+
+  .a11y__reset {
+    padding: 0.35rem 0;
+    border: 0;
+    background: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+
+  .a11y__note {
+    color: var(--c-muted);
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    .a11y__launcher {
+      height: 50px;
+      padding: 0 14px;
+    }
+
+    .a11y__panel {
+      position: fixed;
+      right: var(--a11y-edge);
+      left: var(--a11y-edge);
+      bottom: calc(var(--a11y-edge) + 62px);
+      width: auto;
+    }
+  }
+</style>

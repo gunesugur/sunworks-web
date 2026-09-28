@@ -29,15 +29,15 @@ const { variant = 'outline', class: cls } = Astro.props;
   }
 
   .tag--solid {
-    background: var(--c-light);
-    border-color: var(--c-light);
-    color: var(--c-dark);
+    background: var(--paper);
+    border-color: var(--paper);
+    color: var(--ink);
   }
 
   .tag--glass {
-    color: var(--c-light);
+    color: var(--paper);
     border-width: 2px;
-    background: color-mix(in srgb, var(--c-dark) 25%, transparent);
+    background: color-mix(in srgb, var(--ink) 25%, transparent);
     backdrop-filter: blur(6px);
   }
 
