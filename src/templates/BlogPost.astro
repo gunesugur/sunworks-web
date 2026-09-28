@@ -52,28 +52,30 @@ const ld = [
 
 <Base lang={lang} title={post.seo.title ?? post.title} description={post.seo.description ?? post.excerpt} alternates={alternates} type="article" jsonLd={ld}>
   <article>
-    <PageHeader lang={lang} title={post.title} intro={post.excerpt} crumbs={[{ label: s.blogTitle, href: routes.blog[lang] }]}>
-      {
-        post.tags.length > 0 && (
-          <ul class="post-tags" aria-label={s.tags}>
-            {post.tags.map((tag) => (
-              <li>{tag}</li>
-            ))}
-          </ul>
-        )
-      }
-      <p class="meta">
-        <span>{s.by} <strong>{post.author}</strong></span>
-        <span>{s.publishedOn}: <time datetime={post.publishedAt}>{formatDate(post.publishedAt, lang)}</time></span>
+    <PageHeader lang={lang} title={post.title} intro={post.excerpt} crumbs={[{ label: s.blogTitle, href: routes.blog[lang] }]} wide>
+      <div class="post-info">
         {
-          post.updatedAt && (
-            <span>
-              {s.updatedOn}: <time datetime={post.updatedAt}>{formatDate(post.updatedAt, lang)}</time>
-            </span>
+          post.tags.length > 0 && (
+            <ul class="post-tags" aria-label={s.tags}>
+              {post.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
           )
         }
-      </p>
-</PageHeader>
+        <p class="meta">
+          <span>{s.by} <strong>{post.author}</strong></span>
+          <span>{s.publishedOn}: <time datetime={post.publishedAt}>{formatDate(post.publishedAt, lang)}</time></span>
+          {
+            post.updatedAt && (
+              <span>
+                {s.updatedOn}: <time datetime={post.updatedAt}>{formatDate(post.updatedAt, lang)}</time>
+              </span>
+            )
+          }
+        </p>
+      </div>
+    </PageHeader>
     <div class="container">
       <Notched corner="bl" ratio="1284 / 540" hover={false} fit class="post-media">
         <Img image={post.image} widths={[640, 960, 1284, 1920]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
@@ -109,11 +111,34 @@ const ld = [
     }
   }
 
+  .post-info {
+    display: grid;
+    justify-items: end;
+    gap: 0.9rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .post-info .meta {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .post-info {
+      justify-items: start;
+      margin-top: 1.5rem;
+    }
+
+    .post-info .meta {
+      justify-content: flex-start;
+    }
+  }
+
   .post-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
-    margin-top: 1.5rem;
+    margin: 0;
     padding: 0;
     list-style: none;
   }

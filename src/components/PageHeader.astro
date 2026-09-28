@@ -9,13 +9,15 @@ interface Props {
   title: string;
   intro?: string;
   crumbs?: { label: string; href: string }[];
+  /** Articles: the title spans the container and the slot sits beside the intro. */
+  wide?: boolean;
 }
-const { lang, title, intro, crumbs = [] } = Astro.props;
+const { lang, title, intro, crumbs = [], wide = false } = Astro.props;
 const s = t(lang);
 const trail = [{ label: s.home, href: routes.home[lang] }, ...crumbs];
 ---
 
-<header class="page-head container">
+<header class:list={['page-head container', { 'page-head--wide': wide }]}>
   <nav aria-label={s.breadcrumb} class="crumbs">
     <ol>
       {
@@ -67,6 +69,33 @@ const trail = [{ label: s.home, href: routes.home[lang] }, ...crumbs];
 
   .page-head__title {
     max-width: 20ch;
+  }
+
+  .page-head--wide {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: clamp(2rem, 6vw, 6rem);
+    align-items: end;
+  }
+
+  .page-head--wide > :not(.page-head__intro) {
+    grid-column: 1 / -1;
+  }
+
+  .page-head--wide .page-head__title {
+    max-width: none;
+  }
+
+  .page-head--wide > :global(:last-child) {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: end;
+  }
+
+  @media (max-width: 900px) {
+    .page-head--wide {
+      display: block;
+    }
   }
 
   .page-head__line {
