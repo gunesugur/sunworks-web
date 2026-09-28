@@ -4,6 +4,7 @@ import { cleanPath, otherLocale, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Button from './Button.astro';
 import Logo from './Logo.astro';
+import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
   lang: Locale;
@@ -43,26 +44,71 @@ const altLang = otherLocale(lang);
       </div>
     </nav>
 
-    <button
-      type="button"
-      class="menu-toggle"
-      aria-expanded="false"
-      aria-controls="site-nav"
-      data-menu-toggle
-      data-label-open={s.menu}
-      data-label-close={s.closeMenu}
-    >
-      <span class="sr-only" data-menu-label>{s.menu}</span>
-      <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span></span>
-    </button>
+    <div class="site-header__tools">
+      <ThemeToggle lang={lang} />
+      <button
+        type="button"
+        class="menu-toggle"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        data-menu-toggle
+        data-label-open={s.menu}
+        data-label-close={s.closeMenu}
+      >
+        <span class="sr-only" data-menu-label>{s.menu}</span>
+        <span class="menu-toggle__bars" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
   </div>
 </header>
 
 <style>
+  /* Sticky: glass backdrop once the page scrolls, slides away on scroll down (scripts/header.ts).
+     The backdrop lives on ::before so the mobile nav (position: fixed) keeps the viewport as its box. */
   .site-header {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 40;
     padding-block: 1.75rem;
+    transition:
+      padding-block var(--dur) var(--ease-out),
+      margin-bottom var(--dur) var(--ease-out),
+      transform 0.55s var(--ease-out);
+  }
+
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-bottom: 1px solid var(--c-line);
+    background: color-mix(in srgb, var(--c-light) 90%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
+    opacity: 0;
+    transition: opacity var(--dur) var(--ease-out);
+  }
+
+  /* The bar slims down; margin-bottom takes the freed space so nothing below it moves (no CLS). */
+  .site-header.is-scrolled {
+    padding-block: 0.8rem;
+    margin-bottom: 1.9rem;
+  }
+
+  .site-header.is-scrolled::before {
+    opacity: 1;
+  }
+
+  .site-header.is-hidden {
+    transform: translate3d(0, -110%, 0);
+  }
+
+  .site-header__tools {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
 
   .site-header__inner {
@@ -96,6 +142,7 @@ const altLang = otherLocale(lang);
     font-size: 1.125rem;
     font-weight: 600;
     text-decoration: none;
+    white-space: nowrap;
     transition: color var(--dur-fast) ease;
   }
 
@@ -150,9 +197,33 @@ const altLang = otherLocale(lang);
     display: none;
   }
 
+  @media (min-width: 901px) and (max-width: 1200px) {
+    .site-header__inner,
+    .site-nav {
+      gap: 1rem;
+    }
+
+    .site-nav {
+      margin-left: 1.5rem;
+    }
+
+    .site-nav__list {
+      gap: 1.4rem;
+    }
+
+    .site-nav__extra {
+      gap: 0.75rem;
+    }
+  }
+
   @media (max-width: 900px) {
     .site-header {
       padding-block: 1rem;
+    }
+
+    .site-header.is-scrolled {
+      padding-block: 0.6rem;
+      margin-bottom: 0.8rem;
     }
 
     .menu-toggle {

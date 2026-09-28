@@ -51,3 +51,10 @@ test('RSS feeds and sitemap are served', async ({ request }) => {
   }
   expect(await (await request.get('/rss.xml')).text()).toContain('wordpress-yayin-oncesi-kontrol-listesi');
 });
+
+test('robots.txt, security.txt and the web manifest are served', async ({ request }) => {
+  expect(await (await request.get('/robots.txt')).text()).toContain('Sitemap: https://sunworks.studio/sitemap-index.xml');
+  expect(await (await request.get('/.well-known/security.txt')).text()).toContain('Contact: mailto:hello@sunworks.studio');
+  const manifest = (await (await request.get('/site.webmanifest')).json()) as { name: string };
+  expect(manifest.name).toBe('SUN | WORKS');
+});

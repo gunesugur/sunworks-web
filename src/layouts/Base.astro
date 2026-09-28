@@ -9,6 +9,8 @@ import { t } from '@/i18n/ui';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import Intro from '@/components/Intro.astro';
+import A11yPanel from '@/components/A11yPanel.astro';
+import CookieConsent from '@/components/CookieConsent.astro';
 
 interface Props {
   lang: Locale;
@@ -68,6 +70,7 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
     <link rel="alternate" type="application/rss+xml" title={`${settings.siteName} — ${s.blogTitle}`} href={routes.rss[lang]} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#f5f6f7" />
     <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
 
@@ -85,11 +88,28 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
     {ld.map((json) => <script type="application/ld+json" set:html={json} />)}
 
     <script is:inline>
+      /* Applies saved display preferences before first paint (mirrors scripts/prefs.ts#applyPrefs). */
       (function () {
         const d = document.documentElement;
         d.classList.add('js');
+        let p = {};
         try {
-          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          p = JSON.parse(localStorage.getItem('sw-prefs') || '{}') || {};
+        } catch {
+          /* storage unavailable: defaults */
+        }
+        const dark = p.theme ? p.theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        d.dataset.theme = dark ? 'dark' : 'light';
+        if (p.text) d.dataset.text = String(p.text);
+        if (p.contrast) d.dataset.contrast = 'more';
+        if (p.font) d.dataset.font = 'readable';
+        if (p.spacing) d.dataset.spacing = 'wide';
+        if (p.links) d.dataset.links = 'underline';
+        if (p.motion) d.dataset.motion = 'reduce';
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#12100d' : '#f5f6f7');
+        try {
+          const reduce = p.motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (!reduce && !sessionStorage.getItem('sw-intro')) {
             d.classList.add('intro');
             sessionStorage.setItem('sw-intro', '1');
@@ -109,6 +129,8 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
       <slot />
     </main>
     <Footer lang={lang} nav={nav} settings={settings} altHref={altHref} />
+    <A11yPanel lang={lang} />
+    <CookieConsent lang={lang} />
     <script>
       import '@/scripts/app';
     </script>
