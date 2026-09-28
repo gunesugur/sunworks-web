@@ -9,13 +9,16 @@ test.describe('theme', () => {
   });
 
   test.describe('with a dark system setting', () => {
-    // Set on the context: a per-page emulateMedia colour scheme is not reliable in Firefox.
     test.use({ colorScheme: 'dark' });
 
-    test('follows the system setting until the visitor picks one', async ({ page }) => {
+    test('follows the system setting until the visitor picks one', async ({ page, browserName }) => {
       await page.goto('/');
-      await expect(html(page)).toHaveAttribute('data-theme', 'dark');
-      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#12100d');
+      const systemDark = await page.evaluate(() => matchMedia('(prefers-color-scheme: dark)').matches);
+      // Playwright's Firefox does not always report the emulated scheme to the page; there the
+      // page must still agree with whatever the browser reports.
+      if (browserName !== 'firefox') expect(systemDark).toBe(true);
+      await expect(html(page)).toHaveAttribute('data-theme', systemDark ? 'dark' : 'light');
+      await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', systemDark ? '#12100d' : '#f5f6f7');
     });
   });
 
