@@ -18,6 +18,13 @@ html[data-theme='dark'] {
   color-scheme: dark;
 }
 
+/* In-page links (table of contents, back to top) glide instead of jumping. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-motion='reduce']) {
+    scroll-behavior: smooth;
+  }
+}
+
 /* ---------- Accessibility preferences (set on <html> by scripts/prefs.ts) ---------- */
 html[data-text='1'] {
   font-size: 112.5%;

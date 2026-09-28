@@ -12,7 +12,6 @@ import Tag from '@/components/Tag.astro';
 import Asterisk from '@/components/Asterisk.astro';
 import Icon from '@/components/Icon.astro';
 import ServiceCard from '@/components/ServiceCard.astro';
-import StoryCard from '@/components/StoryCard.astro';
 import { toolLogos } from '@/lib/tool-logos';
 
 interface Props {
@@ -39,9 +38,6 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
         }
       </h1>
       <div class="hero__aside">
-        <div class="hero__card" data-reveal="scale">
-          <StoryCard lang={lang} />
-        </div>
         <p class="hero__note">
           <span class="hero__note-in">
             <span class="hero__star" data-spin aria-hidden="true"><Asterisk size="100%" /></span>
@@ -1103,9 +1099,6 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       width: var(--aside);
     }
 
-    .hero__card {
-      display: none;
-    }
 
     .split,
     .duo,

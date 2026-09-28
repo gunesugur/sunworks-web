@@ -1,18 +1,13 @@
-import type { Block, Illustration, PortableText } from '@/content/schema';
+import type { Block, PortableText } from '@/content/schema';
 
 export type Group =
   | { kind: 'block'; key: string; block: Block }
-  | { kind: 'list'; key: string; ordered: boolean; items: Block[] }
-  | { kind: 'figure'; key: string; figure: Illustration };
+  | { kind: 'list'; key: string; ordered: boolean; items: Block[] };
 
 /** Groups consecutive list-item blocks into lists (Portable Text stores them flat). */
 export function groupBlocks(blocks: PortableText): Group[] {
   const groups: Group[] = [];
   for (const block of blocks) {
-    if (block._type === 'illustration') {
-      groups.push({ kind: 'figure', key: block._key, figure: block });
-      continue;
-    }
     const last = groups.at(-1);
     if (block.listItem) {
       const ordered = block.listItem === 'number';
@@ -61,7 +56,7 @@ export const slugify = (text: string): string =>
 
 /** Plain text of the prose blocks (for word counts). */
 export const plainWords = (blocks: PortableText): number =>
-  blocks.reduce((n, b) => (b._type === 'block' ? n + b.children.map((c) => c.text).join(' ').split(/\s+/).filter(Boolean).length : n), 0);
+  blocks.reduce((n, b) => n + b.children.map((c) => c.text).join(' ').split(/\s+/).filter(Boolean).length, 0);
 
 export interface Heading {
   key: string;
@@ -75,7 +70,7 @@ export function headings(blocks: PortableText): Heading[] {
   const seen = new Map<string, number>();
   const out: Heading[] = [];
   for (const b of blocks) {
-    if (b._type !== 'block' || (b.style !== 'h2' && b.style !== 'h3')) continue;
+    if (b.style !== 'h2' && b.style !== 'h3') continue;
     const text = b.children.map((c) => c.text).join('');
     const base = slugify(text) || 'bolum';
     const n = seen.get(base) ?? 0;

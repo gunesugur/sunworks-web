@@ -45,7 +45,7 @@ test('content avoids claims the brief rules out', () => {
 });
 
 test('pt() parses headings, lists and inline marks in linear time', () => {
-  const blocks = pt('x', '## Title\n\nHello **bold** and *em* with `code` and [a link](/path).\n\n- one\n- two').filter((b) => b._type === 'block');
+  const blocks = pt('x', '## Title\n\nHello **bold** and *em* with `code` and [a link](/path).\n\n- one\n- two');
   assert.equal(blocks[0]?.style, 'h2');
   const para = blocks[1];
   assert.ok(para);
@@ -68,6 +68,4 @@ test('pt() parses headings, lists and inline marks in linear time', () => {
   const start = performance.now();
   pt('y', `${'*'.repeat(20000)}[`.repeat(2));
   assert.ok(performance.now() - start < 500);
-  const figure = pt('z', 'Text\n\n::backup | Caption');
-  assert.deepEqual(figure[1], { _type: 'illustration', _key: 'z1', name: 'backup', caption: 'Caption' });
 });

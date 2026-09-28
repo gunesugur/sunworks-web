@@ -36,6 +36,7 @@ const s = t(lang);
 </div>
 
 <style>
+  /* Same edge as the accessibility launcher (A11yPanel --a11y-edge). */
   .quick {
     --edge: clamp(0.85rem, 2vw, 1.75rem);
   }
@@ -47,8 +48,9 @@ const s = t(lang);
     z-index: 60;
     display: inline-flex;
     align-items: center;
-    height: 56px;
-    padding: 0 16px;
+    height: var(--fab);
+    min-width: var(--fab);
+    padding: 0 calc((var(--fab) - 24px) / 2);
     border-radius: var(--r-pill);
     background: var(--c-light);
     color: var(--c-dark);
@@ -93,13 +95,13 @@ const s = t(lang);
   /* Sits above the accessibility launcher; slides in once the page has scrolled. */
   .quick__top {
     position: fixed;
-    right: calc(var(--edge) + 4px);
-    bottom: calc(var(--edge) + 56px + 0.75rem);
+    right: var(--edge);
+    bottom: calc(var(--edge) + var(--fab) + 0.75rem);
     z-index: 60;
     display: grid;
     place-items: center;
-    width: 48px;
-    height: 48px;
+    width: var(--fab);
+    height: var(--fab);
     padding: 0;
     border: var(--stroke) solid var(--c-dark);
     border-radius: 50%;

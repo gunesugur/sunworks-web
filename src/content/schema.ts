@@ -42,30 +42,7 @@ export const blockSchema = z.object({
 });
 export type Block = z.infer<typeof blockSchema>;
 
-/** Line illustrations drawn in the site's style (src/lib/illustrations.ts), placed between paragraphs. */
-export const ILLUSTRATIONS = [
-  'backup',
-  'updates',
-  'redirects',
-  'search',
-  'forms',
-  'cache',
-  'devices',
-  'speed',
-  'images',
-  'hosting',
-  'store',
-  'payments',
-  'shipping',
-] as const;
-export const illustrationSchema = z.object({
-  _type: z.literal('illustration'),
-  _key: key,
-  name: z.enum(ILLUSTRATIONS),
-  caption: z.string().optional(),
-});
-export type Illustration = z.infer<typeof illustrationSchema>;
-export const portableTextSchema = z.array(z.discriminatedUnion('_type', [blockSchema, illustrationSchema]));
+export const portableTextSchema = z.array(blockSchema);
 export type PortableText = z.infer<typeof portableTextSchema>;
 
 export const linkSchema = z.object({

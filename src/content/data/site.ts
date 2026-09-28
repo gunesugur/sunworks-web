@@ -86,8 +86,8 @@ export const navigation: Navigation[] = [
         _key: 'services',
         title: 'Hizmetler',
         links: [
-          { label: 'WordPress kurumsal site', href: '/hizmetler/wordpress-kurumsal-site' },
-          { label: 'Shopify mağaza kurulumu', href: '/hizmetler/shopify-magaza-kurulumu' },
+          { label: 'WordPress', href: '/hizmetler/wordpress-kurumsal-site' },
+          { label: 'Shopify', href: '/hizmetler/shopify-magaza-kurulumu' },
           { label: 'Teknik destek', href: '/hizmetler/teknik-destek' },
           { label: 'Alan adı ve hosting', href: '/hizmetler/alan-adi-ve-hosting' },
         ],
@@ -134,8 +134,8 @@ export const navigation: Navigation[] = [
         _key: 'services',
         title: 'Services',
         links: [
-          { label: 'WordPress websites', href: '/en/services/wordpress-business-website' },
-          { label: 'Shopify store setup', href: '/en/services/shopify-store-setup' },
+          { label: 'WordPress', href: '/en/services/wordpress-business-website' },
+          { label: 'Shopify', href: '/en/services/shopify-store-setup' },
           { label: 'Technical support', href: '/en/services/technical-support' },
           { label: 'Domain and hosting', href: '/en/services/domain-and-hosting' },
         ],

@@ -4,9 +4,9 @@
  * same renderer handles both sources.
  *
  * Supported: paragraphs, "## " / "### " headings, "> " quotes, "- " and "1. " lists,
- * inline **strong**, *em*, `code` and [label](href), and "::name | caption" illustrations.
+ * inline **strong**, *em*, `code` and [label](href).
  */
-import { ILLUSTRATIONS, type Block, type Illustration } from './schema';
+import type { Block } from './schema';
 
 type Span = Block['children'][number];
 type MarkDef = Block['markDefs'][number];
@@ -101,16 +101,7 @@ function lineToBlock(line: string, blockKey: string): Block {
   return block;
 }
 
-const isIllustration = (name: string): name is Illustration['name'] => (ILLUSTRATIONS as readonly string[]).includes(name);
-
-function lineToItem(line: string, key: string): Block | Illustration {
-  if (!line.startsWith('::')) return lineToBlock(line, key);
-  const [name = '', caption] = line.slice(2).split('|').map((p) => p.trim());
-  if (!isIllustration(name)) throw new Error(`Unknown illustration "${name}"`);
-  return caption ? { _type: 'illustration', _key: key, name, caption } : { _type: 'illustration', _key: key, name };
-}
-
-export function pt(prefix: string, source: string): (Block | Illustration)[] {
+export function pt(prefix: string, source: string): Block[] {
   const lines: string[] = [];
   for (const para of source.trim().split(/\n\s*\n/)) {
     const rows = para.split('\n').map((r) => r.trim());
@@ -118,5 +109,5 @@ export function pt(prefix: string, source: string): (Block | Illustration)[] {
     if (isList) lines.push(...rows);
     else lines.push(rows.join(' '));
   }
-  return lines.map((line, i) => lineToItem(line, `${prefix}${i}`));
+  return lines.map((line, i) => lineToBlock(line, `${prefix}${i}`));
 }

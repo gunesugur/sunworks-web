@@ -71,23 +71,7 @@ export const portableTextField = (name = 'body', title = 'Body') =>
     title,
     type: 'array',
     of: [
-      defineArrayMember({
-        name: 'illustration',
-        type: 'object',
-        title: 'Illustration',
-        fields: [
-          defineField({
-            name: 'name',
-            type: 'string',
-            validation: (r) => r.required(),
-            options: {
-              list: ['backup', 'updates', 'redirects', 'search', 'forms', 'cache', 'devices', 'speed', 'images', 'hosting', 'store', 'payments', 'shipping'],
-            },
-          }),
-          defineField({ name: 'caption', type: 'string' }),
-        ],
-        preview: { select: { title: 'name', subtitle: 'caption' } },
-      }),
+
       defineArrayMember({
         type: 'block',
         styles: [

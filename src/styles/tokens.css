@@ -35,6 +35,8 @@
   --r-card: clamp(18px, 1rem + 1vw, 32px);
   --r-footer: 48px;
   --btn-circle: clamp(56px, 3rem + 2.2vw, 85px);
+  /* Floating buttons (accessibility, back to top, WhatsApp) share one size. */
+  --fab: 56px;
   --stroke: 0.85px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -90,4 +92,10 @@
   --c-muted: color-mix(in srgb, var(--c-dark) 88%, var(--c-light));
   --c-line: color-mix(in srgb, var(--c-dark) 45%, var(--c-light));
   --stroke: 1.5px;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --fab: 50px;
+  }
 }
