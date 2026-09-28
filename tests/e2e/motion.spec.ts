@@ -89,7 +89,7 @@ test('how-we-work follows the scroll: the step under the reading line is active 
   await page.goto('/');
   const steps = page.locator('[data-journey] [data-step]');
   await expect(steps).toHaveCount(3);
-  await steps.last().evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.3));
+  await steps.last().evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.3, behavior: 'instant' }));
   await expect(steps.last()).toHaveClass(/is-active/);
   await expect(steps.first()).not.toHaveClass(/is-active/);
   await expect(page.locator('[data-journey-now]')).toHaveText('03');
