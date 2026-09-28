@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getServices } from '@/lib/cms';
+import ServiceDetail from '@/templates/ServiceDetail.astro';
+
+export const getStaticPaths = (async () => {
+  const services = await getServices('en');
+  return services.map((service) => ({ params: { slug: service.slug.current }, props: { service } }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { service } = Astro.props as Props;
+---
+
+<ServiceDetail lang="en" service={service} />

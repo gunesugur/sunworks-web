@@ -1,0 +1,42 @@
+---
+/** Honeypot + Turnstile mount point shared by all forms. */
+interface Props {
+  idPrefix: string;
+}
+const { idPrefix } = Astro.props;
+const siteKey = (import.meta.env['PUBLIC_TURNSTILE_SITE_KEY'] as string | undefined) ?? '1x00000000000000000000AA';
+---
+
+<div class="hp" aria-hidden="true">
+  <label for={`${idPrefix}-website`}>Website</label>
+  <input id={`${idPrefix}-website`} name="website" type="text" tabindex="-1" autocomplete="off" />
+</div>
+<div class="ts" data-turnstile data-sitekey={siteKey}></div>
+
+<style>
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .ts:empty {
+    display: none;
+  }
+
+  .ts {
+    margin-top: 0.75rem;
+  }
+
+  :global(.form-status) {
+    min-height: 1.6em;
+    margin-top: 0.75rem;
+    font-size: var(--fs-xs);
+  }
+
+  :global(.form-status[data-state='ok'])::before {
+    content: '✓ ';
+  }
+</style>

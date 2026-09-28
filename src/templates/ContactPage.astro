@@ -1,0 +1,160 @@
+---
+import type { Locale } from '@/content/schema';
+import { getPages, getSettings } from '@/lib/cms';
+import { routes } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import PortableText from '@/components/PortableText.astro';
+import ContactForm from '@/components/ContactForm.astro';
+import Icon from '@/components/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const [settings, contactPages, legalPages] = await Promise.all([getSettings(lang), getPages(lang, 'contact'), getPages(lang, 'legal')]);
+const page = contactPages[0];
+if (!page) throw new Error(`Missing contact page for ${lang}`);
+const privacy = legalPages.find((p) => p.translationKey === 'page-privacy');
+const { lat, lng, zoom } = settings.map;
+const d = 180 / 2 ** zoom;
+const bbox = [lng - d, lat - d * 0.6, lng + d, lat + d * 0.6].map((n) => n.toFixed(4)).join(',');
+const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
+---
+
+<Base lang={lang} title={page.seo.title ?? page.title} description={page.seo.description ?? page.intro} alternates={{ tr: routes.contact.tr, en: routes.contact.en }}>
+  <PageHeader lang={lang} title={page.title} intro={page.intro} />
+  <section class="container contact" aria-label={page.title}>
+    <div class="contact__form">
+      <h2 class="h3">{s.formTitle}</h2>
+      <PortableText value={page.body} class="contact__note" />
+      <ContactForm lang={lang} email={settings.email} privacySlug={privacy?.slug.current ?? 'gizlilik'} />
+    </div>
+    <aside class="contact__aside">
+      <dl class="facts">
+        <div>
+          <dt><Icon name="mail" size={20} /> {s.emailUs}</dt>
+          <dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd>
+        </div>
+        <div>
+          <dt><Icon name="pin" size={20} /> {s.location}</dt>
+          <dd>{settings.map.label}</dd>
+        </div>
+      </dl>
+      <div class="map" data-map id="map">
+        <p class="map__notice">{s.mapNotice}</p>
+        <button type="button" class="map__btn" data-map-load data-src={mapSrc} data-title={s.mapTitle}>
+          <Icon name="pin" size={20} />
+          {s.mapLoad}
+        </button>
+      </div>
+    </aside>
+  </section>
+</Base>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    padding-bottom: var(--section);
+    align-items: start;
+  }
+
+  .contact__form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .contact__form :global(.contact__note) {
+    margin-bottom: 1rem;
+    color: var(--c-muted);
+    font-size: var(--fs-small);
+  }
+
+  .contact__aside {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .facts {
+    display: grid;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .facts dt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  .facts dd {
+    margin: 0.25rem 0 0;
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    word-break: break-word;
+  }
+
+  .map {
+    position: relative;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1rem;
+    aspect-ratio: 4 / 3;
+    padding: 1.5rem;
+    border-radius: var(--r-card);
+    background:
+      radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--c-dark) 10%, transparent) 0 6px, transparent 7px),
+      repeating-linear-gradient(0deg, transparent 0 31px, var(--c-line) 31px 32px),
+      repeating-linear-gradient(90deg, transparent 0 31px, var(--c-line) 31px 32px),
+      var(--c-band);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .map :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .map__notice {
+    max-width: 22rem;
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+
+  .map__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 48px;
+    padding: 0.6rem 1.4rem;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: var(--c-dark);
+    color: var(--c-light);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .map__btn:hover {
+    transform: translate3d(0, -2px, 0);
+  }
+
+  @media (max-width: 900px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

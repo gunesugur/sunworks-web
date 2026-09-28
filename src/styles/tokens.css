@@ -1,0 +1,45 @@
+/* Design tokens — extracted from Figma (QALdjrTAJQ2wvLlvkPBg2r, nodes 1:81 / 1:9).
+   Palette is fixed; neutrals are mixes of the palette only. */
+:root {
+  --c-dark: #12100d;
+  --c-light: #f5f6f7;
+  --c-accent: #1cdb9c;
+  --c-muted: #61605f; /* on light: 5.8:1 */
+  --c-muted-on-dark: #a6a6a5; /* on dark: 7.8:1 */
+  --c-line: color-mix(in srgb, var(--c-dark) 12%, var(--c-light));
+  --c-band: color-mix(in srgb, var(--c-dark) 5%, var(--c-light));
+  --c-dark-soft: color-mix(in srgb, var(--c-light) 8%, var(--c-dark));
+  --c-scrim: color-mix(in srgb, var(--c-dark) 55%, transparent);
+
+  --font-sans: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Type scale (1440 canvas: H1 74.5, H2 54, H3 30, body 20, small 16–18) */
+  --fs-h1: clamp(2.5rem, 1.55rem + 3.9vw, 4.656rem);
+  --fs-h2: clamp(2rem, 1.35rem + 2.6vw, 3.375rem);
+  --fs-h3: clamp(1.375rem, 1.2rem + 0.75vw, 1.875rem);
+  --fs-body: clamp(1.0625rem, 1rem + 0.28vw, 1.25rem);
+  --fs-lead: clamp(1.125rem, 1.05rem + 0.4vw, 1.5rem);
+  --fs-small: clamp(1rem, 0.97rem + 0.12vw, 1.125rem);
+  --fs-xs: 1rem;
+  --lh-head: 1.266;
+  --lh-body: 1.6;
+
+  /* Layout: 1284 container + 78px gutters at 1440 */
+  --container: 80.25rem;
+  --gutter: clamp(1rem, 5.42vw, 4.875rem);
+  --section: clamp(4rem, 2.5rem + 6vw, 8rem);
+
+  --r-pill: 57px;
+  --r-card: clamp(18px, 1rem + 1vw, 32px);
+  --r-footer: 48px;
+  --btn-circle: clamp(56px, 3rem + 2.2vw, 85px);
+  --stroke: 0.85px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur: 420ms;
+  --dur-slow: 900ms;
+
+  --focus: 3px solid var(--c-dark);
+}

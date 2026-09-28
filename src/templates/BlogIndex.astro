@@ -1,0 +1,137 @@
+---
+import type { Locale } from '@/content/schema';
+import { getPosts } from '@/lib/cms';
+import { breadcrumbLd } from '@/lib/seo';
+import { formatDate, postPath, routes } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Notched from '@/components/Notched.astro';
+import Img from '@/components/Img.astro';
+import ArrowButton from '@/components/ArrowButton.astro';
+import Icon from '@/components/Icon.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const posts = await getPosts(lang);
+const site = Astro.site ?? new URL('https://sunworks.studio');
+const ld = [
+  breadcrumbLd(site, [
+    { label: s.home, href: routes.home[lang] },
+    { label: s.blogTitle, href: routes.blog[lang] },
+  ]),
+];
+---
+
+<Base lang={lang} title={s.blogTitle} description={s.blogIntro} alternates={{ tr: routes.blog.tr, en: routes.blog.en }} jsonLd={ld}>
+  <PageHeader lang={lang} title={s.blogTitle} intro={s.blogIntro}>
+    <a class="rss" href={routes.rss[lang]}><Icon name="rss" size={18} /> {s.rss}</a>
+  </PageHeader>
+
+  <section class="container posts" aria-label={s.blogTitle}>
+    {posts.length === 0 && <p>{s.noPosts}</p>}
+    <ul>
+      {
+        posts.map((post) => (
+          <li data-reveal>
+            <article class="post card-link">
+              <Notched corner="tr" ratio="16 / 10">
+                <Img image={post.image} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 620px" />
+                <ArrowButton slot="corner" />
+              </Notched>
+              <div class="post__body">
+                <p class="post__meta">
+                  <time datetime={post.publishedAt}>{formatDate(post.publishedAt, lang)}</time>
+                  {post.tags.map((tag) => <span class="post__tag">{tag}</span>)}
+                </p>
+                <h2 class="h3 post__title">
+                  <a href={postPath(lang, post.slug.current)}>{post.title}</a>
+                </h2>
+                <p class="muted">{post.excerpt}</p>
+              </div>
+            </article>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .rss {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  .posts {
+    padding-bottom: var(--section);
+  }
+
+  .posts ul {
+    display: grid;
+    gap: 3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .post {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 620fr) minmax(0, 560fr);
+    gap: clamp(1.5rem, 5vw, 5rem);
+    align-items: center;
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+
+  .post__tag {
+    padding: 0.15rem 0.75rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-pill);
+  }
+
+  .post__title {
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .post__title a {
+    text-decoration: none;
+  }
+
+  .post__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .post:hover .post__title a {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .post:hover :global(.notched__media img) {
+    transform: scale(1.045);
+  }
+
+  @media (max-width: 900px) {
+    .post {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

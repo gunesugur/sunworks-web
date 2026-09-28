@@ -1,0 +1,211 @@
+---
+import type { Locale, Service } from '@/content/schema';
+import { getServices, getTranslation } from '@/lib/cms';
+import { breadcrumbLd } from '@/lib/seo';
+import { routes, servicePath } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import PortableText from '@/components/PortableText.astro';
+import Notched from '@/components/Notched.astro';
+import Img from '@/components/Img.astro';
+import Icon from '@/components/Icon.astro';
+import Button from '@/components/Button.astro';
+import CtaBand from '@/components/CtaBand.astro';
+
+interface Props {
+  lang: Locale;
+  service: Service;
+}
+const { lang, service } = Astro.props;
+const s = t(lang);
+const other: Locale = lang === 'tr' ? 'en' : 'tr';
+const [translation, all] = await Promise.all([getTranslation('service', service.translationKey, other), getServices(lang)]);
+const alternates: Partial<Record<Locale, string>> = { [lang]: servicePath(lang, service.slug.current) };
+if (translation) alternates[other] = servicePath(other, translation.slug.current);
+const others = all.filter((x) => x._id !== service._id);
+const site = Astro.site ?? new URL('https://sunworks.studio');
+const contactHref = `${routes.contact[lang]}?topic=${encodeURIComponent(service.translationKey.replace('service-', ''))}`;
+const ld = [
+  breadcrumbLd(site, [
+    { label: s.home, href: routes.home[lang] },
+    { label: s.servicesTitle, href: routes.services[lang] },
+    { label: service.title, href: servicePath(lang, service.slug.current) },
+  ]),
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: service.title,
+    description: service.excerpt,
+    provider: { '@type': 'Person', name: 'Uğur Güneş' },
+    areaServed: 'TR',
+    url: new URL(servicePath(lang, service.slug.current), site).href,
+  },
+];
+---
+
+<Base lang={lang} title={service.seo.title ?? service.title} description={service.seo.description ?? service.excerpt} alternates={alternates} jsonLd={ld}>
+  <PageHeader
+    lang={lang}
+    title={service.title}
+    intro={service.excerpt}
+    crumbs={[{ label: s.servicesTitle, href: routes.services[lang] }]}
+  />
+
+  <div class="container">
+    <Notched corner="br" nw="clamp(96px, 9vw, 120px)" nh="clamp(96px, 9vw, 120px)" ratio="1284 / 520" class="detail__media" hover={false}>
+      <Img image={service.image} widths={[640, 960, 1284, 1920]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
+      <span slot="corner" class="detail__icon" aria-hidden="true"><Icon name={service.icon} size={34} /></span>
+    </Notched>
+  </div>
+
+  <section class="container detail section">
+    <PortableText value={service.body} class="detail__body" />
+    <aside class="detail__aside" aria-labelledby="included-title">
+      <div class="included">
+        <h2 id="included-title" class="h3">{s.included}</h2>
+        <ul>
+          {
+            service.deliverables.map((d, i) => (
+              <li data-reveal style={`--reveal-i:${i}`}>
+                <Icon name="check" size={20} />
+                <span>{d}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <Button href={contactHref} variant="solid">{s.askAbout}</Button>
+      </div>
+    </aside>
+  </section>
+
+  <nav class="container more" aria-labelledby="more-title">
+    <h2 id="more-title" class="h3">{s.otherServices}</h2>
+    <ul>
+      {
+        others.map((o) => (
+          <li>
+            <a href={servicePath(lang, o.slug.current)}>
+              <Icon name={o.icon} size={22} />
+              <span>{o.title}</span>
+              <Icon name="arrow" size={16} class="more__arrow" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .container :global(.detail__media) {
+    max-height: 70vh;
+  }
+
+  .detail__icon {
+    display: grid;
+    place-items: center;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    margin: 16px 0 0 16px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-dark);
+    animation: spin-in 1.2s var(--ease-out) both;
+  }
+
+  @keyframes spin-in {
+    from {
+      transform: rotate(-90deg) scale(0.6);
+      opacity: 0;
+    }
+  }
+
+  .detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 24rem);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .included {
+    position: sticky;
+    top: 2rem;
+    display: grid;
+    gap: 1.5rem;
+    justify-items: start;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--r-card);
+    background: var(--c-band);
+  }
+
+  .included ul {
+    display: grid;
+    gap: 0.9rem;
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-small);
+  }
+
+  .included li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: start;
+  }
+
+  .included li :global(.icon) {
+    margin-top: 0.25em;
+  }
+
+  .more {
+    padding-bottom: var(--section);
+  }
+
+  .more ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .more a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.9rem;
+    min-height: 64px;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-small);
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      border-color var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out);
+  }
+
+  .more a:hover {
+    border-color: var(--c-dark);
+    transform: translate3d(0, -3px, 0);
+  }
+
+  .more a :global(.more__arrow) {
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .more a:hover :global(.more__arrow) {
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 900px) {
+    .detail {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

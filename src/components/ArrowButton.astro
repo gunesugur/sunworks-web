@@ -1,0 +1,88 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  /** Without href it renders as a decorative span (e.g. inside a card that is already a link). */
+  href?: string;
+  label?: string;
+  size?: 'md' | 'sm';
+  class?: string;
+}
+const { href, label, size = 'md', class: cls } = Astro.props;
+---
+
+{
+  href ? (
+    <a href={href} class:list={['arrow-btn', `arrow-btn--${size}`, cls]} aria-label={label}>
+      <span class="arrow-btn__icons" aria-hidden="true">
+        <Icon name="arrow" size={size === 'sm' ? 16 : 22} />
+        <Icon name="arrow" size={size === 'sm' ? 16 : 22} />
+      </span>
+    </a>
+  ) : (
+    <span class:list={['arrow-btn', `arrow-btn--${size}`, cls]} aria-hidden="true">
+      <span class="arrow-btn__icons">
+        <Icon name="arrow" size={size === 'sm' ? 16 : 22} />
+        <Icon name="arrow" size={size === 'sm' ? 16 : 22} />
+      </span>
+    </span>
+  )
+}
+
+<style>
+  .arrow-btn {
+    display: inline-grid;
+    place-items: center;
+    width: var(--btn-circle);
+    height: var(--btn-circle);
+    border-radius: 50%;
+    background: var(--c-dark);
+    color: var(--c-light);
+    transition:
+      background-color var(--dur) var(--ease-out),
+      color var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out);
+  }
+
+  .arrow-btn--sm {
+    width: 56px;
+    height: 56px;
+  }
+
+  .arrow-btn:hover,
+  .arrow-btn:focus-visible,
+  :global(.card-link:hover) .arrow-btn,
+  :global(.card-link:focus-within) .arrow-btn {
+    background: var(--c-accent);
+    color: var(--c-dark);
+    transform: scale(1.06);
+  }
+
+  .arrow-btn__icons {
+    display: grid;
+    overflow: hidden;
+  }
+
+  .arrow-btn__icons :global(.icon) {
+    grid-area: 1 / 1;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .arrow-btn__icons :global(.icon:last-child) {
+    transform: translate3d(-130%, 130%, 0);
+  }
+
+  .arrow-btn:hover :global(.icon:first-child),
+  .arrow-btn:focus-visible :global(.icon:first-child),
+  :global(.card-link:hover) .arrow-btn :global(.icon:first-child),
+  :global(.card-link:focus-within) .arrow-btn :global(.icon:first-child) {
+    transform: translate3d(130%, -130%, 0);
+  }
+
+  .arrow-btn:hover :global(.icon:last-child),
+  .arrow-btn:focus-visible :global(.icon:last-child),
+  :global(.card-link:hover) .arrow-btn :global(.icon:last-child),
+  :global(.card-link:focus-within) .arrow-btn :global(.icon:last-child) {
+    transform: none;
+  }
+</style>

@@ -1,0 +1,13 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "src/**/*", "tests/**/*", "scripts/**/*", "worker-configuration.d.ts", "*.ts", "*.mjs"],
+  "exclude": ["dist", "studio", "node_modules"],
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] },
+    "types": ["@cloudflare/workers-types"],
+    "verbatimModuleSyntax": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true
+  }
+}

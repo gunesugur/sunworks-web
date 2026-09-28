@@ -1,0 +1,677 @@
+---
+import type { Locale } from '@/content/schema';
+import { getHome, getServices } from '@/lib/cms';
+import { routes, servicePath } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import Img from '@/components/Img.astro';
+import Notched from '@/components/Notched.astro';
+import Button from '@/components/Button.astro';
+import ArrowButton from '@/components/ArrowButton.astro';
+import Tag from '@/components/Tag.astro';
+import Asterisk from '@/components/Asterisk.astro';
+import Icon from '@/components/Icon.astro';
+import ServiceCard from '@/components/ServiceCard.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const [home, services] = await Promise.all([getHome(lang), getServices(lang)]);
+const s = t(lang);
+const words = home.hero.title.split(' ');
+const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
+---
+
+<Base lang={lang} title={home.seo.title} description={home.seo.description} alternates={{ tr: routes.home.tr, en: routes.home.en }}>
+  <!-- Hero -->
+  <section class="hero container" aria-labelledby="hero-title">
+    <div class="hero__top">
+      <h1 id="hero-title" class="h1 hero__title">
+        {
+          words.map((w, i) => (
+            <span class="hero__word" style={`--w:${i}`}>
+              <span>{w}</span>
+            </span>
+          ))
+        }
+      </h1>
+      <div class="hero__aside">
+        <div class="hero__card" data-reveal="scale">
+          <Img image={home.hero.smallImage} widths={[360, 720]} sizes="(max-width: 900px) 1px, 360px" class="hero__small" priority />
+        </div>
+        <p class="hero__note">
+          <button type="button" class="hero__star" data-spin aria-hidden="true" tabindex="-1"><Asterisk size="100%" /></button>
+          <span>{home.hero.note}</span>
+        </p>
+      </div>
+    </div>
+
+    <Notched corner="tr" nw="calc(var(--aside) + var(--hero-gap))" nh="var(--hero-nh)" class="hero__media" hover={false}>
+      <div class="hero__img" data-parallax="0.06">
+        <Img image={home.hero.image} widths={[640, 960, 1284, 1920, 2400]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
+      </div>
+      <ul class="hero__tags" slot="overlay" aria-label="Tags">
+        {
+          home.hero.tags.map((tag, i) => (
+            <li data-reveal style={`--reveal-i:${i}`}>
+              <Tag variant={i === 0 ? 'solid' : 'glass'}>{tag}</Tag>
+            </li>
+          ))
+        }
+      </ul>
+    </Notched>
+  </section>
+
+  <!-- Tools band -->
+  <section class="tools" aria-labelledby="tools-title">
+    <h2 id="tools-title" class="tools__title">{home.tools.title}</h2>
+    <div class="tools__viewport">
+      <ul class="tools__track" aria-label={s.toolsLabel}>
+        {
+          home.tools.items.map((item) => (
+            <li>
+              <span>{item}</span>
+              <Asterisk size="0.55em" />
+            </li>
+          ))
+        }
+      </ul>
+      <ul class="tools__track tools__track--clone" aria-hidden="true">
+        {
+          home.tools.items.map((item) => (
+            <li>
+              <span>{item}</span>
+              <Asterisk size="0.55em" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Intro split -->
+  <section class="split container section" aria-labelledby="split-title">
+    <h2 id="split-title" class="h2 split__title" data-reveal>{home.intro.title}</h2>
+    <span class="split__rule" aria-hidden="true" data-reveal="fade"></span>
+    <p class="split__text" data-reveal style="--reveal-i:1">{home.intro.text}</p>
+    <div data-reveal style="--reveal-i:2"><Button href={home.intro.cta.href}>{home.intro.cta.label}</Button></div>
+  </section>
+
+  <!-- Two notched images -->
+  <section class="duo container" aria-label={`${home.duo.firstTag} / ${home.duo.secondTag}`}>
+    <Notched corner="tr" class="duo__a" ratio="1 / 1">
+      <Img image={home.duo.first} widths={[400, 800]} sizes="(max-width: 900px) 92vw, 401px" />
+      <ArrowButton slot="corner" href={home.duo.link.href} label={home.duo.link.label} />
+      <Tag slot="overlay" variant="solid" class="duo__tag duo__tag--a">{home.duo.firstTag}</Tag>
+    </Notched>
+    <Notched corner="bl" class="duo__b" ratio="858 / 401" nw="clamp(180px, 16vw, 240px)" nh="clamp(56px, 5vw, 68px)">
+      <Img image={home.duo.second} widths={[640, 960, 1716]} sizes="(max-width: 900px) 92vw, 858px" />
+      <Tag slot="corner" variant="outline">{home.duo.secondTag}</Tag>
+    </Notched>
+  </section>
+
+  <!-- Approach -->
+  <section class="approach container section" aria-labelledby="approach-title">
+    <div class="approach__media" data-reveal="scale">
+      <Notched corner="tl" nw="clamp(190px, 17vw, 240px)" nh="clamp(56px, 5vw, 68px)" ratio="591 / 627">
+        <Img image={home.approach.image} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 591px" />
+        <Tag slot="corner" variant="outline">{home.approach.tag}</Tag>
+      </Notched>
+    </div>
+    <div class="approach__body">
+      <h2 id="approach-title" class="h2" data-reveal>{home.approach.title}</h2>
+      <span class="approach__rule" aria-hidden="true"></span>
+      <ul class="features">
+        {
+          home.approach.items.map((item, i) => (
+            <li class="feature" data-reveal style={`--reveal-i:${i}`}>
+              <span class:list={['feature__icon', { 'feature__icon--outline': i % 2 === 1 }]} aria-hidden="true">
+                <Icon name={item.icon} size={34} />
+              </span>
+              <div>
+                <h3 class="h3 feature__title">{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <Button href={home.approach.cta.href}>{home.approach.cta.label}</Button>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services container section" aria-labelledby="services-title">
+    <header class="services__head" data-reveal>
+      <h2 id="services-title" class="h2">{home.servicesSection.title}</h2>
+      <p class="lead">{home.servicesSection.text}</p>
+    </header>
+    <ul class="services__grid">
+      {
+        services.map((svc, i) => (
+          <li data-reveal style={`--reveal-i:${i % 3}`}>
+            <ServiceCard service={svc} href={servicePath(lang, svc.slug.current)} ratio={ratios[i % ratios.length] ?? '1 / 1'} label={s.viewService} />
+          </li>
+        ))
+      }
+    </ul>
+    <div class="services__more">
+      <Button href={routes.services[lang]} variant="solid" size="lg">{s.allServices}</Button>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="process container section" id="process" aria-labelledby="process-title">
+    <div class="process__head">
+      <h2 id="process-title" class="h2" data-reveal>{home.process.title}</h2>
+      <p class="lead process__lead" data-reveal style="--reveal-i:1">{home.process.text}</p>
+    </div>
+    <ol class="steps">
+      {
+        home.process.steps.map((step, i) => (
+          <li class="step" data-reveal style={`--reveal-i:${i}`}>
+            <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="h3 step__title">
+              <span class="sr-only">{`${s.stepLabel} ${i + 1}: `}</span>
+              {step.title}
+            </h3>
+            <p class="step__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Closing -->
+  <section class="closing container" aria-labelledby="closing-title">
+    <Notched corner="tr" nw="var(--closing-nw)" nh="var(--closing-nh)" class="closing__media" ratio="1284 / 574">
+      <div class="closing__img" data-parallax="0.05">
+        <Img image={home.closing.image} widths={[640, 960, 1284, 1920, 2400]} sizes="(max-width: 1440px) 92vw, 1284px" />
+      </div>
+      <div slot="corner" class="closing__text">
+        <h2 id="closing-title" class="closing__title">{home.closing.title}</h2>
+        <ArrowButton href={home.closing.cta.href} label={home.closing.cta.label} size="sm" />
+      </div>
+      <div slot="overlay" class="closing__tag">
+        <Tag variant="solid">{home.closing.tag}</Tag>
+      </div>
+    </Notched>
+  </section>
+</Base>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    --aside: clamp(230px, 25vw, 360px);
+    --hero-gap: clamp(1rem, 2vw, 1.75rem);
+    --hero-nh: clamp(92px, 7.6vw, 112px);
+    padding-top: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .hero__top {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--aside);
+    align-items: end;
+    gap: var(--hero-gap);
+  }
+
+  .hero__title {
+    padding-bottom: calc(var(--hero-nh) + 1rem);
+  }
+
+  .hero__word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding-bottom: 0.06em;
+    margin-right: 0.25em;
+  }
+
+  .hero__word > span {
+    display: inline-block;
+    animation: word-in 1s var(--ease-out) both;
+    animation-delay: calc(0.15s + var(--w) * 70ms);
+  }
+
+  :global(html.intro) .hero__word > span {
+    animation-delay: calc(1.75s + var(--w) * 70ms);
+  }
+
+  @keyframes word-in {
+    from {
+      transform: translate3d(0, 105%, 0);
+    }
+  }
+
+  .hero__aside {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .hero__card :global(.hero__small) {
+    width: 100%;
+    aspect-ratio: 343 / 229;
+    object-fit: cover;
+    border-radius: var(--r-card);
+  }
+
+  .hero :global(.hero__media) {
+    margin-top: calc(var(--hero-nh) * -1);
+    height: clamp(380px, 36vw, 520px);
+  }
+
+  .hero__img {
+    position: absolute;
+    inset: -8% 0;
+    transform: translate3d(0, var(--py, 0), 0);
+    will-change: transform;
+  }
+
+  .hero__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85);
+  }
+
+  .hero__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    min-height: calc(var(--hero-nh) - 0.75rem);
+    font-size: clamp(1rem, 0.85rem + 0.55vw, 1.5rem);
+    line-height: 1.45;
+  }
+
+  .hero__star {
+    flex: none;
+    width: 1.4em;
+    height: 1.4em;
+    margin-top: -0.2em;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    transform: rotate(calc(var(--turns, 0) * 240deg));
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .hero__tags {
+    position: absolute;
+    left: clamp(1rem, 2.5vw, 2rem);
+    bottom: clamp(1rem, 2.5vw, 2rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    max-width: min(34rem, 80%);
+    padding: 0;
+    list-style: none;
+  }
+
+  /* ---------- Tools ---------- */
+  .tools {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-block: clamp(2.5rem, 4vw, 3rem);
+    background: var(--c-band);
+    text-align: center;
+  }
+
+  .tools__title {
+    padding-inline: var(--gutter);
+    color: var(--c-muted);
+    font-size: var(--fs-lead);
+    font-weight: 500;
+  }
+
+  .tools__viewport {
+    display: flex;
+    margin-top: 2rem;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+
+  .tools__track {
+    display: flex;
+    flex: none;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding: 0 clamp(1rem, 2.5vw, 2.25rem);
+    list-style: none;
+    animation: marquee 32s linear infinite;
+  }
+
+  .tools__viewport:hover .tools__track {
+    animation-play-state: paused;
+  }
+
+  .tools__track li {
+    display: inline-flex;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2.25rem);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tools__viewport {
+      mask-image: none;
+    }
+
+    .tools__track {
+      flex-wrap: wrap;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .tools__track--clone {
+      display: none;
+    }
+  }
+
+  /* ---------- Split ---------- */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 472fr) 3px minmax(0, 421fr) auto;
+    align-items: center;
+    gap: clamp(1.5rem, 5vw, 5.25rem);
+  }
+
+  .split__rule {
+    width: 3px;
+    height: 129px;
+    border-radius: 18px;
+    background: var(--c-line);
+  }
+
+  /* ---------- Duo ---------- */
+  .duo {
+    display: grid;
+    grid-template-columns: minmax(0, 401fr) minmax(0, 858fr);
+    gap: clamp(1rem, 1.8vw, 1.6rem);
+    align-items: start;
+  }
+
+  .duo :global(.duo__tag) {
+    position: absolute;
+    left: 1.25rem;
+    bottom: 1.25rem;
+  }
+
+  /* ---------- Approach ---------- */
+  .approach {
+    display: grid;
+    grid-template-columns: minmax(0, 591fr) minmax(0, 560fr);
+    gap: clamp(2rem, 8vw, 8rem);
+    align-items: center;
+  }
+
+  .approach__body {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 3.2rem);
+    justify-items: start;
+  }
+
+  .approach__rule {
+    width: 100%;
+    height: 3px;
+    border-radius: 18px;
+    background: var(--c-line);
+  }
+
+  .features {
+    display: grid;
+    gap: 2.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .feature__icon {
+    display: grid;
+    place-items: center;
+    width: clamp(64px, 5.8vw, 83px);
+    height: clamp(64px, 5.8vw, 83px);
+    border: 1px solid var(--c-dark);
+    border-radius: 50%;
+    background: var(--c-dark);
+    color: var(--c-light);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .feature:hover .feature__icon {
+    transform: rotate(-12deg) scale(1.05);
+  }
+
+  .feature__icon--outline {
+    background: transparent;
+    color: var(--c-dark);
+  }
+
+  .feature__title {
+    margin-bottom: 0.5rem;
+  }
+
+  /* ---------- Services ---------- */
+  .services__head {
+    max-width: 42.5rem;
+    margin: 0 auto clamp(2.5rem, 5vw, 4rem);
+    text-align: center;
+  }
+
+  .services__head .lead {
+    margin-top: 1.25rem;
+  }
+
+  .services__grid {
+    columns: 3 18rem;
+    column-gap: clamp(1rem, 2.4vw, 2rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .services__grid > li {
+    break-inside: avoid;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .services__more {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ---------- Process ---------- */
+  .process__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem 4rem;
+    align-items: end;
+    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1rem, 1.6vw, 1.5rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    min-height: 100%;
+    padding: clamp(1.5rem, 2.4vw, 2rem);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    transition:
+      transform var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out);
+  }
+
+  .step:hover {
+    transform: translate3d(0, -6px, 0);
+    border-color: var(--c-dark);
+  }
+
+  .step__num {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-dark);
+    font-weight: 700;
+    font-size: 1.05rem;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .step:hover .step__num {
+    transform: rotate(-10deg) scale(1.08);
+  }
+
+  .step__text {
+    color: var(--c-muted);
+    font-size: var(--fs-small);
+  }
+
+  /* ---------- Closing ---------- */
+  .closing {
+    --closing-nw: clamp(250px, 30vw, 420px);
+    --closing-nh: clamp(150px, 14vw, 200px);
+    padding-bottom: var(--section);
+  }
+
+  .closing__img {
+    position: absolute;
+    inset: -6% 0;
+    transform: translate3d(0, var(--py, 0), 0);
+    will-change: transform;
+  }
+
+  .closing__img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .closing__text {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    padding: 0.25rem 0 0 1.5rem;
+  }
+
+  .closing__title {
+    font-size: clamp(1.4rem, 0.9rem + 1.6vw, 2.5rem);
+    font-weight: 500;
+    line-height: var(--lh-head);
+  }
+
+  .closing__tag {
+    position: absolute;
+    left: clamp(1rem, 3vw, 2.5rem);
+    bottom: clamp(1rem, 3vw, 2.5rem);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1100px) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) 3px minmax(0, 1fr);
+    }
+
+    .split > div {
+      grid-column: 3;
+    }
+
+    .steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      --aside: 62%;
+      --hero-nh: 96px;
+    }
+
+    .hero__top {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__title {
+      padding-bottom: 0.5rem;
+    }
+
+    .hero__aside {
+      justify-self: end;
+      width: var(--aside);
+    }
+
+    .hero__card {
+      display: none;
+    }
+
+    .split,
+    .duo,
+    .approach,
+    .process__head {
+      grid-template-columns: 1fr;
+    }
+
+    .split__rule {
+      width: 64px;
+      height: 3px;
+    }
+
+    .split > div {
+      grid-column: auto;
+    }
+
+    .duo :global(.duo__a) {
+      max-width: 420px;
+    }
+
+    .closing {
+      --closing-nw: 72%;
+      --closing-nh: 132px;
+    }
+
+    .closing :global(.closing__media) {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__tags :global(li:nth-child(n + 4)) {
+      display: none;
+    }
+  }
+</style>

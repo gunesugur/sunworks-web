@@ -1,0 +1,53 @@
+---
+import type { Locale, Page } from '@/content/schema';
+import { getTranslation } from '@/lib/cms';
+import { formatDate, pagePath } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import PortableText from '@/components/PortableText.astro';
+
+interface Props {
+  lang: Locale;
+  page: Page;
+}
+const { lang, page } = Astro.props;
+const s = t(lang);
+const other: Locale = lang === 'tr' ? 'en' : 'tr';
+const translation = await getTranslation('page', page.translationKey, other);
+const alternates: Partial<Record<Locale, string>> = { [lang]: pagePath(lang, page.slug.current) };
+if (translation) alternates[other] = pagePath(other, translation.slug.current);
+---
+
+<Base lang={lang} title={page.seo.title ?? page.title} description={page.seo.description ?? page.intro} alternates={alternates}>
+  <PageHeader lang={lang} title={page.title} intro={page.intro}>
+    <p class="updated">{s.lastUpdated}: <time datetime={page.updatedAt}>{formatDate(page.updatedAt, lang)}</time></p>
+  </PageHeader>
+  <div class="container legal">
+    {page.legalReviewRequired && <p class="review" role="note">{s.legalReview}</p>}
+    <PortableText value={page.body} />
+  </div>
+</Base>
+
+<style>
+  .updated {
+    margin-top: 1rem;
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+
+  .legal {
+    padding-bottom: var(--section);
+  }
+
+  .review {
+    max-width: 44rem;
+    margin-bottom: 2.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--r-card);
+    background: var(--c-accent);
+    color: var(--c-dark);
+    font-size: var(--fs-small);
+    font-weight: 600;
+  }
+</style>
