@@ -17,6 +17,7 @@ declare global {
 interface Messages {
   ok: string;
   sending: string;
+  verify: string;
   err: Record<'validation' | 'rate' | 'captcha' | 'unavailable' | 'network' | 'generic', string>;
   fields: Record<string, string>;
 }
@@ -48,6 +49,8 @@ function loadTurnstile(): Promise<TurnstileApi> {
 class TokenBox {
   private token = '';
   private waiters: ((t: string) => void)[] = [];
+  /** Set once Turnstile asks the visitor to interact; then we wait for them instead of timing out. */
+  interactive = false;
   set(value: string) {
     this.token = value;
     if (value) this.waiters.splice(0).forEach((w) => w(value));
@@ -58,7 +61,13 @@ class TokenBox {
   get(timeoutMs: number): Promise<string> {
     if (this.token) return Promise.resolve(this.token);
     return new Promise((resolve) => {
-      const timer = window.setTimeout(() => resolve(''), timeoutMs);
+      const started = Date.now();
+      const tick = () => {
+        const limit = this.interactive ? 5 * 60_000 : timeoutMs;
+        if (Date.now() - started >= limit) resolve('');
+        else timer = window.setTimeout(tick, 500);
+      };
+      let timer = window.setTimeout(tick, 500);
       this.waiters.push((t) => {
         window.clearTimeout(timer);
         resolve(t);
@@ -103,17 +112,14 @@ function showFieldErrors(form: HTMLFormElement, fields: string[], msgs: Messages
   first?.focus();
 }
 
+type Field = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+const isField = (el: unknown): el is Field =>
+  el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement;
+
 function invalidFields(form: HTMLFormElement): string[] {
   const names = new Set<string>();
   for (const el of Array.from(form.elements)) {
-    if (
-      (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) &&
-      el.name &&
-      el.name !== 'website' &&
-      !el.checkValidity()
-    ) {
-      names.add(el.name);
-    }
+    if (isField(el) && el.name && el.name !== 'website' && !el.checkValidity()) names.add(el.name);
   }
   return [...names];
 }
@@ -121,12 +127,33 @@ function invalidFields(form: HTMLFormElement): string[] {
 function payload(form: HTMLFormElement): Record<string, string | boolean> {
   const data: Record<string, string | boolean> = {};
   for (const el of Array.from(form.elements)) {
-    if (el instanceof HTMLInputElement && el.type === 'checkbox') data[el.name] = el.checked;
-    else if ((el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) && el.name) {
-      data[el.name] = el.value;
-    }
+    if (!isField(el) || !el.name) continue;
+    data[el.name] = el instanceof HTMLInputElement && el.type === 'checkbox' ? el.checked : el.value;
   }
   return data;
+}
+
+async function post(form: HTMLFormElement, token: string): Promise<{ status: number; result: ApiResult }> {
+  const res = await fetch(form.action, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({ ...payload(form), turnstileToken: token }),
+    credentials: 'same-origin',
+  });
+  const result = (await res.json().catch(() => ({ ok: false, error: 'generic' }))) as ApiResult;
+  return { status: res.status, result };
+}
+
+function showResult(form: HTMLFormElement, msgs: Messages, status: number, result: ApiResult) {
+  if (status < 300 && result.ok) {
+    form.reset();
+    setStatus(form, msgs.ok, 'ok');
+    return;
+  }
+  const error = result.ok ? 'generic' : result.error;
+  setStatus(form, msgs.err[error] ?? msgs.err.generic, 'error');
+  if (error === 'unavailable') appendEmailLink(form);
+  if (!result.ok && result.fields?.length) showFieldErrors(form, result.fields, msgs);
 }
 
 function enhance(form: HTMLFormElement): () => void {
@@ -147,16 +174,17 @@ function enhance(form: HTMLFormElement): () => void {
         callback: (t: string) => tokens.set(t),
         'expired-callback': () => tokens.clear(),
         'error-callback': () => tokens.clear(),
+        'before-interactive-callback': () => {
+          tokens.interactive = true;
+          setStatus(form, msgs.verify, 'busy');
+        },
       });
     } catch {
       /* handled at submit time: no token → captcha error */
     }
   };
 
-  const onFocus = () => void ensureWidget();
-
-  const onSubmit = async (event: SubmitEvent) => {
-    event.preventDefault();
+  const submit = async () => {
     clearFieldErrors(form);
     const bad = invalidFields(form);
     if (bad.length) {
@@ -169,42 +197,34 @@ function enhance(form: HTMLFormElement): () => void {
     setStatus(form, msgs.sending, 'busy');
     try {
       await ensureWidget();
-      const token = await tokens.get(12000);
+      const token = await tokens.get(15_000);
       if (!token) {
         setStatus(form, msgs.err.captcha, 'error');
         return;
       }
-      const res = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...payload(form), turnstileToken: token }),
-        credentials: 'same-origin',
+      // The token is single-use: once it has been sent, get a fresh one for any retry.
+      tokens.clear();
+      const { status, result } = await post(form, token).finally(() => {
+        if (widgetId) window.turnstile?.reset(widgetId);
       });
-      const result = (await res.json().catch(() => ({ ok: false, error: 'generic' }))) as ApiResult;
-      if (res.ok && result.ok) {
-        form.reset();
-        setStatus(form, msgs.ok, 'ok');
-        return;
-      }
-      const error = result.ok ? 'generic' : result.error;
-      setStatus(form, msgs.err[error] ?? msgs.err.generic, 'error');
-      if (error === 'unavailable') appendEmailLink(form);
-      if (!result.ok && result.fields?.length) showFieldErrors(form, result.fields, msgs);
+      showResult(form, msgs, status, result);
     } catch {
       setStatus(form, msgs.err.network, 'error');
     } finally {
-      tokens.clear();
-      if (widgetId) window.turnstile?.reset(widgetId);
       button?.removeAttribute('disabled');
     }
   };
 
-  const submitHandler = (e: SubmitEvent) => void onSubmit(e);
+  const onFocus = () => void ensureWidget();
+  const onSubmit = (event: SubmitEvent) => {
+    event.preventDefault();
+    void submit();
+  };
   form.addEventListener('focusin', onFocus, { once: true });
-  form.addEventListener('submit', submitHandler);
+  form.addEventListener('submit', onSubmit);
   return () => {
     form.removeEventListener('focusin', onFocus);
-    form.removeEventListener('submit', submitHandler);
+    form.removeEventListener('submit', onSubmit);
     if (widgetId) window.turnstile?.remove(widgetId);
   };
 }

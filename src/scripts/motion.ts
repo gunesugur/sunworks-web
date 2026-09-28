@@ -89,7 +89,44 @@ function initSpin(): () => void {
   return () => star.removeEventListener('click', onClick);
 }
 
+/** WCAG 2.2.2: the tools marquee can be paused by keyboard/touch, and pauses while focused. */
+function initMarquee(): () => void {
+  const toggle = document.querySelector<HTMLButtonElement>('[data-marquee-toggle]');
+  const viewport = document.querySelector<HTMLElement>('[data-marquee]');
+  const label = toggle?.querySelector<HTMLElement>('[data-marquee-label]');
+  if (!toggle || !viewport) return () => undefined;
+  const onClick = () => {
+    const paused = toggle.getAttribute('aria-pressed') !== 'true';
+    toggle.setAttribute('aria-pressed', String(paused));
+    viewport.classList.toggle('is-paused', paused);
+    if (label) label.textContent = (paused ? toggle.dataset['labelPlay'] : toggle.dataset['labelPause']) ?? '';
+  };
+  toggle.addEventListener('click', onClick);
+  return () => toggle.removeEventListener('click', onClick);
+}
+
+/** The intro overlay hides the page for ~2.4s: keep the page inert meanwhile, and let any key skip it. */
+function initIntro(): () => void {
+  const root = document.documentElement;
+  const intro = document.querySelector<HTMLElement>('[data-intro]');
+  if (!intro || !root.classList.contains('intro')) return () => undefined;
+  const blocked = [...document.body.children].filter((el): el is HTMLElement => el instanceof HTMLElement && el !== intro);
+  blocked.forEach((el) => (el.inert = true));
+  const finish = () => {
+    root.classList.remove('intro');
+    blocked.forEach((el) => (el.inert = false));
+    window.removeEventListener('keydown', finish);
+    intro.removeEventListener('animationend', onEnd);
+  };
+  const onEnd = (e: AnimationEvent) => {
+    if (e.target === intro) finish();
+  };
+  window.addEventListener('keydown', finish);
+  intro.addEventListener('animationend', onEnd);
+  return finish;
+}
+
 export function initMotion(): () => void {
-  const offs = [initReveal(), initParallax(), initGlow(), initSpin()];
+  const offs = [initIntro(), initReveal(), initParallax(), initGlow(), initSpin(), initMarquee()];
   return () => offs.forEach((off) => off());
 }

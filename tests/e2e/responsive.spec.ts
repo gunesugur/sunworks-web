@@ -22,6 +22,8 @@ test('mobile menu opens, traps nothing and closes with Escape', async ({ page },
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('#site-nav a[href="/hizmetler"]')).toBeVisible();
+  await expect(page.locator('#site-nav a').first()).toBeFocused();
+  await expect(page.locator('main')).toHaveAttribute('inert', '');
   await page.keyboard.press('Escape');
   await expect(toggle).toHaveAttribute('aria-expanded', 'false');
   await expect(toggle).toBeFocused();

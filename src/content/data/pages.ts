@@ -73,7 +73,7 @@ Bültene kaydolduğunuzda e-posta adresiniz ve sayfa dili aynı veritabanında s
 
 ## Kötüye kullanımı önleme
 
-Formlar Cloudflare Turnstile ile korunur. Turnstile, bir insan tarafından gönderildiğini doğrulamak için tarayıcınızdan bazı teknik sinyalleri Cloudflare'e iletir. Ayrıca aşırı istekleri sınırlamak için IP adresinizin gizli bir anahtarla oluşturulmuş tek yönlü özeti (hash) en fazla 24 saat saklanır; IP adresinin kendisi saklanmaz.
+Formlar Cloudflare Turnstile ile korunur. Turnstile, bir insan tarafından gönderildiğini doğrulamak için tarayıcınızdan bazı teknik sinyalleri Cloudflare'e iletir; doğrulama sırasında sunucumuz da IP adresinizi Cloudflare'e gönderir. Ayrıca aşırı istekleri sınırlamak için IP adresinizin gizli bir anahtarla oluşturulmuş tek yönlü özeti (hash) en fazla 24 saat saklanır; IP adresinin kendisi saklanmaz.
 
 ## Harita
 
@@ -120,7 +120,7 @@ When you sign up, your email address and page language are stored in the same da
 
 ## Abuse prevention
 
-Forms are protected by Cloudflare Turnstile, which sends some technical signals from your browser to Cloudflare to check that a person is submitting the form. To limit excessive requests, a one-way hash of your IP address created with a secret key is stored for up to 24 hours; the IP address itself is not stored.
+Forms are protected by Cloudflare Turnstile, which sends some technical signals from your browser to Cloudflare to check that a person is submitting the form; during verification our server also sends your IP address to Cloudflare. To limit excessive requests, a one-way hash of your IP address created with a secret key is stored for up to 24 hours; the IP address itself is not stored.
 
 ## Map
 

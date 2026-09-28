@@ -32,7 +32,7 @@ export default defineConfig({
     })),
   ),
   webServer: {
-    command: 'npx wrangler dev --port 8788 --ip 127.0.0.1',
+    command: 'npx wrangler dev -c dist/server/wrangler.json --port 8788 --ip 127.0.0.1',
     url: 'http://127.0.0.1:8788',
     reuseExistingServer: !process.env['CI'],
     timeout: 120_000,

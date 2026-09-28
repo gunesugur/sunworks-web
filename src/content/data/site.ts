@@ -23,7 +23,7 @@ export const settings: SiteSettings[] = [
     map: { ...map, label: 'Bursa, Türkiye' },
     newsletter: {
       title: 'Bülten',
-      text: 'Yeni bir yazı yayınladığımda kısa bir e-posta. Reklam yok; istediğiniz zaman listeden çıkabilirsiniz.',
+      text: 'Yeni yazılar için listeye yazılın. Gönderimlere henüz başlamadım; başladığımda yalnızca yeni yazıları duyuran kısa e-postalar gelecek.',
     },
     footerNote: "Bursa'dan, Ocak 2026'dan beri serbest çalışıyorum.",
     seo: {
@@ -45,7 +45,7 @@ export const settings: SiteSettings[] = [
     map: { ...map, label: 'Bursa, Türkiye' },
     newsletter: {
       title: 'Newsletter',
-      text: 'A short email when I publish a new post. No ads, and you can leave the list at any time.',
+      text: "Join the list for new posts. I haven't started sending yet; when I do, you'll only get short emails announcing new posts.",
     },
     footerNote: 'Freelancing from Bursa since January 2026.',
     seo: {

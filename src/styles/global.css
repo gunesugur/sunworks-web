@@ -132,7 +132,14 @@ select {
 
 .skip-link:focus-visible {
   transform: none;
-  outline-color: var(--c-accent);
+  outline: 3px solid var(--c-dark);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--c-light);
+}
+
+/* Forms need JavaScript (Turnstile + JSON API); without it only the email fallback is offered. */
+html:not(.js) form[data-form] button[type='submit'] {
+  display: none;
 }
 
 /* ---------- Typography ---------- */
@@ -263,6 +270,7 @@ select {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     transition-delay: 0ms !important;
+    animation-delay: 0ms !important;
     scroll-behavior: auto !important;
   }
 

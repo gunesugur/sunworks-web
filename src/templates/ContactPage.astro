@@ -30,7 +30,7 @@ const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&lay
     <div class="contact__form">
       <h2 class="h3">{s.formTitle}</h2>
       <PortableText value={page.body} class="contact__note" />
-      <ContactForm lang={lang} email={settings.email} privacySlug={privacy?.slug.current ?? 'gizlilik'} />
+      <ContactForm lang={lang} email={settings.email} privacySlug={privacy?.slug.current ?? (lang === 'tr' ? 'gizlilik' : 'privacy')} />
     </div>
     <aside class="contact__aside">
       <dl class="facts">

@@ -24,6 +24,7 @@ export default defineConfig({
       filter: (page) => !page.includes('/404'),
     }),
   ],
+  image: { domains: ['cdn.sanity.io'] },
   security: { checkOrigin: true },
   // Keep every asset a real file so the CSP needs no data: sources.
   vite: { build: { assetsInlineLimit: 0 } },
