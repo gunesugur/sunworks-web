@@ -24,7 +24,6 @@ if (translation) alternates[other] = pagePath(other, translation.slug.current);
     <p class="updated">{s.lastUpdated}: <time datetime={page.updatedAt}>{formatDate(page.updatedAt, lang)}</time></p>
   </PageHeader>
   <div class="container legal">
-    {page.legalReviewRequired && <p class="review" role="note">{s.legalReview}</p>}
     <PortableText value={page.body} />
   </div>
 </Base>
@@ -40,14 +39,4 @@ if (translation) alternates[other] = pagePath(other, translation.slug.current);
     padding-bottom: var(--section);
   }
 
-  .review {
-    max-width: 44rem;
-    margin-bottom: 2.5rem;
-    padding: 1rem 1.25rem;
-    border-radius: var(--r-card);
-    background: var(--c-accent);
-    color: var(--c-on-accent);
-    font-size: var(--fs-small);
-    font-weight: 600;
-  }
 </style>

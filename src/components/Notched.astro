@@ -3,6 +3,7 @@
  * Image frame with an inverted-radius notch in one corner. The notch size comes from CSS
  * (--nw / --nh, responsive); a ResizeObserver builds the exact clip-path (see scripts/notch.ts).
  * Without JS (or clip-path: path support) it falls back to a rounded rectangle.
+ * With `fit`, the notch hugs whatever sits in the corner slot (a tag, a row of tags) plus a gap.
  */
 import type { Corner } from '@/lib/notch';
 
@@ -14,13 +15,15 @@ interface Props {
   ratio?: string;
   class?: string;
   hover?: boolean;
+  /** Size the notch to the corner content instead of nw/nh. */
+  fit?: boolean;
 }
-const { corner = 'tr', nw = 'var(--btn-circle-slot)', nh = 'var(--btn-circle-slot)', ratio, class: cls, hover = true } = Astro.props;
+const { corner = 'tr', nw = 'var(--btn-circle-slot)', nh = 'var(--btn-circle-slot)', ratio, class: cls, hover = true, fit = false } = Astro.props;
 const ratioVar = ratio ? `--ratio:${ratio};` : '';
 const style = `--nw:${nw};--nh:${nh};${ratioVar}`;
 ---
 
-<div class:list={['notched', `notched--${corner}`, { 'notched--hover': hover }, cls]} data-notch={corner} style={style}>
+<div class:list={['notched', `notched--${corner}`, { 'notched--hover': hover, 'notched--fit': fit }, cls]} data-notch={corner} style={style}>
   <div class="notched__media" data-notch-media>
     <slot />
   </div>
@@ -68,6 +71,29 @@ const style = `--nw:${nw};--nh:${nh};${ratioVar}`;
 
   .notched__slot > :global(*) {
     pointer-events: auto;
+  }
+
+  .notched--fit .notched__slot {
+    --notch-gap: clamp(10px, 1vw, 14px);
+    width: auto;
+    height: auto;
+    max-width: 70%;
+  }
+
+  .notched--fit.notched--tr .notched__slot {
+    padding: 0 0 var(--notch-gap) var(--notch-gap);
+  }
+
+  .notched--fit.notched--tl .notched__slot {
+    padding: 0 var(--notch-gap) var(--notch-gap) 0;
+  }
+
+  .notched--fit.notched--br .notched__slot {
+    padding: var(--notch-gap) 0 0 var(--notch-gap);
+  }
+
+  .notched--fit.notched--bl .notched__slot {
+    padding: var(--notch-gap) var(--notch-gap) 0 0;
   }
 
   .notched--tr .notched__slot {

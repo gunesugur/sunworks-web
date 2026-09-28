@@ -39,12 +39,13 @@ const altLang = otherLocale(lang);
         }
       </ul>
       <div class="site-nav__extra">
-        <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}> — {s.langSwitchLabel}</span></a>
         <Button href={nav.cta.href} variant="outline">{nav.cta.label}</Button>
       </div>
     </nav>
 
+    <!-- The language switch sits with the theme toggle so neither moves when the CTA's label length changes. -->
     <div class="site-header__tools">
+      <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}> — {s.langSwitchLabel}</span></a>
       <ThemeToggle lang={lang} />
       <button
         type="button"

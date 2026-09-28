@@ -6,6 +6,7 @@ import { initA11y } from './a11y';
 import { initConsent } from './consent';
 import { initForms } from './forms';
 import { initHeader } from './header';
+import { initJourney } from './journey';
 import { initMap } from './map';
 import { initMenu } from './menu';
 import { initMotion } from './motion';
@@ -25,6 +26,7 @@ function boot() {
     initConsent(),
     initNotches(),
     initMotion(),
+    initJourney(),
     initForms(),
     initMap(),
   );

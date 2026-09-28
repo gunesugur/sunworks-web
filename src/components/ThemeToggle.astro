@@ -86,8 +86,20 @@ const s = t(Astro.props.lang);
     stroke: currentColor;
   }
 
-  .theme-toggle:hover .theme-toggle__sun {
-    transform: translate3d(0, -1px, 0);
+  /* Hover previews the switch: in light mode the sun dips and the crescent peeks over the horizon;
+     in dark mode the sun climbs back up while the moon sinks. */
+  :global(html:not([data-theme='dark'])) .theme-toggle:hover .theme-toggle__sun {
+    transform: translate3d(0, 5px, 0);
+  }
+
+  :global(html:not([data-theme='dark'])) .theme-toggle:hover .theme-toggle__moon {
+    transform: translate3d(0, 4px, 0);
+    opacity: 1;
+  }
+
+  :global(html:not([data-theme='dark'])) .theme-toggle:hover .theme-toggle__stars {
+    opacity: 0.7;
+    transform: scale(0.8);
   }
 
   :global(html[data-theme='dark']) .theme-toggle__sun {
@@ -103,5 +115,20 @@ const s = t(Astro.props.lang);
     opacity: 1;
     transform: none;
     transition-delay: 0.25s;
+  }
+
+  :global(html[data-theme='dark']) .theme-toggle:hover .theme-toggle__sun {
+    transform: translate3d(0, -1px, 0);
+  }
+
+  :global(html[data-theme='dark']) .theme-toggle:hover .theme-toggle__moon {
+    transform: translate3d(0, 7px, 0);
+    opacity: 0.5;
+  }
+
+  :global(html[data-theme='dark']) .theme-toggle:hover .theme-toggle__stars {
+    opacity: 0;
+    transform: scale(0.6);
+    transition-delay: 0s;
   }
 </style>

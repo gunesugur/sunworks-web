@@ -12,6 +12,7 @@ import Tag from '@/components/Tag.astro';
 import Asterisk from '@/components/Asterisk.astro';
 import Icon from '@/components/Icon.astro';
 import ServiceCard from '@/components/ServiceCard.astro';
+import HeroScene from '@/components/HeroScene.astro';
 
 interface Props {
   lang: Locale;
@@ -38,11 +39,13 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       </h1>
       <div class="hero__aside">
         <div class="hero__card" data-reveal="scale">
-          <Img image={home.hero.smallImage} widths={[360, 720]} sizes="(max-width: 900px) 1px, 360px" class="hero__small" priority />
+          <HeroScene labels={s.heroScene} />
         </div>
         <p class="hero__note">
-          <span class="hero__star" data-spin aria-hidden="true"><Asterisk size="100%" /></span>
-          <span>{home.hero.note}</span>
+          <span class="hero__note-in">
+            <span class="hero__star" data-spin aria-hidden="true"><Asterisk size="100%" /></span>
+            <span>{home.hero.note}</span>
+          </span>
         </p>
       </div>
     </div>
@@ -109,7 +112,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       <ArrowButton slot="corner" href={home.duo.link.href} label={home.duo.link.label} />
       <Tag slot="overlay" variant="solid" class="duo__tag duo__tag--a">{home.duo.firstTag}</Tag>
     </Notched>
-    <Notched corner="bl" class="duo__b" ratio="858 / 401" nw="clamp(180px, 16vw, 240px)" nh="clamp(56px, 5vw, 68px)">
+    <Notched corner="bl" class="duo__b" ratio="858 / 401" fit>
       <Img image={home.duo.second} widths={[640, 960, 1716]} sizes="(max-width: 900px) 92vw, 858px" />
       <Tag slot="corner" variant="outline">{home.duo.secondTag}</Tag>
     </Notched>
@@ -118,7 +121,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   <!-- Approach -->
   <section class="approach container section" aria-labelledby="approach-title">
     <div class="approach__media" data-reveal="scale">
-      <Notched corner="tl" nw="clamp(190px, 17vw, 240px)" nh="clamp(56px, 5vw, 68px)" ratio="591 / 627">
+      <Notched corner="tl" ratio="591 / 627" fit>
         <Img image={home.approach.image} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 591px" />
         <Tag slot="corner" variant="outline">{home.approach.tag}</Tag>
       </Notched>
@@ -171,20 +174,24 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       <h2 id="process-title" class="h2" data-reveal>{home.process.title}</h2>
       <p class="lead process__lead" data-reveal style="--reveal-i:1">{home.process.text}</p>
     </div>
-    <ol class="steps">
-      {
-        home.process.steps.map((step, i) => (
-          <li class="step" data-reveal style={`--reveal-i:${i}`}>
-            <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="h3 step__title">
-              <span class="sr-only">{`${s.stepLabel} ${i + 1}: `}</span>
-              {step.title}
-            </h3>
-            <p class="step__text">{step.text}</p>
-          </li>
-        ))
-      }
-    </ol>
+    <div class="journey" data-journey>
+      <svg class="journey__arc" data-journey-path aria-hidden="true" focusable="false"></svg>
+      <span class="journey__sun" data-journey-sun aria-hidden="true"><Asterisk size="55%" /></span>
+      <ol class="steps">
+        {
+          home.process.steps.map((step, i) => (
+            <li class="step" data-step data-reveal style={`--reveal-i:${i}`}>
+              <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="h3 step__title">
+                <span class="sr-only">{`${s.stepLabel} ${i + 1}: `}</span>
+                {step.title}
+              </h3>
+              <p class="step__text">{step.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
   </section>
 
   <!-- Closing -->
@@ -255,13 +262,6 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     gap: 1.5rem;
   }
 
-  .hero__card :global(.hero__small) {
-    width: 100%;
-    aspect-ratio: 343 / 229;
-    object-fit: cover;
-    border-radius: var(--r-card);
-  }
-
   .hero :global(.hero__media) {
     margin-top: calc(var(--hero-nh) * -1);
     height: clamp(380px, 36vw, 520px);
@@ -281,13 +281,19 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     filter: brightness(0.85);
   }
 
+  /* Fills the notch cut out of the photo below and sits centred in it. */
   .hero__note {
+    display: grid;
+    align-items: center;
+    height: var(--hero-nh);
+    font-size: clamp(1rem, 0.85rem + 0.5vw, 1.375rem);
+    line-height: 1.4;
+  }
+
+  .hero__note-in {
     display: flex;
     align-items: flex-start;
     gap: 0.6rem;
-    min-height: calc(var(--hero-nh) - 0.75rem);
-    font-size: clamp(1rem, 0.85rem + 0.55vw, 1.5rem);
-    line-height: 1.45;
   }
 
   .hero__star {
@@ -556,6 +562,78 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     margin-bottom: clamp(2rem, 4vw, 3.5rem);
   }
 
+  /* The sun climbs an arc over cards that rise like stairs (scripts/journey.ts). */
+  .journey {
+    --stair: clamp(2rem, 4.5vw, 4rem);
+    position: relative;
+  }
+
+  .journey__arc,
+  .journey__sun {
+    display: none;
+  }
+
+  .journey.has-arc {
+    padding-top: 7rem;
+  }
+
+  .journey.has-arc .journey__arc {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .journey :global(.journey__track) {
+    fill: none;
+    stroke: var(--c-line);
+    stroke-width: 2;
+    stroke-dasharray: 2 9;
+    stroke-linecap: round;
+  }
+
+  .journey :global(.journey__trail) {
+    fill: none;
+    stroke: var(--c-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  .journey.has-arc .journey__sun {
+    position: absolute;
+    left: -22px;
+    top: -22px;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--c-accent) 22%, transparent);
+    will-change: transform;
+  }
+
+  /* Stretched cards share a floor, so the stagger reads as stairs. */
+  .journey.has-arc .step {
+    min-height: 0;
+  }
+
+  .journey.has-arc .step:nth-child(1) {
+    margin-top: calc(var(--stair) * 2.6);
+  }
+
+  .journey.has-arc .step:nth-child(2) {
+    margin-top: calc(var(--stair) * 1.5);
+  }
+
+  .journey.has-arc .step:nth-child(3) {
+    margin-top: calc(var(--stair) * 0.65);
+  }
+
   .steps {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -590,12 +668,38 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     width: 56px;
     height: 56px;
     margin-bottom: 1rem;
+    border: 1.5px solid var(--c-accent);
     border-radius: 50%;
     background: var(--c-accent);
     color: var(--c-on-accent);
     font-weight: 700;
     font-size: 1.05rem;
-    transition: transform var(--dur) var(--ease-out);
+    transition:
+      transform var(--dur) var(--ease-out),
+      background-color var(--dur) var(--ease-out),
+      border-color var(--dur) var(--ease-out),
+      color var(--dur) var(--ease-out);
+  }
+
+  /* Until the sun reaches a step it waits in outline; lit steps fill with the accent. */
+  :global(.js) .journey .step:not(.is-lit) .step__num {
+    border-color: var(--c-line);
+    background: transparent;
+    color: var(--c-muted);
+  }
+
+  :global(.js) .journey .step.is-lit {
+    border-color: color-mix(in srgb, var(--c-accent) 55%, var(--c-line));
+  }
+
+  :global(.js) .journey .step.is-lit .step__num {
+    animation: step-lit 0.6s var(--ease-out);
+  }
+
+  @keyframes step-lit {
+    40% {
+      transform: scale(1.18);
+    }
   }
 
   .step:hover .step__num {

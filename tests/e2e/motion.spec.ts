@@ -83,3 +83,15 @@ test('tools marquee can be paused with a button (WCAG 2.2.2)', async ({ page }) 
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('[data-marquee]')).toHaveClass(/is-paused/);
 });
+
+test('the process sun climbs its arc and lights each step it reaches', async ({ page }, info) => {
+  test.skip(Number(info.project.metadata['width']) <= 1100, 'the arc is drawn on wide screens only');
+  await page.addInitScript(() => sessionStorage.setItem('sw-intro', '1'));
+  await page.goto('/');
+  const steps = page.locator('[data-journey] [data-step]');
+  await expect(page.locator('[data-journey]')).toHaveClass(/has-arc/);
+  await expect(steps.last()).not.toHaveClass(/is-lit/);
+  await page.locator('[data-journey]').evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().bottom + window.scrollY - 200));
+  await expect(steps).toHaveCount(4);
+  for (const step of await steps.all()) await expect(step).toHaveClass(/is-lit/);
+});
