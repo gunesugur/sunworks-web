@@ -11,29 +11,30 @@ const SCATTER = 28;
 
 type Pt = [number, number];
 
-/** Samples each stroke into POINTS points; missing strokes collapse onto a point of the scene. */
-function sample(host: SVGSVGElement) {
-  const count = Math.max(...SCENES.map((s) => s.length));
-  return SCENES.map((scene) => {
-    const strokes: { pts: Pt[]; accent: boolean; len: number }[] = scene.map((st) => {
-      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-      path.setAttribute('d', st.d);
-      host.appendChild(path);
-      const len = path.getTotalLength();
-      const pts: Pt[] = Array.from({ length: POINTS }, (_, i) => {
-        const p = path.getPointAtLength((len * i) / (POINTS - 1));
-        return [p.x, p.y];
-      });
-      path.remove();
-      return { pts, accent: Boolean(st.a), len };
+type Sampled = { pts: Pt[]; accent: boolean; len: number }[];
+const COUNT = Math.max(...SCENES.map((s) => s.length));
+
+/** Samples one scene's strokes into POINTS points; missing strokes collapse onto a point of the scene. */
+function sampleScene(host: SVGSVGElement, index: number): Sampled {
+  const scene = SCENES[index] ?? [];
+  const strokes: Sampled = scene.map((st) => {
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', st.d);
+    host.appendChild(path);
+    const len = path.getTotalLength();
+    const pts: Pt[] = Array.from({ length: POINTS }, (_, i) => {
+      const p = path.getPointAtLength((len * i) / (POINTS - 1));
+      return [p.x, p.y];
     });
-    while (strokes.length < count) {
-      const src = strokes[strokes.length % scene.length];
-      const at = src?.pts[Math.floor(POINTS / 2)] ?? [W / 2, H / 2];
-      strokes.push({ pts: Array.from({ length: POINTS }, () => [at[0], at[1]] as Pt), accent: false, len: 0 });
-    }
-    return strokes;
+    path.remove();
+    return { pts, accent: Boolean(st.a), len };
   });
+  while (strokes.length < COUNT) {
+    const src = strokes[strokes.length % Math.max(1, scene.length)];
+    const at = src?.pts[Math.floor(POINTS / 2)] ?? [W / 2, H / 2];
+    strokes.push({ pts: Array.from({ length: POINTS }, () => [at[0], at[1]] as Pt), accent: false, len: 0 });
+  }
+  return strokes;
 }
 
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
@@ -52,7 +53,10 @@ export function startStory(root: HTMLElement): () => void {
   const labels = [...root.querySelectorAll<HTMLElement>('[data-story-label]')];
   const ctx = canvas?.getContext('2d');
   if (!canvas || !host || !ctx) return () => undefined;
-  const scenes = sample(host);
+  // Scenes are sampled one at a time, only when the story first needs them (keeps every task short).
+  const cache: Sampled[] = [];
+  const scene = (i: number) => (cache[i] ??= sampleScene(host, i));
+  const total = SCENES.length;
   const still = prefersReducedMotion();
 
   let fg = [245, 246, 247];
@@ -72,8 +76,14 @@ export function startStory(root: HTMLElement): () => void {
   };
 
   const draw = (from: number, to: number, k: number, reveal: number) => {
-    const a = scenes[from];
-    const b = scenes[to];
+    const a = scene(from);
+    // While holding a scene, the next one is sampled in idle time, not inside a frame.
+    const b = k === 0 ? a : scene(to);
+    if (k === 0 && !cache[to]) {
+      const pre = () => scene(to);
+      if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(pre);
+      else setTimeout(pre, 50);
+    }
     if (!a || !b) return;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -121,14 +131,14 @@ export function startStory(root: HTMLElement): () => void {
 
   const render = (elapsed: number) => {
     if (still) {
-      draw(scenes.length - 1, scenes.length - 1, 1, 1);
+      draw(total - 1, total - 1, 1, 1);
       return;
     }
     const reveal = Math.min(1, elapsed / DRAW_IN);
     const step = Math.floor(elapsed / cycle);
     const within = elapsed % cycle;
-    const from = step % scenes.length;
-    const to = (step + 1) % scenes.length;
+    const from = step % total;
+    const to = (step + 1) % total;
     const k = within < HOLD ? 0 : (within - HOLD) / MORPH;
     draw(from, to, k, reveal);
     const current = k < 0.5 ? from : to;
