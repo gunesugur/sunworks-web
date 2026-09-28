@@ -1,0 +1,113 @@
+---
+/**
+ * Line sidebar table of contents for articles: a ruler of hairlines beside the headings; lines
+ * near the pointer stretch and light up, and the section being read stays in the accent colour
+ * (scripts/toc.ts). Wide screens only; the article reads the same without it.
+ */
+import type { Heading } from '@/lib/portable-text';
+
+interface Props {
+  items: Heading[];
+  label: string;
+}
+const { items, label } = Astro.props;
+const clean = (t: string) => t.replace(/^\d+[.)]\s*/, '');
+---
+
+{
+  items.length > 2 && (
+    <nav class="toc" aria-label={label} data-toc>
+      <p class="toc__title">{label}</p>
+      <ol class="toc__list">
+        {items
+          .filter((h) => h.level === 2)
+          .map((h, i) => (
+            <li class="toc__item" data-toc-item>
+              <a href={`#${h.id}`} class="toc__link">
+                <span class="toc__marker" aria-hidden="true" />
+                <span class="toc__index" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span class="toc__label">{clean(h.text)}</span>
+              </a>
+            </li>
+          ))}
+      </ol>
+    </nav>
+  )
+}
+
+<style>
+  .toc {
+    position: sticky;
+    top: 7rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .toc__title {
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .toc__list {
+    display: grid;
+    gap: 0.9rem;
+    padding: 0 0 0 3.25rem;
+    list-style: none;
+  }
+
+  /* --effect (0..1) comes from pointer proximity; .is-active pins it for the section being read. */
+  .toc__item {
+    --e: max(var(--effect, 0), var(--on, 0));
+  }
+
+  .toc__item.is-active {
+    --on: 1;
+  }
+
+  .toc__link {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    color: color-mix(in srgb, var(--c-dark) calc(var(--e) * 100%), var(--c-muted));
+    font-size: var(--fs-xs);
+    line-height: 1.35;
+    text-decoration: none;
+    transform: translateX(calc(var(--e) * 10px));
+  }
+
+  .toc__marker {
+    position: absolute;
+    top: 0.65em;
+    left: -3.25rem;
+    width: 2.5rem;
+    height: 1px;
+    background: color-mix(in srgb, var(--c-accent) calc(var(--e) * 100%), var(--c-line));
+    transform: scaleX(calc(0.55 + var(--e) * 0.45));
+    transform-origin: left;
+  }
+
+  .toc__item.is-active .toc__marker {
+    height: 2px;
+  }
+
+  .toc__index {
+    color: color-mix(in srgb, var(--c-accent) calc(var(--e) * 100%), var(--c-muted));
+    font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+    font-size: 0.8em;
+  }
+
+  .toc__item.is-active .toc__label {
+    font-weight: 600;
+  }
+
+  @media (max-width: 1100px) {
+    .toc {
+      display: none;
+    }
+  }
+</style>

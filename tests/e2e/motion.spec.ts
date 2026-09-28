@@ -84,14 +84,13 @@ test('tools marquee can be paused with a button (WCAG 2.2.2)', async ({ page }) 
   await expect(page.locator('[data-marquee]')).toHaveClass(/is-paused/);
 });
 
-test('the process sun climbs its arc and lights each step it reaches', async ({ page }, info) => {
-  test.skip(Number(info.project.metadata['width']) <= 1100, 'the arc is drawn on wide screens only');
+test('how-we-work follows the scroll: the step under the reading line is active and counted', async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem('sw-intro', '1'));
   await page.goto('/');
   const steps = page.locator('[data-journey] [data-step]');
-  await expect(page.locator('[data-journey]')).toHaveClass(/has-arc/);
-  await expect(steps.last()).not.toHaveClass(/is-lit/);
-  await page.locator('[data-journey]').evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().bottom + window.scrollY - 200));
-  await expect(steps).toHaveCount(4);
-  for (const step of await steps.all()) await expect(step).toHaveClass(/is-lit/);
+  await expect(steps).toHaveCount(3);
+  await steps.last().evaluate((el) => window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.3));
+  await expect(steps.last()).toHaveClass(/is-active/);
+  await expect(steps.first()).not.toHaveClass(/is-active/);
+  await expect(page.locator('[data-journey-now]')).toHaveText('03');
 });

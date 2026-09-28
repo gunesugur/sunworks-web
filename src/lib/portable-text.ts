@@ -42,3 +42,36 @@ export function spans(block: Block): RenderSpan[] {
     };
   });
 }
+
+const TR_MAP: Record<string, string> = { ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u' };
+
+export const slugify = (text: string): string =>
+  text
+    .toLocaleLowerCase('tr')
+    .replace(/[çğıöşü]/g, (ch) => TR_MAP[ch] ?? ch)
+    .normalize('NFKD')
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/[\s_-]+/g, '-');
+
+export interface Heading {
+  key: string;
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
+/** h2/h3 blocks with unique anchor ids, for in-page navigation. */
+export function headings(blocks: PortableText): Heading[] {
+  const seen = new Map<string, number>();
+  const out: Heading[] = [];
+  for (const b of blocks) {
+    if (b.style !== 'h2' && b.style !== 'h3') continue;
+    const text = b.children.map((c) => c.text).join('');
+    const base = slugify(text) || 'bolum';
+    const n = seen.get(base) ?? 0;
+    seen.set(base, n + 1);
+    out.push({ key: b._key, id: n ? `${base}-${n + 1}` : base, text, level: b.style === 'h2' ? 2 : 3 });
+  }
+  return out;
+}

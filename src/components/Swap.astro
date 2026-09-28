@@ -1,0 +1,29 @@
+---
+/**
+ * A label that always takes the width of its longer translation: the other language's text sits
+ * invisibly in the same grid cell, so switching language never nudges the elements around it.
+ */
+interface Props {
+  text: string;
+  alt: string | undefined;
+  class?: string;
+}
+const { text, alt, class: cls } = Astro.props;
+---
+
+<span class:list={['swap', cls]}><span class="swap__text">{text}</span>{alt && alt !== text && <span class="swap__ghost" aria-hidden="true">{alt}</span>}</span>
+
+<style>
+  .swap {
+    display: inline-grid;
+  }
+
+  .swap > * {
+    grid-area: 1 / 1;
+    justify-self: center;
+  }
+
+  .swap__ghost {
+    visibility: hidden;
+  }
+</style>

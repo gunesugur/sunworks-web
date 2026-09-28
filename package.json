@@ -43,6 +43,8 @@
     "eslint-plugin-sonarjs": "^4.2.1",
     "globals": "^17.12.0",
     "linkinator": "^8.1.0",
+    "simple-icons": "^16.33.0",
+    "svg-path-bbox": "^2.1.0",
     "tsx": "^4.23.15",
     "typescript-eslint": "^8.70.1",
     "wrangler": "^4.142.0"

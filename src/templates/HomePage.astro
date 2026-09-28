@@ -12,7 +12,8 @@ import Tag from '@/components/Tag.astro';
 import Asterisk from '@/components/Asterisk.astro';
 import Icon from '@/components/Icon.astro';
 import ServiceCard from '@/components/ServiceCard.astro';
-import HeroScene from '@/components/HeroScene.astro';
+import SunCard from '@/components/SunCard.astro';
+import { toolLogos } from '@/lib/tool-logos';
 
 interface Props {
   lang: Locale;
@@ -39,7 +40,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       </h1>
       <div class="hero__aside">
         <div class="hero__card" data-reveal="scale">
-          <HeroScene labels={s.heroScene} />
+          <SunCard />
         </div>
         <p class="hero__note">
           <span class="hero__note-in">
@@ -66,40 +67,59 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     </Notched>
   </section>
 
-  <!-- Tools band -->
-  <section class="tools" aria-labelledby="tools-title">
+  <!-- Tools band: brand marks drift sideways and speed up with the scroll (scripts/velocity.ts) -->
+  <section class="tools" aria-labelledby="tools-title" data-velocity>
     <h2 id="tools-title" class="tools__title">{home.tools.title}</h2>
     <button type="button" class="tools__toggle" aria-pressed="false" data-marquee-toggle data-label-pause={s.pause} data-label-play={s.play}>
       <span class="sr-only" data-marquee-label>{s.pause}</span>
       <span class="tools__toggle-icon" aria-hidden="true"></span>
     </button>
     <div class="tools__viewport" data-marquee>
-      <ul class="tools__track" aria-label={s.toolsLabel}>
+      <div class="tools__row" data-velocity-row data-speed="38" data-dir="1">
         {
-          home.tools.items.map((item) => (
-            <li>
-              <span>{item}</span>
-              <Asterisk size="0.55em" />
-            </li>
+          [0, 1].map((copy) => (
+            <ul class="tools__track" aria-label={copy === 0 ? s.toolsLabel : undefined} aria-hidden={copy === 1 ? 'true' : undefined}>
+              {home.tools.items.map((item) => {
+                const logos = toolLogos(item);
+                return (
+                  <li class="tool" title={item}>
+                    {logos.length ? (
+                      <>
+                        <span class="sr-only">{item}</span>
+                        {logos.map((l) => (
+                          <svg class="tool__logo" viewBox={l.viewBox} aria-hidden="true" focusable="false" style={`--brand:#${l.hex};--s:${l.scale}`}>
+                            <path d={l.path} />
+                          </svg>
+                        ))}
+                      </>
+                    ) : (
+                      <span class="tool__name">{item}</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           ))
         }
-      </ul>
-      <ul class="tools__track tools__track--clone" aria-hidden="true">
-        {
-          home.tools.items.map((item) => (
-            <li>
-              <span>{item}</span>
-              <Asterisk size="0.55em" />
-            </li>
-          ))
-        }
-      </ul>
+      </div>
     </div>
   </section>
 
   <!-- Intro split -->
   <section class="split container section" aria-labelledby="split-title">
-    <h2 id="split-title" class="h2 split__title" data-reveal>{home.intro.title}</h2>
+    <h2 id="split-title" class="h2 split__title" data-reveal>
+      <span class="focus" data-true-focus>
+        {
+          home.intro.title.split(' ').map((w, i, all) => (
+            <>
+              <span class="focus__word">{w}</span>
+              {i < all.length - 1 ? ' ' : ''}
+            </>
+          ))
+        }
+        <span class="focus__frame" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      </span>
+    </h2>
     <span class="split__rule" aria-hidden="true" data-reveal="fade"></span>
     <p class="split__text" data-reveal style="--reveal-i:1">{home.intro.text}</p>
     <div data-reveal style="--reveal-i:2"><Button href={home.intro.cta.href}>{home.intro.cta.label}</Button></div>
@@ -148,6 +168,27 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     </div>
   </section>
 
+  <!-- Figures: short commitments that count up once when they scroll into view (scripts/count.ts) -->
+  {
+    home.stats && (
+      <section class="figures container" aria-label={s.figuresLabel}>
+        <ul class="figures__list">
+          {home.stats.items.map((it, i) => (
+            <li class="figure" data-reveal style={`--reveal-i:${i}`}>
+              <span class="figure__value">
+                <span class="figure__num" data-count={it.value}>
+                  {it.value}
+                </span>
+                {it.suffix && <span class="figure__suffix">{it.suffix}</span>}
+              </span>
+              <span class="figure__label">{it.label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
   <!-- Services -->
   <section class="services container section" aria-labelledby="services-title">
     <header class="services__head" data-reveal>
@@ -168,30 +209,81 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     </div>
   </section>
 
-  <!-- Process -->
-  <section class="process container section" id="process" aria-labelledby="process-title">
-    <div class="process__head">
-      <h2 id="process-title" class="h2" data-reveal>{home.process.title}</h2>
-      <p class="lead process__lead" data-reveal style="--reveal-i:1">{home.process.text}</p>
+  <!-- Process: an editorial list beside a sticky sunrise that climbs as the steps scroll past (scripts/journey.ts) -->
+  <section class="process container section" id="process" aria-labelledby="process-title" data-journey>
+    <div class="process__aside">
+      <div class="process__sticky">
+        <h2 id="process-title" class="h2" data-reveal>{home.process.title}</h2>
+        <p class="lead process__lead" data-reveal style="--reveal-i:1">{home.process.text}</p>
+        <div class="dial" aria-hidden="true">
+          <svg class="dial__art" viewBox="0 0 200 120">
+            <defs>
+              <clipPath id="dial-sky"><rect width="200" height="96"></rect></clipPath>
+            </defs>
+            <g clip-path="url(#dial-sky)">
+              <g class="dial__rays">
+                {Array.from({ length: 12 }, (_, i) => <path d="M100 96V22" transform={`rotate(${i * 15 - 82.5} 100 96)`}></path>)}
+              </g>
+              <circle class="dial__sun" cx="100" cy="96" r="44"></circle>
+            </g>
+            <path class="dial__horizon" d="M8 96h184"></path>
+          </svg>
+          <p class="dial__count">
+            <span class="dial__now" data-journey-now>01</span>
+            <span class="dial__total">/ {String(home.process.steps.length).padStart(2, '0')}</span>
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="journey" data-journey>
-      <svg class="journey__arc" data-journey-path aria-hidden="true" focusable="false"></svg>
-      <span class="journey__sun" data-journey-sun aria-hidden="true"><Asterisk size="55%" /></span>
-      <ol class="steps">
-        {
-          home.process.steps.map((step, i) => (
-            <li class="step" data-step data-reveal style={`--reveal-i:${i}`}>
-              <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-              <h3 class="h3 step__title">
+    <ol class="phases">
+      {
+        home.process.steps.map((step, i) => (
+          <li class="phase" data-step>
+            <span class="phase__num" aria-hidden="true" />
+            <div class="phase__body">
+              <h3 class="phase__title">
                 <span class="sr-only">{`${s.stepLabel} ${i + 1}: `}</span>
                 {step.title}
               </h3>
-              <p class="step__text">{step.text}</p>
-            </li>
-          ))
-        }
-      </ol>
-    </div>
+              <p class="phase__text">{step.text}</p>
+              {step.deliverables?.length ? (
+                <div class="phase__gets">
+                  <p class="phase__gets-title">{s.youReceive}</p>
+                  <ul>
+                    {step.deliverables.map((d) => (
+                      <li>
+                        <Asterisk size="0.8em" />
+                        {d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Ribbon: still until the page scrolls, then slides with it; rows run in opposite directions -->
+  <section class="ribbon" aria-hidden="true" data-velocity>
+    {
+      [1, -1].map((dir) => (
+        <div class:list={['ribbon__row', { 'ribbon__row--outline': dir < 0 }]} data-velocity-row data-speed="0" data-dir={dir}>
+          {[0, 1].map(() => (
+            <p class="ribbon__track">
+              {home.hero.tags.map((tag) => (
+                <span class="ribbon__item">
+                  {tag}
+                  <Asterisk size="0.6em" />
+                </span>
+              ))}
+            </p>
+          ))}
+        </div>
+      ))
+    }
   </section>
 
   <!-- Closing -->
@@ -325,6 +417,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
 
   /* ---------- Tools ---------- */
   .tools {
+    position: relative;
     margin-top: clamp(3rem, 6vw, 5rem);
     padding-block: clamp(2.5rem, 4vw, 3rem);
     background: var(--c-band);
@@ -339,38 +432,69 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   }
 
   .tools__viewport {
-    display: flex;
-    margin-top: 2rem;
+    margin-top: 2.25rem;
     overflow: hidden;
-    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  }
+
+  .tools__row {
+    display: flex;
+    width: max-content;
+    will-change: transform;
   }
 
   .tools__track {
     display: flex;
     flex: none;
-    gap: clamp(2rem, 5vw, 4.5rem);
-    padding: 0 clamp(1rem, 2.5vw, 2.25rem);
+    align-items: center;
+    gap: clamp(3rem, 7vw, 6.5rem);
+    padding: 0.5rem clamp(1.5rem, 3.5vw, 3.25rem);
     list-style: none;
-    animation: marquee 32s linear infinite;
   }
 
-  .tools {
-    position: relative;
+  .tool {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    color: var(--c-dark);
   }
 
-  .tools__viewport:hover .tools__track,
-  .tools__viewport.is-paused .tools__track {
-    animation-play-state: paused;
+  /* Monochrome in the site's ink; the real brand colour shows on hover. */
+  .tool__logo {
+    width: auto;
+    height: calc(clamp(2.1rem, 1.6rem + 1.4vw, 3rem) * var(--s, 1));
+    fill: currentColor;
+    opacity: 0.82;
+    transition:
+      fill var(--dur) var(--ease-out),
+      opacity var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out);
+  }
+
+  .tool:hover .tool__logo {
+    fill: var(--brand);
+    opacity: 1;
+    transform: translate3d(0, -3px, 0) scale(1.06);
+  }
+
+  .tool__name {
+    font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2.25rem);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  :global(html:not(.js)) .tools__row {
+    width: auto;
+    justify-content: center;
   }
 
   :global(html:not(.js)) .tools__track {
-    animation: none;
     flex-wrap: wrap;
     justify-content: center;
-    flex: 1;
+    row-gap: 1.5rem;
   }
 
-  :global(html:not(.js)) .tools__track--clone,
+  :global(html:not(.js)) .tools__track + .tools__track,
   :global(html:not(.js)) .tools__toggle {
     display: none;
   }
@@ -404,36 +528,42 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     margin-left: 3px;
   }
 
-  .tools__track li {
-    display: inline-flex;
-    align-items: center;
-    gap: clamp(2rem, 5vw, 4.5rem);
-    font-size: clamp(1.4rem, 1.1rem + 1.3vw, 2.25rem);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  @keyframes marquee {
-    to {
-      transform: translate3d(-100%, 0, 0);
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .tools__viewport {
       mask-image: none;
     }
 
+    .tools__row {
+      width: auto;
+      justify-content: center;
+    }
+
     .tools__track {
       flex-wrap: wrap;
       justify-content: center;
-      flex: 1;
+      row-gap: 1.5rem;
     }
 
-    .tools__track--clone,
+    .tools__track + .tools__track,
     .tools__toggle {
       display: none;
     }
+  }
+
+  :global(html[data-motion='reduce']) .tools__row {
+    width: auto;
+    justify-content: center;
+  }
+
+  :global(html[data-motion='reduce']) .tools__track {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 1.5rem;
+  }
+
+  :global(html[data-motion='reduce']) .tools__track + .tools__track,
+  :global(html[data-motion='reduce']) .tools__toggle {
+    display: none;
   }
 
   /* ---------- Split ---------- */
@@ -449,6 +579,77 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     height: 129px;
     border-radius: 18px;
     background: var(--c-line);
+  }
+
+  /* True focus: one word at a time comes into focus inside accent corner marks (scripts/focus.ts). */
+  .focus {
+    position: relative;
+    display: inline;
+  }
+
+  .focus__word {
+    transition:
+      filter 0.5s var(--ease-out),
+      opacity 0.5s var(--ease-out);
+  }
+
+  .focus.is-focusing .focus__word:not(.is-focus) {
+    filter: blur(3px);
+    opacity: 0.45;
+  }
+
+  .focus__frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      transform 0.55s var(--ease-out),
+      width 0.55s var(--ease-out),
+      height 0.55s var(--ease-out),
+      opacity 0.4s ease;
+  }
+
+  .focus.has-frame .focus__frame {
+    opacity: 1;
+  }
+
+  .focus__frame i {
+    position: absolute;
+    width: 0.32em;
+    height: 0.32em;
+    border: 0.07em solid var(--c-accent);
+  }
+
+  .focus__frame i:nth-child(1) {
+    left: -0.14em;
+    top: -0.06em;
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .focus__frame i:nth-child(2) {
+    right: -0.14em;
+    top: -0.06em;
+    border-left: 0;
+    border-bottom: 0;
+  }
+
+  .focus__frame i:nth-child(3) {
+    left: -0.14em;
+    bottom: -0.06em;
+    border-right: 0;
+    border-top: 0;
+  }
+
+  .focus__frame i:nth-child(4) {
+    right: -0.14em;
+    bottom: -0.06em;
+    border-left: 0;
+    border-top: 0;
   }
 
   /* ---------- Duo ---------- */
@@ -525,6 +726,55 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     margin-bottom: 0.5rem;
   }
 
+  /* ---------- Figures ---------- */
+  .figures__list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 0;
+    list-style: none;
+    border-block: 1px solid var(--c-line);
+  }
+
+  .figure {
+    display: grid;
+    align-content: start;
+    gap: 0.6rem;
+    padding: clamp(1.75rem, 3.5vw, 2.75rem) clamp(1rem, 2.5vw, 2rem);
+  }
+
+  .figure + .figure {
+    border-left: 1px solid var(--c-line);
+  }
+
+  .figure__value {
+    display: flex;
+    align-items: baseline;
+    font-size: clamp(2.75rem, 1.9rem + 3vw, 4.75rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Tabular digits keep the width steady while counting; the final value is in the HTML. */
+  .figure__num {
+    display: inline-block;
+  }
+
+  .figure__suffix {
+    margin-left: 0.12em;
+    color: var(--c-muted);
+    font-size: 0.5em;
+    letter-spacing: 0;
+  }
+
+  .figure__label {
+    max-width: 16rem;
+    color: var(--c-muted);
+    font-size: var(--fs-small);
+    line-height: 1.4;
+  }
+
   /* ---------- Services ---------- */
   .services__head {
     max-width: 42.5rem;
@@ -554,161 +804,226 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   }
 
   /* ---------- Process ---------- */
-  .process__head {
+  .process {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 2rem 4rem;
-    align-items: end;
-    margin-bottom: clamp(2rem, 4vw, 3.5rem);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
   }
 
-  /* The sun climbs an arc over cards that rise like stairs (scripts/journey.ts). */
-  .journey {
-    --stair: clamp(2rem, 4.5vw, 4rem);
-    position: relative;
+  .process__sticky {
+    position: sticky;
+    top: 7rem;
+    display: grid;
+    gap: 1.5rem;
   }
 
-  .journey__arc,
-  .journey__sun {
-    display: none;
+  .dial {
+    --p: 0;
+    display: grid;
+    gap: 0.75rem;
+    max-width: 22rem;
+    margin-top: clamp(1rem, 3vw, 2.5rem);
   }
 
-  .journey.has-arc {
-    padding-top: 7rem;
-  }
-
-  .journey.has-arc .journey__arc {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: block;
+  .dial__art {
+    width: 100%;
+    height: auto;
     overflow: visible;
-    pointer-events: none;
   }
 
-  .journey :global(.journey__track) {
-    fill: none;
-    stroke: var(--c-line);
-    stroke-width: 2;
-    stroke-dasharray: 2 9;
-    stroke-linecap: round;
+  /* --p (0..1) is the scroll progress through the steps; the sun climbs with it. */
+  .dial__sun {
+    fill: var(--c-accent);
+    transform: translate3d(0, calc((1 - var(--p)) * 70px), 0);
+    transition: transform 0.6s var(--ease-out);
   }
 
-  .journey :global(.journey__trail) {
-    fill: none;
+  .dial__rays path {
     stroke: var(--c-accent);
-    stroke-width: 3;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-dasharray: 3 7;
+    opacity: calc(var(--p) * 0.9);
+    transition: opacity 0.6s var(--ease-out);
+  }
+
+  .dial__rays {
+    transform-origin: 100px 96px;
+    transform: rotate(calc(var(--p) * 30deg - 15deg));
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .dial__horizon {
+    stroke: var(--c-dark);
+    stroke-width: 2;
     stroke-linecap: round;
   }
 
-  .journey.has-arc .journey__sun {
-    position: absolute;
-    left: -22px;
-    top: -22px;
-    z-index: 2;
+  .dial__count {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dial__now {
+    font-size: clamp(2.5rem, 1.8rem + 2.6vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .dial__total {
+    color: var(--c-muted);
+  }
+
+  .phases {
+    counter-reset: phase;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--c-line);
+  }
+
+  .phase {
     display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--c-accent);
-    color: var(--c-on-accent);
-    box-shadow: 0 0 0 10px color-mix(in srgb, var(--c-accent) 22%, transparent);
-    will-change: transform;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: clamp(1.25rem, 3vw, 3rem);
+    padding-block: clamp(2.5rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--c-line);
+    transition: opacity 0.5s var(--ease-out);
   }
 
-  /* Stretched cards share a floor, so the stagger reads as stairs. */
-  .journey.has-arc .step {
-    min-height: 0;
+  /* Steps the sun hasn't reached wait in the background. */
+  :global(.js) [data-journey].is-tracking .phase:not(.is-active) .phase__num {
+    opacity: 0.35;
   }
 
-  .journey.has-arc .step:nth-child(1) {
-    margin-top: calc(var(--stair) * 2.6);
+  :global(.js) [data-journey].is-tracking .phase:not(.is-active) :is(.phase__title, .phase__gets) {
+    color: var(--c-muted);
   }
 
-  .journey.has-arc .step:nth-child(2) {
-    margin-top: calc(var(--stair) * 1.5);
+  /* The numeral is generated content: purely decorative, so it may use the outline and the accent. */
+  .phase__num::before {
+    counter-increment: phase;
+    content: counter(phase, decimal-leading-zero);
   }
 
-  .journey.has-arc .step:nth-child(3) {
-    margin-top: calc(var(--stair) * 0.65);
+  .phase__num {
+    min-width: 2.2ch;
+    color: transparent;
+    font-size: clamp(3rem, 2rem + 3.5vw, 5.5rem);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    -webkit-text-stroke: 1.5px var(--c-dark);
+    transition: color 0.5s var(--ease-out);
   }
 
-  .steps {
+  .phase.is-active .phase__num {
+    color: var(--c-accent);
+    -webkit-text-stroke-color: var(--c-accent);
+  }
+
+  .phase__body {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(1rem, 1.6vw, 1.5rem);
+    gap: 1rem;
+    padding-top: 0.35rem;
+  }
+
+  .phase__title {
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: var(--lh-head);
+  }
+
+  .phase__text {
+    max-width: 38rem;
+    color: var(--c-muted);
+  }
+
+  .phase__gets {
+    margin-top: 0.75rem;
+  }
+
+  .phase__gets-title {
+    margin-bottom: 0.75rem;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .phase__gets ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     padding: 0;
     list-style: none;
   }
 
-  .step {
-    position: relative;
-    display: grid;
-    align-content: start;
-    gap: 0.75rem;
-    min-height: 100%;
-    padding: clamp(1.5rem, 2.4vw, 2rem);
+  .phase__gets li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 0.95rem;
     border: 1px solid var(--c-line);
-    border-radius: var(--r-card);
-    background: var(--c-light);
-    transition:
-      transform var(--dur) var(--ease-out),
-      border-color var(--dur) var(--ease-out);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-xs);
+    font-weight: 500;
   }
 
-  .step:hover {
-    transform: translate3d(0, -6px, 0);
-    border-color: var(--c-dark);
+  .phase__gets li :global(.asterisk) {
+    color: var(--c-accent);
   }
 
-  .step__num {
+  /* ---------- Ribbon ---------- */
+  .ribbon {
     display: grid;
-    place-items: center;
-    width: 56px;
-    height: 56px;
-    margin-bottom: 1rem;
-    border: 1.5px solid var(--c-accent);
-    border-radius: 50%;
-    background: var(--c-accent);
-    color: var(--c-on-accent);
-    font-weight: 700;
-    font-size: 1.05rem;
-    transition:
-      transform var(--dur) var(--ease-out),
-      background-color var(--dur) var(--ease-out),
-      border-color var(--dur) var(--ease-out),
-      color var(--dur) var(--ease-out);
+    gap: 0.25rem;
+    margin-bottom: var(--section);
+    overflow: hidden;
+    user-select: none;
   }
 
-  /* Until the sun reaches a step it waits in outline; lit steps fill with the accent. */
-  :global(.js) .journey .step:not(.is-lit) .step__num {
-    border-color: var(--c-line);
-    background: transparent;
-    color: var(--c-muted);
+  .ribbon__row {
+    display: flex;
+    width: max-content;
+    will-change: transform;
   }
 
-  :global(.js) .journey .step.is-lit {
-    border-color: color-mix(in srgb, var(--c-accent) 55%, var(--c-line));
+  .ribbon__row:first-child {
+    margin-left: -12vw;
   }
 
-  :global(.js) .journey .step.is-lit .step__num {
-    animation: step-lit 0.6s var(--ease-out);
+  .ribbon__track {
+    display: flex;
+    flex: none;
+    white-space: nowrap;
   }
 
-  @keyframes step-lit {
-    40% {
-      transform: scale(1.18);
-    }
+  .ribbon__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding-right: 0.35em;
+    font-size: clamp(3rem, 1.6rem + 6vw, 8.5rem);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
   }
 
-  .step:hover .step__num {
-    transform: rotate(-10deg) scale(1.08);
+  .ribbon__item :global(.asterisk) {
+    color: var(--c-accent);
   }
 
-  .step__text {
-    color: var(--c-muted);
-    font-size: var(--fs-small);
+  /* Muted, but still 3:1 against the page (large text). */
+  .ribbon__row--outline .ribbon__item {
+    color: color-mix(in srgb, var(--c-dark) 50%, var(--c-light));
+  }
+
+  .ribbon__row--outline .ribbon__item :global(.asterisk) {
+    color: color-mix(in srgb, var(--c-dark) 30%, var(--c-light));
   }
 
   /* ---------- Closing ---------- */
@@ -762,10 +1077,6 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     .split > div {
       grid-column: 3;
     }
-
-    .steps {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   @media (max-width: 900px) {
@@ -794,8 +1105,28 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     .split,
     .duo,
     .approach,
-    .process__head {
+    .process {
       grid-template-columns: 1fr;
+    }
+
+    .figures__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .figure:nth-child(3) {
+      border-left: 0;
+    }
+
+    .figure:nth-child(n + 3) {
+      border-top: 1px solid var(--c-line);
+    }
+
+    .process__sticky {
+      position: static;
+    }
+
+    .dial {
+      display: none;
     }
 
     .split__rule {
@@ -822,10 +1153,6 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   }
 
   @media (max-width: 560px) {
-    .steps {
-      grid-template-columns: 1fr;
-    }
-
     .hero__tags :global(li:nth-child(n + 4)) {
       display: none;
     }

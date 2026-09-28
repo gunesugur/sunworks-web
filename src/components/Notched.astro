@@ -60,6 +60,30 @@ const style = `--nw:${nw};--nh:${nh};${ratioVar}`;
     transform: scale(1.045);
   }
 
+  /* Glare: a soft band of light sweeps across the image on hover (mouse only). */
+  @media (hover: hover) and (pointer: fine) {
+    .notched--hover .notched__media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(
+        115deg,
+        transparent 38%,
+        color-mix(in srgb, var(--paper) 42%, transparent) 50%,
+        transparent 62%
+      );
+      background-size: 250% 100%;
+      background-position: 120% 0;
+      pointer-events: none;
+    }
+
+    .notched--hover:hover .notched__media::after {
+      background-position: -30% 0;
+      transition: background-position 0.9s var(--ease-out);
+    }
+  }
+
   .notched__slot {
     position: absolute;
     display: grid;

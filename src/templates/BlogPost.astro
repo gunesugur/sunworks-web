@@ -12,6 +12,8 @@ import Notched from '@/components/Notched.astro';
 import Img from '@/components/Img.astro';
 import Button from '@/components/Button.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import PostToc from '@/components/PostToc.astro';
+import { headings } from '@/lib/portable-text';
 
 interface Props {
   lang: Locale;
@@ -71,8 +73,11 @@ const ld = [
       </Notched>
     </div>
     <div class="container body section">
-      <PortableText value={post.body} />
-      <p class="back"><Button href={routes.blog[lang]}>{s.backToBlog}</Button></p>
+      <div class="body__main">
+        <PortableText value={post.body} />
+        <p class="back"><Button href={routes.blog[lang]}>{s.backToBlog}</Button></p>
+      </div>
+      <aside class="body__aside"><PostToc items={headings(post.body)} label={s.onThisPage} /></aside>
     </div>
   </article>
   <CtaBand lang={lang} />
@@ -110,7 +115,24 @@ const ld = [
 
   .body {
     display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 17rem);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .body__main {
+    display: grid;
     justify-items: start;
+  }
+
+  @media (max-width: 1100px) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+
+    .body__aside {
+      display: none;
+    }
   }
 
   .body :global(.prose) {

@@ -150,8 +150,14 @@ export const homePageSchema = z.object({
   process: z.object({
     title: z.string(),
     text: z.string(),
-    steps: z.array(z.object({ _key: key, title: z.string(), text: z.string() })).min(3),
+    steps: z.array(z.object({ _key: key, title: z.string(), text: z.string(), deliverables: z.array(z.string()).optional() })).min(3),
   }),
+  /** Short commitments shown as counting figures between sections. */
+  stats: z
+    .object({
+      items: z.array(z.object({ _key: key, value: z.number().int().nonnegative(), suffix: z.string().optional(), label: z.string() })).min(2).max(4),
+    })
+    .optional(),
   closing: z.object({ title: z.string(), image: imageSchema, tag: z.string(), cta: linkSchema }),
 });
 export type HomePage = z.infer<typeof homePageSchema>;

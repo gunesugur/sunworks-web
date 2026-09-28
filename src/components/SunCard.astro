@@ -1,0 +1,89 @@
+---
+/**
+ * Hero card: the logo's sun rising over the horizon, drawn as a halftone field in WebGL
+ * (scripts/sun.ts, loaded lazily). The dots breathe outwards from the sun, ripple in the reflection
+ * and gather around the pointer. Before the shader starts (or without WebGL / JS) a flat version of
+ * the same sun is shown; with reduced motion the shader paints one still frame.
+ */
+---
+
+<div class="sun scheme-invert" data-sun aria-hidden="true">
+  <span class="sun__fallback"><span class="sun__disc"></span></span>
+  <canvas class="sun__canvas" data-sun-canvas></canvas>
+  <span class="sun__probe sun__probe--fg"></span>
+  <span class="sun__probe sun__probe--accent"></span>
+</div>
+
+<style>
+  .sun {
+    position: relative;
+    aspect-ratio: 343 / 229;
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .sun__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.9s var(--ease-out);
+  }
+
+  .sun.is-live .sun__canvas {
+    opacity: 1;
+  }
+
+  /* Flat stand-in: the same sun and horizon, in CSS. */
+  .sun__fallback {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, color-mix(in srgb, var(--c-dark) 16%, transparent) 1px, transparent 1.4px);
+    background-size: 9px 9px;
+    transition: opacity 0.9s var(--ease-out);
+  }
+
+  .sun.is-live .sun__fallback {
+    opacity: 0;
+  }
+
+  .sun__fallback::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 34%;
+    height: 1px;
+    background: color-mix(in srgb, var(--c-dark) 70%, transparent);
+  }
+
+  .sun__disc {
+    position: absolute;
+    left: 50%;
+    bottom: 34%;
+    width: 38%;
+    aspect-ratio: 2 / 1;
+    border-radius: 999px 999px 0 0;
+    background: var(--c-accent);
+    transform: translateX(-50%);
+  }
+
+  /* Colour probes: the script reads the theme's resolved colours from these. */
+  .sun__probe {
+    position: absolute;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+  }
+
+  .sun__probe--fg {
+    color: var(--c-dark);
+  }
+
+  .sun__probe--accent {
+    color: var(--c-accent);
+  }
+</style>

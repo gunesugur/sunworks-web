@@ -11,7 +11,7 @@ export default defineConfig({
   output: 'static',
   adapter: cloudflare({ imageService: 'compile' }),
   session: false,
-  build: { inlineStylesheets: 'never', format: 'file' },
+  build: { inlineStylesheets: 'auto', format: 'file' },
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   i18n: {
     locales: ['tr', 'en'],

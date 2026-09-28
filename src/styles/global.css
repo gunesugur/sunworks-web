@@ -302,17 +302,6 @@ html:not(.js) form[data-form] button[type='submit'] {
   animation-timing-function: var(--ease-in-out);
 }
 
-/* Theme switch: a circle grows from the toggle (scripts/prefs.ts); named groups are folded into it. */
-html.theme-vt::view-transition-old(root),
-html.theme-vt::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-html.theme-vt * {
-  view-transition-name: none !important;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
