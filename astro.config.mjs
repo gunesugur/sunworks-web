@@ -25,4 +25,6 @@ export default defineConfig({
     }),
   ],
   security: { checkOrigin: true },
+  // Keep every asset a real file so the CSP needs no data: sources.
+  vite: { build: { assetsInlineLimit: 0 } },
 });

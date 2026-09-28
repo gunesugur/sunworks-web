@@ -13,12 +13,13 @@
     "check": "astro check",
     "typecheck": "astro check && tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
-    "test": "node --test --experimental-strip-types tests/unit/*.test.ts",
+    "test": "tsx --test tests/unit/*.test.ts",
     "test:e2e": "playwright test",
     "db:migrate:local": "wrangler d1 migrations apply sunworks-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply sunworks-db --remote",
     "links": "linkinator dist/client --recurse --skip '^(?!http://localhost)' --silent",
-    "deploy": "npm run build && wrangler deploy"
+    "deploy": "npm run build && wrangler deploy",
+    "sanity:seed": "tsx scripts/sanity-seed.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
@@ -34,13 +35,14 @@
     "@axe-core/playwright": "^4.13.0",
     "@cloudflare/workers-types": "^5.20260927.1",
     "@eslint/js": "^10.0.1",
-    "@playwright/test": "1.56",
+    "@playwright/test": "^1.63.0",
     "eslint": "^10.11.0",
     "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-security": "^4.1.0",
     "eslint-plugin-sonarjs": "^4.2.1",
     "globals": "^17.12.0",
     "linkinator": "^8.1.0",
+    "tsx": "^4.23.15",
     "typescript-eslint": "^8.70.1",
     "wrangler": "^4.142.0"
   }

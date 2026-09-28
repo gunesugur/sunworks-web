@@ -7,6 +7,7 @@ declare namespace Cloudflare {
     RATE_LIMIT_SALT?: string;
     FORMS_ENABLED?: string;
     ALLOWED_ORIGINS?: string;
+    RATE_LIMIT_MAX?: string;
   }
 }
 

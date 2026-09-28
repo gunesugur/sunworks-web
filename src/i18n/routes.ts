@@ -25,3 +25,9 @@ export function formatDate(iso: string, lang: Locale): string {
     new Date(`${iso}T00:00:00Z`),
   );
 }
+
+/** Normalizes build-time pathnames (`/blog.html`, `/en/index.html`, `/x/`) to public URLs (`/blog`, `/en`, `/x`). */
+export function cleanPath(pathname: string): string {
+  const p = pathname.replace(/\.html$/, '').replace(/\/index$/, '').replace(/\/$/, '');
+  return p === '' || p === '/index' ? '/' : p;
+}

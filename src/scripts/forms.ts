@@ -209,7 +209,15 @@ function enhance(form: HTMLFormElement): () => void {
   };
 }
 
+/** Preselects the contact topic from ?topic= (links from service pages). */
+function preselectTopic() {
+  const select = document.querySelector('form[data-form="contact"] select[name="topic"]');
+  const topic = new URLSearchParams(location.search).get('topic');
+  if (select instanceof HTMLSelectElement && topic && [...select.options].some((o) => o.value === topic)) select.value = topic;
+}
+
 export function initForms(): () => void {
+  preselectTopic();
   const offs = [...document.querySelectorAll<HTMLFormElement>('form[data-form]')].map(enhance);
   return () => offs.forEach((off) => off());
 }

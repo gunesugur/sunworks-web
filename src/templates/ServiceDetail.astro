@@ -25,7 +25,8 @@ const alternates: Partial<Record<Locale, string>> = { [lang]: servicePath(lang, 
 if (translation) alternates[other] = servicePath(other, translation.slug.current);
 const others = all.filter((x) => x._id !== service._id);
 const site = Astro.site ?? new URL('https://sunworks.studio');
-const contactHref = `${routes.contact[lang]}?topic=${encodeURIComponent(service.translationKey.replace('service-', ''))}`;
+const TOPICS: Record<string, string> = { 'service-wordpress': 'wordpress', 'service-shopify': 'shopify', 'service-support': 'support' };
+const contactHref = `${routes.contact[lang]}?topic=${TOPICS[service.translationKey] ?? 'other'}`;
 const ld = [
   breadcrumbLd(site, [
     { label: s.home, href: routes.home[lang] },
