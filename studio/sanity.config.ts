@@ -3,7 +3,7 @@ import { structureTool } from 'sanity/structure';
 import { documentInternationalization } from '@sanity/document-internationalization';
 import { schemaTypes, translatedTypes } from './schemaTypes';
 
-const projectId = process.env.SANITY_STUDIO_PROJECT_ID ?? '';
+const projectId = process.env.SANITY_STUDIO_PROJECT_ID ?? '75kap9xi';
 const dataset = process.env.SANITY_STUDIO_DATASET ?? 'production';
 
 export default defineConfig({
