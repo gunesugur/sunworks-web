@@ -14,7 +14,7 @@ export function initMenu(): () => void {
     document.body.style.overflow = open ? 'hidden' : '';
     outside.forEach((el) => el.toggleAttribute('inert', open));
     if (label) label.textContent = (open ? toggle.dataset['labelClose'] : toggle.dataset['labelOpen']) ?? '';
-    if (open) nav.querySelector<HTMLElement>('a')?.focus();
+    if (open) nav.querySelector<HTMLElement>('a')?.focus({ preventScroll: true });
   };
   const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
   const onToggle = () => setOpen(!isOpen());

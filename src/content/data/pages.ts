@@ -55,7 +55,7 @@ export const pages: Page[] = [
       'p',
       `## Veri sorumlusu
 
-Veri sorumlusu: Uğur Güneş (SUN | WORKS). Kişisel verilerinizle ilgili tüm talepleriniz için [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine yazabilirsiniz.
+Veri sorumlusu: SUN | WORKS. Kişisel verilerinizle ilgili tüm talepleriniz için [hello@sunworks.studio](mailto:hello@sunworks.studio) adresine yazabilirsiniz.
 
 ## İşlediğimiz veriler ve amaçları
 
@@ -103,7 +103,7 @@ KVKK'nın 11. maddesi uyarınca verilerinizin işlenip işlenmediğini öğrenme
       'p',
       `## Data controller
 
-The data controller is Uğur Güneş (SUN | WORKS). For any request about your personal data, write to [hello@sunworks.studio](mailto:hello@sunworks.studio).
+The data controller is SUN | WORKS. For any request about your personal data, write to [hello@sunworks.studio](mailto:hello@sunworks.studio).
 
 ## Data we process and why
 

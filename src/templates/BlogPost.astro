@@ -8,10 +8,13 @@ import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
 import PortableText from '@/components/PortableText.astro';
-import Notched from '@/components/Notched.astro';
 import Img from '@/components/Img.astro';
 import Button from '@/components/Button.astro';
 import CtaBand from '@/components/CtaBand.astro';
+import PostToc from '@/components/PostToc.astro';
+import PostFacts from '@/components/PostFacts.astro';
+import Notched from '@/components/Notched.astro';
+import { headings } from '@/lib/portable-text';
 
 interface Props {
   lang: Locale;
@@ -49,30 +52,42 @@ const ld = [
 
 <Base lang={lang} title={post.seo.title ?? post.title} description={post.seo.description ?? post.excerpt} alternates={alternates} type="article" jsonLd={ld}>
   <article>
-    <PageHeader lang={lang} title={post.title} intro={post.excerpt} crumbs={[{ label: s.blogTitle, href: routes.blog[lang] }]}>
-      <p class="meta">
-        <span>{s.by} <strong>{post.author}</strong></span>
-        <span>{s.publishedOn}: <time datetime={post.publishedAt}>{formatDate(post.publishedAt, lang)}</time></span>
+    <PageHeader lang={lang} title={post.title} intro={post.excerpt} crumbs={[{ label: s.blogTitle, href: routes.blog[lang] }]} wide>
+      <div class="post-info">
         {
-          post.updatedAt && (
-            <span>
-              {s.updatedOn}: <time datetime={post.updatedAt}>{formatDate(post.updatedAt, lang)}</time>
-            </span>
+          post.tags.length > 0 && (
+            <ul class="post-tags" aria-label={s.tags}>
+              {post.tags.map((tag) => (
+                <li>{tag}</li>
+              ))}
+            </ul>
           )
         }
-      </p>
+        <p class="meta">
+          <span>{s.by} <strong>{post.author}</strong></span>
+          <span>{s.publishedOn}: <time datetime={post.publishedAt}>{formatDate(post.publishedAt, lang)}</time></span>
+          {
+            post.updatedAt && (
+              <span>
+                {s.updatedOn}: <time datetime={post.updatedAt}>{formatDate(post.updatedAt, lang)}</time>
+              </span>
+            )
+          }
+        </p>
+      </div>
     </PageHeader>
     <div class="container">
-      <Notched corner="bl" nw="clamp(160px, 18vw, 240px)" nh="clamp(56px, 5vw, 68px)" ratio="1284 / 540" hover={false}>
+      <Notched corner="bl" ratio="1284 / 540" hover={false} fit class="post-media">
         <Img image={post.image} widths={[640, 960, 1284, 1920]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
-        <ul slot="corner" class="tags" aria-label={s.tags}>
-          {post.tags.map((tag) => <li>{tag}</li>)}
-        </ul>
+        <PostFacts slot="corner" lang={lang} post={post} url={url} />
       </Notched>
     </div>
     <div class="container body section">
-      <PortableText value={post.body} />
-      <p class="back"><Button href={routes.blog[lang]}>{s.backToBlog}</Button></p>
+      <div class="body__main">
+        <PortableText value={post.body} />
+        <p class="back"><Button href={routes.blog[lang]}>{s.backToBlog}</Button></p>
+      </div>
+      <aside class="body__aside"><PostToc items={headings(post.body)} label={s.onThisPage} /></aside>
     </div>
   </article>
   <CtaBand lang={lang} />
@@ -88,29 +103,85 @@ const ld = [
     font-size: var(--fs-xs);
   }
 
+  /* Taller crop on phones so the facts card in the notch keeps some photo around it. */
+  @media (max-width: 560px) {
+    .body :global(.post-media),
+    :global(.post-media) {
+      --ratio: 4 / 3 !important;
+    }
+  }
+
+  .post-info {
+    display: grid;
+    justify-items: end;
+    gap: 0.9rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .post-info .meta {
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+
+  @media (max-width: 900px) {
+    .post-info {
+      justify-items: start;
+      margin-top: 1.5rem;
+    }
+
+    .post-info .meta {
+      justify-content: flex-start;
+    }
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .post-tags li {
+    padding: 0.3rem 0.85rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+  }
+
   .meta strong {
     color: var(--c-dark);
     font-weight: 600;
   }
 
-  .tags {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0;
-    list-style: none;
-    font-size: var(--fs-xs);
-    font-weight: 600;
-  }
-
-  .tags li {
-    padding: 0.35rem 0.9rem;
-    border: 1px solid var(--c-dark);
-    border-radius: var(--r-pill);
-  }
 
   .body {
     display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 17rem);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  /* Stretch to the article's height so the sticky TOC has room to travel. */
+  .body__aside {
+    align-self: stretch;
+  }
+
+  .body__main {
+    display: grid;
     justify-items: start;
+  }
+
+  @media (max-width: 1100px) {
+    .body {
+      grid-template-columns: 1fr;
+    }
+
+    .body__aside {
+      display: none;
+    }
   }
 
   .body :global(.prose) {

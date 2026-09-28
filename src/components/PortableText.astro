@@ -1,6 +1,6 @@
 ---
 import type { PortableText } from '@/content/schema';
-import { groupBlocks } from '@/lib/portable-text';
+import { groupBlocks, headings } from '@/lib/portable-text';
 import Spans from './Spans.astro';
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
   class?: string;
 }
 const groups = groupBlocks(Astro.props.value);
+const ids = new Map(headings(Astro.props.value).map((h) => [h.key, h.id]));
 ---
 
 <div class:list={['prose', Astro.props.class]}>
@@ -27,7 +28,7 @@ const groups = groupBlocks(Astro.props.value);
       }
       const Tag = g.block.style === 'normal' ? 'p' : g.block.style;
       return (
-        <Tag>
+        <Tag id={ids.get(g.block._key)}>
           <Spans block={g.block} />
         </Tag>
       );

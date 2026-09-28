@@ -110,6 +110,98 @@ const topics = Object.entries(s.topics);
     background-repeat: no-repeat;
   }
 
+  /* Browsers with customizable <select> get the dropdown in our style; others keep the native one. */
+  @supports (appearance: base-select) {
+    .field select,
+    .field select::picker(select) {
+      appearance: base-select;
+    }
+
+    .field select {
+      display: flex;
+      align-items: center;
+      background-image: none;
+      cursor: pointer;
+    }
+
+    .field select::picker-icon {
+      content: '';
+      width: 0.45rem;
+      height: 0.45rem;
+      margin: -0.2rem 0.25rem 0 auto;
+      border: solid currentColor;
+      border-width: 0 1.5px 1.5px 0;
+      transform: rotate(45deg);
+      transition: transform var(--dur) var(--ease-out);
+    }
+
+    .field select:open::picker-icon {
+      transform: translateY(0.25rem) rotate(-135deg);
+    }
+
+    .field select:open {
+      border-color: var(--c-dark);
+    }
+
+    .field select::picker(select) {
+      margin-top: 0.5rem;
+      padding: 0.4rem;
+      border: 1px solid var(--c-dark);
+      border-radius: 24px;
+      background: var(--c-light);
+      color: var(--c-dark);
+      box-shadow: 0 18px 40px -20px color-mix(in srgb, var(--ink) 55%, transparent);
+      opacity: 0;
+      transform: translate3d(0, -6px, 0);
+      transition:
+        opacity var(--dur-fast) ease,
+        transform var(--dur) var(--ease-out),
+        display var(--dur) allow-discrete,
+        overlay var(--dur) allow-discrete;
+    }
+
+    .field select:open::picker(select) {
+      opacity: 1;
+      transform: none;
+    }
+
+    @starting-style {
+      .field select:open::picker(select) {
+        opacity: 0;
+        transform: translate3d(0, -6px, 0);
+      }
+    }
+
+    .field option {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 44px;
+      padding: 0.55rem 1rem;
+      border-radius: var(--r-pill);
+      font-size: var(--fs-small);
+      cursor: pointer;
+      transition: background-color var(--dur-fast) ease;
+    }
+
+    .field option:is(:hover, :focus-visible) {
+      background: var(--c-band);
+      outline: none;
+    }
+
+    .field option:checked {
+      background: color-mix(in srgb, var(--c-accent) 22%, var(--c-light));
+      font-weight: 600;
+    }
+
+    .field option::checkmark {
+      order: 1;
+      margin-left: auto;
+      content: '✓';
+      color: var(--c-dark);
+    }
+  }
+
   .field input:hover,
   .field select:hover,
   .field textarea:hover {

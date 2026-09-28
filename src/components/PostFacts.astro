@@ -1,0 +1,131 @@
+---
+/** Article facts in the cover image's notch: reading time, sections and a copy-link action. */
+import type { Locale, Post } from '@/content/schema';
+import { headings, plainWords } from '@/lib/portable-text';
+import { t } from '@/i18n/ui';
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  lang: Locale;
+  post: Post;
+  url: string;
+}
+const { lang, post, url } = Astro.props;
+const s = t(lang);
+const minutes = Math.max(1, Math.round(plainWords(post.body) / 200));
+const sections = headings(post.body).filter((h) => h.level === 2).length;
+---
+
+<div class="facts">
+  <span class="facts__mark" aria-hidden="true"><Asterisk size="100%" /></span>
+  <dl class="facts__list">
+    <div>
+      <dt>{s.readingTime}</dt>
+      <dd>{s.minutes(minutes)}</dd>
+    </div>
+    {
+      sections > 0 && (
+        <div>
+          <dt>{s.sections}</dt>
+          <dd>{sections}</dd>
+        </div>
+      )
+    }
+  </dl>
+  <button type="button" class="facts__copy" data-copy-link={url} data-copied={s.linkCopied}>
+    <span data-copy-label>{s.copyLink}</span>
+  </button>
+</div>
+
+<style>
+  .facts {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+    width: clamp(13rem, 20vw, 16rem);
+    padding: 1.1rem 1.25rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .facts__mark {
+    position: absolute;
+    right: -2.5rem;
+    bottom: -2.5rem;
+    z-index: -1;
+    width: 7rem;
+    color: color-mix(in srgb, var(--c-dark) 6%, transparent);
+    animation: facts-spin 40s linear infinite;
+  }
+
+  @keyframes facts-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .facts__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    margin: 0;
+  }
+
+  .facts__list > div + div {
+    border-left: 1px solid var(--c-line);
+  }
+
+  .facts dt {
+    color: var(--c-muted);
+    font-size: 0.8rem;
+  }
+
+  .facts dd {
+    margin: 0.15rem 0 0;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .facts__copy {
+    min-height: 40px;
+    padding: 0 1rem;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: var(--r-pill);
+    background: transparent;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--dur-fast) ease;
+  }
+
+  .facts__copy:hover {
+    background: var(--c-band);
+  }
+
+  @media (max-width: 560px) {
+    .facts {
+      width: 10rem;
+      gap: 0;
+      padding: 0.6rem 0.5rem;
+    }
+
+    .facts dt {
+      font-size: 0.68rem;
+      white-space: nowrap;
+    }
+
+    .facts dd {
+      font-size: 1.05rem;
+    }
+
+    .facts__copy {
+      display: none;
+    }
+  }
+</style>

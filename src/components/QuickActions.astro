@@ -1,0 +1,152 @@
+---
+/**
+ * Floating quick actions: WhatsApp on the left edge (a dark disc that opens into a label on
+ * hover), and a back-to-top disc stacked above the accessibility launcher that appears once the
+ * page has scrolled (scripts/quick.ts).
+ */
+import { siWhatsapp } from 'simple-icons';
+import type { Locale } from '@/content/schema';
+import { t } from '@/i18n/ui';
+import Icon from './Icon.astro';
+
+interface Props {
+  lang: Locale;
+  whatsapp: string | undefined;
+}
+const { lang, whatsapp } = Astro.props;
+const s = t(lang);
+---
+
+<div class="quick" transition:persist={`quick-${lang}`}>
+  {
+    whatsapp && (
+      <a class="quick__wa scheme-invert" href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer" aria-label={s.whatsapp}>
+        <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+          <path d={siWhatsapp.path} />
+        </svg>
+        <span class="quick__wa-label" aria-hidden="true">
+          {s.whatsapp}
+        </span>
+      </a>
+    )
+  }
+  <button type="button" class="quick__top" data-to-top aria-label={s.backToTop}>
+    <Icon name="arrow" size={16} />
+  </button>
+</div>
+
+<style>
+  /* Same edge as the accessibility launcher (A11yPanel --a11y-edge). */
+  .quick {
+    --edge: clamp(0.85rem, 2vw, 1.75rem);
+  }
+
+  .quick__wa {
+    position: fixed;
+    left: var(--edge);
+    bottom: var(--edge);
+    z-index: 60;
+    display: inline-flex;
+    align-items: center;
+    height: var(--fab);
+    min-width: var(--fab);
+    padding: 0 calc((var(--fab) - 24px) / 2);
+    border-radius: var(--r-pill);
+    background: var(--c-light);
+    color: var(--c-dark);
+    text-decoration: none;
+    box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--ink) 55%, transparent);
+    transition:
+      transform var(--dur) var(--ease-out),
+      opacity var(--dur) var(--ease-out);
+  }
+
+  .quick__wa svg {
+    flex: none;
+    fill: currentColor;
+    transition: fill var(--dur) var(--ease-out);
+  }
+
+  .quick__wa-label {
+    max-width: 0;
+    overflow: hidden;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition:
+      max-width 0.5s var(--ease-out),
+      margin 0.5s var(--ease-out),
+      opacity 0.3s ease;
+  }
+
+  .quick__wa:hover svg,
+  .quick__wa:focus-visible svg {
+    fill: var(--c-accent);
+  }
+
+  .quick__wa:hover .quick__wa-label,
+  .quick__wa:focus-visible .quick__wa-label {
+    max-width: 14rem;
+    margin-left: 0.6rem;
+    opacity: 1;
+  }
+
+  /* Sits above the accessibility launcher; slides in once the page has scrolled. */
+  .quick__top {
+    position: fixed;
+    right: var(--edge);
+    bottom: calc(var(--edge) + var(--fab) + 0.75rem);
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    width: var(--fab);
+    height: var(--fab);
+    padding: 0;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: 50%;
+    background: var(--c-light);
+    color: var(--c-dark);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(0, 12px, 0);
+    transition:
+      opacity var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out),
+      visibility 0s linear var(--dur),
+      background-color var(--dur-fast) ease;
+  }
+
+  .quick__top :global(svg) {
+    transform: rotate(-45deg);
+  }
+
+  .quick__top.is-shown {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity var(--dur) var(--ease-out),
+      transform var(--dur) var(--ease-out),
+      background-color var(--dur-fast) ease;
+  }
+
+  .quick__top:hover {
+    background: var(--c-band);
+  }
+
+  :global(html[data-consent-visible]) .quick__wa,
+  :global(html[data-consent-visible]) .quick__top,
+  :global(body:has(.site-nav.is-open)) .quick__wa,
+  :global(body:has(.site-nav.is-open)) .quick__top {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media print {
+    .quick {
+      display: none;
+    }
+  }
+</style>

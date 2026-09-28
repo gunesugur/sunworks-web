@@ -21,6 +21,12 @@ const siteSettings = defineType({
     defineField({ name: 'siteName', type: 'string', validation: (r) => r.required() }),
     defineField({ name: 'tagline', type: 'string' }),
     defineField({ name: 'email', type: 'string', validation: (r) => r.required().email() }),
+    defineField({
+      name: 'whatsapp',
+      type: 'string',
+      description: 'International format, digits only, e.g. 905xxxxxxxxx. Leave empty to hide the WhatsApp button.',
+      validation: (r) => r.regex(/^\d{8,15}$/),
+    }),
     defineField({ name: 'city', type: 'string' }),
     defineField({
       name: 'socials',
@@ -111,7 +117,7 @@ const homePage = defineType({
     defineField({
       name: 'tools',
       type: 'object',
-      description: 'Platforms and tools I work with — not clients.',
+      description: 'Platforms and tools we work with — not clients. Known names show their logo.',
       fields: [defineField({ name: 'title', type: 'string' }), defineField({ name: 'items', type: 'array', of: [defineArrayMember({ type: 'string' })] })],
     }),
     defineField({
@@ -171,10 +177,43 @@ const homePage = defineType({
           of: [
             defineArrayMember({
               type: 'object',
-              fields: [defineField({ name: 'title', type: 'string' }), defineField({ name: 'text', type: 'text' })],
+              fields: [
+                defineField({ name: 'title', type: 'string' }),
+                defineField({ name: 'text', type: 'text' }),
+                defineField({
+                  name: 'deliverables',
+                  title: 'What the client receives',
+                  type: 'array',
+                  of: [defineArrayMember({ type: 'string' })],
+                }),
+              ],
             }),
           ],
           validation: (r) => r.min(3),
+        }),
+      ],
+    }),
+    defineField({
+      name: 'stats',
+      title: 'Figures',
+      type: 'object',
+      description: 'Two to four short commitments shown as counting numbers. Only use figures you can stand behind.',
+      fields: [
+        defineField({
+          name: 'items',
+          type: 'array',
+          validation: (r) => r.min(2).max(4),
+          of: [
+            defineArrayMember({
+              type: 'object',
+              fields: [
+                defineField({ name: 'value', type: 'number', validation: (r) => r.required().integer().min(0) }),
+                defineField({ name: 'suffix', type: 'string', description: 'Shown after the number, e.g. " h" or "%".' }),
+                defineField({ name: 'label', type: 'string', validation: (r) => r.required() }),
+              ],
+              preview: { select: { title: 'label', value: 'value', suffix: 'suffix' }, prepare: ({ title, value, suffix }) => ({ title: `${value ?? ''}${suffix ?? ''} — ${title ?? ''}` }) },
+            }),
+          ],
         }),
       ],
     }),

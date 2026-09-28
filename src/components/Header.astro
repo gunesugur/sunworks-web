@@ -1,9 +1,11 @@
 ---
 import type { Locale, Navigation } from '@/content/schema';
+import { getNavigation } from '@/lib/cms';
 import { cleanPath, otherLocale, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Button from './Button.astro';
 import Logo from './Logo.astro';
+import Swap from './Swap.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
@@ -20,6 +22,8 @@ const isActive = (href: string) => {
   return path === href || path.startsWith(`${href}/`);
 };
 const altLang = otherLocale(lang);
+// Labels of the other language, index-aligned, so every label keeps the width of its longer version.
+const altNav = await getNavigation(altLang);
 ---
 
 <header class="site-header" transition:name="site-header" data-header>
@@ -29,22 +33,25 @@ const altLang = otherLocale(lang);
     <nav class="site-nav" aria-label={s.mainNav} id="site-nav" data-nav>
       <ul class="site-nav__list">
         {
-          nav.header.map((item) => (
-            <li>
-              <a href={item.href} class="site-nav__link" aria-current={isActive(item.href) ? 'page' : undefined}>
-                {item.label}
+          nav.header.map((item, i) => (
+            <li style={`--i:${i}`}>
+              <a href={item.href} class="site-nav__link" data-index={String(i + 1).padStart(2, '0')} aria-current={isActive(item.href) ? 'page' : undefined}>
+                <Swap text={item.label} alt={altNav.header[i]?.label} class="site-nav__label" />
               </a>
             </li>
           ))
         }
       </ul>
       <div class="site-nav__extra">
-        <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}> — {s.langSwitchLabel}</span></a>
-        <Button href={nav.cta.href} variant="outline">{nav.cta.label}</Button>
+        <Button href={nav.cta.href} variant="outline"><Swap text={nav.cta.label} alt={altNav.cta.label} /></Button>
       </div>
     </nav>
 
+    <div class="menu-layers" aria-hidden="true"><span></span><span></span></div>
+
+    <!-- The language switch sits with the theme toggle so neither moves when the CTA's label length changes. -->
     <div class="site-header__tools">
+      <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}> — {s.langSwitchLabel}</span></a>
       <ThemeToggle lang={lang} />
       <button
         type="button"
@@ -103,6 +110,11 @@ const altLang = otherLocale(lang);
     transform: translate3d(0, -110%, 0);
   }
 
+  .site-header__inner > :global(.logo) {
+    position: relative;
+    z-index: 2;
+  }
+
   .site-header__tools {
     position: relative;
     z-index: 2;
@@ -146,12 +158,17 @@ const altLang = otherLocale(lang);
     transition: color var(--dur-fast) ease;
   }
 
-  .site-nav__link::after {
+  /* Underline the visible label only; the Swap ghost may make the link wider than its text. */
+  .site-nav__link :global(.swap__text) {
+    position: relative;
+  }
+
+  .site-nav__link :global(.swap__text)::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom: -0.4rem;
     height: 2px;
     border-radius: 2px;
     background: currentColor;
@@ -165,8 +182,8 @@ const altLang = otherLocale(lang);
     color: var(--c-dark);
   }
 
-  .site-nav__link:hover::after,
-  .site-nav__link[aria-current='page']::after {
+  .site-nav__link:hover :global(.swap__text)::after,
+  .site-nav__link[aria-current='page'] :global(.swap__text)::after {
     transform: scaleX(1);
     transform-origin: left;
   }
@@ -193,7 +210,8 @@ const altLang = otherLocale(lang);
     background: var(--c-band);
   }
 
-  .menu-toggle {
+  .menu-toggle,
+  .menu-layers {
     display: none;
   }
 
@@ -261,6 +279,43 @@ const altLang = otherLocale(lang);
       transform: translate3d(0, -3.8px, 0) rotate(-45deg);
     }
 
+    /* Staggered menu: an accent layer, then an ink layer, then the panel sweep in from the right;
+       the links rise one after another. Closing runs the same sweep back out, faster. */
+    .menu-layers,
+    .menu-layers span {
+      position: fixed;
+      inset: 0;
+    }
+
+    .menu-layers {
+      z-index: 0;
+      display: block;
+      pointer-events: none;
+    }
+
+    .menu-layers span {
+      transform: translate3d(100%, 0, 0);
+      transition: transform 0.45s var(--ease-in-out) 0.12s;
+    }
+
+    .menu-layers span:first-child {
+      background: var(--c-accent);
+      transition-delay: 0.18s;
+    }
+
+    .menu-layers span:last-child {
+      background: var(--c-dark);
+    }
+
+    .site-header:has(.site-nav.is-open) .menu-layers span {
+      transform: none;
+      transition: transform 0.55s var(--ease-out);
+    }
+
+    .site-header:has(.site-nav.is-open) .menu-layers span:last-child {
+      transition-delay: 0.07s;
+    }
+
     .site-nav {
       position: fixed;
       inset: 0;
@@ -268,41 +323,89 @@ const altLang = otherLocale(lang);
       flex-direction: column;
       align-items: stretch;
       justify-content: center;
-      gap: 2.5rem;
+      gap: 3rem;
       margin: 0;
       padding: 6rem var(--gutter) 3rem;
       background: var(--c-light);
       visibility: hidden;
-      opacity: 0;
-      transform: translate3d(0, -12px, 0);
+      /* The panel is wiped in with a clip, not moved: its links never drift sideways. */
+      clip-path: inset(0 0 0 100%);
       transition:
-        opacity var(--dur) var(--ease-out),
-        transform var(--dur) var(--ease-out),
-        visibility 0s linear var(--dur);
+        clip-path 0.45s var(--ease-in-out),
+        visibility 0s linear 0.6s;
     }
 
     .site-nav.is-open {
       visibility: visible;
-      opacity: 1;
-      transform: none;
-      transition:
-        opacity var(--dur) var(--ease-out),
-        transform var(--dur) var(--ease-out);
+      clip-path: inset(0);
+      transition: clip-path 0.5s var(--ease-in-out) 0.14s;
     }
 
     .site-nav__list {
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.25rem;
     }
 
     .site-nav__link {
-      font-size: clamp(2rem, 8vw, 2.75rem);
-      font-weight: 500;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: clamp(2.5rem, 11vw, 4rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--c-dark);
+      /* Each label is revealed bottom-up in place, after the panel has settled; the text itself
+         never moves, so there is nothing to settle or re-snap once it is visible. */
+      clip-path: inset(100% 0 0 0);
+      transition: clip-path 0.25s var(--ease-in-out);
+    }
+
+    .site-nav.is-open .site-nav__link {
+      clip-path: inset(-0.5rem);
+      transition: clip-path 0.5s var(--ease-in-out) calc(0.68s + var(--i) * 0.07s);
+    }
+
+    .site-nav__link[aria-current='page'] {
       color: var(--c-dark);
     }
 
-    .site-nav__link::after {
+    /* Menu numbers are generated content (empty alt text), so they stay out of the link's name. */
+    .site-nav__link::before {
+      content: attr(data-index);
+      content: attr(data-index) / '';
+      display: block;
+      min-width: 1.6em;
+      padding-top: 0.55em;
+      color: var(--c-accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .site-nav__link :global(.swap__text)::after {
       display: none;
+    }
+
+    /* One language at a time in the full-screen menu: no ghost width, labels start on one line. */
+    .site-nav__link :global(.swap__ghost) {
+      display: none;
+    }
+
+    .site-nav__extra {
+      opacity: 0;
+      transform: translate3d(0, 12px, 0);
+      transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .site-nav.is-open .site-nav__extra {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity 0.5s ease 0.7s,
+        transform 0.6s var(--ease-out) 0.7s;
     }
 
     .site-nav__extra {

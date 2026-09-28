@@ -41,6 +41,7 @@ export const blockSchema = z.object({
   children: z.array(spanSchema).min(1),
 });
 export type Block = z.infer<typeof blockSchema>;
+
 export const portableTextSchema = z.array(blockSchema);
 export type PortableText = z.infer<typeof portableTextSchema>;
 
@@ -90,6 +91,8 @@ export const siteSettingsSchema = z.object({
   siteName: z.string(),
   tagline: z.string(),
   email: z.email(),
+  /** WhatsApp number in international format, digits only (e.g. 905550000000). */
+  whatsapp: z.string().regex(/^\d{8,15}$/).optional(),
   city: z.string(),
   socials: z.array(
     z.object({
@@ -150,8 +153,14 @@ export const homePageSchema = z.object({
   process: z.object({
     title: z.string(),
     text: z.string(),
-    steps: z.array(z.object({ _key: key, title: z.string(), text: z.string() })).min(3),
+    steps: z.array(z.object({ _key: key, title: z.string(), text: z.string(), deliverables: z.array(z.string()).optional() })).min(3),
   }),
+  /** Short commitments shown as counting figures between sections. */
+  stats: z
+    .object({
+      items: z.array(z.object({ _key: key, value: z.number().int().nonnegative(), suffix: z.string().optional(), label: z.string() })).min(2).max(4),
+    })
+    .optional(),
   closing: z.object({ title: z.string(), image: imageSchema, tag: z.string(), cta: linkSchema }),
 });
 export type HomePage = z.infer<typeof homePageSchema>;

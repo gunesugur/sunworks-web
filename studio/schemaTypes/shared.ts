@@ -71,6 +71,7 @@ export const portableTextField = (name = 'body', title = 'Body') =>
     title,
     type: 'array',
     of: [
+
       defineArrayMember({
         type: 'block',
         styles: [

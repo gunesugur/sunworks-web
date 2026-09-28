@@ -11,6 +11,7 @@ import Footer from '@/components/Footer.astro';
 import Intro from '@/components/Intro.astro';
 import A11yPanel from '@/components/A11yPanel.astro';
 import CookieConsent from '@/components/CookieConsent.astro';
+import QuickActions from '@/components/QuickActions.astro';
 
 interface Props {
   lang: Locale;
@@ -130,6 +131,7 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
     </main>
     <Footer lang={lang} nav={nav} settings={settings} altHref={altHref} />
     <A11yPanel lang={lang} />
+    <QuickActions lang={lang} whatsapp={settings.whatsapp} />
     <CookieConsent lang={lang} />
     <script>
       import '@/scripts/app';

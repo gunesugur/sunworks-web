@@ -89,22 +89,6 @@ function initSpin(): () => void {
   return () => star.removeEventListener('click', onClick);
 }
 
-/** WCAG 2.2.2: the tools marquee can be paused by keyboard/touch, and pauses while focused. */
-function initMarquee(): () => void {
-  const toggle = document.querySelector<HTMLButtonElement>('[data-marquee-toggle]');
-  const viewport = document.querySelector<HTMLElement>('[data-marquee]');
-  const label = toggle?.querySelector<HTMLElement>('[data-marquee-label]');
-  if (!toggle || !viewport) return () => undefined;
-  const onClick = () => {
-    const paused = toggle.getAttribute('aria-pressed') !== 'true';
-    toggle.setAttribute('aria-pressed', String(paused));
-    viewport.classList.toggle('is-paused', paused);
-    if (label) label.textContent = (paused ? toggle.dataset['labelPlay'] : toggle.dataset['labelPause']) ?? '';
-  };
-  toggle.addEventListener('click', onClick);
-  return () => toggle.removeEventListener('click', onClick);
-}
-
 /** The intro overlay hides the page for ~2.4s: keep the page inert meanwhile, and let any key skip it. */
 function initIntro(): () => void {
   const root = document.documentElement;
@@ -127,6 +111,6 @@ function initIntro(): () => void {
 }
 
 export function initMotion(): () => void {
-  const offs = [initIntro(), initReveal(), initParallax(), initGlow(), initSpin(), initMarquee()];
+  const offs = [initIntro(), initReveal(), initParallax(), initGlow(), initSpin()];
   return () => offs.forEach((off) => off());
 }
