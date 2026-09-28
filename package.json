@@ -19,7 +19,8 @@
     "db:migrate:remote": "wrangler d1 migrations apply sunworks-db --remote",
     "links": "linkinator dist/client --recurse --skip '^(?!http://localhost)' --silent",
     "deploy": "npm run build && wrangler deploy",
-    "sanity:seed": "tsx scripts/sanity-seed.ts"
+    "sanity:seed": "tsx scripts/sanity-seed.ts",
+    "sanity:import": "tsx scripts/sanity-import.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

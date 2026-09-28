@@ -16,6 +16,8 @@ concurrency:
 env:
   NODE_VERSION: 22
   CI: true
+  # Tests run against the bundled seed content so editor changes in Sanity can't break CI.
+  CONTENT_SOURCE: local
 
 jobs:
   quality:
