@@ -1,68 +1,78 @@
-# SUN | WORKS — web
+# SUN | WORKS
 
-Bilingual (TR at `/`, EN at `/en`) site for SUN | WORKS, a small solo-led web studio in Bursa.
-Astro 7 + TypeScript (strict), static-first, deployed to Cloudflare Workers with two API routes for forms.
+SUN | WORKS web stüdyosunun kurumsal sitesi. Türkçe (`/`) ve İngilizce (`/en`) olarak yayınlanır.
 
-## Stack
+## Teknolojiler
 
-| Area | Choice |
+| Alan | Kullanılan |
 | --- | --- |
-| Framework | Astro 7, static output, `ClientRouter` view transitions, tiny vanilla TS islands |
-| Hosting | Cloudflare Workers (static assets + `@astrojs/cloudflare` for `/api/*`) — free plan |
-| CMS | Sanity (free) with document-level i18n; local typed seed content mirrors the Sanity schemas until connected |
-| Forms | `/api/contact`, `/api/newsletter`: zod validation, honeypot, origin/CSRF checks, D1 rate limit, Turnstile, D1 storage |
-| Fonts | Plus Jakarta Sans Variable, self-hosted via `@fontsource-variable` (latin + latin-ext) |
-| Images | Unsplash (Unsplash License), optimized at build with `astro:assets` → WebP |
+| Arayüz | [Astro](https://astro.build) + TypeScript, statik sayfalar |
+| Barındırma | Cloudflare Workers (statik dosyalar + form API'leri) |
+| İçerik yönetimi | [Sanity](https://www.sanity.io) (Studio: `studio/` klasörü) |
+| Formlar | Cloudflare D1 veritabanı, Turnstile bot koruması, istek sınırlama |
+| Test | Node test runner, Playwright (uçtan uca + erişilebilirlik), Lighthouse |
 
-## Scripts
+## Klasör yapısı
+
+```
+src/
+  pages/        Sayfa yolları ve /api/* form uç noktaları
+  templates/    Sayfa şablonları
+  components/   Arayüz bileşenleri
+  content/      İçerik şeması (zod) ve yerel örnek içerik
+  lib/          İçerik okuma, görsel, SEO yardımcıları
+  server/       Form doğrulama, güvenlik ve istek sınırlama
+  scripts/      Tarayıcı tarafı küçük geliştirmeler
+studio/         Sanity Studio (içerik paneli)
+migrations/     D1 veritabanı tabloları
+tests/          Birim ve uçtan uca testler
+```
+
+## Yerel geliştirme
+
+Node.js 22.12 veya üstü gerekir.
 
 ```bash
 npm install
-cp .dev.vars.example .dev.vars      # Turnstile always-pass test secret + local salt
-npm run build                       # astro build + security headers/CSP
-npm run db:migrate:local            # create local D1 tables (state lives next to the built worker)
-npm run preview                     # wrangler dev on http://127.0.0.1:8788 (real Worker runtime, local D1)
-npm run lint                        # ESLint (typescript-eslint strict, sonarjs, security, astro) — zero warnings
-npm run typecheck                   # astro check + tsc
-npm test                            # unit + API security tests (node:test, real SQLite for D1 SQL)
-npm run test:e2e                    # Playwright: chromium/firefox/webkit × 390/768/1024/1440, axe, CLS, forms, headers
-npm run sanity:seed                 # export local content → dist-sanity/seed.ndjson (images attached)
+cp .dev.vars.example .dev.vars   # yerel test anahtarları
+npm run build
+npm run db:migrate:local         # yerel veritabanı tabloları
+npm run preview                  # http://127.0.0.1:8788
 ```
 
-## Content model
+Diğer komutlar:
 
-`src/content/schema.ts` (zod) ⇄ `studio/schemaTypes` (Sanity) — same `_type`s and fields:
-`siteSettings`, `navigation`, `homePage`, `service`, `post`, `page` (contact + legal). Each document has `language` (`tr`|`en`)
-and a shared `translationKey`, used for hreflang and the language switch.
+```bash
+npm run lint        # ESLint
+npm run typecheck   # Astro + TypeScript tip kontrolü
+npm test            # birim ve API testleri
+npm run test:e2e    # Playwright testleri
+```
 
-When `SANITY_PROJECT_ID` is set at build time, `src/lib/cms.ts` reads published documents from Sanity (GROQ over HTTPS, no SDK)
-and validates them with the same zod schemas; otherwise it uses `src/content/data/*`.
+## İçerik
 
-A Sanity webhook (on publish) → Cloudflare **Workers Builds deploy hook** rebuilds the site.
+İçerikler Sanity'de tutulur ve **https://sunworks.sanity.studio** üzerinden düzenlenir.
+Studio'da bir içerik yayınlandığında (Publish) site otomatik olarak yeniden derlenir ve birkaç dakika içinde güncellenir.
 
-## Environment
+`SANITY_PROJECT_ID` tanımlı değilse site, `src/content/data/` altındaki yerel örnek içerikle derlenir (testler bu şekilde çalışır).
+Her iki kaynak da `src/content/schema.ts` içindeki aynı şemayla doğrulanır.
 
-| Name | Where | Purpose |
+## Yayına alma
+
+`main` dalına gelen her değişiklik Cloudflare Workers Builds ile otomatik olarak derlenip yayınlanır.
+`studio/` klasöründeki değişiklikler GitHub Actions ile Sanity Studio'ya ayrıca yüklenir.
+
+## Ortam değişkenleri
+
+| Ad | Nerede | Açıklama |
 | --- | --- | --- |
-| `TURNSTILE_SECRET_KEY` | Worker secret | Turnstile verification (forms return 503 "unavailable" without it) |
-| `RATE_LIMIT_SALT` | Worker secret | salt for the hashed rate-limit key |
-| `PUBLIC_TURNSTILE_SITE_KEY` | build variable | Turnstile widget site key (defaults to Cloudflare's test key) |
-| `SANITY_PROJECT_ID`, `SANITY_DATASET` | build variables | switch content source to Sanity |
-| `FORMS_ENABLED` | `wrangler.jsonc` var | kill switch for both forms |
-| `RESEND_API_KEY` | (later) | email delivery is not implemented yet; messages are stored in D1 only |
+| `TURNSTILE_SECRET_KEY` | Worker secret | Turnstile doğrulaması (yoksa formlar kapalı kalır) |
+| `RATE_LIMIT_SALT` | Worker secret | İstek sınırlama anahtarı için tuz |
+| `PUBLIC_TURNSTILE_SITE_KEY` | Build değişkeni | Turnstile site anahtarı |
+| `SANITY_PROJECT_ID`, `SANITY_DATASET` | Build değişkeni | İçerik kaynağı (`.env.production`) |
+| `FORMS_ENABLED` | `wrangler.jsonc` | Formları topluca açıp kapatır |
+| `SANITY_AUTH_TOKEN` | GitHub secret | Studio yükleme yetkisi |
 
-## Design
+## Görseller
 
-Figma file `QALdjrTAJQ2wvLlvkPBg2r` (frame `1:81`, design-system frame `1:9`). Tokens live in `src/styles/tokens.css`.
-Palette is fixed: `#12100D`, `#F5F6F7`, `#1CDB9C` (accent never used as text on light backgrounds).
-The "notched" image corners are built in `src/components/Notched.astro` + `src/lib/notch.ts` (`clip-path: path()` computed via
-`ResizeObserver`, rounded-rectangle fallback).
-
-## Legal pages
-
-Privacy, terms and cookie texts describe only the data flows implemented in this repo and are flagged
-**"requires legal review"** (`legalReviewRequired: true`) until a lawyer has checked them.
-
-## Photo credits
-
-All photos are from [Unsplash](https://unsplash.com) under the Unsplash License. IDs: see `docs/photo-credits.md`.
+Fotoğraflar [Unsplash Lisansı](https://unsplash.com/license) kapsamında kullanılmaktadır. Liste: [`docs/photo-credits.md`](docs/photo-credits.md).

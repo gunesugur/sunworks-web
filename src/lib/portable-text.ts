@@ -42,6 +42,3 @@ export function spans(block: Block): RenderSpan[] {
     };
   });
 }
-
-export const plainText = (blocks: PortableText): string =>
-  blocks.map((b) => b.children.map((c) => c.text).join('')).join('\n\n');

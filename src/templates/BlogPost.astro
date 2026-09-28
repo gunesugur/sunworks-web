@@ -3,7 +3,7 @@ import type { Locale, Post } from '@/content/schema';
 import { getTranslation } from '@/lib/cms';
 import { breadcrumbLd } from '@/lib/seo';
 import { resolveImage } from '@/lib/images';
-import { formatDate, postPath, routes } from '@/i18n/routes';
+import { formatDate, otherLocale, postPath, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
@@ -19,7 +19,7 @@ interface Props {
 }
 const { lang, post } = Astro.props;
 const s = t(lang);
-const other: Locale = lang === 'tr' ? 'en' : 'tr';
+const other = otherLocale(lang);
 const translation = await getTranslation('post', post.translationKey, other);
 const alternates: Partial<Record<Locale, string>> = { [lang]: postPath(lang, post.slug.current) };
 if (translation) alternates[other] = postPath(other, translation.slug.current);
