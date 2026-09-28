@@ -12,6 +12,7 @@ const home = await getHome(Astro.props.lang);
 
 <section class="container cta" aria-labelledby="cta-title">
   <div class="cta__box" data-reveal>
+    <span class="cta__mark" aria-hidden="true"><Asterisk size="100%" /></span>
     <h2 id="cta-title" class="h2 cta__title">
       {home.closing.title}
       <Asterisk class="cta__star" size="0.6em" />
@@ -34,6 +35,27 @@ const home = await getHome(Astro.props.lang);
     padding: clamp(2rem, 5vw, 4rem);
     border-radius: var(--r-footer);
     background: var(--c-band);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* Watermark: the brand asterisk, large and faint, turning slowly in the corner. */
+  .cta__mark {
+    position: absolute;
+    left: clamp(-7rem, -6vw, -3rem);
+    bottom: clamp(-7rem, -6vw, -3rem);
+    z-index: -1;
+    width: clamp(12rem, 24vw, 20rem);
+    aspect-ratio: 1;
+    color: color-mix(in srgb, var(--c-dark) 7%, transparent);
+    animation: cta-spin 60s linear infinite;
+  }
+
+  @keyframes cta-spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .cta__title {

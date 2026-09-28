@@ -19,7 +19,20 @@ export function initVelocity(): () => void {
       rows.push({ el, speed: Number(el.dataset['speed'] ?? 40), dir: Number(el.dataset['dir']) || 1, x: 0, width: 0 });
     }
   }
-  const measure = () => rows.forEach((r) => (r.width = (r.el.firstElementChild as HTMLElement | null)?.offsetWidth ?? 0));
+  // Enough copies of the track to cover the viewport plus one track of travel, so no gap opens.
+  const measure = () =>
+    rows.forEach((r) => {
+      const first = r.el.firstElementChild as HTMLElement | null;
+      r.width = first?.offsetWidth ?? 0;
+      if (!first || !r.width) return;
+      const need = Math.ceil(window.innerWidth / r.width) + 1;
+      while (r.el.children.length < need) {
+        const copy = first.cloneNode(true) as HTMLElement;
+        copy.setAttribute('aria-hidden', 'true');
+        copy.removeAttribute('aria-label');
+        r.el.appendChild(copy);
+      }
+    });
   measure();
 
   let lastY = window.scrollY;

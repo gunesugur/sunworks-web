@@ -21,6 +21,12 @@ const siteSettings = defineType({
     defineField({ name: 'siteName', type: 'string', validation: (r) => r.required() }),
     defineField({ name: 'tagline', type: 'string' }),
     defineField({ name: 'email', type: 'string', validation: (r) => r.required().email() }),
+    defineField({
+      name: 'whatsapp',
+      type: 'string',
+      description: 'International format, digits only, e.g. 905xxxxxxxxx. Leave empty to hide the WhatsApp button.',
+      validation: (r) => r.regex(/^\d{8,15}$/),
+    }),
     defineField({ name: 'city', type: 'string' }),
     defineField({
       name: 'socials',

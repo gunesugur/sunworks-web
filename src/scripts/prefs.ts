@@ -3,7 +3,6 @@
  * The inline script in layouts/Base.astro applies the same attributes before first paint;
  * keep the two in sync.
  */
-import { pixelSwap } from './pixel-swap';
 import { prefersReducedMotion } from './reduced-motion';
 
 export type ThemeChoice = 'light' | 'dark' | 'system';
@@ -21,9 +20,7 @@ export interface Prefs {
 const KEY = 'sw-prefs';
 export const PREFS_EVENT = 'sw:prefs';
 const DARK_QUERY = '(prefers-color-scheme: dark)';
-const PAPER = '#f5f6f7';
-const INK = '#12100d';
-const THEME_COLOR = { light: PAPER, dark: INK } as const;
+const THEME_COLOR = { light: '#f5f6f7', dark: '#12100d' } as const;
 
 export function loadPrefs(): Prefs {
   try {
@@ -83,20 +80,30 @@ export function resetPrefs() {
 export const themeChoice = (prefs: Prefs = loadPrefs()): ThemeChoice => prefs.theme ?? 'system';
 
 /**
- * Switches the theme. With an origin (the toggle) and motion allowed, the new theme arrives as a
- * pixel swap spreading from it (scripts/pixel-swap.ts); otherwise it switches at once.
+ * Switches the theme. Where View Transitions exist, the new theme grows as a circle from
+ * `origin` (the toggle), echoing the rising sun of the logo; otherwise colours cross-fade.
  */
 export function setTheme(choice: ThemeChoice, origin?: { x: number; y: number }) {
   const root = document.documentElement;
   const before = root.dataset['theme'];
   const commit = () => updatePrefs({ theme: choice === 'system' ? undefined : choice });
   const after = resolvedTheme(choice === 'system' ? {} : { theme: choice });
-  if (before === after || prefersReducedMotion() || !origin) {
+  if (before === after || prefersReducedMotion() || !('startViewTransition' in document) || !origin) {
     commit();
     return;
   }
-  const accent = getComputedStyle(root).getPropertyValue('--c-accent').trim() || '#1cdb9c';
-  pixelSwap(origin, after === 'dark' ? INK : PAPER, accent, commit);
+  const radius = Math.hypot(Math.max(origin.x, innerWidth - origin.x), Math.max(origin.y, innerHeight - origin.y));
+  root.classList.add('theme-vt');
+  const vt = document.startViewTransition(commit);
+  vt.ready
+    .then(() =>
+      root.animate(
+        { clipPath: [`circle(0px at ${origin.x}px ${origin.y}px)`, `circle(${radius}px at ${origin.x}px ${origin.y}px)`] },
+        { duration: 750, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', pseudoElement: '::view-transition-new(root)' },
+      ),
+    )
+    .catch(() => undefined);
+  vt.finished.finally(() => root.classList.remove('theme-vt')).catch(() => undefined);
 }
 
 /** Follows the OS theme while the visitor has not picked one. */

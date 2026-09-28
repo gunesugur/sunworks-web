@@ -41,7 +41,31 @@ export const blockSchema = z.object({
   children: z.array(spanSchema).min(1),
 });
 export type Block = z.infer<typeof blockSchema>;
-export const portableTextSchema = z.array(blockSchema);
+
+/** Line illustrations drawn in the site's style (src/lib/illustrations.ts), placed between paragraphs. */
+export const ILLUSTRATIONS = [
+  'backup',
+  'updates',
+  'redirects',
+  'search',
+  'forms',
+  'cache',
+  'devices',
+  'speed',
+  'images',
+  'hosting',
+  'store',
+  'payments',
+  'shipping',
+] as const;
+export const illustrationSchema = z.object({
+  _type: z.literal('illustration'),
+  _key: key,
+  name: z.enum(ILLUSTRATIONS),
+  caption: z.string().optional(),
+});
+export type Illustration = z.infer<typeof illustrationSchema>;
+export const portableTextSchema = z.array(z.discriminatedUnion('_type', [blockSchema, illustrationSchema]));
 export type PortableText = z.infer<typeof portableTextSchema>;
 
 export const linkSchema = z.object({
@@ -90,6 +114,8 @@ export const siteSettingsSchema = z.object({
   siteName: z.string(),
   tagline: z.string(),
   email: z.email(),
+  /** WhatsApp number in international format, digits only (e.g. 905550000000). */
+  whatsapp: z.string().regex(/^\d{8,15}$/).optional(),
   city: z.string(),
   socials: z.array(
     z.object({

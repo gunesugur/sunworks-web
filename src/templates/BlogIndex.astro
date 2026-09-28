@@ -9,7 +9,6 @@ import PageHeader from '@/components/PageHeader.astro';
 import Notched from '@/components/Notched.astro';
 import Img from '@/components/Img.astro';
 import ArrowButton from '@/components/ArrowButton.astro';
-import Icon from '@/components/Icon.astro';
 
 interface Props {
   lang: Locale;
@@ -27,9 +26,7 @@ const ld = [
 ---
 
 <Base lang={lang} title={s.blogTitle} description={s.blogIntro} alternates={{ tr: routes.blog.tr, en: routes.blog.en }} jsonLd={ld}>
-  <PageHeader lang={lang} title={s.blogTitle} intro={s.blogIntro}>
-    <a class="rss" href={routes.rss[lang]}><Icon name="rss" size={18} /> {s.rss}</a>
-  </PageHeader>
+  <PageHeader lang={lang} title={s.blogTitle} intro={s.blogIntro} />
 
   <section class="container posts" aria-label={s.blogTitle}>
     {posts.length === 0 && <p>{s.noPosts}</p>}
@@ -61,14 +58,6 @@ const ld = [
 </Base>
 
 <style>
-  .rss {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    font-size: var(--fs-xs);
-    font-weight: 600;
-  }
 
   .posts {
     padding-bottom: var(--section);

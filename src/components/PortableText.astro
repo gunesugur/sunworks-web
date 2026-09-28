@@ -2,6 +2,7 @@
 import type { PortableText } from '@/content/schema';
 import { groupBlocks, headings } from '@/lib/portable-text';
 import Spans from './Spans.astro';
+import Figure from './Figure.astro';
 
 interface Props {
   value: PortableText;
@@ -14,6 +15,7 @@ const ids = new Map(headings(Astro.props.value).map((h) => [h.key, h.id]));
 <div class:list={['prose', Astro.props.class]}>
   {
     groups.map((g) => {
+      if (g.kind === 'figure') return <Figure figure={g.figure} />;
       if (g.kind === 'list') {
         const Tag = g.ordered ? 'ol' : 'ul';
         return (

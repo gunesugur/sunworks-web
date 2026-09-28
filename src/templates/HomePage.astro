@@ -12,7 +12,7 @@ import Tag from '@/components/Tag.astro';
 import Asterisk from '@/components/Asterisk.astro';
 import Icon from '@/components/Icon.astro';
 import ServiceCard from '@/components/ServiceCard.astro';
-import SunCard from '@/components/SunCard.astro';
+import StoryCard from '@/components/StoryCard.astro';
 import { toolLogos } from '@/lib/tool-logos';
 
 interface Props {
@@ -40,7 +40,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
       </h1>
       <div class="hero__aside">
         <div class="hero__card" data-reveal="scale">
-          <SunCard />
+          <StoryCard lang={lang} />
         </div>
         <p class="hero__note">
           <span class="hero__note-in">
@@ -809,6 +809,11 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: clamp(2rem, 6vw, 6rem);
     align-items: start;
+  }
+
+  /* Stretched to the list's height so the sticky dial can travel with the steps. */
+  .process__aside {
+    align-self: stretch;
   }
 
   .process__sticky {

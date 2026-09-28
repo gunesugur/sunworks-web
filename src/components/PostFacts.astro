@@ -1,0 +1,128 @@
+---
+/** Article facts beside the post title: reading time, sections, tags and a copy-link action. */
+import type { Locale, Post } from '@/content/schema';
+import { headings, plainWords } from '@/lib/portable-text';
+import { t } from '@/i18n/ui';
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  lang: Locale;
+  post: Post;
+  url: string;
+}
+const { lang, post, url } = Astro.props;
+const s = t(lang);
+const minutes = Math.max(1, Math.round(plainWords(post.body) / 200));
+const sections = headings(post.body).filter((h) => h.level === 2).length;
+---
+
+<div class="facts">
+  <span class="facts__mark" aria-hidden="true"><Asterisk size="100%" /></span>
+  <dl class="facts__list">
+    <div>
+      <dt>{s.readingTime}</dt>
+      <dd>{s.minutes(minutes)}</dd>
+    </div>
+    {
+      sections > 0 && (
+        <div>
+          <dt>{s.sections}</dt>
+          <dd>{sections}</dd>
+        </div>
+      )
+    }
+  </dl>
+  {
+    post.tags.length > 0 && (
+      <ul class="facts__tags" aria-label={s.tags}>
+        {post.tags.map((tag) => (
+          <li>{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+  <button type="button" class="facts__copy" data-copy-link={url} data-copied={s.linkCopied}>
+    <span data-copy-label>{s.copyLink}</span>
+  </button>
+</div>
+
+<style>
+  .facts {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 2.5vw, 1.75rem);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .facts__mark {
+    position: absolute;
+    right: -3rem;
+    bottom: -3rem;
+    z-index: -1;
+    width: 10rem;
+    color: color-mix(in srgb, var(--c-dark) 6%, transparent);
+    animation: facts-spin 40s linear infinite;
+  }
+
+  @keyframes facts-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .facts__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .facts dt {
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+
+  .facts dd {
+    margin: 0.2rem 0 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .facts__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .facts__tags li {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+  }
+
+  .facts__copy {
+    justify-self: start;
+    min-height: 44px;
+    padding: 0 1.1rem;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: var(--r-pill);
+    background: transparent;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color var(--dur-fast) ease;
+  }
+
+  .facts__copy:hover {
+    background: var(--c-band);
+  }
+</style>

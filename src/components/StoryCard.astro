@@ -1,0 +1,105 @@
+---
+/**
+ * Hero card: a short line-drawn story of how we work. One set of strokes scatters and regroups:
+ * two people shake hands, a laptop wireframe, code, then the logo's sun rising (scripts/story.ts,
+ * loaded when the browser is idle). Without JS the first drawing is shown as plain SVG; with
+ * reduced motion the last one stays still.
+ */
+import type { Locale } from '@/content/schema';
+import { SCENES } from '@/lib/story-scenes';
+import { t } from '@/i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+const s = t(Astro.props.lang);
+const first = SCENES[0] ?? [];
+---
+
+<div class="story scheme-invert" data-story aria-hidden="true">
+  <svg class="story__fallback" viewBox="0 0 360 240" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    {first.map((st) => <path d={st.d} class:list={{ 'is-accent': st.a }} />)}
+  </svg>
+  <canvas class="story__canvas" data-story-canvas></canvas>
+  <svg class="story__host" data-story-host width="0" height="0"></svg>
+  <span class="story__accent" data-story-accent></span>
+  <p class="story__labels">
+    {
+      s.storyScenes.map((label, i) => (
+        <span data-story-label class:list={{ 'is-on': i === 0 }}>
+          <b>{String(i + 1).padStart(2, '0')}</b> {label}
+        </span>
+      ))
+    }
+  </p>
+</div>
+
+<style>
+  .story {
+    position: relative;
+    aspect-ratio: 343 / 229;
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    color: var(--c-dark);
+    overflow: hidden;
+  }
+
+  .story__fallback,
+  .story__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .story__fallback {
+    stroke: currentColor;
+    transition: opacity 0.4s ease;
+  }
+
+  .story__fallback .is-accent {
+    stroke: var(--c-accent);
+  }
+
+  .story.is-live .story__fallback {
+    opacity: 0;
+  }
+
+  .story__host,
+  .story__accent {
+    position: absolute;
+    visibility: hidden;
+  }
+
+  .story__accent {
+    color: var(--c-accent);
+  }
+
+  .story__labels {
+    position: absolute;
+    left: 1rem;
+    top: 0.9rem;
+    display: grid;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .story__labels span {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translate3d(0, 6px, 0);
+    transition:
+      opacity 0.5s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+
+  .story__labels span.is-on {
+    opacity: 1;
+    transform: none;
+  }
+
+  .story__labels b {
+    color: var(--c-accent);
+    font-weight: 700;
+  }
+</style>

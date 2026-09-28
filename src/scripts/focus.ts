@@ -3,14 +3,13 @@ import { prefersReducedMotion } from './reduced-motion';
 const STEP_MS = 1100;
 
 /**
- * True focus: when the heading scrolls into view, focus walks across its words once (the others
- * blur back), framed by accent corner marks; it ends on the last word with everything sharp again.
- * One pass only, so nothing keeps moving. Reduced motion: plain text.
+ * True focus: while the heading is on screen, focus walks across its words (the others blur back),
+ * framed by accent corner marks, and starts over. Off screen it stops. Reduced motion: plain text.
  */
 export function initFocus(): () => void {
   const roots = [...document.querySelectorAll<HTMLElement>('[data-true-focus]')];
   if (!roots.length || prefersReducedMotion()) return () => undefined;
-  const timers: number[] = [];
+  const timers = new Map<HTMLElement, number>();
 
   const place = (root: HTMLElement, word: HTMLElement) => {
     const frame = root.querySelector<HTMLElement>('.focus__frame');
@@ -22,30 +21,36 @@ export function initFocus(): () => void {
     frame.style.height = `${w.height}px`;
   };
 
+  // Loops while on screen; a short rest on the last word before starting over.
   const play = (root: HTMLElement) => {
     const words = [...root.querySelectorAll<HTMLElement>('.focus__word')];
     root.classList.add('is-focusing', 'has-frame');
-    words.forEach((word, i) => {
-      timers.push(
-        window.setTimeout(() => {
-          words.forEach((w) => w.classList.toggle('is-focus', w === word));
-          place(root, word);
-        }, i * STEP_MS),
-      );
-    });
-    timers.push(window.setTimeout(() => root.classList.remove('is-focusing'), words.length * STEP_MS));
+    let i = 0;
+    const step = () => {
+      const word = words[i % words.length];
+      if (word) {
+        words.forEach((w) => w.classList.toggle('is-focus', w === word));
+        place(root, word);
+      }
+      i += 1;
+      timers.set(root, window.setTimeout(step, i % words.length === 0 ? STEP_MS * 1.8 : STEP_MS));
+    };
+    step();
+  };
+  const stop = (root: HTMLElement) => {
+    window.clearTimeout(timers.get(root));
+    timers.delete(root);
   };
 
   const io = new IntersectionObserver(
     (entries) => {
       for (const e of entries) {
-        if (!e.isIntersecting) continue;
-        io.unobserve(e.target);
-        // Let the heading's own reveal finish first.
-        timers.push(window.setTimeout(() => play(e.target as HTMLElement), 700));
+        const root = e.target as HTMLElement;
+        if (e.isIntersecting && !timers.has(root)) play(root);
+        else if (!e.isIntersecting) stop(root);
       }
     },
-    { threshold: 0.8 },
+    { threshold: 0.6 },
   );
   roots.forEach((r) => io.observe(r));
   const onResize = () =>
@@ -57,7 +62,7 @@ export function initFocus(): () => void {
 
   return () => {
     io.disconnect();
-    timers.forEach((t) => window.clearTimeout(t));
+    roots.forEach(stop);
     window.removeEventListener('resize', onResize);
   };
 }

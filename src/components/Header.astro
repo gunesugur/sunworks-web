@@ -358,8 +358,7 @@ const altNav = await getNavigation(altLang);
       line-height: 1.1;
       letter-spacing: -0.02em;
       color: var(--c-dark);
-      transform: translate3d(0, 110%, 0) rotate(4deg);
-      transform-origin: left bottom;
+      transform: translate3d(0, 105%, 0);
       transition: transform 0.3s var(--ease-in-out);
     }
 
@@ -377,6 +376,7 @@ const altNav = await getNavigation(altLang);
       content: attr(data-index);
       content: attr(data-index) / '';
       display: block;
+      min-width: 1.6em;
       padding-top: 0.55em;
       color: var(--c-accent);
       font-size: 0.8rem;
@@ -385,6 +385,11 @@ const altNav = await getNavigation(altLang);
     }
 
     .site-nav__link :global(.swap__text)::after {
+      display: none;
+    }
+
+    /* One language at a time in the full-screen menu: no ghost width, labels start on one line. */
+    .site-nav__link :global(.swap__ghost) {
       display: none;
     }
 

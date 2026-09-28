@@ -1,0 +1,55 @@
+---
+/** An article illustration: line art in the site's style that draws itself in when scrolled to. */
+import type { Illustration } from '@/content/schema';
+import { ILLUSTRATION_ART } from '@/lib/illustrations';
+
+interface Props {
+  figure: Illustration;
+}
+const { figure } = Astro.props;
+const strokes = ILLUSTRATION_ART[figure.name];
+---
+
+<figure class="illo" data-reveal="fade">
+  <svg viewBox="0 0 360 200" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    {strokes.map((st, i) => <path d={st.d} pathLength="1" class:list={{ 'is-accent': st.a }} style={`--i:${i}`} />)}
+  </svg>
+  {figure.caption && <figcaption>{figure.caption}</figcaption>}
+</figure>
+
+<style>
+  .illo {
+    margin-block: 2.25em;
+  }
+
+  .illo svg {
+    width: 100%;
+    height: auto;
+    padding: clamp(1rem, 3vw, 2rem);
+    border-radius: var(--r-card);
+    background: var(--c-band);
+    stroke: var(--c-dark);
+  }
+
+  .illo .is-accent {
+    stroke: var(--c-accent);
+  }
+
+  /* Draw-in: each stroke traces itself, one after another. */
+  :global(.js) .illo path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.9s var(--ease-out);
+    transition-delay: calc(var(--i) * 90ms);
+  }
+
+  :global(.js) .illo.is-in path {
+    stroke-dashoffset: 0;
+  }
+
+  .illo figcaption {
+    margin-top: 0.75rem;
+    color: var(--c-muted);
+    font-size: var(--fs-xs);
+  }
+</style>
