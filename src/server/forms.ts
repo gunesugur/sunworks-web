@@ -10,6 +10,8 @@ export interface FormEnv {
   RATE_LIMIT_SALT?: string;
   FORMS_ENABLED?: string;
   ALLOWED_ORIGINS?: string;
+  /** Optional override (e.g. a higher value for e2e runs). */
+  RATE_LIMIT_MAX?: string;
 }
 
 interface FormDef<T> {
@@ -74,7 +76,9 @@ export async function handleForm<T extends { turnstileToken: string }>(
   const ip = request.headers.get('CF-Connecting-IP');
   try {
     const key = await rateKey(env.RATE_LIMIT_SALT, def.scope, ip ?? 'unknown');
-    if (!(await hit(db, key, def.limit))) return fail(429, 'rate');
+    const max = Number(env.RATE_LIMIT_MAX);
+    const limit = Number.isInteger(max) && max > 0 ? { ...def.limit, limit: max } : def.limit;
+    if (!(await hit(db, key, limit))) return fail(429, 'rate');
   } catch {
     return fail(503, 'unavailable');
   }

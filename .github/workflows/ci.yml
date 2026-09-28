@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 22
+  CI: true
+
+jobs:
+  quality:
+    name: Lint, types, unit tests, audit, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npx astro check
+      - run: npx tsc --noEmit
+      - run: npm test
+      - run: npm audit --audit-level=low
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          include-hidden-files: true
+          retention-days: 3
+
+  e2e:
+    name: E2E (${{ matrix.browser }})
+    needs: quality
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
+      - uses: actions/download-artifact@v5
+        with:
+          name: dist
+          path: dist
+      - name: Local secrets (Cloudflare Turnstile always-pass test keys)
+        run: |
+          printf 'TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA\nRATE_LIMIT_SALT=ci\nRATE_LIMIT_MAX=1000\n' > .dev.vars
+          cp .dev.vars dist/server/.dev.vars
+      - run: npx wrangler d1 migrations apply sunworks-db --local
+      - run: npx playwright test
+        env:
+          PW_BROWSERS: ${{ matrix.browser }}
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: playwright-report
+          retention-days: 7
+
+  lighthouse-links:
+    name: Lighthouse + link check
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v5
+        with:
+          name: dist
+          path: dist
+      - run: |
+          printf 'TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA\nRATE_LIMIT_SALT=ci\n' > .dev.vars
+          cp .dev.vars dist/server/.dev.vars
+          npx wrangler d1 migrations apply sunworks-db --local
+      - name: Start preview server
+        run: |
+          npx wrangler dev --port 8788 --ip 127.0.0.1 > wrangler.log 2>&1 &
+          npx --yes wait-on@8 -t 90000 http-get://127.0.0.1:8788/
+      - name: Lighthouse (desktop)
+        run: npx --yes @lhci/cli@0.15 autorun --config=lighthouserc.json
+      - name: Lighthouse (mobile)
+        run: npx --yes @lhci/cli@0.15 autorun --config=lighthouserc.mobile.json
+      - name: Link check
+        run: npx linkinator http://localhost:8788/ --recurse --skip "^(?!http://localhost:8788)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse
+          path: .lighthouseci
+          retention-days: 7
