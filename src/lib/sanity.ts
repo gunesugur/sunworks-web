@@ -10,6 +10,8 @@ export interface SanityConfig {
 }
 
 export function sanityConfig(): SanityConfig | null {
+  // CONTENT_SOURCE=local forces the bundled seed content (used by CI for deterministic tests).
+  if (import.meta.env['CONTENT_SOURCE'] === 'local') return null;
   const projectId = import.meta.env['SANITY_PROJECT_ID'] as string | undefined;
   if (!projectId) return null;
   if (!/^[a-z0-9]+$/.test(projectId)) throw new Error('Invalid SANITY_PROJECT_ID');

@@ -13,3 +13,4 @@ playwright-report/
 !.env.example
 *.tmp.mjs
 dist-sanity/
+!.env.production

@@ -13,6 +13,7 @@ declare namespace Cloudflare {
 }
 
 interface ImportMetaEnv {
+  readonly CONTENT_SOURCE?: 'local' | 'sanity';
   readonly SANITY_PROJECT_ID?: string;
   readonly SANITY_DATASET?: string;
   readonly PUBLIC_TURNSTILE_SITE_KEY?: string;
