@@ -328,25 +328,22 @@ const altNav = await getNavigation(altLang);
       padding: 6rem var(--gutter) 3rem;
       background: var(--c-light);
       visibility: hidden;
-      transform: translate3d(100%, 0, 0);
+      /* The panel is wiped in with a clip, not moved: its links never drift sideways. */
+      clip-path: inset(0 0 0 100%);
       transition:
-        transform 0.45s var(--ease-in-out),
+        clip-path 0.45s var(--ease-in-out),
         visibility 0s linear 0.6s;
     }
 
     .site-nav.is-open {
       visibility: visible;
-      transform: none;
-      transition: transform 0.6s var(--ease-out) 0.14s;
+      clip-path: inset(0);
+      transition: clip-path 0.5s var(--ease-in-out) 0.14s;
     }
 
     .site-nav__list {
       flex-direction: column;
       gap: 0.25rem;
-    }
-
-    .site-nav__list li {
-      overflow: hidden;
     }
 
     .site-nav__link {
@@ -358,13 +355,15 @@ const altNav = await getNavigation(altLang);
       line-height: 1.1;
       letter-spacing: -0.02em;
       color: var(--c-dark);
-      transform: translate3d(0, 105%, 0);
-      transition: transform 0.3s var(--ease-in-out);
+      /* Each label is revealed bottom-up in place, after the panel has settled; the text itself
+         never moves, so there is nothing to settle or re-snap once it is visible. */
+      clip-path: inset(100% 0 0 0);
+      transition: clip-path 0.25s var(--ease-in-out);
     }
 
     .site-nav.is-open .site-nav__link {
-      transform: none;
-      transition: transform 0.75s var(--ease-out) calc(0.38s + var(--i) * 0.07s);
+      clip-path: inset(-0.5rem);
+      transition: clip-path 0.5s var(--ease-in-out) calc(0.6s + var(--i) * 0.07s);
     }
 
     .site-nav__link[aria-current='page'] {
