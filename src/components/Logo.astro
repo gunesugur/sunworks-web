@@ -1,0 +1,69 @@
+---
+interface Props {
+  href: string;
+  label: string;
+  tone?: 'dark' | 'light';
+}
+const { href, label, tone = 'dark' } = Astro.props;
+---
+
+<a href={href} class:list={['logo', `logo--${tone}`]} aria-label={label}>
+  <svg class="logo__mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <circle cx="16" cy="16" r="16" class="logo__disc"></circle>
+    <path class="logo__sun" d="M7 20.5a9 9 0 0 1 18 0z"></path>
+    <path class="logo__line" d="M6 23.5h20" stroke-width="1.6" stroke-linecap="round"></path>
+  </svg>
+  <span class="logo__word" aria-hidden="true">SUN <span class="logo__bar">|</span> WORKS</span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .logo__disc {
+    fill: var(--c-dark);
+  }
+
+  .logo__sun {
+    fill: var(--c-accent);
+    transform-origin: 16px 20.5px;
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .logo__line {
+    stroke: var(--c-dark);
+  }
+
+  .logo:hover .logo__sun {
+    transform: translate3d(0, -2px, 0) scale(1.08);
+  }
+
+  .logo__bar {
+    font-weight: 300;
+    opacity: 0.55;
+  }
+
+  .logo--light {
+    color: var(--c-light);
+  }
+
+  .logo--light .logo__disc {
+    fill: var(--c-light);
+  }
+
+  .logo--light .logo__sun {
+    fill: var(--c-dark);
+  }
+
+  .logo--light .logo__line {
+    stroke: var(--c-light);
+  }
+</style>

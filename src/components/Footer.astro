@@ -1,0 +1,285 @@
+---
+import type { Locale, Navigation, SiteSettings } from '@/content/schema';
+import { routes } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Asterisk from './Asterisk.astro';
+import Logo from './Logo.astro';
+import NewsletterForm from './NewsletterForm.astro';
+
+interface Props {
+  lang: Locale;
+  nav: Navigation;
+  settings: SiteSettings;
+  altHref: string;
+}
+const { lang, nav, settings, altHref } = Astro.props;
+const s = t(lang);
+const year = new Date().getUTCFullYear();
+const altLang: Locale = lang === 'tr' ? 'en' : 'tr';
+const word = 'SUN | WORKS'.split('');
+---
+
+<footer class="site-footer" transition:name="site-footer">
+  <div class="container">
+    <div class="footer on-dark" data-footer>
+      <span class="footer__glow" aria-hidden="true" data-glow></span>
+      <div class="footer__top">
+        <nav class="footer__cols" aria-label={s.footerNav}>
+          {
+            nav.footerColumns.map((col) => (
+              <div class="footer__col">
+                <h2 class="footer__title">{col.title}</h2>
+                <ul>
+                  {col.links.map((l) => (
+                    <li>
+                      <a href={l.href}>{l.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </nav>
+
+        <div class="footer__news">
+          <h2 class="footer__nl-title">
+            {settings.newsletter.title}
+            <Asterisk class="footer__star" size="0.9em" />
+          </h2>
+          <p class="footer__nl-text">{settings.newsletter.text}</p>
+          <NewsletterForm lang={lang} email={settings.email} />
+        </div>
+      </div>
+
+      <ul class="footer__social">
+        {
+          settings.socials.map((so) => {
+            const pending = so.url === '#';
+            return (
+              <li>
+                {pending ? (
+                  <span class="social social--pending" title={s.socialPending}>
+                    {s.social[so.platform]} <span class="sr-only">{s.socialPending}</span>
+                  </span>
+                ) : (
+                  <a class="social" href={so.url} rel="me noopener noreferrer">
+                    {s.social[so.platform]}
+                  </a>
+                )}
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <div class="footer__word" aria-hidden="true" data-word>
+        {word.map((ch, i) => <span style={`--i:${i}`}>{ch === ' ' ? ' ' : ch}</span>)}
+      </div>
+
+      <div class="footer__bottom">
+        <p>© {year} <strong>{settings.siteName}</strong> · {settings.footerNote}</p>
+        <ul class="footer__legal">
+          {
+            nav.legalLinks.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))
+          }
+          <li><a href={routes.rss[lang]}>{s.rss}</a></li>
+          <li><a href={altHref} hreflang={altLang} lang={altLang}>{s.langSwitch}</a></li>
+        </ul>
+      </div>
+      <div class="footer__brand"><Logo href={routes.home[lang]} label={settings.siteName} tone="light" /></div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-bottom: var(--gutter);
+  }
+
+  .footer {
+    position: relative;
+    display: grid;
+    gap: 2rem;
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 8vw, 6.625rem) 2rem;
+    border-radius: var(--r-footer);
+    background: var(--c-dark);
+    color: var(--c-light);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .footer__glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 520px;
+    height: 520px;
+    margin: -260px 0 0 -260px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--c-accent) 16%, transparent), transparent);
+    opacity: 0;
+    transform: translate3d(var(--gx, 50%), var(--gy, 50%), 0);
+    transition: opacity var(--dur-slow) ease;
+    pointer-events: none;
+  }
+
+  .footer:hover .footer__glow {
+    opacity: 1;
+  }
+
+  .footer__top {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 23rem);
+    gap: clamp(2.5rem, 8vw, 8rem);
+    align-items: start;
+  }
+
+  .footer__cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem clamp(2rem, 4vw, 3.4rem);
+  }
+
+  .footer__col ul,
+  .footer__social,
+  .footer__legal {
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__title {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .footer__col li + li {
+    margin-top: 0.9rem;
+  }
+
+  .footer a {
+    color: var(--c-light);
+    font-size: var(--fs-small);
+    text-decoration: none;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    transition: background-size var(--dur) var(--ease-out);
+  }
+
+  .footer a:hover {
+    background-size: 100% 1px;
+  }
+
+  .footer__nl-title {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.9rem;
+    font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.3rem);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .footer__nl-title :global(.footer__star) {
+    color: var(--c-accent);
+    margin-bottom: 0.35em;
+    animation: spin 14s linear infinite;
+  }
+
+  .footer__nl-text {
+    margin: 0.9rem 0 2rem;
+    color: var(--c-light);
+    font-size: var(--fs-small);
+    line-height: 1.4;
+  }
+
+  .footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .social {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.35rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--c-light) 35%, transparent);
+    border-radius: var(--r-pill);
+    font-size: var(--fs-xs);
+  }
+
+  .social--pending {
+    color: var(--c-muted-on-dark);
+  }
+
+  .footer__word {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--c-light) 18%, transparent);
+    color: color-mix(in srgb, var(--c-light) 10%, var(--c-dark));
+    font-size: clamp(2.4rem, 9.6vw, 10rem);
+    font-weight: 700;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    user-select: none;
+    overflow: hidden;
+  }
+
+  .footer__word span {
+    display: inline-block;
+    transition: transform 1.1s var(--ease-out);
+    transition-delay: calc(var(--i) * 45ms);
+  }
+
+  :global(.js) .footer__word:not(.is-in) span {
+    transform: translate3d(0, 105%, 0);
+  }
+
+  .footer__word span:hover {
+    transform: translate3d(0, -8%, 0);
+    transition-delay: 0ms;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    font-size: var(--fs-xs);
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+  }
+
+  .footer__legal a {
+    font-size: var(--fs-xs);
+  }
+
+  .footer__brand {
+    display: none;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .footer__top {
+      grid-template-columns: 1fr;
+    }
+
+    .footer__news {
+      order: -1;
+    }
+  }
+</style>

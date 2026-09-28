@@ -1,0 +1,67 @@
+---
+import Base from '@/layouts/Base.astro';
+import Button from '@/components/Button.astro';
+import Asterisk from '@/components/Asterisk.astro';
+import { routes } from '@/i18n/routes';
+import { ui } from '@/i18n/ui';
+---
+
+<Base lang="tr" title={ui.tr.notFoundTitle} alternates={{}} noindex>
+  <section class="container nf">
+    <p class="nf__code" aria-hidden="true">4<Asterisk class="nf__star" size="0.8em" />4</p>
+    <div class="nf__cols">
+      <div lang="tr-TR">
+        <h1 class="h2">{ui.tr.notFoundTitle}</h1>
+        <p class="muted">{ui.tr.notFoundText}</p>
+        <Button href={routes.home.tr} variant="solid">{ui.tr.backHome}</Button>
+      </div>
+      <div lang="en-US">
+        <h2 class="h2">{ui.en.notFoundTitle}</h2>
+        <p class="muted">{ui.en.notFoundText}</p>
+        <Button href={routes.home.en}>{ui.en.backHome}</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-block: clamp(2rem, 6vw, 5rem) var(--section);
+  }
+
+  .nf__code {
+    display: flex;
+    align-items: center;
+    font-size: clamp(6rem, 22vw, 16rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .nf__code :global(.nf__star) {
+    animation: nf-spin 6s var(--ease-in-out) infinite;
+  }
+
+  @keyframes nf-spin {
+    50% {
+      transform: rotate(180deg) scale(0.85);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .nf__cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+    gap: 3rem;
+    margin-top: 2rem;
+  }
+
+  .nf__cols > div {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+</style>

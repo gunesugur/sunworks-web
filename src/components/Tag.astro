@@ -1,0 +1,54 @@
+---
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  variant?: 'solid' | 'glass' | 'outline' | 'dark';
+  class?: string;
+}
+const { variant = 'outline', class: cls } = Astro.props;
+---
+
+<span class:list={['tag', `tag--${variant}`, cls]}>
+  <span><slot /></span>
+  <Asterisk size="0.85em" />
+</span>
+
+<style>
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 40px;
+    padding: 0.4rem 1rem;
+    border: 1px solid currentColor;
+    border-radius: var(--r-pill);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+  }
+
+  .tag--solid {
+    background: var(--c-light);
+    border-color: var(--c-light);
+    color: var(--c-dark);
+  }
+
+  .tag--glass {
+    color: var(--c-light);
+    border-width: 2px;
+    background: color-mix(in srgb, var(--c-dark) 25%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .tag--outline {
+    color: var(--c-dark);
+    font-weight: 500;
+  }
+
+  .tag--dark {
+    background: var(--c-dark);
+    border-color: var(--c-dark);
+    color: var(--c-light);
+  }
+</style>

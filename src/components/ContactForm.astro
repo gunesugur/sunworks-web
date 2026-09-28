@@ -1,0 +1,161 @@
+---
+import type { Locale } from '@/content/schema';
+import { pagePath } from '@/i18n/routes';
+import { formMessages, t } from '@/i18n/ui';
+import Button from './Button.astro';
+import FormExtras from './FormExtras.astro';
+
+interface Props {
+  lang: Locale;
+  email: string;
+  privacySlug: string;
+}
+const { lang, email, privacySlug } = Astro.props;
+const s = t(lang);
+const topics = Object.entries(s.topics);
+---
+
+<form class="cf" action="/api/contact" method="post" novalidate data-form="contact" data-lang={lang} data-fallback-email={email} data-i18n={formMessages(lang, 'contact')}>
+  <input type="hidden" name="lang" value={lang} />
+  <div class="cf__row">
+    <div class="field">
+      <label for="cf-name">{s.name} <span class="req">({s.required})</span></label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="80" aria-describedby="cf-name-err" />
+      <p class="field__err" id="cf-name-err" data-error-for="name"></p>
+    </div>
+    <div class="field">
+      <label for="cf-email">{s.email} <span class="req">({s.required})</span></label>
+      <input id="cf-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" aria-describedby="cf-email-err" />
+      <p class="field__err" id="cf-email-err" data-error-for="email"></p>
+    </div>
+  </div>
+  <div class="field">
+    <label for="cf-topic">{s.topic} <span class="req">({s.required})</span></label>
+    <select id="cf-topic" name="topic" required aria-describedby="cf-topic-err">
+      {topics.map(([value, label]) => <option value={value}>{label}</option>)}
+    </select>
+    <p class="field__err" id="cf-topic-err" data-error-for="topic"></p>
+  </div>
+  <div class="field">
+    <label for="cf-message">{s.message} <span class="req">({s.required})</span></label>
+    <textarea id="cf-message" name="message" rows="6" required minlength="10" maxlength="4000" aria-describedby="cf-message-err"></textarea>
+    <p class="field__err" id="cf-message-err" data-error-for="message"></p>
+  </div>
+  <div class="field field--check">
+    <input id="cf-consent" name="consent" type="checkbox" required aria-describedby="cf-consent-err" />
+    <label for="cf-consent">{s.consent} <a href={pagePath(lang, privacySlug)}>{s.privacyLink}</a></label>
+    <p class="field__err" id="cf-consent-err" data-error-for="consent"></p>
+  </div>
+  <FormExtras idPrefix="cf" />
+  <div class="cf__actions">
+    <Button type="submit" variant="solid" size="lg">{s.send}</Button>
+  </div>
+  <p class="form-status" role="status" aria-live="polite" data-status></p>
+  <noscript><p class="form-status">{s.err.unavailable}<a href={`mailto:${email}`}>{email}</a></p></noscript>
+</form>
+
+<style>
+  .cf {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .cf__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .field label {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  .req {
+    color: var(--c-muted);
+    font-weight: 400;
+  }
+
+  .field input:not([type='checkbox']),
+  .field select,
+  .field textarea {
+    width: 100%;
+    min-height: 56px;
+    padding: 0.8rem 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--c-dark) 45%, var(--c-light));
+    border-radius: 28px;
+    background: var(--c-light);
+    font-size: var(--fs-small);
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .field textarea {
+    min-height: 10rem;
+    border-radius: 24px;
+    resize: vertical;
+  }
+
+  .field select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+      calc(100% - 1.6rem) 55%,
+      calc(100% - 1.25rem) 55%;
+    background-size: 0.35rem 0.35rem;
+    background-repeat: no-repeat;
+  }
+
+  .field input:hover,
+  .field select:hover,
+  .field textarea:hover {
+    border-color: var(--c-dark);
+  }
+
+  .field :is(input, select, textarea)[aria-invalid='true'] {
+    border-color: var(--c-dark);
+    border-width: 2px;
+  }
+
+  .field__err {
+    min-height: 0;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  .field__err:not(:empty)::before {
+    content: '! ';
+  }
+
+  .field--check {
+    grid-template-columns: auto 1fr;
+    align-items: start;
+    column-gap: 0.75rem;
+  }
+
+  .field--check input {
+    width: 22px;
+    height: 22px;
+    margin-top: 0.15rem;
+    accent-color: var(--c-dark);
+  }
+
+  .field--check label {
+    font-weight: 400;
+    font-size: var(--fs-small);
+  }
+
+  .field--check .field__err {
+    grid-column: 2;
+  }
+
+  @media (max-width: 600px) {
+    .cf__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

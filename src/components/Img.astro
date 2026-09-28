@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageField } from '@/content/schema';
+import { resolveImage } from '@/lib/images';
+
+interface Props {
+  image: ImageField;
+  widths: number[];
+  sizes: string;
+  class?: string;
+  priority?: boolean;
+  alt?: string;
+}
+const { image, widths, sizes, class: cls, priority = false, alt } = Astro.props;
+const resolved = resolveImage(image);
+const common = {
+  alt: alt ?? resolved.alt,
+  widths,
+  sizes,
+  class: cls,
+  loading: priority ? ('eager' as const) : ('lazy' as const),
+  decoding: priority ? ('sync' as const) : ('async' as const),
+  fetchpriority: priority ? ('high' as const) : ('auto' as const),
+  format: 'webp' as const,
+  quality: 72,
+};
+---
+
+{
+  resolved.kind === 'local' ? (
+    <Image src={resolved.src} {...common} />
+  ) : (
+    <Image src={resolved.src} width={resolved.width} height={resolved.height} {...common} />
+  )
+}

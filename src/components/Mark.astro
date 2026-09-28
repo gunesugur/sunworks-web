@@ -1,0 +1,19 @@
+---
+/** Renders its children wrapped in `as` when given, otherwise unwrapped. */
+interface Props {
+  as?: 'a' | 'strong' | 'em' | 'code';
+  href?: string;
+  rel?: string;
+}
+const { as: Tag, ...rest } = Astro.props;
+---
+
+{
+  Tag ? (
+    <Tag {...rest}>
+      <slot />
+    </Tag>
+  ) : (
+    <slot />
+  )
+}

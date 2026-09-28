@@ -1,0 +1,23 @@
+---
+import type { Block } from '@/content/schema';
+import { spans } from '@/lib/portable-text';
+import Mark from './Mark.astro';
+
+interface Props {
+  block: Block;
+}
+const list = spans(Astro.props.block);
+const relFor = (href: string | undefined) => (href?.startsWith('https://') ? 'noopener noreferrer' : undefined);
+---
+
+{
+  list.map((s) => (
+    <Mark as={s.href ? 'a' : undefined} href={s.href} rel={relFor(s.href)}>
+      <Mark as={s.strong ? 'strong' : undefined}>
+        <Mark as={s.em ? 'em' : undefined}>
+          <Mark as={s.code ? 'code' : undefined}>{s.text}</Mark>
+        </Mark>
+      </Mark>
+    </Mark>
+  ))
+}

@@ -1,0 +1,83 @@
+---
+/** First-visit intro reveal. Only shown when <html> has the `intro` class (set by the head script). */
+const letters = 'SUN | WORKS'.split('');
+---
+
+<div class="intro" aria-hidden="true" data-intro>
+  <div class="intro__inner">
+    <svg class="intro__sun" viewBox="0 0 120 60" width="120" height="60">
+      <path d="M10 60a50 50 0 0 1 100 0z"></path>
+    </svg>
+    <p class="intro__word">
+      {letters.map((ch, i) => <span style={`--i:${i}`}>{ch === ' ' ? ' ' : ch}</span>)}
+    </p>
+  </div>
+</div>
+
+<style>
+  .intro {
+    display: none;
+  }
+
+  :global(html.intro) .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    background: var(--c-dark);
+    color: var(--c-light);
+    animation: intro-out 0.8s var(--ease-in-out) 1.55s forwards;
+    pointer-events: none;
+  }
+
+  .intro__inner {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+  }
+
+  .intro__sun {
+    overflow: hidden;
+  }
+
+  .intro__sun path {
+    fill: var(--c-accent);
+    transform: translate3d(0, 100%, 0);
+    animation: rise 1s var(--ease-out) 0.1s forwards;
+  }
+
+  .intro__word {
+    display: flex;
+    overflow: hidden;
+    font-size: clamp(1.75rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .intro__word span {
+    display: inline-block;
+    transform: translate3d(0, 110%, 0);
+    animation: rise 0.8s var(--ease-out) forwards;
+    animation-delay: calc(0.35s + var(--i) * 45ms);
+  }
+
+  @keyframes rise {
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes intro-out {
+    to {
+      transform: translate3d(0, -100%, 0);
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(html.intro) .intro {
+      display: none;
+    }
+  }
+</style>

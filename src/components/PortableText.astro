@@ -1,0 +1,36 @@
+---
+import type { PortableText } from '@/content/schema';
+import { groupBlocks } from '@/lib/portable-text';
+import Spans from './Spans.astro';
+
+interface Props {
+  value: PortableText;
+  class?: string;
+}
+const groups = groupBlocks(Astro.props.value);
+---
+
+<div class:list={['prose', Astro.props.class]}>
+  {
+    groups.map((g) => {
+      if (g.kind === 'list') {
+        const Tag = g.ordered ? 'ol' : 'ul';
+        return (
+          <Tag>
+            {g.items.map((item) => (
+              <li>
+                <Spans block={item} />
+              </li>
+            ))}
+          </Tag>
+        );
+      }
+      const Tag = g.block.style === 'normal' ? 'p' : g.block.style;
+      return (
+        <Tag>
+          <Spans block={g.block} />
+        </Tag>
+      );
+    })
+  }
+</div>

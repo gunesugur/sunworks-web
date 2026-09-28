@@ -1,0 +1,51 @@
+---
+import type { Locale } from '@/content/schema';
+import { getHome } from '@/lib/cms';
+import ArrowButton from './ArrowButton.astro';
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  lang: Locale;
+}
+const home = await getHome(Astro.props.lang);
+---
+
+<section class="container cta" aria-labelledby="cta-title">
+  <div class="cta__box" data-reveal>
+    <h2 id="cta-title" class="h2 cta__title">
+      {home.closing.title}
+      <Asterisk class="cta__star" size="0.6em" />
+    </h2>
+    <ArrowButton href={home.closing.cta.href} label={home.closing.cta.label} />
+  </div>
+</section>
+
+<style>
+  .cta {
+    padding-bottom: var(--section);
+  }
+
+  .cta__box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--r-footer);
+    background: var(--c-band);
+  }
+
+  .cta__title {
+    max-width: 18ch;
+  }
+
+  .cta__title :global(.cta__star) {
+    display: inline-block;
+    vertical-align: super;
+  }
+
+  .cta__box :global(.arrow-btn) {
+    flex: none;
+  }
+</style>

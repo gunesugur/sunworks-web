@@ -1,0 +1,117 @@
+---
+import '@/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import fontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import type { Locale } from '@/content/schema';
+import { getNavigation, getSettings } from '@/lib/cms';
+import { htmlLang, ogLocale, routes } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import Intro from '@/components/Intro.astro';
+
+interface Props {
+  lang: Locale;
+  title?: string;
+  description?: string;
+  /** Paths of this page in each locale (for hreflang + language switch). */
+  alternates: Partial<Record<Locale, string>>;
+  type?: 'website' | 'article';
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { lang, title, description, alternates, type = 'website', jsonLd = [], noindex = false } = Astro.props;
+const [settings, nav] = await Promise.all([getSettings(lang), getNavigation(lang)]);
+const s = t(lang);
+const site = Astro.site ?? new URL('https://sunworks.studio');
+const fullTitle = title ? `${title} — ${settings.siteName}` : settings.seo.title;
+const desc = description ?? settings.seo.description;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', site).href;
+const altLang: Locale = lang === 'tr' ? 'en' : 'tr';
+const altHref = alternates[altLang] ?? routes.home[altLang];
+const ogImage = new URL(`/og/${lang}.png`, site).href;
+
+const baseLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: settings.siteName,
+  description: settings.seo.description,
+  url: new URL(routes.home[lang], site).href,
+  email: settings.email,
+  founder: { '@type': 'Person', name: 'Uğur Güneş' },
+  address: { '@type': 'PostalAddress', addressLocality: settings.city, addressCountry: 'TR' },
+  areaServed: 'TR',
+};
+const pageAnim = {
+  old: { name: 'vt-out', duration: '0.32s', easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fillMode: 'both' },
+  new: { name: 'vt-in', duration: '0.6s', easing: 'cubic-bezier(0.22, 1, 0.36, 1)', delay: '0.08s', fillMode: 'both' },
+};
+const pageTransition = { forwards: pageAnim, backwards: pageAnim };
+const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', String.raw`<`));
+---
+
+<!doctype html>
+<html lang={htmlLang[lang]} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    {
+      (Object.entries(alternates) as [Locale, string][]).map(([l, href]) => (
+        <link rel="alternate" hreflang={l} href={new URL(href, site).href} />
+      ))
+    }
+    {alternates.tr && <link rel="alternate" hreflang="x-default" href={new URL(alternates.tr, site).href} />}
+    <link rel="alternate" type="application/rss+xml" title={`${settings.siteName} — ${s.blogTitle}`} href={routes.rss[lang]} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f5f6f7" />
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={settings.siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    <meta property="og:locale:alternate" content={ogLocale[altLang]} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {ld.map((json) => <script type="application/ld+json" set:html={json} />)}
+
+    <script is:inline>
+      (function () {
+        const d = document.documentElement;
+        d.classList.add('js');
+        try {
+          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!reduce && !sessionStorage.getItem('sw-intro')) {
+            d.classList.add('intro');
+            sessionStorage.setItem('sw-intro', '1');
+          }
+        } catch {
+          /* storage unavailable: skip the intro */
+        }
+      })();
+    </script>
+    <ClientRouter fallback="swap" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{s.skip}</a>
+    <Intro />
+    <Header lang={lang} nav={nav} siteName={settings.siteName} altHref={altHref} />
+    <main id="main" tabindex="-1" transition:animate={pageTransition}>
+      <slot />
+    </main>
+    <Footer lang={lang} nav={nav} settings={settings} altHref={altHref} />
+    <script>
+      import '@/scripts/app';
+    </script>
+  </body>
+</html>

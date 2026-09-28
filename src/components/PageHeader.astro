@@ -1,0 +1,103 @@
+---
+import type { Locale } from '@/content/schema';
+import { routes } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Asterisk from './Asterisk.astro';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  intro?: string;
+  crumbs?: { label: string; href: string }[];
+}
+const { lang, title, intro, crumbs = [] } = Astro.props;
+const s = t(lang);
+const trail = [{ label: s.home, href: routes.home[lang] }, ...crumbs];
+---
+
+<header class="page-head container">
+  <nav aria-label={s.breadcrumb} class="crumbs">
+    <ol>
+      {
+        trail.map((c) => (
+          <li>
+            <a href={c.href}>{c.label}</a>
+          </li>
+        ))
+      }
+      <li aria-current="page">{title}</li>
+    </ol>
+  </nav>
+  <h1 class="h1 page-head__title">
+    <span class="page-head__line">{title}</span><Asterisk class="page-head__star" size="0.45em" />
+  </h1>
+  {intro && <p class="lead page-head__intro">{intro}</p>}
+  <slot />
+</header>
+
+<style>
+  .page-head {
+    padding-top: clamp(2rem, 5vw, 4.5rem);
+    padding-bottom: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.6rem;
+    padding: 0;
+    margin-bottom: 1.5rem;
+    list-style: none;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+  }
+
+  .crumbs li + li::before {
+    content: '/';
+    margin-right: 0.6rem;
+  }
+
+  .crumbs a {
+    text-underline-offset: 0.2em;
+  }
+
+  .crumbs a:hover {
+    color: var(--c-dark);
+  }
+
+  .page-head__title {
+    max-width: 20ch;
+  }
+
+  .page-head__line {
+    display: inline;
+    animation: head-in 0.9s var(--ease-out) both;
+  }
+
+  .page-head__title :global(.page-head__star) {
+    display: inline-block;
+    margin-left: 0.2em;
+    vertical-align: 0.6em;
+    animation: star-in 1.2s var(--ease-out) 0.2s both;
+  }
+
+  .page-head__intro {
+    max-width: 42rem;
+    margin-top: 1.5rem;
+    animation: head-in 0.9s var(--ease-out) 0.1s both;
+  }
+
+  @keyframes head-in {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 20px, 0);
+    }
+  }
+
+  @keyframes star-in {
+    from {
+      opacity: 0;
+      transform: rotate(-180deg) scale(0.4);
+    }
+  }
+</style>

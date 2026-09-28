@@ -1,0 +1,92 @@
+---
+import type { Locale } from '@/content/schema';
+import { formMessages, t } from '@/i18n/ui';
+import Icon from './Icon.astro';
+import FormExtras from './FormExtras.astro';
+
+interface Props {
+  lang: Locale;
+  email: string;
+}
+const { lang, email } = Astro.props;
+const s = t(lang);
+---
+
+<form class="nl" action="/api/newsletter" method="post" novalidate data-form="newsletter" data-lang={lang} data-fallback-email={email} data-i18n={formMessages(lang, 'newsletter')}>
+  <input type="hidden" name="lang" value={lang} />
+  <div class="nl__field">
+    <label for="nl-email" class="sr-only">{s.newsletterEmail}</label>
+    <input
+      id="nl-email"
+      name="email"
+      type="email"
+      inputmode="email"
+      autocomplete="email"
+      required
+      maxlength="254"
+      placeholder={s.newsletterEmail}
+      aria-describedby="nl-status"
+    />
+    <button type="submit" class="nl__submit" aria-label={s.subscribe}>
+      <Icon name="arrow" size={18} />
+    </button>
+  </div>
+  <FormExtras idPrefix="nl" />
+  <p id="nl-status" class="form-status" role="status" aria-live="polite" data-status></p>
+</form>
+
+<style>
+  .nl__field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 68px;
+    padding: 5px 5px 5px 1.5rem;
+    border: 1px solid var(--c-light);
+    border-radius: 53px;
+    transition: border-color var(--dur-fast) ease;
+  }
+
+  .nl__field:focus-within {
+    border-color: var(--c-accent);
+  }
+
+  .nl input[type='email'] {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    color: var(--c-light);
+    font-size: var(--fs-small);
+    outline: none;
+  }
+
+  .nl input::placeholder {
+    color: var(--c-muted-on-dark);
+    opacity: 1;
+  }
+
+  .nl__submit {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 57px;
+    height: 57px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--c-accent);
+    color: var(--c-dark);
+    cursor: pointer;
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .nl__submit:hover {
+    transform: rotate(45deg);
+  }
+
+  .nl__submit:focus-visible {
+    outline: 3px solid var(--c-light);
+    outline-offset: 2px;
+  }
+</style>

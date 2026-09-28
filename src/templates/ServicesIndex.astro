@@ -1,0 +1,67 @@
+---
+import type { Locale } from '@/content/schema';
+import { getServices } from '@/lib/cms';
+import { breadcrumbLd } from '@/lib/seo';
+import { routes, servicePath } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import ServiceCard from '@/components/ServiceCard.astro';
+import CtaBand from '@/components/CtaBand.astro';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+const services = await getServices(lang);
+const site = Astro.site ?? new URL('https://sunworks.studio');
+const ld = [
+  breadcrumbLd(site, [
+    { label: s.home, href: routes.home[lang] },
+    { label: s.servicesTitle, href: routes.services[lang] },
+  ]),
+];
+const ratios = ['4 / 3', '1 / 1', '4 / 3'];
+---
+
+<Base lang={lang} title={s.servicesTitle} description={s.servicesIntro} alternates={{ tr: routes.services.tr, en: routes.services.en }} jsonLd={ld}>
+  <PageHeader lang={lang} title={s.servicesTitle} intro={s.servicesIntro} />
+  <section class="container list" aria-label={s.servicesTitle}>
+    <ul class="grid">
+      {
+        services.map((svc, i) => (
+          <li data-reveal style={`--reveal-i:${i % 3}`}>
+            <ServiceCard service={svc} href={servicePath(lang, svc.slug.current)} ratio={ratios[i % 3] ?? '4 / 3'} label={s.viewService} headingLevel="h2" />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <CtaBand lang={lang} />
+</Base>
+
+<style>
+  .list {
+    padding-bottom: var(--section);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1rem, 2.4vw, 2rem);
+    align-items: start;
+    padding: 0;
+    list-style: none;
+  }
+
+  .grid > li:nth-child(3n + 2) {
+    margin-top: clamp(0rem, 5vw, 4rem);
+  }
+
+  @media (max-width: 700px) {
+    .grid > li:nth-child(3n + 2) {
+      margin-top: 0;
+    }
+  }
+</style>

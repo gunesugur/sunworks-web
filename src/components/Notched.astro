@@ -1,0 +1,92 @@
+---
+/**
+ * Image frame with an inverted-radius notch in one corner. The notch size comes from CSS
+ * (--nw / --nh, responsive); a ResizeObserver builds the exact clip-path (see scripts/notch.ts).
+ * Without JS (or clip-path: path support) it falls back to a rounded rectangle.
+ */
+import type { Corner } from '@/lib/notch';
+
+interface Props {
+  corner?: Corner;
+  /** Notch width/height, any CSS length. */
+  nw?: string;
+  nh?: string;
+  ratio?: string;
+  class?: string;
+  hover?: boolean;
+}
+const { corner = 'tr', nw = 'var(--btn-circle-slot)', nh = 'var(--btn-circle-slot)', ratio, class: cls, hover = true } = Astro.props;
+const ratioVar = ratio ? `--ratio:${ratio};` : '';
+const style = `--nw:${nw};--nh:${nh};${ratioVar}`;
+---
+
+<div class:list={['notched', `notched--${corner}`, { 'notched--hover': hover }, cls]} data-notch={corner} style={style}>
+  <div class="notched__media" data-notch-media>
+    <slot />
+  </div>
+  <div class="notched__slot" data-notch-slot>
+    <slot name="corner" />
+  </div>
+  <slot name="overlay" />
+</div>
+
+<style>
+  .notched {
+    --btn-circle-slot: calc(var(--btn-circle) + clamp(10px, 1vw, 16px));
+    position: relative;
+    aspect-ratio: var(--ratio, auto);
+  }
+
+  .notched__media {
+    position: relative;
+    height: 100%;
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: var(--c-band);
+    transform: translateZ(0);
+  }
+
+  .notched__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  .notched--hover:hover .notched__media :global(img) {
+    transform: scale(1.045);
+  }
+
+  .notched__slot {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: var(--nw);
+    height: var(--nh);
+    pointer-events: none;
+  }
+
+  .notched__slot > :global(*) {
+    pointer-events: auto;
+  }
+
+  .notched--tr .notched__slot {
+    top: 0;
+    right: 0;
+  }
+
+  .notched--tl .notched__slot {
+    top: 0;
+    left: 0;
+  }
+
+  .notched--br .notched__slot {
+    bottom: 0;
+    right: 0;
+  }
+
+  .notched--bl .notched__slot {
+    bottom: 0;
+    left: 0;
+  }
+</style>
