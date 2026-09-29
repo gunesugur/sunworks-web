@@ -159,7 +159,7 @@ export const navigation: Navigation[] = [
   },
 ];
 
-const tools = ['WordPress', 'WooCommerce', 'Shopify', 'Figma', 'cPanel', 'Plesk', 'HTML & CSS'];
+const tools = ['WordPress', 'Shopify', 'Figma', 'Claude', 'Cloudflare', 'Google Search Console', 'Google Analytics', 'GitHub', 'cPanel', 'Plesk'];
 
 export const home: HomePage[] = [
   {

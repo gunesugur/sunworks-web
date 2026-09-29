@@ -1,4 +1,17 @@
-import { siCss, siCpanel, siFigma, siHtml5, siPlesk, siShopify, siWoocommerce, siWordpress, type SimpleIcon } from 'simple-icons';
+import {
+  siClaude,
+  siCloudflare,
+  siCpanel,
+  siFigma,
+  siGithub,
+  siGoogleanalytics,
+  siGooglesearchconsole,
+  siPlesk,
+  siShopify,
+  siWoocommerce,
+  siWordpress,
+  type SimpleIcon,
+} from 'simple-icons';
 import { svgPathBbox } from 'svg-path-bbox';
 
 /** Brand marks for the "tools we work with" band, looked up by the CMS label (case-insensitive). */
@@ -9,9 +22,11 @@ const LOGOS: Record<string, SimpleIcon[]> = {
   figma: [siFigma],
   cpanel: [siCpanel],
   plesk: [siPlesk],
-  'html & css': [siHtml5, siCss],
-  html: [siHtml5],
-  css: [siCss],
+  claude: [siClaude],
+  cloudflare: [siCloudflare],
+  github: [siGithub],
+  'google search console': [siGooglesearchconsole],
+  'google analytics': [siGoogleanalytics],
 };
 
 export interface ToolLogo {
