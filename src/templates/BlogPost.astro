@@ -2,7 +2,8 @@
 import type { Locale, Post } from '@/content/schema';
 import { getTranslation } from '@/lib/cms';
 import { breadcrumbLd } from '@/lib/seo';
-import { resolveImage } from '@/lib/images';
+import { shareImageUrl } from '@/lib/images';
+import { plainWords } from '@/lib/portable-text';
 import { formatDate, otherLocale, postPath, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
@@ -28,7 +29,7 @@ const alternates: Partial<Record<Locale, string>> = { [lang]: postPath(lang, pos
 if (translation) alternates[other] = postPath(other, translation.slug.current);
 const site = Astro.site ?? new URL('https://sunworks.studio');
 const url = new URL(postPath(lang, post.slug.current), site).href;
-const img = resolveImage(post.image);
+const shareImage = await shareImageUrl(post.image, site);
 const ld = [
   breadcrumbLd(site, [
     { label: s.home, href: routes.home[lang] },
@@ -43,14 +44,17 @@ const ld = [
     datePublished: post.publishedAt,
     dateModified: post.updatedAt ?? post.publishedAt,
     inLanguage: lang,
-    author: { '@type': 'Person', name: post.author },
+    author: { '@type': 'Organization', name: post.author, url: new URL(routes.home[lang], site).href },
+    publisher: { '@type': 'Organization', name: post.author, logo: { '@type': 'ImageObject', url: new URL('/apple-touch-icon.png', site).href } },
     mainEntityOfPage: url,
-    image: img.kind === 'remote' ? img.src : undefined,
+    image: shareImage,
+    keywords: post.tags.join(', '),
+    wordCount: plainWords(post.body),
   },
 ];
 ---
 
-<Base lang={lang} title={post.seo.title ?? post.title} description={post.seo.description ?? post.excerpt} alternates={alternates} type="article" jsonLd={ld}>
+<Base lang={lang} title={post.seo.title ?? post.title} description={post.seo.description ?? post.excerpt} alternates={alternates} type="article" jsonLd={ld} image={shareImage}>
   <article>
     <PageHeader lang={lang} title={post.title} intro={post.excerpt} crumbs={[{ label: s.blogTitle, href: routes.blog[lang] }]} wide>
       <div class="post-info">

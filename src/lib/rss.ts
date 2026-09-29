@@ -7,7 +7,7 @@ import { t } from '@/i18n/ui';
 export async function rssFeed(lang: Locale, site: URL | undefined): Promise<Response> {
   const [settings, posts] = await Promise.all([getSettings(lang), getPosts(lang)]);
   return rss({
-    title: `${settings.siteName} — ${t(lang).blogTitle}`,
+    title: `${settings.siteName} · ${t(lang).blogTitle}`,
     description: t(lang).blogIntro,
     site: new URL(routes.blog[lang], site ?? 'https://sunworks.studio').href,
     items: posts.map((p) => ({

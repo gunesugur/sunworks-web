@@ -233,7 +233,8 @@ const service = defineType({
   fields: [
     languageField,
     translationKeyField,
-    defineField({ name: 'title', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'title', type: 'string', description: 'Short name for cards and menus', validation: (r) => r.required().max(32) }),
+    defineField({ name: 'headline', type: 'string', description: 'Descriptive H1 on the service page', validation: (r) => r.max(90) }),
     slugField(),
     defineField({ name: 'order', type: 'number', validation: (r) => r.required().integer() }),
     defineField({ name: 'icon', type: 'string', options: { list: ICONS }, validation: (r) => r.required() }),
@@ -241,6 +242,21 @@ const service = defineType({
     imageField('image', 'Image'),
     defineField({ name: 'deliverables', type: 'array', of: [defineArrayMember({ type: 'string' })], validation: (r) => r.min(1) }),
     portableTextField(),
+    defineField({
+      name: 'faq',
+      title: 'FAQ',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'question', type: 'string', validation: (r) => r.required() }),
+            defineField({ name: 'answer', type: 'text', rows: 3, validation: (r) => r.required() }),
+          ],
+          preview: { select: { title: 'question' } },
+        }),
+      ],
+    }),
     seoField,
   ],
   orderings: [{ title: 'Order', name: 'order', by: [{ field: 'order', direction: 'asc' }] }],

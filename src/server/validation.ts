@@ -29,7 +29,7 @@ export const contactSchema = z.object({
     .transform((v) => clean(v))
     .pipe(z.string().min(2).max(80)),
   email,
-  topic: z.enum(['wordpress', 'shopify', 'support', 'other']),
+  topic: z.enum(['wordpress', 'shopify', 'support', 'ai', 'other']),
   message: z
     .string()
     .max(8000)

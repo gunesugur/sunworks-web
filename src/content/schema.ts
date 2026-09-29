@@ -81,6 +81,7 @@ export const iconNames = [
   'chat',
   'check',
   'spark',
+  'ai',
 ] as const;
 export const iconSchema = z.enum(iconNames);
 export type IconName = z.infer<typeof iconSchema>;
@@ -168,7 +169,10 @@ export type HomePage = z.infer<typeof homePageSchema>;
 export const serviceSchema = z.object({
   ...baseDoc,
   _type: z.literal('service'),
-  title: z.string(),
+  /** Short name used in cards, menus and links. */
+  title: z.string().max(32),
+  /** Descriptive H1 on the service page; falls back to the title. */
+  headline: z.string().max(90).optional(),
   slug: slugSchema,
   order: z.number().int(),
   icon: iconSchema,
@@ -176,6 +180,7 @@ export const serviceSchema = z.object({
   image: imageSchema,
   deliverables: z.array(z.string()).min(1),
   body: portableTextSchema,
+  faq: z.array(z.object({ _key: key, question: z.string(), answer: z.string() })).optional(),
   seo: seoSchema,
 });
 export type Service = z.infer<typeof serviceSchema>;

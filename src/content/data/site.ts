@@ -16,7 +16,7 @@ export const settings: SiteSettings[] = [
     language: 'tr',
     translationKey: 'siteSettings',
     siteName: 'SUN | WORKS',
-    tagline: 'WordPress ve Shopify odaklı butik web stüdyosu',
+    tagline: 'WordPress, Shopify ve AI destekli geliştirme yapan bağımsız web stüdyosu',
     email: 'hello@sunworks.studio',
     whatsapp: '905550000000',
     city: 'Bursa',
@@ -24,13 +24,13 @@ export const settings: SiteSettings[] = [
     map: { ...map, label: 'Bursa, Türkiye' },
     newsletter: {
       title: 'Bülten',
-      text: 'Yeni yazılarımızdan haberdar olmak için listemize katılın. Yalnızca yeni bir içerik yayımladığımızda kısa bir e-posta göndeririz.',
+      text: 'Yeni bir yazı yayımladığımızda kısa bir e-posta göndeririz. Başka bir şey değil.',
     },
-    footerNote: 'WordPress ve Shopify için tasarım, kurulum ve bakım.',
+    footerNote: 'Web siteleri, mağazalar ve arkalarında çalışan sistemler.',
     seo: {
-      title: 'SUN | WORKS — WordPress ve Shopify web stüdyosu',
+      title: 'SUN | WORKS · WordPress, Shopify ve web geliştirme stüdyosu',
       description:
-        'WordPress kurumsal site, Shopify mağaza kurulumu, teknik destek ve eğitim hizmetleri sunan butik web stüdyosu.',
+        'Bursa merkezli bağımsız web stüdyosu. WordPress kurumsal siteler, Shopify mağazalar, AI destekli geliştirme, teknik destek ve bakım.',
     },
   },
   {
@@ -39,7 +39,7 @@ export const settings: SiteSettings[] = [
     language: 'en',
     translationKey: 'siteSettings',
     siteName: 'SUN | WORKS',
-    tagline: 'A boutique web studio focused on WordPress and Shopify',
+    tagline: 'An independent web studio for WordPress, Shopify and AI-assisted development',
     email: 'hello@sunworks.studio',
     whatsapp: '905550000000',
     city: 'Bursa',
@@ -47,13 +47,13 @@ export const settings: SiteSettings[] = [
     map: { ...map, label: 'Bursa, Türkiye' },
     newsletter: {
       title: 'Newsletter',
-      text: 'Join our list to hear about new articles. We only send a short email when we publish something new.',
+      text: 'A short email when we publish a new article. Nothing else.',
     },
-    footerNote: 'Design, setup and maintenance for WordPress and Shopify.',
+    footerNote: 'Websites, stores and the systems working behind them.',
     seo: {
-      title: 'SUN | WORKS — WordPress and Shopify web studio',
+      title: 'SUN | WORKS · WordPress, Shopify and web development studio',
       description:
-        'A boutique web studio offering WordPress business websites, Shopify store setup, technical support and training.',
+        'An independent web studio in Bursa, Türkiye. WordPress business sites, Shopify stores, AI-assisted development, technical support and care.',
     },
   },
 ];
@@ -88,6 +88,7 @@ export const navigation: Navigation[] = [
         links: [
           { label: 'WordPress', href: '/hizmetler/wordpress-kurumsal-site' },
           { label: 'Shopify', href: '/hizmetler/shopify-magaza-kurulumu' },
+          { label: 'AI destekli geliştirme', href: '/hizmetler/ai-destekli-gelistirme' },
           { label: 'Teknik destek', href: '/hizmetler/teknik-destek' },
           { label: 'Alan adı ve hosting', href: '/hizmetler/alan-adi-ve-hosting' },
         ],
@@ -136,6 +137,7 @@ export const navigation: Navigation[] = [
         links: [
           { label: 'WordPress', href: '/en/services/wordpress-business-website' },
           { label: 'Shopify', href: '/en/services/shopify-store-setup' },
+          { label: 'AI-assisted development', href: '/en/services/ai-assisted-development' },
           { label: 'Technical support', href: '/en/services/technical-support' },
           { label: 'Domain and hosting', href: '/en/services/domain-and-hosting' },
         ],
@@ -167,16 +169,16 @@ export const home: HomePage[] = [
     translationKey: 'homePage',
     seo: {},
     hero: {
-      title: 'WordPress ve Shopify için butik web stüdyosu',
-      note: 'Tasarım, kurulum ve bakım tek ekipten; muhatabınız hep aynı.',
+      title: 'Tasarımda kalmayan, çalışan web siteleri',
+      note: 'Arayüzden arkasındaki sisteme kadar tasarlar, kurar ve bağlarız.',
       image: img('hero-desk', 'Aydınlık bir masada kod editörü açık bir dizüstü bilgisayar, yanında bir fincan ve masa lambası'),
       smallImage: img('hands-typing', 'Dizüstü bilgisayarın klavyesinde yazı yazan eller'),
-      tags: ['WordPress', 'Shopify', 'Bakım', 'Teknik destek', 'Eğitim'],
+      tags: ['WordPress', 'Shopify', 'AI destekli geliştirme', 'Teknik destek', 'Bakım'],
     },
     tools: { title: 'Çalıştığımız platformlar ve araçlar', items: tools },
     intro: {
-      title: 'Önce kapsam, sonra kod',
-      text: 'Her işe; neyin yapılacağını, ne zaman teslim edileceğini ve neyin kapsam dışında kaldığını yazıya dökerek başlarız. Projeyi baştan sona aynı ekip yürütür, sorularınızı işi yapan kişi yanıtlar.',
+      title: 'Her proje farklı bir sorunla başlar',
+      text: 'Bu yüzden şablonla başlamayız. Önce neyin yapılacağını, ne zaman teslim edileceğini ve neyin kapsam dışında kaldığını yazıya dökeriz. Projeyi baştan sona aynı ekip yürütür. Sorularınızı işi yapan kişi yanıtlar.',
       cta: { label: 'Hizmetleri inceleyin', href: '/hizmetler' },
     },
     duo: {
@@ -195,41 +197,41 @@ export const home: HomePage[] = [
           _key: 'root-cause',
           icon: 'wrench',
           title: 'Sorunu kaynağında çözeriz',
-          text: 'Tema, eklenti, önbellek ya da sunucu kaynaklı hataları belirtiye değil nedene odaklanarak ayıklarız. Gerektiğinde barındırma ve eklenti sağlayıcılarıyla yazışmayı da biz yürütürüz.',
+          text: 'Tema, eklenti, önbellek ya da sunucu kaynaklı hatalarda belirtiye değil nedene bakarız. Gerekirse hosting ve eklenti sağlayıcılarıyla yazışmayı da biz yürütürüz.',
         },
         {
           _key: 'handover',
           icon: 'book',
-          title: 'Yayından sonra da yanınızdayız',
-          text: 'Teslimle birlikte içerik, ürün ve sayfaları kendiniz güncelleyebilmeniz için uygulamalı bir eğitim verir, adım adım kullanım notları bırakırız.',
+          title: 'Yayından sonra da buradayız',
+          text: 'Teslimde kısa bir eğitim verir, adım adım notlar bırakırız. İçeriği, ürünleri ve sayfaları kendiniz güncelleyebilirsiniz.',
         },
       ],
       cta: { label: 'Proje konuşalım', href: '/iletisim' },
     },
     servicesSection: {
       title: 'Hizmetler',
-      text: 'Kurumsal WordPress sitelerinden Shopify mağazalarına; kurulum, geliştirme ve sürekli bakım.',
+      text: 'Bir platform işi iyi yapıyorsa onu kullanırız. Yetmediği yerde geliştiririz.',
     },
     process: {
       title: 'Nasıl çalışıyoruz',
-      text: 'Üç aşamalı, şeffaf bir süreç. Her aşamanın sonunda neyin tamamlandığını görür, bir sonrakine birlikte geçeriz.',
+      text: 'Üç aşama, hepsi yazılı. Her aşamanın sonunda neyin bittiğini görür, bir sonrakine birlikte geçeriz.',
       steps: [
         {
           _key: 's1',
           title: 'Keşif ve kapsam',
-          text: 'Hedeflerinizi, mevcut altyapınızı ve teknik kısıtları birlikte inceleriz. Kapsamı, takvimi ve bütçeyi tek belgede toplayan yazılı bir teklif hazırlarız.',
+          text: 'Hedefinizi, mevcut altyapınızı ve teknik kısıtları birlikte inceleriz. Kapsamı, takvimi ve bütçeyi tek bir yazılı teklifte toplarız.',
           deliverables: ['Yazılı teklif', 'İş takvimi', 'Kapsam dışı kalemler'],
         },
         {
           _key: 's2',
           title: 'Tasarım ve geliştirme',
-          text: 'Onaylanan kapsamı bir test ortamında hayata geçiririz. İlerlemeyi çalışan bir önizleme bağlantısından takip eder, geri bildirimlerinizi aşama aşama uygularız.',
+          text: 'Onaylanan kapsamı bir test ortamında kurarız. İlerlemeyi çalışan bir önizleme bağlantısından izler, geri bildirimlerinizi aşama aşama uygularız.',
           deliverables: ['Canlı önizleme bağlantısı', 'Düzenli ilerleme notları', 'Hız ve erişilebilirlik kontrolü'],
         },
         {
           _key: 's3',
           title: 'Yayın ve devir',
-          text: 'Yedek alarak siteyi yayına alır, ilk günlerde yakından izleriz. Yönetimi kısa bir eğitimle size devreder, yazılı bir kullanım kılavuzu bırakırız.',
+          text: 'Yedek alıp siteyi yayına alırız, ilk günlerde yakından izleriz. Yönetimi kısa bir eğitimle size devreder, yazılı bir kılavuz bırakırız.',
           deliverables: ['Yayın kontrol listesi', 'Yönetim eğitimi', 'Kullanım kılavuzu'],
         },
       ],
@@ -243,7 +245,7 @@ export const home: HomePage[] = [
       ],
     },
     closing: {
-      title: 'Bir sonraki projenizi konuşalım',
+      title: 'Bir projeniz mi var? Konuşalım.',
       image: img('laptop-dark-desk', 'Koyu ahşap masada açık duran dizüstü bilgisayar ve beyaz bir sandalye'),
       tag: 'Yeni projelere açığız',
       cta: { label: 'İletişime geçin', href: '/iletisim' },
@@ -256,16 +258,16 @@ export const home: HomePage[] = [
     translationKey: 'homePage',
     seo: {},
     hero: {
-      title: 'A boutique web studio for WordPress and Shopify',
-      note: 'Design, build and care from one team — and one point of contact.',
+      title: 'Websites that work beyond the mockup',
+      note: 'We design, build and connect everything from the interface to the system behind it.',
       image: img('hero-desk', 'A laptop with a code editor open on a bright desk, next to a mug and a desk lamp'),
       smallImage: img('hands-typing', 'Hands typing on a laptop keyboard'),
-      tags: ['WordPress', 'Shopify', 'Maintenance', 'Tech support', 'Training'],
+      tags: ['WordPress', 'Shopify', 'AI-assisted development', 'Tech support', 'Maintenance'],
     },
     tools: { title: 'Platforms and tools we work with', items: tools },
     intro: {
-      title: 'Scope first, then code',
-      text: 'Every project starts with a written brief: what will be done, when it will be delivered and what is out of scope. The same team runs it from start to finish, and the person doing the work answers your questions.',
+      title: 'Every project starts with a different problem',
+      text: "So we don't begin with a template. First we write down what will be done, when it will be delivered and what is out of scope. The same team runs the project from start to finish, and the person doing the work answers your questions.",
       cta: { label: 'Explore services', href: '/en/services' },
     },
     duo: {
@@ -284,7 +286,7 @@ export const home: HomePage[] = [
           _key: 'root-cause',
           icon: 'wrench',
           title: 'We fix problems at the source',
-          text: 'Theme, plugin, cache or server issues are traced to their cause rather than patched at the symptom. When needed, we handle the conversation with hosting and plugin vendors.',
+          text: 'With theme, plugin, cache or server issues, we look for the cause, not the symptom. When needed, we handle the conversation with hosting and plugin vendors.',
         },
         {
           _key: 'handover',
@@ -297,11 +299,11 @@ export const home: HomePage[] = [
     },
     servicesSection: {
       title: 'Services',
-      text: 'From business sites on WordPress to Shopify stores: setup, development and ongoing care.',
+      text: 'If an existing platform does the job well, we use it. Where it falls short, we build.',
     },
     process: {
       title: 'How we work',
-      text: 'A transparent process in three phases. At the end of each one you see what is done, and we move on together.',
+      text: 'Three phases, all in writing. At the end of each one you see what is done, and we move on together.',
       steps: [
         {
           _key: 's1',
@@ -332,7 +334,7 @@ export const home: HomePage[] = [
       ],
     },
     closing: {
-      title: "Let's talk about your next project",
+      title: "Working on something? Let's talk.",
       image: img('laptop-dark-desk', 'An open laptop on a dark wooden desk next to a white chair'),
       tag: 'Open for new projects',
       cta: { label: 'Get in touch', href: '/en/contact' },
