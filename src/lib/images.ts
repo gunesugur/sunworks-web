@@ -33,3 +33,12 @@ export function resolveImage(field: ImageField): ResolvedImage {
     alt: field.alt,
   };
 }
+
+/** Absolute 1200×630 URL of an image, for og:image and structured data. */
+export async function shareImageUrl(field: ImageField, site: URL): Promise<string> {
+  const img = resolveImage(field);
+  if (img.kind === 'remote') return `${img.src}?w=1200&h=630&fit=crop&auto=format`;
+  const { getImage } = await import('astro:assets');
+  const out = await getImage({ src: img.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+  return new URL(out.src, site).href;
+}

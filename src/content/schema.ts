@@ -81,6 +81,13 @@ export const iconNames = [
   'chat',
   'check',
   'spark',
+  'ai',
+  'user',
+  'key',
+  'phone',
+  'eye',
+  'refresh',
+  'gauge',
 ] as const;
 export const iconSchema = z.enum(iconNames);
 export type IconName = z.infer<typeof iconSchema>;
@@ -161,14 +168,27 @@ export const homePageSchema = z.object({
       items: z.array(z.object({ _key: key, value: z.number().int().nonnegative(), suffix: z.string().optional(), label: z.string() })).min(2).max(4),
     })
     .optional(),
-  closing: z.object({ title: z.string(), image: imageSchema, tag: z.string(), cta: linkSchema }),
+  /** One big counting figure with a short story, next to a slowly drifting column of commitments. */
+  highlight: z
+    .object({
+      value: z.number().int().nonnegative(),
+      suffix: z.string().optional(),
+      title: z.string(),
+      text: z.string().max(220),
+      items: z.array(z.object({ _key: key, icon: iconSchema, title: z.string().max(40), text: z.string().max(90) })).min(4).max(10),
+    })
+    .optional(),
+  closing: z.object({ title: z.string(), text: z.string().max(200).optional(), image: imageSchema, tag: z.string(), cta: linkSchema }),
 });
 export type HomePage = z.infer<typeof homePageSchema>;
 
 export const serviceSchema = z.object({
   ...baseDoc,
   _type: z.literal('service'),
-  title: z.string(),
+  /** Short name used in cards, menus and links. */
+  title: z.string().max(32),
+  /** Descriptive H1 on the service page; falls back to the title. */
+  headline: z.string().max(90).optional(),
   slug: slugSchema,
   order: z.number().int(),
   icon: iconSchema,
@@ -176,6 +196,7 @@ export const serviceSchema = z.object({
   image: imageSchema,
   deliverables: z.array(z.string()).min(1),
   body: portableTextSchema,
+  faq: z.array(z.object({ _key: key, question: z.string(), answer: z.string() })).optional(),
   seo: seoSchema,
 });
 export type Service = z.infer<typeof serviceSchema>;

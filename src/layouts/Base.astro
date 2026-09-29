@@ -22,18 +22,20 @@ interface Props {
   type?: 'website' | 'article';
   jsonLd?: Record<string, unknown>[];
   noindex?: boolean;
+  /** Absolute share image URL; defaults to the locale's OG card. */
+  image?: string;
 }
 
-const { lang, title, description, alternates, type = 'website', jsonLd = [], noindex = false } = Astro.props;
+const { lang, title, description, alternates, type = 'website', jsonLd = [], noindex = false, image } = Astro.props;
 const [settings, nav] = await Promise.all([getSettings(lang), getNavigation(lang)]);
 const s = t(lang);
 const site = Astro.site ?? new URL('https://sunworks.studio');
-const fullTitle = title ? `${title} — ${settings.siteName}` : settings.seo.title;
+const fullTitle = title ? `${title} · ${settings.siteName}` : settings.seo.title;
 const desc = description ?? settings.seo.description;
 const canonical = new URL(cleanPath(Astro.url.pathname), site).href;
 const altLang = otherLocale(lang);
 const altHref = alternates[altLang] ?? routes.home[altLang];
-const ogImage = new URL(`/og/${lang}.png`, site).href;
+const ogImage = image ?? new URL(`/og/${lang}.png`, site).href;
 
 const baseLd = {
   '@context': 'https://schema.org',
@@ -68,7 +70,7 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
       ))
     }
     {alternates.tr && <link rel="alternate" hreflang="x-default" href={new URL(alternates.tr, site).href} />}
-    <link rel="alternate" type="application/rss+xml" title={`${settings.siteName} — ${s.blogTitle}`} href={routes.rss[lang]} />
+    <link rel="alternate" type="application/rss+xml" title={`${settings.siteName} · ${s.blogTitle}`} href={routes.rss[lang]} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />

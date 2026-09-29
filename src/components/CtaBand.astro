@@ -13,10 +13,13 @@ const home = await getHome(Astro.props.lang);
 <section class="container cta" aria-labelledby="cta-title">
   <div class="cta__box" data-reveal>
     <span class="cta__mark" aria-hidden="true"><Asterisk size="100%" /></span>
-    <h2 id="cta-title" class="h2 cta__title">
-      {home.closing.title}
-      <Asterisk class="cta__star" size="0.6em" />
-    </h2>
+    <div class="cta__copy">
+      <h2 id="cta-title" class="h2 cta__title">
+        {home.closing.title}
+        <Asterisk class="cta__star" size="0.6em" />
+      </h2>
+      {home.closing.text && <p class="cta__text">{home.closing.text}</p>}
+    </div>
     <ArrowButton href={home.closing.cta.href} label={home.closing.cta.label} />
   </div>
 </section>
@@ -43,7 +46,7 @@ const home = await getHome(Astro.props.lang);
   /* Watermark: the brand asterisk, large and faint, turning slowly in the corner. */
   .cta__mark {
     position: absolute;
-    left: clamp(-7rem, -6vw, -3rem);
+    right: clamp(-7rem, -6vw, -3rem);
     bottom: clamp(-7rem, -6vw, -3rem);
     z-index: -1;
     width: clamp(12rem, 24vw, 20rem);
@@ -58,8 +61,19 @@ const home = await getHome(Astro.props.lang);
     }
   }
 
+  .cta__copy {
+    display: grid;
+    gap: 1rem;
+    max-width: 44rem;
+  }
+
   .cta__title {
-    max-width: 18ch;
+    max-width: 22ch;
+  }
+
+  .cta__text {
+    max-width: 52ch;
+    color: var(--c-muted);
   }
 
   .cta__title :global(.cta__star) {

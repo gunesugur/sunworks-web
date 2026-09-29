@@ -108,7 +108,7 @@ const homePage = defineType({
       type: 'object',
       fields: [
         defineField({ name: 'title', type: 'string' }),
-        defineField({ name: 'note', type: 'string' }),
+        defineField({ name: 'note', type: 'string', description: 'Sits in the photo notch, keep it to two or three lines' }),
         imageField('image', 'Wide image'),
         imageField('smallImage', 'Small image'),
         defineField({ name: 'tags', type: 'array', of: [defineArrayMember({ type: 'string' })], validation: (r) => r.max(6) }),
@@ -211,7 +211,35 @@ const homePage = defineType({
                 defineField({ name: 'suffix', type: 'string', description: 'Shown after the number, e.g. " h" or "%".' }),
                 defineField({ name: 'label', type: 'string', validation: (r) => r.required() }),
               ],
-              preview: { select: { title: 'label', value: 'value', suffix: 'suffix' }, prepare: ({ title, value, suffix }) => ({ title: `${value ?? ''}${suffix ?? ''} — ${title ?? ''}` }) },
+              preview: { select: { title: 'label', value: 'value', suffix: 'suffix' }, prepare: ({ title, value, suffix }) => ({ title: `${value ?? ''}${suffix ?? ''} · ${title ?? ''}` }) },
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'highlight',
+      title: 'Highlight',
+      type: 'object',
+      description: 'One big counting figure with a title and text, next to a slowly drifting column of short commitments.',
+      fields: [
+        defineField({ name: 'value', type: 'number', validation: (r) => r.required().integer().min(0) }),
+        defineField({ name: 'suffix', type: 'string' }),
+        defineField({ name: 'title', type: 'string', validation: (r) => r.required() }),
+        defineField({ name: 'text', type: 'text', rows: 3, validation: (r) => r.required().max(220) }),
+        defineField({
+          name: 'items',
+          type: 'array',
+          validation: (r) => r.min(4).max(10),
+          of: [
+            defineArrayMember({
+              type: 'object',
+              fields: [
+                defineField({ name: 'icon', type: 'string', options: { list: ICONS }, validation: (r) => r.required() }),
+                defineField({ name: 'title', type: 'string', validation: (r) => r.required().max(40) }),
+                defineField({ name: 'text', type: 'string', validation: (r) => r.required().max(90) }),
+              ],
+              preview: { select: { title: 'title', subtitle: 'text' } },
             }),
           ],
         }),
@@ -220,7 +248,13 @@ const homePage = defineType({
     defineField({
       name: 'closing',
       type: 'object',
-      fields: [defineField({ name: 'title', type: 'string' }), imageField('image', 'Image'), defineField({ name: 'tag', type: 'string' }), linkField('cta', 'Button')],
+      fields: [
+        defineField({ name: 'title', type: 'string' }),
+        defineField({ name: 'text', type: 'text', rows: 2, validation: (r) => r.max(200) }),
+        imageField('image', 'Image'),
+        defineField({ name: 'tag', type: 'string' }),
+        linkField('cta', 'Button'),
+      ],
     }),
   ],
   preview: { select: { subtitle: 'language' }, prepare: ({ subtitle }) => ({ title: 'Home page', subtitle }) },
@@ -233,7 +267,8 @@ const service = defineType({
   fields: [
     languageField,
     translationKeyField,
-    defineField({ name: 'title', type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'title', type: 'string', description: 'Short name for cards and menus', validation: (r) => r.required().max(32) }),
+    defineField({ name: 'headline', type: 'string', description: 'Descriptive H1 on the service page', validation: (r) => r.max(90) }),
     slugField(),
     defineField({ name: 'order', type: 'number', validation: (r) => r.required().integer() }),
     defineField({ name: 'icon', type: 'string', options: { list: ICONS }, validation: (r) => r.required() }),
@@ -241,6 +276,21 @@ const service = defineType({
     imageField('image', 'Image'),
     defineField({ name: 'deliverables', type: 'array', of: [defineArrayMember({ type: 'string' })], validation: (r) => r.min(1) }),
     portableTextField(),
+    defineField({
+      name: 'faq',
+      title: 'FAQ',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'question', type: 'string', validation: (r) => r.required() }),
+            defineField({ name: 'answer', type: 'text', rows: 3, validation: (r) => r.required() }),
+          ],
+          preview: { select: { title: 'question' } },
+        }),
+      ],
+    }),
     seoField,
   ],
   orderings: [{ title: 'Order', name: 'order', by: [{ field: 'order', direction: 'asc' }] }],

@@ -28,7 +28,7 @@ const altNav = await getNavigation(altLang);
 
 <header class="site-header" transition:name="site-header" data-header>
   <div class="container site-header__inner">
-    <Logo href={routes.home[lang]} label={`${siteName} — ${s.home}`} />
+    <Logo href={routes.home[lang]} label={`${siteName}, ${s.home}`} />
 
     <nav class="site-nav" aria-label={s.mainNav} id="site-nav" data-nav>
       <ul class="site-nav__list">
@@ -51,7 +51,7 @@ const altNav = await getNavigation(altLang);
 
     <!-- The language switch sits with the theme toggle so neither moves when the CTA's label length changes. -->
     <div class="site-header__tools">
-      <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}> — {s.langSwitchLabel}</span></a>
+      <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}>, {s.langSwitchLabel}</span></a>
       <ThemeToggle lang={lang} />
       <button
         type="button"

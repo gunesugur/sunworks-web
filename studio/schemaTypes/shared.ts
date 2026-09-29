@@ -4,7 +4,7 @@
  */
 import { defineArrayMember, defineField } from 'sanity';
 
-export const ICONS = ['wordpress', 'cart', 'wrench', 'code', 'server', 'book', 'search', 'chat', 'check', 'spark'];
+export const ICONS = ['wordpress', 'cart', 'wrench', 'code', 'server', 'book', 'search', 'chat', 'check', 'spark', 'ai', 'user', 'key', 'phone', 'eye', 'refresh', 'gauge'];
 
 export const languageField = defineField({
   name: 'language',

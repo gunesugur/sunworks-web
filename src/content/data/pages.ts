@@ -14,14 +14,14 @@ export const pages: Page[] = [
     kind: 'contact',
     title: 'İletişim',
     slug: slug('iletisim'),
-    intro: 'Projenizi, mevcut sitenizdeki bir sorunu ya da aklınızdaki bir soruyu yazın; en kısa sürede e-postayla dönüş yaparız.',
+    intro: 'Yeni bir proje, mevcut sitenizde bir sorun ya da bir soru. Yazın, 24 saat içinde e-postayla dönelim.',
     body: pt(
       'c',
       `Mesajınıza sitenizin adresini ve kullandığınız platformu (WordPress, Shopify ya da başka) eklerseniz size daha hızlı yardımcı olabiliriz.`,
     ),
     legalReviewRequired: false,
     updatedAt: UPDATED,
-    seo: { description: 'SUN | WORKS ile iletişime geçin: WordPress, Shopify ve teknik destek talepleri için form ve e-posta.' },
+    seo: { description: 'SUN | WORKS ile iletişime geçin. WordPress, Shopify, AI destekli geliştirme ve teknik destek talepleri için form ve e-posta.' },
   },
   {
     _id: 'page-contact-en',
@@ -31,14 +31,14 @@ export const pages: Page[] = [
     kind: 'contact',
     title: 'Contact',
     slug: slug('contact'),
-    intro: 'Tell us about your project, a problem with your current site, or a question you have. We reply by email as soon as we can.',
+    intro: 'A new project, a problem with your current site, or a question. Write to us and we will reply by email within 24 hours.',
     body: pt(
       'c',
       `If you include your site's address and the platform you use (WordPress, Shopify or something else), we can help you faster.`,
     ),
     legalReviewRequired: false,
     updatedAt: UPDATED,
-    seo: { description: 'Get in touch with SUN | WORKS about WordPress, Shopify or technical support work.' },
+    seo: { description: 'Contact SUN | WORKS about WordPress, Shopify, AI-assisted development or technical support. Form and email, reply within 24 hours.' },
   },
 
   // ---------- Privacy ----------
@@ -98,7 +98,7 @@ KVKK'nın 11. maddesi uyarınca verilerinizin işlenip işlenmediğini öğrenme
     kind: 'legal',
     title: 'Privacy policy',
     slug: slug('privacy'),
-    intro: 'Which personal data this site processes, why, and for how long — under Turkish data protection law (KVKK No. 6698).',
+    intro: 'Which personal data this site processes, why, and for how long, under Turkish data protection law (KVKK No. 6698).',
     body: pt(
       'p',
       `## Data controller
