@@ -27,7 +27,15 @@ export const imageField = (name: string, title: string) =>
     title,
     type: 'image',
     options: { hotspot: true },
-    fields: [defineField({ name: 'alt', title: 'Alt text', type: 'string', validation: (r) => r.required() })],
+    fields: [
+      defineField({ name: 'alt', title: 'Alt text', type: 'string', validation: (r) => r.required() }),
+      defineField({
+        name: 'dark',
+        title: 'Dark mode image',
+        description: 'Optional. The same scene in a dark palette, shown in dark mode. Use the same size as the main image.',
+        type: 'image',
+      }),
+    ],
     validation: (r) => r.required(),
   });
 

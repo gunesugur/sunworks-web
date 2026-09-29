@@ -69,3 +69,27 @@ test('pt() parses headings, lists and inline marks in linear time', () => {
   pt('y', `${'*'.repeat(20000)}[`.repeat(2));
   assert.ok(performance.now() - start < 500);
 });
+
+test('every local image has a dark twin of the same size', async () => {
+  const { default: sharp } = await import('sharp');
+  const { existsSync } = await import('node:fs');
+  const refs = new Set<string>();
+  const walk = (v: unknown): void => {
+    if (Array.isArray(v)) v.forEach(walk);
+    else if (v && typeof v === 'object') {
+      const o = v as Record<string, unknown>;
+      if (o['_type'] === 'image' && o['alt']) refs.add(String((o['asset'] as { _ref: string })._ref));
+      Object.values(o).forEach(walk);
+    }
+  };
+  walk([home, services, posts]);
+  assert.ok(refs.size > 0);
+  for (const ref of refs) {
+    const key = ref.replace('image-local-', '');
+    const light = `src/assets/images/${key}.webp`;
+    const dark = `src/assets/images/${key}-dark.webp`;
+    assert.ok(existsSync(light) && existsSync(dark), key);
+    const [a, b] = await Promise.all([sharp(light).metadata(), sharp(dark).metadata()]);
+    assert.deepEqual([a.width, a.height], [b.width, b.height], key);
+  }
+});

@@ -171,8 +171,8 @@ export const home: HomePage[] = [
     hero: {
       title: 'Aklınızdaki projeyi birlikte hayata geçirelim',
       note: 'Neye ihtiyacınız olduğunu konuşalım, yönetmesi kolay çözümü birlikte kuralım.',
-      image: img('hero-desk', 'Aydınlık bir masada kod editörü açık bir dizüstü bilgisayar, yanında bir fincan ve masa lambası'),
-      smallImage: img('hands-typing', 'Dizüstü bilgisayarın klavyesinde yazı yazan eller'),
+      image: img('hero-studio', 'Sade bir çalışma masasında açık dizüstü bilgisayar, masa lambası ve bir fincan'),
+      smallImage: img('duo-sketch', 'Dizüstü bilgisayarın yanında kâğıda web sitesi taslağı çizen bir el'),
       tags: ['WordPress', 'Shopify', 'AI destekli geliştirme', 'Teknik destek', 'Bakım'],
     },
     tools: { title: 'Çalıştığımız platformlar ve araçlar', items: tools },
@@ -182,15 +182,15 @@ export const home: HomePage[] = [
       cta: { label: 'Hizmetleri inceleyin', href: '/hizmetler' },
     },
     duo: {
-      first: img('planning-laptop', 'Dizüstü bilgisayarın yanında kâğıda plan notları alan bir el'),
-      second: img('laptop-top-view', 'Ahşap masa üzerinde yukarıdan görünen dizüstü bilgisayar, kahve ve kalemler'),
+      first: img('duo-sketch', 'Dizüstü bilgisayarın yanında kâğıda web sitesi taslağı çizen bir el'),
+      second: img('duo-top-view', 'Ahşap masada yukarıdan görünen dizüstü bilgisayar, kahve fincanı, kalemler ve açık bir defter'),
       firstTag: 'Önce plan',
       secondTag: 'Sonra kurulum',
       link: { label: 'Sürecimizi görün', href: '#process' },
     },
     approach: {
       title: 'Daha az sürpriz, daha fazla netlik',
-      image: img('checklist-notebook', 'Defterdeki kontrol listesine işaret koyan bir el'),
+      image: img('approach-checklist', 'Defterdeki kontrol listesine işaret koyan bir el, arkada dizüstü bilgisayar'),
       tag: 'Kontrol listesiyle',
       items: [
         {
@@ -255,7 +255,7 @@ export const home: HomePage[] = [
     closing: {
       title: 'Aklınızdaki projeyi gelin, birlikte inşa edelim.',
       text: 'İster yeni bir web sitesi fikri, ister mevcut sitenizle ilgili bir destek ihtiyacı. Bize kısaca yazın, size nasıl yardımcı olabileceğimize birlikte karar verelim.',
-      image: img('laptop-dark-desk', 'Koyu ahşap masada açık duran dizüstü bilgisayar ve beyaz bir sandalye'),
+      image: img('closing-desk', 'Geniş ve sakin bir odada ahşap masa üzerinde dizüstü bilgisayar ve beyaz bir sandalye'),
       tag: 'Yeni projelere açığız',
       cta: { label: 'İletişime geçin', href: '/iletisim' },
     },
@@ -269,8 +269,8 @@ export const home: HomePage[] = [
     hero: {
       title: "Let's build your project together",
       note: "Let's talk about what you need and build a solution that's easy to run.",
-      image: img('hero-desk', 'A laptop with a code editor open on a bright desk, next to a mug and a desk lamp'),
-      smallImage: img('hands-typing', 'Hands typing on a laptop keyboard'),
+      image: img('hero-studio', 'An open laptop on a calm studio desk with a desk lamp and a mug'),
+      smallImage: img('duo-sketch', 'A hand sketching a website layout on paper next to a laptop'),
       tags: ['WordPress', 'Shopify', 'AI-assisted development', 'Tech support', 'Maintenance'],
     },
     tools: { title: 'Platforms and tools we work with', items: tools },
@@ -280,15 +280,15 @@ export const home: HomePage[] = [
       cta: { label: 'Explore services', href: '/en/services' },
     },
     duo: {
-      first: img('planning-laptop', 'A hand writing planning notes on paper next to a laptop'),
-      second: img('laptop-top-view', 'Top view of a laptop, a coffee cup and pencils on a wooden desk'),
+      first: img('duo-sketch', 'A hand sketching a website layout on paper next to a laptop'),
+      second: img('duo-top-view', 'Top view of a laptop, a coffee cup, pencils and an open notebook on a wooden desk'),
       firstTag: 'Plan first',
       secondTag: 'Then build',
       link: { label: 'See our process', href: '#process' },
     },
     approach: {
       title: 'Fewer surprises, more clarity',
-      image: img('checklist-notebook', 'A hand ticking off items on a checklist in a notebook'),
+      image: img('approach-checklist', 'A hand ticking a checklist in a notebook, a laptop behind it'),
       tag: 'Checklist-driven',
       items: [
         {
@@ -353,7 +353,7 @@ export const home: HomePage[] = [
     closing: {
       title: "Come, let's build what you have in mind.",
       text: "Whether it's an idea for a new website or support for your current one, write to us briefly and we'll decide together how we can help.",
-      image: img('laptop-dark-desk', 'An open laptop on a dark wooden desk next to a white chair'),
+      image: img('closing-desk', 'A laptop on a wooden desk with a white chair in a calm, spacious room'),
       tag: 'Open for new projects',
       cta: { label: 'Get in touch', href: '/en/contact' },
     },

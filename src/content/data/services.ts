@@ -18,7 +18,7 @@ export const services: Service[] = [
     order: 1,
     icon: 'wordpress',
     excerpt: 'Şirketinizi sade ve şık bir şekilde anlatan, yazı ve fotoğraflarınızı kimseye ihtiyaç duymadan ekleyebileceğiniz kurumsal web siteleri.',
-    image: img('laptop-code-plant', 'Kod editörü açık bir dizüstü bilgisayarda WordPress tema dosyaları'),
+    image: img('service-wordpress', 'Ekranında sade bir web sitesi düzeni açık dizüstü bilgisayar, yanında bitkiler ve defter'),
     deliverables: [
       'Sayfa yapısı ve içerik planı',
       'Tema kurulumu ve markaya göre özelleştirme',
@@ -74,7 +74,7 @@ Yayına hazırlanıyorsanız [WordPress yayın öncesi kontrol listemiz](/blog/w
     order: 1,
     icon: 'wordpress',
     excerpt: 'Company websites that present your business simply and elegantly, where you can add your own text and photos without needing anyone.',
-    image: img('laptop-code-plant', 'WordPress theme files open in a code editor on a laptop'),
+    image: img('service-wordpress', 'A laptop showing a simple website layout, with plants and a notebook nearby'),
     deliverables: [
       'Page structure and content plan',
       'Theme setup and brand customization',
@@ -132,7 +132,7 @@ Getting ready to launch? Our [WordPress pre-launch checklist](/en/blog/wordpress
     order: 2,
     icon: 'cart',
     excerpt: 'Ürünlerinizi kolayca sergileyip satabileceğiniz, siparişlerinizi telefonunuzdan bile takip edebileceğiniz online mağazalar.',
-    image: img('clothing-store', 'Raflarda katlanmış giysiler ve askıda ürünler bulunan küçük bir mağaza'),
+    image: img('service-shopify', 'Katlanmış giysiler ve ürün görselleri açık bir tabletle butik mağaza tezgâhı'),
     deliverables: [
       'Mağaza kurulumu ve tema özelleştirme',
       'Ürün, varyant ve koleksiyon yapısı',
@@ -187,7 +187,7 @@ Açılıştan önce [Shopify mağaza açmadan önce yapılacak 5 ayar](/blog/sho
     order: 2,
     icon: 'cart',
     excerpt: 'Online stores where you can show and sell your products with ease, and follow orders even from your phone.',
-    image: img('clothing-store', 'A small shop with folded clothes on shelves and garments on hanging rails'),
+    image: img('service-shopify', 'A boutique shop counter with folded clothes and a tablet showing product tiles'),
     deliverables: [
       'Store setup and theme customization',
       'Product, variant and collection structure',
@@ -244,7 +244,7 @@ Before launch, see [5 things to set up before opening a Shopify store](/en/blog/
     order: 3,
     icon: 'wrench',
     excerpt: 'Bozulan sayfa, yavaşlayan site ya da genel teknik aksaklıklarda kafanızı yormamanız için yanınızda duran pratik destek.',
-    image: img('pointing-laptop', 'Dizüstü bilgisayar ekranındaki bir hatayı parmağıyla gösteren biri'),
+    image: img('service-support', 'Dizüstü bilgisayar ekranındaki bir noktayı parmağıyla gösteren biri'),
     deliverables: [
       'Sorunun yeniden üretilmesi ve kaynağının bulunması',
       'Tema ve eklenti çakışmalarının çözümü',
@@ -297,7 +297,7 @@ Site yavaşlığıyla uğraşıyorsanız [siteniz neden yavaş](/blog/siteniz-ne
     order: 3,
     icon: 'wrench',
     excerpt: 'Practical support for broken pages, a slow site or general technical hiccups, so you don\'t have to worry about them.',
-    image: img('pointing-laptop', 'Someone pointing at an error on a laptop screen'),
+    image: img('service-support', 'Someone pointing at a spot on a laptop screen'),
     deliverables: [
       'Reproducing the issue and finding its source',
       'Resolving theme and plugin conflicts',
@@ -352,7 +352,7 @@ Dealing with a slow site? We cover the five causes we see most in [why is your s
     order: 4,
     icon: 'ai',
     excerpt: 'Günlük rutin işlerinizi kolaylaştıran, web sitenizde müşterilerinize yardımcı olan ya da iş süreçlerinizi hızlandıran akıllı küçük çözümler.',
-    image: img('code-dark', 'Koyu temalı bir kod editöründe renkli kod satırları'),
+    image: img('service-ai', 'Ekranında yumuşak dalga biçimleri olan dizüstü bilgisayar, masada bir fincan'),
     deliverables: [
       'İhtiyaca göre AI kullanım planı',
       'Hızlı prototip ve arayüz denemeleri',
@@ -405,7 +405,7 @@ Hazır bir tema ya da eklentinin yetmediği, ama sıfırdan büyük bir yazılı
     order: 4,
     icon: 'ai',
     excerpt: 'Smart small solutions that ease your daily routine, help customers on your website or speed up the way you work.',
-    image: img('code-dark', 'Colorful lines of code in a dark-themed code editor'),
+    image: img('service-ai', 'A laptop showing soft flowing wave shapes, a mug on the desk'),
     deliverables: [
       'A plan for where AI actually helps',
       'Fast prototypes and interface experiments',
@@ -460,7 +460,7 @@ Work where an off-the-shelf theme or plugin is not enough, but a large software 
     order: 5,
     icon: 'server',
     excerpt: 'Alan adı, DNS, SSL ve kurumsal e-posta ayarları. Sitenizi yeni sunucuya kesintisiz taşıyalım. Hesaplar sizin adınıza açılır.',
-    image: img('dashboard-laptop', 'Ekranında sunucu kontrol paneli açık bir dizüstü bilgisayar'),
+    image: img('service-hosting', 'Dizüstü bilgisayarın yanında durum ışıkları yanan küçük bir sunucu cihazı'),
     deliverables: [
       'İhtiyaca uygun hosting paketi önerisi',
       'Alan adı ve DNS yönlendirmeleri',
@@ -506,7 +506,7 @@ Yeni bir site kuruyorsanız bu adım genellikle bir [WordPress](/hizmetler/wordp
     order: 5,
     icon: 'server',
     excerpt: 'Domain, DNS, SSL and business email settings. We move your site to a new server without downtime. Accounts are opened in your name.',
-    image: img('dashboard-laptop', 'A server control panel open on a laptop screen'),
+    image: img('service-hosting', 'A small server device with status lights next to a laptop'),
     deliverables: [
       'A hosting plan that fits the site',
       'Domain and DNS configuration',
@@ -554,7 +554,7 @@ For a new site, this step usually happens as part of a [WordPress](/en/services/
     order: 6,
     icon: 'search',
     excerpt: 'Sitenizi hızlandıralım, Google\'ın doğru okuyacağı şekilde düzenleyelim. Ziyaretçi de arama motoru da beklemesin.',
-    image: img('hands-typing', 'Dizüstü bilgisayar klavyesinde çalışan eller'),
+    image: img('service-speed', 'Ekranında yükselen çubuk grafikler açık dizüstü bilgisayarda yazan eller'),
     deliverables: [
       'Hız ölçümü: LCP, INP ve CLS',
       'Görsel, kod ve eklenti optimizasyonu',
@@ -602,7 +602,7 @@ Site yavaşlığının en sık nedenlerini [siteniz neden yavaş](/blog/siteniz-
     order: 6,
     icon: 'search',
     excerpt: 'We make your site faster and set it up so Google reads it correctly. Neither visitors nor search engines have to wait.',
-    image: img('hands-typing', 'Hands working on a laptop keyboard'),
+    image: img('service-speed', 'Hands typing on a laptop showing rising bar charts'),
     deliverables: [
       'Speed measurement: LCP, INP and CLS',
       'Image, code and plugin optimization',

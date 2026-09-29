@@ -1,7 +1,7 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import type { ImageField } from '@/content/schema';
-import { resolveImage } from '@/lib/images';
+import { resolveDarkImage, resolveImage, type ResolvedImage } from '@/lib/images';
 
 interface Props {
   image: ImageField;
@@ -12,24 +12,42 @@ interface Props {
   alt?: string;
 }
 const { image, widths, sizes, class: cls, priority = false, alt } = Astro.props;
-const resolved = resolveImage(image);
-const common = {
-  alt: alt ?? resolved.alt,
-  widths,
-  sizes,
-  class: cls,
-  loading: priority ? ('eager' as const) : ('lazy' as const),
-  decoding: priority ? ('sync' as const) : ('async' as const),
-  fetchpriority: priority ? ('high' as const) : ('auto' as const),
-  format: 'webp' as const,
-  quality: 72,
-};
+const light = resolveImage(image);
+const dark = resolveDarkImage(image);
+
+/** AVIF first (smallest), WebP for the rest; quality tuned per codec to look the same. */
+const FORMATS = [
+  { format: 'avif', type: 'image/avif', quality: 58 },
+  { format: 'webp', type: 'image/webp', quality: 80 },
+] as const;
+
+const build = async (img: ResolvedImage) =>
+  Promise.all(
+    FORMATS.map(async ({ format, type, quality }) => {
+      const size = img.kind === 'local' ? {} : { width: img.width, height: img.height };
+      const out = await getImage({ src: img.src, ...size, widths, format, quality });
+      return { type, srcset: out.srcSet.attribute, src: out.src, attrs: out.attributes };
+    }),
+  );
+
+const [lightAvif, lightWebp] = await build(light);
+const darkSets = dark ? await build(dark) : [];
+if (!lightAvif || !lightWebp) throw new Error('Image formats missing');
 ---
 
-{
-  resolved.kind === 'local' ? (
-    <Image src={resolved.src} {...common} />
-  ) : (
-    <Image src={resolved.src} width={resolved.width} height={resolved.height} {...common} />
-  )
-}
+<picture>
+  {darkSets.map((s) => <source data-dark media="(prefers-color-scheme: dark)" type={s.type} srcset={s.srcset} sizes={sizes} />)}
+  <source type={lightAvif.type} srcset={lightAvif.srcset} sizes={sizes} />
+  <img
+    src={lightWebp.src}
+    srcset={lightWebp.srcset}
+    sizes={sizes}
+    width={lightWebp.attrs['width']}
+    height={lightWebp.attrs['height']}
+    alt={alt ?? light.alt}
+    class={cls}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding={priority ? 'sync' : 'async'}
+    fetchpriority={priority ? 'high' : 'auto'}
+  />
+</picture>

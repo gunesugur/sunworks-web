@@ -114,6 +114,11 @@ img {
   height: auto;
 }
 
+/* <picture> only picks the file; the <img> inside lays out as if it stood alone. */
+picture {
+  display: contents;
+}
+
 a {
   color: inherit;
 }

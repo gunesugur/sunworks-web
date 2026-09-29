@@ -14,12 +14,20 @@ const LOCAL_PREFIX = 'image-local-';
 const SANITY_REF = /^image-([a-f0-9]+)-(\d+)x(\d+)-(\w+)$/;
 
 export function resolveImage(field: ImageField): ResolvedImage {
-  const ref = field.asset._ref;
+  return resolveRef(field.asset._ref, field.alt);
+}
+
+/** The dark mode twin of an image, if it has one. */
+export function resolveDarkImage(field: ImageField): ResolvedImage | undefined {
+  return field.dark ? resolveRef(field.dark.asset._ref, field.alt) : undefined;
+}
+
+function resolveRef(ref: string, alt: string): ResolvedImage {
   if (ref.startsWith(LOCAL_PREFIX)) {
     const key = ref.slice(LOCAL_PREFIX.length);
     const mod = Object.entries(localImages).find(([path]) => path.split('/').pop()?.replace(/\.\w+$/, '') === key);
     if (!mod) throw new Error(`Local image not found: ${key}`);
-    return { kind: 'local', src: mod[1].default, alt: field.alt };
+    return { kind: 'local', src: mod[1].default, alt };
   }
   const match = SANITY_REF.exec(ref);
   const cfg = sanityConfig();
@@ -30,7 +38,7 @@ export function resolveImage(field: ImageField): ResolvedImage {
     src: `https://cdn.sanity.io/images/${cfg.projectId}/${cfg.dataset}/${id}-${w}x${h}.${ext}`,
     width: Number(w),
     height: Number(h),
-    alt: field.alt,
+    alt,
   };
 }
 
