@@ -75,4 +75,4 @@ Her iki kaynak da `src/content/schema.ts` içindeki aynı şemayla doğrulanır.
 
 ## Görseller
 
-Fotoğraflar [Unsplash Lisansı](https://unsplash.com/license) kapsamında kullanılmaktadır. Liste: [`docs/photo-credits.md`](docs/photo-credits.md).
+Fotoğraflar SUN | WORKS için özel olarak üretildi. Her görselin açık ve koyu tema için iki sürümü var (`src/assets/images/<ad>.webp` ve `<ad>-dark.webp`). Sanity'de koyu sürüm, görsel alanındaki "Dark mode image" alanına yüklenir.
