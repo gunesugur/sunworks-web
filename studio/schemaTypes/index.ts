@@ -108,7 +108,7 @@ const homePage = defineType({
       type: 'object',
       fields: [
         defineField({ name: 'title', type: 'string' }),
-        defineField({ name: 'note', type: 'string' }),
+        defineField({ name: 'note', type: 'string', description: 'Sits in the photo notch, keep it to two or three lines' }),
         imageField('image', 'Wide image'),
         imageField('smallImage', 'Small image'),
         defineField({ name: 'tags', type: 'array', of: [defineArrayMember({ type: 'string' })], validation: (r) => r.max(6) }),
@@ -220,7 +220,13 @@ const homePage = defineType({
     defineField({
       name: 'closing',
       type: 'object',
-      fields: [defineField({ name: 'title', type: 'string' }), imageField('image', 'Image'), defineField({ name: 'tag', type: 'string' }), linkField('cta', 'Button')],
+      fields: [
+        defineField({ name: 'title', type: 'string' }),
+        defineField({ name: 'text', type: 'text', rows: 2, validation: (r) => r.max(200) }),
+        imageField('image', 'Image'),
+        defineField({ name: 'tag', type: 'string' }),
+        linkField('cta', 'Button'),
+      ],
     }),
   ],
   preview: { select: { subtitle: 'language' }, prepare: ({ subtitle }) => ({ title: 'Home page', subtitle }) },

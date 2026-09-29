@@ -17,7 +17,7 @@ export const services: Service[] = [
     slug: slug('wordpress-kurumsal-site'),
     order: 1,
     icon: 'wordpress',
-    excerpt: 'İçeriğinize, ziyaretçinize ve ekibinizin kullanacağı panele göre kurulan WordPress siteleri. Yayından sonra bakımı da biz yaparız.',
+    excerpt: 'Şirketinizi sade ve şık bir şekilde anlatan, yazı ve fotoğraflarınızı kimseye ihtiyaç duymadan ekleyebileceğiniz kurumsal web siteleri.',
     image: img('laptop-code-plant', 'Kod editörü açık bir dizüstü bilgisayarda WordPress tema dosyaları'),
     deliverables: [
       'Sayfa yapısı ve içerik planı',
@@ -73,7 +73,7 @@ Yayına hazırlanıyorsanız [WordPress yayın öncesi kontrol listemiz](/blog/w
     slug: slug('wordpress-business-website'),
     order: 1,
     icon: 'wordpress',
-    excerpt: 'WordPress sites structured around your content, your visitors and the people who will edit them. We look after them after launch too.',
+    excerpt: 'Company websites that present your business simply and elegantly, where you can add your own text and photos without needing anyone.',
     image: img('laptop-code-plant', 'WordPress theme files open in a code editor on a laptop'),
     deliverables: [
       'Page structure and content plan',
@@ -131,7 +131,7 @@ Getting ready to launch? Our [WordPress pre-launch checklist](/en/blog/wordpress
     slug: slug('shopify-magaza-kurulumu'),
     order: 2,
     icon: 'cart',
-    excerpt: 'Ürünlerin bulunma, anlaşılma ve satın alınma biçimine göre kurulan Shopify mağazaları. Tema, uygulamalar, katalog ve ürün yapılandırıcıları.',
+    excerpt: 'Ürünlerinizi kolayca sergileyip satabileceğiniz, siparişlerinizi telefonunuzdan bile takip edebileceğiniz online mağazalar.',
     image: img('clothing-store', 'Raflarda katlanmış giysiler ve askıda ürünler bulunan küçük bir mağaza'),
     deliverables: [
       'Mağaza kurulumu ve tema özelleştirme',
@@ -186,7 +186,7 @@ Açılıştan önce [Shopify mağaza açmadan önce yapılacak 5 ayar](/blog/sho
     slug: slug('shopify-store-setup'),
     order: 2,
     icon: 'cart',
-    excerpt: 'Shopify stores built around the way products are discovered, understood and bought. Themes, apps, catalogs and product configurators.',
+    excerpt: 'Online stores where you can show and sell your products with ease, and follow orders even from your phone.',
     image: img('clothing-store', 'A small shop with folded clothes on shelves and garments on hanging rails'),
     deliverables: [
       'Store setup and theme customization',
@@ -243,7 +243,7 @@ Before launch, see [5 things to set up before opening a Shopify store](/en/blog/
     slug: slug('teknik-destek'),
     order: 3,
     icon: 'wrench',
-    excerpt: 'Güncellemeden sonra bozulan sayfalar, çakışan eklentiler, yavaşlayan site. Sorunu kaynağında bulur, kalıcı olarak çözeriz.',
+    excerpt: 'Bozulan sayfa, yavaşlayan site ya da genel teknik aksaklıklarda kafanızı yormamanız için yanınızda duran pratik destek.',
     image: img('pointing-laptop', 'Dizüstü bilgisayar ekranındaki bir hatayı parmağıyla gösteren biri'),
     deliverables: [
       'Sorunun yeniden üretilmesi ve kaynağının bulunması',
@@ -296,7 +296,7 @@ Site yavaşlığıyla uğraşıyorsanız [siteniz neden yavaş](/blog/siteniz-ne
     slug: slug('technical-support'),
     order: 3,
     icon: 'wrench',
-    excerpt: 'Pages that broke after an update, conflicting plugins, a site that slowed down. We find the cause and fix it for good.',
+    excerpt: 'Practical support for broken pages, a slow site or general technical hiccups, so you don\'t have to worry about them.',
     image: img('pointing-laptop', 'Someone pointing at an error on a laptop screen'),
     deliverables: [
       'Reproducing the issue and finding its source',
@@ -351,7 +351,7 @@ Dealing with a slow site? We cover the five causes we see most in [why is your s
     slug: slug('ai-destekli-gelistirme'),
     order: 4,
     icon: 'ai',
-    excerpt: 'Yapay zekâyı araştırma, prototip ve üretim hızını artırdığı yerde kullanıyoruz. Kararları, kontrolü ve kod kalitesini ise biz üstleniyoruz.',
+    excerpt: 'Günlük rutin işlerinizi kolaylaştıran, web sitenizde müşterilerinize yardımcı olan ya da iş süreçlerinizi hızlandıran akıllı küçük çözümler.',
     image: img('code-dark', 'Koyu temalı bir kod editöründe renkli kod satırları'),
     deliverables: [
       'İhtiyaca göre AI kullanım planı',
@@ -404,7 +404,7 @@ Hazır bir tema ya da eklentinin yetmediği, ama sıfırdan büyük bir yazılı
     slug: slug('ai-assisted-development'),
     order: 4,
     icon: 'ai',
-    excerpt: 'We use AI where it speeds up research, prototyping and production. Decisions, review and code quality stay with us.',
+    excerpt: 'Smart small solutions that ease your daily routine, help customers on your website or speed up the way you work.',
     image: img('code-dark', 'Colorful lines of code in a dark-themed code editor'),
     deliverables: [
       'A plan for where AI actually helps',

@@ -24,7 +24,7 @@ export const settings: SiteSettings[] = [
     map: { ...map, label: 'Bursa, Türkiye' },
     newsletter: {
       title: 'Bülten',
-      text: 'Yeni bir yazı yayımladığımızda kısa bir e-posta göndeririz. Başka bir şey değil.',
+      text: 'Yeni bir yazı yayımladığımızda size kısa bir e-posta gönderelim.',
     },
     footerNote: 'Web siteleri, mağazalar ve arkalarında çalışan sistemler.',
     seo: {
@@ -47,7 +47,7 @@ export const settings: SiteSettings[] = [
     map: { ...map, label: 'Bursa, Türkiye' },
     newsletter: {
       title: 'Newsletter',
-      text: 'A short email when we publish a new article. Nothing else.',
+      text: "We'll send you a short email when we publish a new article.",
     },
     footerNote: 'Websites, stores and the systems working behind them.',
     seo: {
@@ -169,16 +169,16 @@ export const home: HomePage[] = [
     translationKey: 'homePage',
     seo: {},
     hero: {
-      title: 'Tasarımda kalmayan, çalışan web siteleri',
-      note: 'Arayüzden arkasındaki sisteme kadar tasarlar, kurar ve bağlarız.',
+      title: 'Aklınızdaki projeyi birlikte hayata geçirelim',
+      note: 'Neye ihtiyacınız olduğunu konuşalım, yönetmesi kolay çözümü birlikte kuralım.',
       image: img('hero-desk', 'Aydınlık bir masada kod editörü açık bir dizüstü bilgisayar, yanında bir fincan ve masa lambası'),
       smallImage: img('hands-typing', 'Dizüstü bilgisayarın klavyesinde yazı yazan eller'),
       tags: ['WordPress', 'Shopify', 'AI destekli geliştirme', 'Teknik destek', 'Bakım'],
     },
     tools: { title: 'Çalıştığımız platformlar ve araçlar', items: tools },
     intro: {
-      title: 'Her proje farklı bir sorunla başlar',
-      text: 'Bu yüzden şablonla başlamayız. Önce neyin yapılacağını, ne zaman teslim edileceğini ve neyin kapsam dışında kaldığını yazıya dökeriz. Projeyi baştan sona aynı ekip yürütür. Sorularınızı işi yapan kişi yanıtlar.',
+      title: 'Önce sizi dinliyoruz',
+      text: 'Her işin ve markanın beklentisi farklıdır. Ezbere kalıplar sunmak yerine tam olarak ne yapmak istediğinizi konuşuyor, bütçenize ve hedefinize en uygun yolu birlikte planlıyoruz.',
       cta: { label: 'Hizmetleri inceleyin', href: '/hizmetler' },
     },
     duo: {
@@ -196,21 +196,21 @@ export const home: HomePage[] = [
         {
           _key: 'root-cause',
           icon: 'wrench',
-          title: 'Sorunu kaynağında çözeriz',
-          text: 'Tema, eklenti, önbellek ya da sunucu kaynaklı hatalarda belirtiye değil nedene bakarız. Gerekirse hosting ve eklenti sağlayıcılarıyla yazışmayı da biz yürütürüz.',
+          title: 'Karşılaştığınız sorunlara pratik ve akılcı çözümler',
+          text: 'Sitenizde bir şeyler ters mi gidiyor, yavaşlık mı var ya da aklınızda yeni bir fikir mi var? Durumu birlikte inceliyor, gereksiz karmaşaya girmeden işinizi kolaylaştıracak adımları beraber atıyoruz.',
         },
         {
           _key: 'handover',
           icon: 'book',
-          title: 'Yayından sonra da buradayız',
-          text: 'Teslimde kısa bir eğitim verir, adım adım notlar bırakırız. İçeriği, ürünleri ve sayfaları kendiniz güncelleyebilirsiniz.',
+          title: 'Site yayına girdikten sonra da yanınızdayız',
+          text: 'İşi teslim edip iletişimi kesmiyoruz. Sayfalarınızı ve ürünlerinizi nasıl rahatça güncelleyebileceğinizi gösteriyor, aklınıza bir soru takıldığında danışabileceğiniz bir çalışma arkadaşı oluyoruz.',
         },
       ],
       cta: { label: 'Proje konuşalım', href: '/iletisim' },
     },
     servicesSection: {
       title: 'Hizmetler',
-      text: 'Bir platform işi iyi yapıyorsa onu kullanırız. Yetmediği yerde geliştiririz.',
+      text: 'Her işin ihtiyacı aynı değildir. Sizin için hangisi en kolay ve en mantıklıysa onunla ilerliyoruz.',
     },
     process: {
       title: 'Nasıl çalışıyoruz',
@@ -218,20 +218,20 @@ export const home: HomePage[] = [
       steps: [
         {
           _key: 's1',
-          title: 'Keşif ve kapsam',
-          text: 'Hedefinizi, mevcut altyapınızı ve teknik kısıtları birlikte inceleriz. Kapsamı, takvimi ve bütçeyi tek bir yazılı teklifte toplarız.',
+          title: 'Tanışalım ve ihtiyacı belirleyelim',
+          text: 'Aklınızdaki fikri, nasıl bir site hayal ettiğinizi konuşur, sizin için en doğru yol haritasını çıkarırız.',
           deliverables: ['Yazılı teklif', 'İş takvimi', 'Kapsam dışı kalemler'],
         },
         {
           _key: 's2',
-          title: 'Tasarım ve geliştirme',
-          text: 'Onaylanan kapsamı bir test ortamında kurarız. İlerlemeyi çalışan bir önizleme bağlantısından izler, geri bildirimlerinizi aşama aşama uygularız.',
+          title: 'Birlikte şekillendirelim',
+          text: 'Tasarımı ve sayfaları hazırlarken sürekli iletişimde kalır, adımları sizin onayınızla ilerletiriz.',
           deliverables: ['Canlı önizleme bağlantısı', 'Düzenli ilerleme notları', 'Hız ve erişilebilirlik kontrolü'],
         },
         {
           _key: 's3',
-          title: 'Yayın ve devir',
-          text: 'Yedek alıp siteyi yayına alırız, ilk günlerde yakından izleriz. Yönetimi kısa bir eğitimle size devreder, yazılı bir kılavuz bırakırız.',
+          title: 'Yayına alalım ve devredelim',
+          text: 'Sitenizi açtıktan sonra paneli nasıl kullanacağınızı gösteririz. Sonrasında aklınıza takılan her şey için yine buradayız.',
           deliverables: ['Yayın kontrol listesi', 'Yönetim eğitimi', 'Kullanım kılavuzu'],
         },
       ],
@@ -245,7 +245,8 @@ export const home: HomePage[] = [
       ],
     },
     closing: {
-      title: 'Bir projeniz mi var? Konuşalım.',
+      title: 'Aklınızda bir proje mi var? Gelin, birlikte bakalım.',
+      text: 'İster yeni bir web sitesi fikri, ister mevcut sitenizle ilgili bir destek ihtiyacı. Bize kısaca yazın, size nasıl yardımcı olabileceğimize birlikte karar verelim.',
       image: img('laptop-dark-desk', 'Koyu ahşap masada açık duran dizüstü bilgisayar ve beyaz bir sandalye'),
       tag: 'Yeni projelere açığız',
       cta: { label: 'İletişime geçin', href: '/iletisim' },
@@ -258,16 +259,16 @@ export const home: HomePage[] = [
     translationKey: 'homePage',
     seo: {},
     hero: {
-      title: 'Websites that work beyond the mockup',
-      note: 'We design, build and connect everything from the interface to the system behind it.',
+      title: "Let's build your project together",
+      note: "Let's talk about what you need and build a solution that's easy to run.",
       image: img('hero-desk', 'A laptop with a code editor open on a bright desk, next to a mug and a desk lamp'),
       smallImage: img('hands-typing', 'Hands typing on a laptop keyboard'),
       tags: ['WordPress', 'Shopify', 'AI-assisted development', 'Tech support', 'Maintenance'],
     },
     tools: { title: 'Platforms and tools we work with', items: tools },
     intro: {
-      title: 'Every project starts with a different problem',
-      text: "So we don't begin with a template. First we write down what will be done, when it will be delivered and what is out of scope. The same team runs the project from start to finish, and the person doing the work answers your questions.",
+      title: 'First, we listen',
+      text: 'Every business and every brand expects something different. Instead of off-the-shelf templates, we talk about exactly what you want to do and plan the route that best fits your budget and goals.',
       cta: { label: 'Explore services', href: '/en/services' },
     },
     duo: {
@@ -285,21 +286,21 @@ export const home: HomePage[] = [
         {
           _key: 'root-cause',
           icon: 'wrench',
-          title: 'We fix problems at the source',
-          text: 'With theme, plugin, cache or server issues, we look for the cause, not the symptom. When needed, we handle the conversation with hosting and plugin vendors.',
+          title: 'Practical, sensible fixes for the problems you run into',
+          text: 'Something going wrong on your site, a slowdown, or a new idea on your mind? We look at it together and take the steps that make your work easier, without adding complexity.',
         },
         {
           _key: 'handover',
           icon: 'book',
-          title: 'Still here after launch',
-          text: 'At handover we run a hands-on training session and leave step-by-step notes, so you can update content, products and pages yourself.',
+          title: 'Still by your side after launch',
+          text: "We don't hand over and disappear. We show you how to update your pages and products with ease, and we stay a partner you can ask whenever a question comes up.",
         },
       ],
       cta: { label: "Let's talk", href: '/en/contact' },
     },
     servicesSection: {
       title: 'Services',
-      text: 'If an existing platform does the job well, we use it. Where it falls short, we build.',
+      text: "Every project needs something different. We go with whatever is simplest and makes the most sense for you.",
     },
     process: {
       title: 'How we work',
@@ -307,20 +308,20 @@ export const home: HomePage[] = [
       steps: [
         {
           _key: 's1',
-          title: 'Discovery and scope',
-          text: 'We review your goals, current setup and technical constraints together, then write a proposal that puts scope, timeline and budget in a single document.',
+          title: "Let's meet and define the need",
+          text: 'We talk about your idea and the kind of site you have in mind, then map out the right route for you.',
           deliverables: ['Written proposal', 'Timeline', 'Out-of-scope list'],
         },
         {
           _key: 's2',
-          title: 'Design and build',
-          text: 'The agreed scope is built on a staging environment. You follow progress on a working preview link, and we apply your feedback phase by phase.',
+          title: "Let's shape it together",
+          text: 'While we design and build the pages, we stay in close touch and move each step forward with your approval.',
           deliverables: ['Live preview link', 'Regular progress notes', 'Speed and accessibility check'],
         },
         {
           _key: 's3',
-          title: 'Launch and handover',
-          text: 'We take a backup, launch the site and watch it closely in the first days. A short training session hands management over to you, along with a written guide.',
+          title: "Let's launch and hand it over",
+          text: "Once the site is live, we show you how to use the admin panel. After that, we're still here for anything on your mind.",
           deliverables: ['Launch checklist', 'Admin training', 'User guide'],
         },
       ],
@@ -334,7 +335,8 @@ export const home: HomePage[] = [
       ],
     },
     closing: {
-      title: "Working on something? Let's talk.",
+      title: 'Have a project in mind? Come, let\'s take a look together.',
+      text: "Whether it's an idea for a new website or support for your current one, write to us briefly and we'll decide together how we can help.",
       image: img('laptop-dark-desk', 'An open laptop on a dark wooden desk next to a white chair'),
       tag: 'Open for new projects',
       cta: { label: 'Get in touch', href: '/en/contact' },

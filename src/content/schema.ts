@@ -162,7 +162,7 @@ export const homePageSchema = z.object({
       items: z.array(z.object({ _key: key, value: z.number().int().nonnegative(), suffix: z.string().optional(), label: z.string() })).min(2).max(4),
     })
     .optional(),
-  closing: z.object({ title: z.string(), image: imageSchema, tag: z.string(), cta: linkSchema }),
+  closing: z.object({ title: z.string(), text: z.string().max(200).optional(), image: imageSchema, tag: z.string(), cta: linkSchema }),
 });
 export type HomePage = z.infer<typeof homePageSchema>;
 
