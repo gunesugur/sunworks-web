@@ -845,7 +845,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
 
   .odo__suffix {
     margin-left: 0.08em;
-    color: var(--c-accent);
+    color: var(--c-accent-text);
     font-size: 0.42em;
     letter-spacing: 0;
     transition: opacity 0.6s ease 1.4s;
@@ -916,7 +916,11 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
 
   .drift__card :global(.icon) {
     margin-bottom: 0.35rem;
-    color: var(--c-accent);
+    color: var(--c-accent-text);
+  }
+
+  .drift__card--2 :global(.icon) {
+    color: color-mix(in srgb, var(--c-accent) 60%, var(--c-light));
   }
 
   .drift__card strong {
