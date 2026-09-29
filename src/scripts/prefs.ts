@@ -59,6 +59,19 @@ export function applyPrefs(root: HTMLElement, prefs: Prefs = loadPrefs()) {
   setFlag(root, 'links', prefs.links ? 'underline' : undefined);
   setFlag(root, 'motion', prefs.motion ? 'reduce' : undefined);
   root.ownerDocument.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLOR[theme]);
+  syncDarkImages(root, prefs.theme);
+}
+
+/**
+ * Dark mode images are <source data-dark> entries that follow the OS scheme by default; a theme
+ * picked on the site overrides that, so the picture shows the variant of the theme on screen.
+ */
+function syncDarkImages(root: HTMLElement, choice: Prefs['theme']) {
+  const MEDIA = { dark: 'all', light: 'not all' } as const;
+  const media = choice ? MEDIA[choice] : DARK_QUERY;
+  for (const source of root.querySelectorAll<HTMLSourceElement>('source[data-dark]')) {
+    if (source.media !== media) source.media = media;
+  }
 }
 
 /** Merges a patch into the saved prefs; `undefined` or `false` removes a key (back to default). */

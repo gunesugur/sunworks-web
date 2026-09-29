@@ -50,3 +50,5 @@ document.addEventListener('astro:before-swap', (e) => applyPrefs(e.newDocument.d
 document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'));
 document.addEventListener('astro:page-load', boot);
 watchSystemTheme();
+// First load: point the dark mode images at a theme picked on the site (the inline script cannot reach them).
+applyPrefs(document.documentElement);

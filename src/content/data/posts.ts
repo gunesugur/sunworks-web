@@ -17,7 +17,7 @@ export const posts: Post[] = [
     updatedAt: UPDATED,
     author: 'SUN | WORKS',
     excerpt: 'İlk haftalarda çıkan sorunların çoğu birkaç basit kontrolle önlenir. Bir WordPress sitesini yayına almadan önce üzerinden geçtiğimiz yedi adım.',
-    image: img('planning-board', 'Beyaz bir panoya iğnelenmiş, yayın öncesi kontrol adımlarını gösteren planlama kartları'),
+    image: img('post-planning', 'Beyaz panoya iğnelenmiş planlama kartlarına yeni bir kart ekleyen el'),
     tags: ['WordPress', 'Bakım'],
     body: pt(
       'b',
@@ -86,7 +86,7 @@ Evet, listedeki adımların çoğu yönetim panelinden yapılır. Yönlendirme y
     updatedAt: UPDATED,
     author: 'SUN | WORKS',
     excerpt: 'Most problems in the first weeks can be prevented with a few simple checks. The seven steps we go through before launching a WordPress site.',
-    image: img('planning-board', 'Planning cards pinned to a white board, showing pre-launch steps'),
+    image: img('post-planning', 'A hand pinning a new card among planning cards on a white board'),
     tags: ['WordPress', 'Maintenance'],
     body: pt(
       'b',
@@ -157,7 +157,7 @@ Yes, most of the steps happen in the admin panel. If you get stuck on redirects 
     updatedAt: UPDATED,
     author: 'SUN | WORKS',
     excerpt: 'Yavaş bir site hem ziyaretçiyi hem arama sıralamasını kaybettirir. Hız sorunlarının çoğu birkaç tanıdık kaynaktan gelir ve hepsinin çözümü ölçmekle başlar.',
-    image: img('dashboard-laptop', 'Ekranında sayfa hızı ölçüm grafikleri açık bir dizüstü bilgisayar'),
+    image: img('post-speed', 'Ekranında hız göstergesi ve grafikler açık dizüstü bilgisayar, yanında kahve'),
     tags: ['Performans', 'WordPress'],
     body: pt(
       'b',
@@ -219,7 +219,7 @@ Görselleri küçültmek ve gereksiz eklentileri silmek kolay adımlar. Sunucu, 
     updatedAt: UPDATED,
     author: 'SUN | WORKS',
     excerpt: 'A slow site loses visitors and search rankings. Most speed problems come from a few familiar places, and fixing them starts with measuring.',
-    image: img('dashboard-laptop', 'A laptop showing page speed charts on its screen'),
+    image: img('post-speed', 'A laptop showing a speed gauge and charts, coffee beside it'),
     tags: ['Performance', 'WordPress'],
     body: pt(
       'b',
@@ -283,7 +283,7 @@ Resizing images and removing unused plugins are easy steps. For server, caching 
     updatedAt: UPDATED,
     author: 'SUN | WORKS',
     excerpt: 'Tema ve ürünler hazır olduğunda mağaza da hazır görünür. Ama ilk siparişin sorunsuz geçmesini ödeme, kargo, vergi, yasal sayfalar ve alan adı ayarları belirler.',
-    image: img('clothing-store', 'Askılarda giysilerin sergilendiği aydınlık bir butik mağaza'),
+    image: img('post-boutique', 'Ahşap askılarda giysilerin sergilendiği aydınlık bir butik mağaza'),
     tags: ['Shopify', 'E-ticaret'],
     body: pt(
       'b',
@@ -339,7 +339,7 @@ Evet, hepsi Shopify yönetim panelinden yapılır. Tema, uygulama ya da ürün y
     updatedAt: UPDATED,
     author: 'SUN | WORKS',
     excerpt: 'With the theme and products in place, the store looks ready. But payment, shipping, tax, policy and domain settings decide whether the first order goes smoothly.',
-    image: img('clothing-store', 'A bright boutique shop with clothes displayed on rails'),
+    image: img('post-boutique', 'A bright boutique store with garments on wooden rails'),
     tags: ['Shopify', 'E-commerce'],
     body: pt(
       'b',

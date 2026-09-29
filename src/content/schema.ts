@@ -11,10 +11,14 @@ export type Locale = z.infer<typeof localeSchema>;
 
 const key = z.string().min(1);
 
+const imageAsset = z.object({ _ref: z.string().regex(/^image-[\w-]+$/) });
+
 export const imageSchema = z.object({
   _type: z.literal('image'),
-  asset: z.object({ _ref: z.string().regex(/^image-[\w-]+$/) }),
+  asset: imageAsset,
   alt: z.string().min(1),
+  /** Same scene in a dark palette, shown while the site is in dark mode. */
+  dark: z.object({ _type: z.literal('image'), asset: imageAsset }).optional(),
 });
 export type ImageField = z.infer<typeof imageSchema>;
 
