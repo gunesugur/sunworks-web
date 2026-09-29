@@ -177,7 +177,7 @@ export const home: HomePage[] = [
     },
     tools: { title: 'Çalıştığımız platformlar ve araçlar', items: tools },
     intro: {
-      title: 'Önce sizi dinliyoruz',
+      title: 'Her proje farklı bir ihtiyaçla başlar',
       text: 'Her işin ve markanın beklentisi farklıdır. Ezbere kalıplar sunmak yerine tam olarak ne yapmak istediğinizi konuşuyor, bütçenize ve hedefinize en uygun yolu birlikte planlıyoruz.',
       cta: { label: 'Hizmetleri inceleyin', href: '/hizmetler' },
     },
@@ -213,35 +213,43 @@ export const home: HomePage[] = [
       text: 'Her işin ihtiyacı aynı değildir. Sizin için hangisi en kolay ve en mantıklıysa onunla ilerliyoruz.',
     },
     process: {
-      title: 'Nasıl çalışıyoruz',
-      text: 'Üç aşama, hepsi yazılı. Her aşamanın sonunda neyin bittiğini görür, bir sonrakine birlikte geçeriz.',
+      title: 'Süreç',
+      text: 'Fikirden yayına kadar her adımı birlikte atalım. Nerede olduğumuzu her zaman bilin.',
       steps: [
         {
           _key: 's1',
           title: 'Tanışalım ve ihtiyacı belirleyelim',
-          text: 'Aklınızdaki fikri, nasıl bir site hayal ettiğinizi konuşur, sizin için en doğru yol haritasını çıkarırız.',
+          text: 'Aklınızdaki fikri, nasıl bir site hayal ettiğinizi konuşalım, sizin için en doğru yol haritasını birlikte çıkaralım.',
           deliverables: ['Yazılı teklif', 'İş takvimi', 'Kapsam dışı kalemler'],
         },
         {
           _key: 's2',
           title: 'Birlikte şekillendirelim',
-          text: 'Tasarımı ve sayfaları hazırlarken sürekli iletişimde kalır, adımları sizin onayınızla ilerletiriz.',
+          text: 'Tasarımı ve sayfaları hazırlarken sürekli iletişimde kalalım, her adımı sizin onayınızla ilerletelim.',
           deliverables: ['Canlı önizleme bağlantısı', 'Düzenli ilerleme notları', 'Hız ve erişilebilirlik kontrolü'],
         },
         {
           _key: 's3',
           title: 'Yayına alalım ve devredelim',
-          text: 'Sitenizi açtıktan sonra paneli nasıl kullanacağınızı gösteririz. Sonrasında aklınıza takılan her şey için yine buradayız.',
-          deliverables: ['Yayın kontrol listesi', 'Yönetim eğitimi', 'Kullanım kılavuzu'],
+          text: 'Sitenizi açalım, paneli nasıl kullanacağınızı birlikte görelim. Sonrasında aklınıza takılan her şey için yine buradayız.',
+          deliverables: ['Yayın kontrol listesi', 'Panel tanıtımı', 'Yayın sonrası destek'],
         },
       ],
     },
-    stats: {
+    highlight: {
+      value: 24,
+      suffix: 'sa',
+      title: 'Mesajınıza aynı gün dönelim',
+      text: 'Yazdığınızda karşınıza bir form cevabı değil, işi yapacak kişi çıksın. İlk yanıtı 24 saat içinde verelim, gerisini birlikte planlayalım.',
       items: [
-        { _key: 'reply', value: 24, suffix: 'sa', label: 'İlk yanıt süremiz' },
-        { _key: 'lighthouse', value: 100, label: 'Hedeflediğimiz Lighthouse puanı' },
-        { _key: 'phases', value: 3, label: 'Aşamalı, yazılı süreç' },
-        { _key: 'contact', value: 1, label: 'Baştan sona tek muhatap' },
+        { _key: 'h1', icon: 'user', title: 'Tek muhatap', text: 'Baştan sona aynı kişiyle konuşun.' },
+        { _key: 'h2', icon: 'key', title: 'Hesaplar sizde', text: 'Alan adı ve hosting sizin adınıza açılsın.' },
+        { _key: 'h3', icon: 'refresh', title: 'Önce yedek', text: 'Her güncellemeden önce yedek alalım.' },
+        { _key: 'h4', icon: 'gauge', title: 'Hızlı sayfalar', text: 'Lighthouse puanında 90 ve üzerini hedefleyelim.' },
+        { _key: 'h5', icon: 'phone', title: 'Önce telefon', text: 'Her sayfa önce telefonda düzgün çalışsın.' },
+        { _key: 'h6', icon: 'eye', title: 'Canlı önizleme', text: 'İlerlemeyi her an kendi gözünüzle görün.' },
+        { _key: 'h7', icon: 'search', title: 'Temel SEO', text: 'Google sitenizi ilk günden doğru okusun.' },
+        { _key: 'h8', icon: 'chat', title: 'Yayından sonra da', text: 'Sorularınız için hep buradayız.' },
       ],
     },
     closing: {
@@ -267,7 +275,7 @@ export const home: HomePage[] = [
     },
     tools: { title: 'Platforms and tools we work with', items: tools },
     intro: {
-      title: 'First, we listen',
+      title: 'Every project starts with a different need',
       text: 'Every business and every brand expects something different. Instead of off-the-shelf templates, we talk about exactly what you want to do and plan the route that best fits your budget and goals.',
       cta: { label: 'Explore services', href: '/en/services' },
     },
@@ -303,8 +311,8 @@ export const home: HomePage[] = [
       text: "Every project needs something different. We go with whatever is simplest and makes the most sense for you.",
     },
     process: {
-      title: 'How we work',
-      text: 'Three phases, all in writing. At the end of each one you see what is done, and we move on together.',
+      title: 'Process',
+      text: "Let's take every step together, from idea to launch. You always know where things stand.",
       steps: [
         {
           _key: 's1',
@@ -322,16 +330,24 @@ export const home: HomePage[] = [
           _key: 's3',
           title: "Let's launch and hand it over",
           text: "Once the site is live, we show you how to use the admin panel. After that, we're still here for anything on your mind.",
-          deliverables: ['Launch checklist', 'Admin training', 'User guide'],
+          deliverables: ['Launch checklist', 'Admin walkthrough', 'Support after launch'],
         },
       ],
     },
-    stats: {
+    highlight: {
+      value: 24,
+      suffix: 'h',
+      title: "We'll get back to you the same day",
+      text: "When you write, you hear from the person who will do the work, not a form reply. We reply within 24 hours and plan the rest together.",
       items: [
-        { _key: 'reply', value: 24, suffix: 'h', label: 'Our first-reply time' },
-        { _key: 'lighthouse', value: 100, label: 'The Lighthouse score we aim for' },
-        { _key: 'phases', value: 3, label: 'Phases, all in writing' },
-        { _key: 'contact', value: 1, label: 'Point of contact, start to finish' },
+        { _key: 'h1', icon: 'user', title: 'One point of contact', text: 'Talk to the same person from start to finish.' },
+        { _key: 'h2', icon: 'key', title: 'Accounts stay yours', text: 'Domain and hosting are opened in your name.' },
+        { _key: 'h3', icon: 'refresh', title: 'Backup first', text: 'A backup before every update.' },
+        { _key: 'h4', icon: 'gauge', title: 'Fast pages', text: 'We aim for a Lighthouse score of 90 and above.' },
+        { _key: 'h5', icon: 'phone', title: 'Phone first', text: 'Every page works properly on a phone first.' },
+        { _key: 'h6', icon: 'eye', title: 'Live preview', text: 'See progress with your own eyes, any time.' },
+        { _key: 'h7', icon: 'search', title: 'SEO basics', text: 'Google reads your site correctly from day one.' },
+        { _key: 'h8', icon: 'chat', title: 'After launch too', text: "We're here whenever a question comes up." },
       ],
     },
     closing: {

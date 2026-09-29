@@ -33,30 +33,30 @@ export const services: Service[] = [
 
 Kendini net anlatan bir siteye ihtiyacı olan işletmeler, serbest çalışanlar, dernekler ve kurumlar için. Dağınık hale gelmiş mevcut bir WordPress sitesini toparlamak da bu hizmetin parçası.
 
-## Neye göre kuruyoruz?
+## Siteyi neye göre kuralım?
 
-Tema seçmeden önce içeriğe bakarız. Hangi sayfalar gerekli, ziyaretçi ne arıyor, sitede içeriği kim güncelleyecek? Yapıyı bu sorulara göre kurar, temayı ona göre seçeriz. Tersini yapmayız.
+Tema seçmeden önce içeriğe bakalım. Hangi sayfalar gerekli, ziyaretçi ne arıyor, sitede içeriği kim güncelleyecek? Yapıyı bu sorulara göre kuralım, temayı da ona göre seçelim. Tersini yapmayız.
 
-Her eklenti bakım yükü demektir. Bu yüzden yalnızca gerçekten işe yarayanları kurarız. İşi temanın kendisi görüyorsa ek eklenti eklemeyiz.
+Her eklenti bakım yükü demektir. Bu yüzden yalnızca gerçekten işe yarayanları kuralım. İşi temanın kendisi görüyorsa ek eklenti eklemeyelim.
 
-## Nasıl ilerliyoruz?
+## Nasıl ilerleyelim?
 
-1. **Keşif:** Hedefi, sayfaları ve içeriği konuşuruz. Kapsamı yazılı bir teklifte toplarız.
-2. **Kurulum:** Siteyi bir test ortamında kurar, ilerlemeyi bir önizleme bağlantısından paylaşırız.
-3. **Kontrol:** Hız, mobil görünüm, formlar ve temel SEO ayarlarını birlikte kontrol ederiz.
-4. **Yayın:** Yedek alıp yayına alır, ilk günlerde siteyi yakından izleriz.
+1. **Keşif:** Hedefi, sayfaları ve içeriği konuşalım. Kapsamı yazılı bir teklifte toplayalım.
+2. **Kurulum:** Siteyi bir test ortamında kuralım, ilerlemeyi bir önizleme bağlantısından paylaşalım.
+3. **Kontrol:** Hız, mobil görünüm, formlar ve temel SEO ayarlarını birlikte kontrol edelim.
+4. **Yayın:** Yedek alıp yayına alalım, ilk günlerde siteyi yakından izleyelim.
 
 ## Yayından sonra
 
-WordPress çekirdeğini, temayı ve eklentileri güncel tutarız. Her güncellemeden önce yedek alırız. Bir şey bozulursa [teknik destek](/hizmetler/teknik-destek) tarafında aynı ekip devreye girer. Siteyi kendiniz yönetmek isterseniz kısa bir [eğitim](/hizmetler/egitim-ve-teslim) veririz.
+WordPress çekirdeğini, temayı ve eklentileri güncel tutalım. Her güncellemeden önce yedek alırız. Bir şey bozulursa [teknik destek](/hizmetler/teknik-destek) tarafında aynı ekip devreye girer. Sitenin hızlı açılması ve aramalarda doğru görünmesi için [hız ve SEO](/hizmetler/hiz-ve-seo) tarafında da birlikte çalışabiliriz.
 
 Yayına hazırlanıyorsanız [WordPress yayın öncesi kontrol listemiz](/blog/wordpress-yayin-oncesi-kontrol-listesi) iyi bir başlangıç noktası.`,
     ),
     faq: faq('wpq', [
       ['WordPress sitesi ne kadar sürede hazır olur?', 'Kapsama göre değişir. Tanıtım amaçlı birkaç sayfalık bir site genellikle iki ila dört hafta sürer. Takvimi teklifle birlikte yazılı olarak paylaşırız.'],
-      ['Hazır tema mı kullanıyorsunuz, özel tasarım mı?', 'İhtiyaca göre. Çoğu kurumsal site için iyi bir tema, markaya göre özelleştirildiğinde yeterlidir. Tema ihtiyacı karşılamıyorsa özel bileşenler ekleriz.'],
-      ['Hosting ve alan adı kimin adına açılır?', 'Sizin adınıza. Hesaplar size ait kalır. Kurulumu isterseniz biz yaparız.'],
-      ['Siteyi sonradan kendim güncelleyebilir miyim?', 'Evet. Teslimde yönetim panelini birlikte kullanır, adım adım notlar bırakırız.'],
+      ['Hazır tema mı kullanıyorsunuz, özel tasarım mı?', 'İhtiyaca göre. Çoğu kurumsal site için iyi bir tema, markaya göre özelleştirildiğinde yeterlidir. Tema ihtiyacı karşılamıyorsa özel bileşenler ekleyelim.'],
+      ['Hosting ve alan adı kimin adına açılır?', 'Sizin adınıza. Hesaplar size ait kalır. İsterseniz kurulumu biz yapalım.'],
+      ['Siteyi sonradan kendim güncelleyebilir miyim?', 'Evet. Teslimde yönetim panelini birlikte kullanalım, bilmeniz gerekenleri gösterelim.'],
     ]),
     seo: {
       title: 'WordPress kurumsal site kurulumu ve bakımı',
@@ -104,7 +104,7 @@ Every plugin adds maintenance. We only install the ones that earn their place. I
 
 ## After launch
 
-We keep WordPress core, the theme and plugins up to date, with a backup before every update. If something breaks, the same team handles [technical support](/en/services/technical-support). If you want to run the site yourself, we offer short [training](/en/services/training-and-onboarding).
+We keep WordPress core, the theme and plugins up to date, with a backup before every update. If something breaks, the same team handles [technical support](/en/services/technical-support). For a fast site that shows up properly in search, we can also work on [speed and SEO](/en/services/speed-and-seo).
 
 Getting ready to launch? Our [WordPress pre-launch checklist](/en/blog/wordpress-pre-launch-checklist) is a good place to start.`,
     ),
@@ -112,7 +112,7 @@ Getting ready to launch? Our [WordPress pre-launch checklist](/en/blog/wordpress
       ['How long does a WordPress site take?', 'It depends on scope. A small company site usually takes two to four weeks. We share the timeline in writing with the proposal.'],
       ['Do you use a ready-made theme or a custom design?', 'Whatever the project needs. For most business sites, a good theme customized to the brand is enough. When it is not, we add custom components.'],
       ['Whose name are hosting and the domain registered in?', 'Yours. The accounts stay yours. We can set them up for you if you like.'],
-      ['Can I update the site myself later?', 'Yes. At handover we go through the admin panel together and leave step-by-step notes.'],
+      ['Can I update the site myself later?', 'Yes. At handover we go through the admin panel together and show you what you need to know.'],
     ]),
     seo: {
       title: 'WordPress business website setup and care',
@@ -147,29 +147,29 @@ Getting ready to launch? Our [WordPress pre-launch checklist](/en/blog/wordpress
 
 Çevrim içi satışa başlayan küçük markalar ve mevcut Shopify mağazasını düzene sokmak isteyenler için.
 
-## Mağazayı nasıl kuruyoruz?
+## Mağazayı nasıl kuralım?
 
-Temadan önce ürünlere bakarız. Müşteri ürünü nasıl buluyor, neyi karşılaştırıyor, satın almadan önce neyi merak ediyor? Koleksiyonları, filtreleri ve ürün sayfalarını bu sorulara göre düzenleriz.
+Temadan önce ürünlere bakalım. Müşteri ürünü nasıl buluyor, neyi karşılaştırıyor, satın almadan önce neyi merak ediyor? Koleksiyonları, filtreleri ve ürün sayfalarını bu sorulara göre düzenleyelim.
 
-Uygulama eklemek kolay, sonradan temizlemek zor. Her uygulama sayfayı biraz daha yavaşlatır ve aylık bir maliyet getirir. Bu yüzden önce temanın ve Shopify'ın kendi özelliklerinin yetip yetmediğine bakarız.
+Uygulama eklemek kolay, sonradan temizlemek zor. Her uygulama sayfayı biraz daha yavaşlatır ve aylık bir maliyet getirir. Bu yüzden önce temanın ve Shopify'ın kendi özelliklerinin yetip yetmediğine bakalım.
 
 ## Kişiselleştirilebilir ürünler
 
-Print-on-demand ürünler için müşterinin rengi, bedeni ya da baskıyı seçtiği ürün yapılandırıcıları kuruyoruz. Seçimleri fiyat mantığına bağlıyor, siparişin üretime doğru bilgiyle gitmesini sağlıyoruz.
+Print-on-demand ürünler için müşterinin rengi, bedeni ya da baskıyı seçtiği ürün yapılandırıcıları kuralım. Seçimleri fiyat mantığına bağlayalım, siparişin üretime doğru bilgiyle gitmesini sağlayalım.
 
-## Nasıl ilerliyoruz?
+## Nasıl ilerleyelim?
 
-1. **Keşif:** Ürün yapısını, satış kanallarını ve teslimat ihtiyacını konuşuruz.
-2. **Kurulum:** Temayı kurar ve özelleştirir, ürünleri ve koleksiyonları düzenleriz.
-3. **Entegrasyon:** Gerekli uygulamaları bağlar, ödeme ve kargo ayarlarını tamamlarız.
-4. **Test ve yayın:** Gerçek bir sipariş akışını baştan sona dener, sonra mağazayı açarız.
+1. **Keşif:** Ürün yapısını, satış kanallarını ve teslimat ihtiyacını konuşalım.
+2. **Kurulum:** Temayı kuralım ve markanıza göre özelleştirelim, ürünleri ve koleksiyonları düzenleyelim.
+3. **Entegrasyon:** Gerekli uygulamaları bağlayalım, ödeme ve kargo ayarlarını tamamlayalım.
+4. **Test ve yayın:** Gerçek bir sipariş akışını baştan sona deneyelim, sonra mağazayı açalım.
 
 Açılıştan önce [Shopify mağaza açmadan önce yapılacak 5 ayar](/blog/shopify-magaza-acmadan-once) yazımıza da göz atabilirsiniz.`,
     ),
     faq: faq('shq', [
-      ['Shopify mı, WooCommerce mu?', 'Ürün sayısına, ekibinize ve bütçenize bağlı. Sunucu ve güncelleme işiyle uğraşmak istemiyorsanız Shopify genellikle daha az bakım ister. Kararı birlikte veririz.'],
-      ['Mevcut mağazamı devralabilir misiniz?', 'Evet. Önce mağazayı inceler, gereksiz uygulamaları ve yavaşlığa yol açan noktaları raporlarız.'],
-      ['Ürünleri siz mi yüklüyorsunuz?', 'İsterseniz evet. Toplu yükleme için ürün listesini birlikte hazırlarız ya da sizin yüklemeniz için şablon veririz.'],
+      ['Shopify mı, WooCommerce mu?', 'Ürün sayısına, ekibinize ve bütçenize bağlı. Sunucu ve güncelleme işiyle uğraşmak istemiyorsanız Shopify genellikle daha az bakım ister. Kararı birlikte verelim.'],
+      ['Mevcut mağazamı devralabilir misiniz?', 'Evet. Önce mağazayı inceleyelim, gereksiz uygulamaları ve yavaşlığa yol açan noktaları belirleyelim.'],
+      ['Ürünleri siz mi yüklüyorsunuz?', 'İsterseniz evet. Toplu yükleme için ürün listesini birlikte hazırlayalım ya da sizin yüklemeniz için bir şablon verelim.'],
     ]),
     seo: {
       title: 'Shopify mağaza kurulumu ve tema özelleştirme',
@@ -264,11 +264,11 @@ Before launch, see [5 things to set up before opening a Shopify store](/en/blog/
 - Telefonda kayan, taşan ya da hizası bozulan bölümler
 - Birden yavaşlayan sayfalar
 
-## Nasıl çalışıyoruz?
+## Nasıl çalışalım?
 
-Belirtiyi değil nedeni ararız. Önce sorunu yeniden üretir, hangi değişiklikten sonra başladığını buluruz. Düzeltmeyi mümkünse bir test kopyasında deneriz. Değilse önce yedek alırız.
+Belirtiyi değil nedeni arayalım. Önce sorunu yeniden üretelim, hangi değişiklikten sonra başladığını bulalım. Düzeltmeyi mümkünse bir test kopyasında deneyelim. Değilse önce yedek alalım.
 
-Sorun bir temanın, eklentinin ya da hosting firmasının kendisinden kaynaklanıyorsa destek ekipleriyle yazışmayı biz yürütürüz. Sizin araya girmeniz gerekmez.
+Sorun bir temanın, eklentinin ya da hosting firmasının kendisinden kaynaklanıyorsa destek ekipleriyle yazışmayı biz yürütelim. Sizin araya girmeniz gerekmez.
 
 ## Sonunda ne alırsınız?
 
@@ -278,7 +278,7 @@ Site yavaşlığıyla uğraşıyorsanız [siteniz neden yavaş](/blog/siteniz-ne
     ),
     faq: faq('suq', [
       ['Acil bir sorunda ne kadar hızlı dönüyorsunuz?', 'İlk yanıtı 24 saat içinde veririz. Site tamamen erişilemez durumdaysa önceliklendiririz.'],
-      ['Başkasının kurduğu siteye de bakıyor musunuz?', 'Evet. Çoğu destek talebi başka birinin kurduğu sitelerden gelir. Önce kısa bir inceleme yaparız.'],
+      ['Başkasının kurduğu siteye de bakıyor musunuz?', 'Evet. Çoğu destek talebi başka birinin kurduğu sitelerden gelir. Önce kısa bir inceleme yapalım.'],
       ['Ücretlendirme nasıl?', 'İşin büyüklüğüne göre. Tek seferlik düzeltmeler için sabit fiyat, sürekli destek için aylık paket öneririz.'],
     ]),
     seo: {
@@ -369,12 +369,12 @@ Yapay zekâ araçları bazı işleri çok hızlandırıyor: araştırma, ilk tas
 
 AI, muhakemenin yerine geçmez. Hızlandırdığı kısımdan kazandığımız zamanı tasarıma, teste ve detaylara ayırıyoruz.
 
-## Neler yapıyoruz?
+## Neler yapalım?
 
-- **Prototip:** Bir fikri günler yerine saatler içinde tıklanabilir bir örneğe dönüştürürüz. Böylece karar vermeden önce görürsünüz.
+- **Prototip:** Bir fikri günler yerine saatler içinde tıklanabilir bir örneğe dönüştürelim. Böylece karar vermeden önce görürsünüz.
 - **Özel geliştirme:** WordPress eklentileri, Shopify uygulama entegrasyonları, küçük otomasyonlar ve API bağlantıları.
 - **AI özellikleri:** Sitenize akıllı arama, soru yanıtlayan bir asistan ya da içerik düzenleme akışları eklemek.
-- **Mevcut kodu anlamak:** Belgesi olmayan eski bir temayı ya da eklentiyi hızla çözümler, güvenle değiştiririz.
+- **Mevcut kodu anlamak:** Belgesi olmayan eski bir temayı ya da eklentiyi hızla çözümleyelim, güvenle değiştirelim.
 
 ## Nasıl kontrol ediyoruz?
 
@@ -387,7 +387,7 @@ Hazır bir tema ya da eklentinin yetmediği, ama sıfırdan büyük bir yazılı
     faq: faq('aiq', [
       ['Kodu tamamen AI mı yazıyor?', 'Hayır. AI taslak ve tekrar eden kısımlarda yardım eder. Mimariyi, kararları ve son kontrolü biz yaparız. Her değişiklik incelenir ve test edilir.'],
       ['Verilerim AI araçlarıyla paylaşılıyor mu?', 'Hayır. Müşteri verisini, şifreleri ve gizli bilgileri AI araçlarına vermeyiz. Gerekirse anonim örnek veriyle çalışırız.'],
-      ['Siteme bir AI asistanı ekleyebilir misiniz?', 'Evet. Sitenizin içeriğine dayanan ve sınırları belli bir asistan kurabiliriz. Önce gerçekten işe yarayıp yaramayacağını birlikte değerlendiririz.'],
+      ['Siteme bir AI asistanı ekleyebilir misiniz?', 'Evet. Sitenizin içeriğine dayanan ve sınırları belli bir asistan kurabiliriz. Önce gerçekten işe yarayıp yaramayacağını birlikte değerlendirelim.'],
     ]),
     seo: {
       title: 'AI destekli web geliştirme',
@@ -459,7 +459,7 @@ Work where an off-the-shelf theme or plugin is not enough, but a large software 
     slug: slug('alan-adi-ve-hosting'),
     order: 5,
     icon: 'server',
-    excerpt: 'Alan adı, DNS, SSL ve kurumsal e-posta ayarları. Sitenizi yeni sunucuya kesintisiz taşırız. Hesaplar sizin adınıza açılır.',
+    excerpt: 'Alan adı, DNS, SSL ve kurumsal e-posta ayarları. Sitenizi yeni sunucuya kesintisiz taşıyalım. Hesaplar sizin adınıza açılır.',
     image: img('dashboard-laptop', 'Ekranında sunucu kontrol paneli açık bir dizüstü bilgisayar'),
     deliverables: [
       'İhtiyaca uygun hosting paketi önerisi',
@@ -471,24 +471,24 @@ Work where an off-the-shelf theme or plugin is not enough, but a large software 
     ],
     body: pt(
       'ho',
-      `## Ne yapıyoruz?
+      `## Neler yapalım?
 
-Alan adınızı doğru sunucuya yönlendirir, cPanel ya da Plesk üzerinde sitenizi kurar, SSL sertifikasını etkinleştiririz. Alan adınıza bağlı e-posta hesaplarını açar, e-postaların spam klasörüne düşmemesi için gerekli DNS kayıtlarını ekleriz.
+Alan adınızı doğru sunucuya yönlendirelim, cPanel ya da Plesk üzerinde sitenizi kuralım, SSL sertifikasını etkinleştirelim. Alan adınıza bağlı e-posta hesaplarını açalım, e-postaların spam klasörüne düşmemesi için gerekli DNS kayıtlarını ekleyelim.
 
 ## Taşıma
 
-Mevcut sitenizi yeni bir sunucuya taşırken önce tam yedek alırız. Siteyi yeni sunucuda kurup kontrol ettikten sonra DNS'i yönlendiririz. Böylece ziyaretçileriniz kesinti yaşamaz, e-postalarınız kaybolmaz.
+Mevcut sitenizi yeni bir sunucuya taşırken önce tam yedek alalım. Siteyi yeni sunucuda kurup kontrol ettikten sonra DNS'i yönlendirelim. Böylece ziyaretçileriniz kesinti yaşamaz, e-postalarınız kaybolmaz.
 
 ## Hesaplar kimin?
 
-Sizin. Hosting ve alan adı hesapları sizin adınıza açılır. Şifreler sizde kalır. Paket seçerken ihtiyacınıza göre birkaç seçeneği karşılaştırır, gereğinden büyük bir paket önermeyiz.
+Sizin. Hosting ve alan adı hesapları sizin adınıza açılır. Şifreler sizde kalır. Paket seçerken ihtiyacınıza göre birkaç seçeneği karşılaştıralım. Gereğinden büyük bir paket önermeyiz.
 
 Yeni bir site kuruyorsanız bu adım genellikle bir [WordPress](/hizmetler/wordpress-kurumsal-site) projesinin parçası olarak yapılır.`,
     ),
     faq: faq('hoq', [
-      ['Hangi hosting firmasını öneriyorsunuz?', 'Tek bir firmaya bağlı değiliz. Site türüne, trafiğe ve bütçeye göre birkaç seçenek sunarız.'],
+      ['Hangi hosting firmasını öneriyorsunuz?', 'Tek bir firmaya bağlı değiliz. Site türüne, trafiğe ve bütçeye göre birkaç seçeneğe birlikte bakalım.'],
       ['Taşıma sırasında site kapanır mı?', 'Hayır. Siteyi yeni sunucuda hazırlayıp kontrol ettikten sonra yönlendirme yaparız.'],
-      ['E-postalarım neden spam klasörüne düşüyor?', 'Çoğu zaman SPF, DKIM ve DMARC kayıtları eksik ya da hatalıdır. Kurulumda bunları doğru şekilde ekleriz.'],
+      ['E-postalarım neden spam klasörüne düşüyor?', 'Çoğu zaman SPF, DKIM ve DMARC kayıtları eksik ya da hatalıdır. Kurulumda bunları doğru şekilde ekleyelim.'],
     ]),
     seo: {
       title: 'Alan adı, hosting, SSL ve e-posta kurulumu',
@@ -542,99 +542,101 @@ For a new site, this step usually happens as part of a [WordPress](/en/services/
     },
   },
 
-  // ---------- Training ----------
+  // ---------- Speed and SEO ----------
   {
-    _id: 'service-training-tr',
+    _id: 'service-seo-tr',
     _type: 'service',
     language: 'tr',
-    translationKey: 'service-training',
-    title: 'Eğitim',
-    headline: 'WordPress ve Shopify yönetim eğitimi',
-    slug: slug('egitim-ve-teslim'),
+    translationKey: 'service-seo',
+    title: 'Hız ve SEO',
+    headline: 'Site hızı ve teknik SEO',
+    slug: slug('hiz-ve-seo'),
     order: 6,
-    icon: 'book',
-    excerpt: 'Sitenizi ya da mağazanızı kendiniz yönetebilmeniz için birebir eğitim ve sitenize özel yazılı notlar.',
-    image: img('writing-notes', 'Masada kahve fincanının yanında kâğıda not alan bir el'),
+    icon: 'search',
+    excerpt: 'Sitenizi hızlandıralım, Google\'ın doğru okuyacağı şekilde düzenleyelim. Ziyaretçi de arama motoru da beklemesin.',
+    image: img('hands-typing', 'Dizüstü bilgisayar klavyesinde çalışan eller'),
     deliverables: [
-      'Birebir eğitim, yüz yüze ya da çevrim içi',
-      'Sayfa, yazı, görsel ve ürün güncelleme adımları',
-      'Sitenize özel, ekran görüntülü kullanım notları',
-      'Eğitim kaydı (isterseniz)',
-      'Eğitimden sonra kısa bir soru-cevap süresi',
+      'Hız ölçümü: LCP, INP ve CLS',
+      'Görsel, kod ve eklenti optimizasyonu',
+      'Önbellek ve CDN ayarları',
+      'Başlık yapısı, meta başlık ve açıklamalar',
+      'Site haritası, yönlendirmeler ve yapısal veri',
+      'Search Console kurulumu ve takibi',
     ],
     body: pt(
-      'tr',
+      'seo',
       `## Neden önemli?
 
-Bir site ancak güncel tutulabildiğinde işe yarar. Yeni bir ürün eklemek ya da bir metni düzeltmek için her seferinde birine yazmanız gerekmemeli.
+Yavaş açılan bir sayfada ziyaretçi beklemez. Google da sayfa deneyimini sıralamada hesaba katar. Hızlı ve düzgün yapılandırılmış bir site hem ziyaretçiyi tutar hem de aramalarda daha kolay bulunur.
 
-## Neyi öğretiyoruz?
+## Neler yapalım?
 
-Genel bir WordPress ya da Shopify kursu değil. Sizin sitenizin panelinde, sizin en sık yapacağınız işler üzerinden ilerleriz: sayfa ve yazı düzenlemek, görsel eklemek, ürün ve stok güncellemek, form mesajlarını görmek.
+- **Hız:** Sayfalarınızı ölçelim, en çok yavaşlatan şeyleri bulalım. Görselleri küçültelim, gereksiz eklentileri ve kodları temizleyelim, önbelleği doğru kuralım.
+- **Teknik SEO:** Başlık sırasını, meta başlık ve açıklamaları, site haritasını ve yönlendirmeleri düzenleyelim. Google'ın sayfalarınızı doğru anlaması için yapısal veri ekleyelim.
+- **Takip:** Google Search Console'u kuralım, sitenin aramalardaki durumunu birlikte izleyelim.
 
-Neye dokunmamanız gerektiğini de gösteririz. Bir ayarı yanlışlıkla değiştirmek, çoğu zaman bir sorunun başlangıcıdır.
+## Nasıl ilerleyelim?
 
-## Nasıl ilerliyoruz?
+Önce mevcut durumu ölçelim ve size sade bir özet çıkaralım. Hangi adımın en çok fark yaratacağını birlikte seçelim. Her değişiklikten sonra yeniden ölçelim, farkı birlikte görelim.
 
-Eğitimi yüz yüze ya da çevrim içi yaparız. Ardından her adımı ekran görüntüsüyle anlatan kısa notlar hazırlarız. Eğitimden sonraki ilk haftalarda aklınıza takılan soruları yanıtlarız.
-
-Eğitim genellikle bir [WordPress](/hizmetler/wordpress-kurumsal-site) ya da [Shopify](/hizmetler/shopify-magaza-kurulumu) projesinin teslim aşamasında verilir. Mevcut siteniz için ayrıca da alabilirsiniz.`,
+Site yavaşlığının en sık nedenlerini [siteniz neden yavaş](/blog/siteniz-neden-yavas) yazımızda anlattık. Yavaşlık bir hatadan kaynaklanıyorsa [teknik destek](/hizmetler/teknik-destek) tarafında birlikte bakalım.`,
     ),
-    faq: faq('trq', [
-      ['Eğitim ne kadar sürer?', 'Genellikle bir ila iki saat. Konu sayısına göre iki oturuma bölebiliriz.'],
-      ['Başkasının kurduğu site için de eğitim veriyor musunuz?', 'Evet. Önce siteyi kısaca inceleriz, sonra eğitimi o siteye göre hazırlarız.'],
-      ['Ekibimden birden fazla kişi katılabilir mi?', 'Evet. Farklı rollerdeki kişiler için konuları ayırabiliriz.'],
+    faq: faq('seoq', [
+      ['Lighthouse puanı 100 olmak zorunda mı?', 'Hayır. Puan bir araç, hedef değil. Asıl önemli olan gerçek ziyaretçinin deneyimi. Yine de 90 ve üzeri iyi bir işarettir.'],
+      ['SEO ile hemen ilk sıraya çıkar mıyım?', 'Kimse bunu söz veremez. Teknik SEO, sitenizin doğru okunmasını ve hızlı açılmasını sağlar. Sıralamayı içerik ve zaman da belirler.'],
+      ['Bu çalışma mevcut siteme zarar verir mi?', 'Hayır. Her değişiklikten önce yedek alırız, mümkünse önce bir test kopyasında deneriz.'],
     ]),
     seo: {
-      title: 'WordPress ve Shopify yönetim eğitimi',
-      description: 'Sitenizi kendiniz yönetebilmeniz için birebir WordPress ve Shopify eğitimi. Sitenize özel, ekran görüntülü yazılı kullanım notları.',
+      title: 'Site hızı ve teknik SEO',
+      description: 'Web sitenizi hızlandıralım ve Google için doğru yapılandıralım: hız ölçümü, görsel ve kod optimizasyonu, meta etiketler, site haritası ve Search Console.',
     },
   },
   {
-    _id: 'service-training-en',
+    _id: 'service-seo-en',
     _type: 'service',
     language: 'en',
-    translationKey: 'service-training',
-    title: 'Training',
-    headline: 'WordPress and Shopify admin training',
-    slug: slug('training-and-onboarding'),
+    translationKey: 'service-seo',
+    title: 'Speed and SEO',
+    headline: 'Site speed and technical SEO',
+    slug: slug('speed-and-seo'),
     order: 6,
-    icon: 'book',
-    excerpt: 'One-to-one training and written notes for your own site, so you can run it yourself.',
-    image: img('writing-notes', 'A hand taking notes on paper next to a coffee cup'),
+    icon: 'search',
+    excerpt: 'We make your site faster and set it up so Google reads it correctly. Neither visitors nor search engines have to wait.',
+    image: img('hands-typing', 'Hands working on a laptop keyboard'),
     deliverables: [
-      'One-to-one training, in person or online',
-      'Steps for updating pages, posts, images and products',
-      'Usage notes with screenshots, written for your site',
-      'A recording of the session (optional)',
-      'A short Q&A window after training',
+      'Speed measurement: LCP, INP and CLS',
+      'Image, code and plugin optimization',
+      'Caching and CDN settings',
+      'Heading structure, meta titles and descriptions',
+      'Sitemap, redirects and structured data',
+      'Search Console setup and monitoring',
     ],
     body: pt(
-      'tr',
+      'seo',
       `## Why it matters
 
-A website only helps you if it can be kept up to date. Adding a product or fixing a sentence should not mean writing to someone every time.
+Visitors don't wait for a slow page. Google also takes page experience into account when ranking. A fast, well-structured site keeps visitors and is easier to find in search.
 
-## What we teach
+## What we do
 
-Not a general WordPress or Shopify course. We work in your site's admin panel, on the tasks you will do most: editing pages and posts, adding images, updating products and stock, reading form messages.
-
-We also show you what not to touch. Changing a setting by accident is often where problems start.
+- **Speed:** We measure your pages and find what slows them down most. We resize images, remove unneeded plugins and code, and set up caching properly.
+- **Technical SEO:** We sort out heading order, meta titles and descriptions, the sitemap and redirects, and add structured data so Google understands your pages.
+- **Monitoring:** We set up Google Search Console and follow how the site does in search together.
 
 ## How we work
 
-Training happens in person or online. Afterwards we write short notes with a screenshot for each step. In the first weeks after training, we answer the questions that come up.
+First we measure where things stand and give you a plain summary. Together we pick the step that will make the most difference. After each change we measure again, so you see the difference.
 
-Training is usually part of handover on a [WordPress](/en/services/wordpress-business-website) or [Shopify](/en/services/shopify-store-setup) project. You can also book it for an existing site.`,
+We cover the most common causes of a slow site in [why is your site slow](/en/blog/why-is-your-site-slow). If the slowdown comes from a bug, our [technical support](/en/services/technical-support) looks into it.`,
     ),
-    faq: faq('trq', [
-      ['How long is a session?', 'Usually one to two hours. We can split it into two sessions depending on the topics.'],
-      ['Do you train on sites someone else built?', 'Yes. We review the site briefly first, then prepare the training for it.'],
-      ['Can several people from my team join?', 'Yes. We can split topics for people in different roles.'],
+    faq: faq('seoq', [
+      ['Does the Lighthouse score need to be 100?', 'No. The score is a tool, not the goal. What matters is the experience of real visitors. Still, 90 and above is a good sign.'],
+      ['Will SEO put me at the top right away?', 'Nobody can promise that. Technical SEO makes sure your site is read correctly and loads fast. Content and time decide the ranking too.'],
+      ['Could this work harm my current site?', 'No. We take a backup before every change and, where possible, try it on a staging copy first.'],
     ]),
     seo: {
-      title: 'WordPress and Shopify admin training',
-      description: 'One-to-one WordPress and Shopify training so you can run your site yourself, with written usage notes and screenshots made for your site.',
+      title: 'Site speed and technical SEO',
+      description: 'We make your website faster and set it up properly for Google: speed audits, image and code optimization, meta tags, sitemaps and Search Console.',
     },
   },
 ];

@@ -211,7 +211,35 @@ const homePage = defineType({
                 defineField({ name: 'suffix', type: 'string', description: 'Shown after the number, e.g. " h" or "%".' }),
                 defineField({ name: 'label', type: 'string', validation: (r) => r.required() }),
               ],
-              preview: { select: { title: 'label', value: 'value', suffix: 'suffix' }, prepare: ({ title, value, suffix }) => ({ title: `${value ?? ''}${suffix ?? ''} — ${title ?? ''}` }) },
+              preview: { select: { title: 'label', value: 'value', suffix: 'suffix' }, prepare: ({ title, value, suffix }) => ({ title: `${value ?? ''}${suffix ?? ''} · ${title ?? ''}` }) },
+            }),
+          ],
+        }),
+      ],
+    }),
+    defineField({
+      name: 'highlight',
+      title: 'Highlight',
+      type: 'object',
+      description: 'One big counting figure with a title and text, next to a slowly drifting column of short commitments.',
+      fields: [
+        defineField({ name: 'value', type: 'number', validation: (r) => r.required().integer().min(0) }),
+        defineField({ name: 'suffix', type: 'string' }),
+        defineField({ name: 'title', type: 'string', validation: (r) => r.required() }),
+        defineField({ name: 'text', type: 'text', rows: 3, validation: (r) => r.required().max(220) }),
+        defineField({
+          name: 'items',
+          type: 'array',
+          validation: (r) => r.min(4).max(10),
+          of: [
+            defineArrayMember({
+              type: 'object',
+              fields: [
+                defineField({ name: 'icon', type: 'string', options: { list: ICONS }, validation: (r) => r.required() }),
+                defineField({ name: 'title', type: 'string', validation: (r) => r.required().max(40) }),
+                defineField({ name: 'text', type: 'string', validation: (r) => r.required().max(90) }),
+              ],
+              preview: { select: { title: 'title', subtitle: 'text' } },
             }),
           ],
         }),

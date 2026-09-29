@@ -82,6 +82,12 @@ export const iconNames = [
   'check',
   'spark',
   'ai',
+  'user',
+  'key',
+  'phone',
+  'eye',
+  'refresh',
+  'gauge',
 ] as const;
 export const iconSchema = z.enum(iconNames);
 export type IconName = z.infer<typeof iconSchema>;
@@ -160,6 +166,16 @@ export const homePageSchema = z.object({
   stats: z
     .object({
       items: z.array(z.object({ _key: key, value: z.number().int().nonnegative(), suffix: z.string().optional(), label: z.string() })).min(2).max(4),
+    })
+    .optional(),
+  /** One big counting figure with a short story, next to a slowly drifting column of commitments. */
+  highlight: z
+    .object({
+      value: z.number().int().nonnegative(),
+      suffix: z.string().optional(),
+      title: z.string(),
+      text: z.string().max(220),
+      items: z.array(z.object({ _key: key, icon: iconSchema, title: z.string().max(40), text: z.string().max(90) })).min(4).max(10),
     })
     .optional(),
   closing: z.object({ title: z.string(), text: z.string().max(200).optional(), image: imageSchema, tag: z.string(), cta: linkSchema }),
