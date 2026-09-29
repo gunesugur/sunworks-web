@@ -159,7 +159,7 @@ export const navigation: Navigation[] = [
   },
 ];
 
-const tools = ['WordPress', 'Shopify', 'Figma', 'Claude', 'Cloudflare', 'Google Search Console', 'Google Analytics', 'GitHub', 'cPanel', 'Plesk'];
+const tools = ['WordPress', 'Elementor', 'Shopify', 'Stripe', 'PayPal', 'Figma', 'Claude', 'Cloudflare', 'Google Search Console', 'Google Analytics', 'Google Tag Manager', 'Google Ads', 'Meta', 'Mailchimp', 'Make', 'Sanity', 'Astro', 'GitHub', 'cPanel', 'Plesk'];
 
 export const home: HomePage[] = [
   {

@@ -1,15 +1,25 @@
 import {
+  siAstro,
   siClaude,
   siCloudflare,
   siCpanel,
+  siElementor,
   siFigma,
   siGithub,
+  siGoogleads,
   siGoogleanalytics,
   siGooglesearchconsole,
+  siGoogletagmanager,
+  siMailchimp,
+  siMeta,
+  siPaypal,
   siPlesk,
+  siSanity,
   siShopify,
+  siStripe,
   siWoocommerce,
   siWordpress,
+  siMake,
   type SimpleIcon,
 } from 'simple-icons';
 import { svgPathBbox } from 'svg-path-bbox';
@@ -27,6 +37,16 @@ const LOGOS: Record<string, SimpleIcon[]> = {
   github: [siGithub],
   'google search console': [siGooglesearchconsole],
   'google analytics': [siGoogleanalytics],
+  'google tag manager': [siGoogletagmanager],
+  'google ads': [siGoogleads],
+  elementor: [siElementor],
+  stripe: [siStripe],
+  paypal: [siPaypal],
+  meta: [siMeta],
+  mailchimp: [siMailchimp],
+  make: [siMake],
+  sanity: [siSanity],
+  astro: [siAstro],
 };
 
 export interface ToolLogo {
