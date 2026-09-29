@@ -345,7 +345,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
 
   <!-- Closing -->
   <section class="closing container" aria-labelledby="closing-title">
-    <Notched corner="tr" nw="var(--closing-nw)" nh="var(--closing-nh)" class="closing__media" ratio="1284 / 574">
+    <Notched corner="tr" fit class="closing__media" ratio="1284 / 574">
       <div class="closing__img" data-parallax="0.05">
         <Img image={home.closing.image} widths={[640, 960, 1284, 1920, 2400]} sizes="(max-width: 1440px) 92vw, 1284px" />
       </div>
@@ -1293,14 +1293,15 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     object-fit: cover;
   }
 
+  /* The notch hugs this block (Notched fit), so a longer title never pushes the button out. */
   .closing__text {
     display: grid;
     align-content: start;
     justify-items: start;
     gap: 1rem;
-    width: 100%;
-    height: 100%;
-    padding: 0.25rem 0 0 1.5rem;
+    width: var(--closing-nw);
+    max-width: 100%;
+    padding: 0.25rem 0 0.25rem 1.25rem;
   }
 
   .closing__title {
@@ -1387,7 +1388,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     }
 
     .closing {
-      --closing-nw: 72%;
+      --closing-nw: min(62vw, 290px);
       --closing-nh: 132px;
     }
 

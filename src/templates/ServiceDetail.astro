@@ -305,7 +305,7 @@ const ld = [
     transition: transform var(--dur) var(--ease-out);
   }
 
-  .faq__item summary:hover .faq__toggle {
+  .faq__item:not([open]) summary:hover .faq__toggle {
     background: var(--c-band);
   }
 

@@ -253,7 +253,7 @@ export const home: HomePage[] = [
       ],
     },
     closing: {
-      title: 'Aklınızda bir proje mi var? Gelin, birlikte bakalım.',
+      title: 'Aklınızdaki projeyi gelin, birlikte inşa edelim.',
       text: 'İster yeni bir web sitesi fikri, ister mevcut sitenizle ilgili bir destek ihtiyacı. Bize kısaca yazın, size nasıl yardımcı olabileceğimize birlikte karar verelim.',
       image: img('laptop-dark-desk', 'Koyu ahşap masada açık duran dizüstü bilgisayar ve beyaz bir sandalye'),
       tag: 'Yeni projelere açığız',
@@ -351,7 +351,7 @@ export const home: HomePage[] = [
       ],
     },
     closing: {
-      title: 'Have a project in mind? Come, let\'s take a look together.',
+      title: "Come, let's build what you have in mind.",
       text: "Whether it's an idea for a new website or support for your current one, write to us briefly and we'll decide together how we can help.",
       image: img('laptop-dark-desk', 'An open laptop on a dark wooden desk next to a white chair'),
       tag: 'Open for new projects',
