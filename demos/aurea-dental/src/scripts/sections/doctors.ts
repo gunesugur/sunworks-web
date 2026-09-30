@@ -1,116 +1,92 @@
 /**
- * §10 DoctorsShowcase.
- * Selector: ARIA tablist (roving tabindex, ←/→/↑/↓/Home/End, automatic activation). Switching wipes
- * the current portrait out (inset → 100% right) while the next wipes in from the right edge
- * (mirrored when going back), name/specialty crossfade with a small rise. ~700ms; interruptible.
- * Scroll (desktop + motion): the veil dims the Journey stage as this panel rises over it, the card
- * image drifts, and on exit the card is wiped left — the same cut that opens the Results comparison.
- * Reduced motion: opacity crossfades only, no scroll-linked motion.
+ * §7 DoctorsShowcase — interior only (the rise over Journey / lift-off from Results are built by scenes.ts).
+ * Selector: ARIA tablist (roving tabindex, ←/→/↑/↓/Home/End, automatic activation).
+ * Switch: maskWipe(out, in, { forward: next > prev }) — directional clip-path, DURATION.wipe (650 ms);
+ * name / specialty / bio: out opacity → 0 (220 ms), in y 8 → 0 + opacity (320 ms, 80 ms delay);
+ * the ambient spill follows the selected doctor (data-ambient + ambientChanged()).
+ * Reduced motion: opacity cross-fade (maskWipe reduce) and instant text swap fade.
  */
 import { gsap, EASE, DURATION } from '../../motion/tokens';
-import { withMotion, prefersReducedMotion } from '../../motion/media';
-
-const SHOW = 'inset(0% 0% 0% 0%)';
-const OFF_LEFT = 'inset(0% 100% 0% 0%)'; // visible edge collapsed to the left
-const OFF_RIGHT = 'inset(0% 0% 0% 100%)'; // visible edge collapsed to the right
-const WIPE = 0.7; // s — within the 550–750ms spec
+import { prefersReducedMotion } from '../../motion/media';
+import { maskWipe, ambientChanged } from '../../motion/scenes';
 
 export function init(root: HTMLElement): () => void {
   const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-doctor-tab]'));
-  const portraits = Array.from(root.querySelectorAll<HTMLElement>('[data-doctor-portrait]'));
-  const infos = Array.from(root.querySelectorAll<HTMLElement>('[data-doctor-info]'));
-  const depths = Array.from(root.querySelectorAll<HTMLElement>('[data-doctors-depth-layer]'));
+  const layers = Array.from(root.querySelectorAll<HTMLElement>('[data-dlayer]'));
+  const infos = Array.from(root.querySelectorAll<HTMLElement>('[data-dinfo]'));
   const panel = root.querySelector<HTMLElement>('[data-doctors-panel]');
-  const current = root.querySelector<HTMLElement>('[data-doctors-current]');
   const tablist = root.querySelector<HTMLElement>('[data-doctors-tabs]');
-  if (tabs.length === 0 || portraits.length !== tabs.length || !panel || !tablist) return () => undefined;
-
+  const current = root.querySelector<HTMLElement>('[data-doctors-current]');
   const count = tabs.length;
-  let active = 0;
-  let switchTl: gsap.core.Timeline | null = null;
-  const imgOf = (el: HTMLElement | undefined): HTMLElement | null => el?.querySelector<HTMLElement>('img') ?? null;
+  if (count === 0 || layers.length !== count || infos.length !== count || !panel || !tablist) return () => undefined;
 
-  const settle = (): void => {
-    portraits.forEach((p, i) => {
-      p.classList.toggle('is-active', i === active);
-      gsap.set(p, { clipPath: i === active ? SHOW : OFF_RIGHT, opacity: 1, zIndex: i === active ? 1 : 0 });
-      const img = imgOf(p);
-      if (img) gsap.set(img, { clearProps: 'transform' });
-    });
-    infos.forEach((el, i) => {
-      el.hidden = i !== active;
-      gsap.set(el, { clearProps: 'opacity,transform' });
-    });
-    depths.forEach((el, i) => gsap.set(el, { opacity: i === active ? 1 : 0 }));
-  };
+  let active = 0;
+  let wipe: gsap.core.Timeline | null = null;
+  let switches = 0;
+  const parts = (el: HTMLElement): HTMLElement[] => Array.from(el.querySelectorAll<HTMLElement>('[data-dinfo-part]'));
 
   const select = (next: number, moveFocus = false): void => {
     if (next < 0 || next >= count) return;
-    const tab = tabs[next]!;
-    if (moveFocus) tab.focus();
+    if (moveFocus) tabs[next]!.focus();
     if (next === active) return;
-    // finish any running switch first so states never interleave
-    const running = switchTl;
-    switchTl = null;
-    if (running) {
-      running.progress(1); // fires onComplete → settle() for the previous state
-      running.kill();
-    }
+    wipe?.progress(1);
     const prev = active;
     active = next;
+    const reduce = prefersReducedMotion();
 
     tabs.forEach((t, i) => {
       t.setAttribute('aria-selected', String(i === next));
       t.tabIndex = i === next ? 0 : -1;
     });
-    panel.setAttribute('aria-labelledby', tab.id);
+    panel.setAttribute('aria-labelledby', tabs[next]!.id);
     if (current) current.textContent = String(next + 1).padStart(2, '0');
-    portraits.forEach((p, i) => {
-      if (i === next) p.removeAttribute('aria-hidden');
-      else p.setAttribute('aria-hidden', 'true');
+    layers.forEach((l, i) => {
+      l.classList.toggle('is-active', i === next);
+      if (i === next) l.removeAttribute('aria-hidden');
+      else l.setAttribute('aria-hidden', 'true');
     });
-    if (!moveFocus || window.innerWidth < 1024) {
-      // keep the chosen chip in view in the scrollable mobile row
-      const left = tab.offsetLeft - tablist.offsetLeft - 24;
-      if (tablist.scrollWidth > tablist.clientWidth) tablist.scrollTo({ left, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
-    }
 
-    const out = portraits[prev]!;
-    const inn = portraits[next]!;
-    const infoOut = infos[prev];
-    const infoIn = infos[next];
-    if (infoIn) infoIn.hidden = false;
-    gsap.set(inn, { zIndex: 2 });
-    gsap.set(out, { zIndex: 1 });
-    inn.classList.add('is-active');
+    // portrait: directional mask wipe (primitive) — never wipe to an undecoded portrait (max 350 ms wait)
+    const token = ++switches;
+    const run = (): void => {
+      if (token !== switches) return;
+      const out = layers.find((l, i) => i !== next && getComputedStyle(l).zIndex === '2') ?? layers[prev]!;
+      gsap.set(layers.filter((l, i) => i !== next && l !== out), { clipPath: 'inset(0% 0% 0% 100%)', zIndex: 0 });
+      wipe = maskWipe(out, layers[next]!, { forward: next > prev, reduce });
+    };
+    const img = layers[next]!.querySelector<HTMLImageElement>('.dlayer__portrait img');
+    if (img) {
+      // clipped portraits may be loaded but not decoded yet: decode first (resolves at once when ready)
+      img.loading = 'eager';
+      void Promise.race([img.decode().catch(() => undefined), new Promise((r) => window.setTimeout(r, 350))]).then(run);
+    } else run();
 
-    const tl = gsap.timeline({
-      defaults: { ease: EASE.primary },
+    // text: out quickly, in with a small rise
+    const outParts = parts(infos[prev]!);
+    const inParts = parts(infos[next]!);
+    gsap.killTweensOf([...outParts, ...inParts]);
+    gsap.to(outParts, {
+      opacity: 0,
+      duration: DURATION.fast,
+      ease: EASE.soft,
       onComplete: () => {
-        switchTl = null;
-        settle();
+        infos[prev]!.hidden = true;
+        gsap.set(outParts, { clearProps: 'opacity,transform' });
       },
     });
-    switchTl = tl;
+    infos[next]!.hidden = false;
+    gsap.fromTo(
+      inParts,
+      { opacity: 0, y: reduce ? 0 : 8 },
+      { opacity: 1, y: 0, duration: DURATION.ui, delay: 0.08, ease: EASE.primary, clearProps: 'transform' },
+    );
 
-    if (prefersReducedMotion()) {
-      tl.fromTo(inn, { clipPath: SHOW, opacity: 0 }, { opacity: 1, duration: DURATION.ui }, 0);
-      if (infoOut) tl.to(infoOut, { opacity: 0, duration: DURATION.fast }, 0);
-      if (infoIn) tl.fromTo(infoIn, { opacity: 0 }, { opacity: 1, duration: DURATION.ui }, 0.1);
-    } else {
-      const forward = next > prev;
-      const outImg = imgOf(out);
-      const inImg = imgOf(inn);
-      tl.fromTo(out, { clipPath: SHOW }, { clipPath: forward ? OFF_LEFT : OFF_RIGHT, duration: WIPE }, 0);
-      tl.fromTo(inn, { clipPath: forward ? OFF_RIGHT : OFF_LEFT, opacity: 1 }, { clipPath: SHOW, duration: WIPE }, 0);
-      if (outImg) tl.to(outImg, { xPercent: forward ? -4 : 4, duration: WIPE }, 0);
-      if (inImg) tl.fromTo(inImg, { xPercent: forward ? 5 : -5, scale: 1.05 }, { xPercent: 0, scale: 1, duration: DURATION.large }, 0);
-      if (infoOut) tl.to(infoOut, { opacity: 0, y: -8, duration: DURATION.ui, ease: EASE.soft }, 0);
-      if (infoIn) tl.fromTo(infoIn, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: DURATION.medium }, 0.16);
+    // ambient spill follows the selected clinician
+    const key = layers[next]!.dataset.dlayer;
+    if (key) {
+      root.dataset.ambient = key;
+      ambientChanged();
     }
-    depths.forEach((el, i) => {
-      if (i === prev || i === next) tl.to(el, { opacity: i === next ? 1 : 0, duration: DURATION.medium, ease: EASE.soft }, 0);
-    });
   };
 
   const onClick = (e: Event): void => {
@@ -120,103 +96,37 @@ export function init(root: HTMLElement): () => void {
   const onKey = (e: KeyboardEvent): void => {
     const i = tabs.indexOf(document.activeElement as HTMLButtonElement);
     if (i < 0) return;
-    let next = -1;
-    switch (e.key) {
-      case 'ArrowRight':
-      case 'ArrowDown':
-        next = (i + 1) % count;
-        break;
-      case 'ArrowLeft':
-      case 'ArrowUp':
-        next = (i - 1 + count) % count;
-        break;
-      case 'Home':
-        next = 0;
-        break;
-      case 'End':
-        next = count - 1;
-        break;
-      default:
-        return;
-    }
+    const map: Record<string, number> = {
+      ArrowRight: (i + 1) % count,
+      ArrowDown: (i + 1) % count,
+      ArrowLeft: (i - 1 + count) % count,
+      ArrowUp: (i - 1 + count) % count,
+      Home: 0,
+      End: count - 1,
+    };
+    const next = map[e.key];
+    if (next === undefined) return;
     e.preventDefault();
     select(next, true);
   };
   tablist.addEventListener('click', onClick);
   tablist.addEventListener('keydown', onKey);
 
-  // Fully clipped lazy images never load (the browser treats them as hidden), so fetch every
-  // portrait once the section is about a screen away — a switch must never wipe to an empty card.
+  // Clipped lazy portraits may never load on their own: fetch them once the scene is about a screen away,
+  // so a switch never wipes to an empty frame (only doctor 01 is requested before that).
   const warm = new IntersectionObserver(
     (entries) => {
       if (!entries.some((e) => e.isIntersecting)) return;
-      portraits.forEach((p) => {
-        const img = imgOf(p) as HTMLImageElement | null;
-        if (img) img.loading = 'eager';
-      });
+      root.querySelectorAll<HTMLImageElement>('.dlayer img').forEach((img) => (img.loading = 'eager'));
       warm.disconnect();
     },
-    { rootMargin: '100% 0px' },
+    { rootMargin: '200% 0px' },
   );
-  warm.observe(panel);
-
-  const card = root.querySelector<HTMLElement>('[data-doctors-card]');
-  const parallax = root.querySelector<HTMLElement>('[data-doctors-parallax]');
-  const veil = root.querySelector<HTMLElement>('[data-doctors-veil]');
-  const depth = root.querySelector<HTMLElement>('[data-doctors-depth]');
-
-  const motion = withMotion(root, ({ desktop }) => {
-    if (!desktop) return;
-    // the panel rises over the Journey's still-sticky stage: dim what it covers
-    if (veil) {
-      gsap.fromTo(
-        veil,
-        { opacity: 0 },
-        {
-          opacity: 0.14,
-          ease: 'none',
-          scrollTrigger: { trigger: root, start: 'top bottom', end: 'top top', scrub: true },
-        },
-      );
-    }
-    // card image settles as it comes up
-    if (parallax) {
-      gsap.fromTo(
-        parallax,
-        { yPercent: -6, scale: 1.08 },
-        {
-          yPercent: 4,
-          scale: 1,
-          ease: 'none',
-          scrollTrigger: { trigger: card ?? root, start: 'top bottom', end: 'bottom top', scrub: true },
-        },
-      );
-    }
-    if (depth) {
-      gsap.fromTo(
-        depth,
-        { yPercent: 8 },
-        { yPercent: -8, ease: 'none', scrollTrigger: { trigger: root, start: 'top bottom', end: 'bottom top', scrub: true } },
-      );
-    }
-    // exit hand-off: the portrait is cut away to the left as the Results comparison opens beneath
-    if (card) {
-      gsap.fromTo(
-        card,
-        { clipPath: 'inset(0% 0% 0% 0% round 24px)' },
-        {
-          clipPath: 'inset(0% 42% 0% 0% round 24px)',
-          ease: 'none',
-          scrollTrigger: { trigger: card, start: 'bottom 45%', end: 'bottom top', scrub: true },
-        },
-      );
-    }
-  });
+  warm.observe(root);
 
   return () => {
-    motion();
     warm.disconnect();
-    switchTl?.kill();
+    wipe?.kill();
     tablist.removeEventListener('click', onClick);
     tablist.removeEventListener('keydown', onKey);
   };

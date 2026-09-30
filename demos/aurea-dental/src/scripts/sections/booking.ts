@@ -1,54 +1,20 @@
 /**
- * §13 BookingCTA.
- * Motion: portrait clip inset(35% 0 35% 0) → 0 with a settling image — scrubbed on desktop as the
- * section reaches the centre (while the FAQ recedes, see faq.ts), time-based on mobile. Heading lines
- * and the form's field stagger (50ms) come from the generic reveals. Reduced motion: no clip/scale.
+ * §10 BookingCTA — form only. The image entrance is the declared `grow="y"` hand-off (SceneFrame enter="grow" +
+ * MaskedMedia), built by motion/scenes.ts; heading lines + field stagger come from the generic reveals.
  * Form: native validation is replaced by inline, accessible errors (aria-invalid + aria-describedby,
  * focus to the first invalid field, role=alert summary). Honeypot filled → silent fake success.
  * No backend yet: submit is intercepted and the success state shown. When `data-endpoint="live"`
  * is set on the form, the data is POSTed to its action (e.g. the parent repo's D1 + Turnstile stack).
  */
 import { gsap, EASE, DURATION, ScrollTrigger } from '../../motion/tokens';
-import { withMotion, prefersReducedMotion } from '../../motion/media';
+import { prefersReducedMotion } from '../../motion/media';
 
-const CLIP_FROM = 'inset(35% 0% 35% 0% round 24px)';
-const CLIP_TO = 'inset(0% 0% 0% 0% round 24px)';
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 type FieldName = 'name' | 'phone' | 'email';
 
 export function init(root: HTMLElement): () => void {
   const cleanups: Array<() => void> = [];
-
-  // ---------------- motion ----------------
-  const media = root.querySelector<HTMLElement>('[data-booking-media]');
-  const portrait = root.querySelector<HTMLElement>('[data-booking-portrait]');
-  const img = root.querySelector<HTMLElement>('[data-booking-img]');
-  if (portrait) {
-    cleanups.push(
-      withMotion(root, ({ desktop, mobile }) => {
-        if (desktop) {
-          const tl = gsap.timeline({
-            defaults: { ease: 'none' },
-            scrollTrigger: { trigger: media ?? portrait, start: 'top bottom', end: 'top 15%', scrub: 0.5 },
-          });
-          tl.fromTo(portrait, { clipPath: CLIP_FROM }, { clipPath: CLIP_TO }, 0);
-          if (img) tl.fromTo(img, { scale: 1.18, yPercent: 6 }, { scale: 1, yPercent: 0 }, 0);
-        } else if (mobile) {
-          gsap.set(portrait, { clipPath: CLIP_FROM });
-          ScrollTrigger.create({
-            trigger: portrait,
-            start: 'top 85%',
-            once: true,
-            onEnter: () => {
-              gsap.to(portrait, { clipPath: CLIP_TO, duration: DURATION.expand, ease: EASE.primary });
-              if (img) gsap.fromTo(img, { scale: 1.12 }, { scale: 1, duration: DURATION.expand * 1.1, ease: EASE.primary });
-            },
-          });
-        }
-      }),
-    );
-  }
 
   // ---------------- form ----------------
   const form = root.querySelector<HTMLFormElement>('[data-booking-form]');

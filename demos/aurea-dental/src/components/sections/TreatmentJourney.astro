@@ -1,142 +1,179 @@
 ---
 /**
- * §9 Signature: treatment journey.
+ * §6 TreatmentJourney — ONE stable pinned stage (motion kit §4 #4, §5 Journey).
  *
- * Motion (prefers-reduced-motion: no-preference): outer section = sticky 100svh stage + scroll.
- *  - Desktop ≥1024: `--journey-lift` (100svh) of the section sits UNDER the Services panel
- *    (negative margin); the panel lifts off and the stage beneath comes forward (journey.ts).
- *    Then `--journey-steps` (250vh) of scrubbed step changes. Own scroll ≈ 450vh incl. the cover zone.
- *  - Mobile <1024: 100svh + 180vh (≈280vh), model dominant, no overlap.
+ * <SceneFrame enter="beneath" pin="all" height="fixed" length="var(--len-journey)">: the stage settles
+ * (.965 → 1) while the Services panel lifts off it (scenes.ts), then journey.ts scrubs its own state machine
+ * over --len-journey via scenePin(): the heading lifts out of the stage top (first 14 %), then 5 states /
+ * 4 transitions — masked number roll, model swap (brief values, no spin/float), step list shift, caption swap,
+ * thin progress line. The stage itself never moves. Doctors (RisingPanel) rises over it afterwards.
  *
- * ── Coordination with DoctorsShowcase (next section) ──────────────────────────────────────────
- *  The stage is `.journey__stage` ([data-journey-stage]). To slide the Doctors panel over the END
- *  of the stage, give the Doctors root a negative `margin-top` (e.g. -100svh on desktop+motion) and
- *  `position: relative; z-index: var(--z-panel)`. journey.ts reads that negative margin on every
- *  refresh and appends it to this section as `--journey-cover`, so the stage stays sticky (and
- *  quietly recedes) for exactly that distance while the Doctors panel rises over it. Nothing else
- *  needs to be shared.
- *
- * Reduced motion / no JS layout: no pin — steps render as a readable stacked list.
- * The same <ol> serves both modes: in staged mode each step's number, model and caption are
- * absolutely placed into shared slots of the stage (li/ol stay unpositioned), titles form the
- * right-hand list (desktop) or a shared slot (mobile).
+ * Desktop: number left (cols 1–2) · model 1:1 + caption (cols 3–7) · step list (cols 9–12) · progress far right.
+ * Tablet / phone: number top-left · model centre · the list collapses to ONE swapping row · caption below.
+ * Reduced motion (and motion-fallback): no pin, stacked list with all 5 steps (number · model · title · caption).
  */
 import { site } from '../../content/site';
+import SceneFrame from '../scene/SceneFrame.astro';
 import Img from '../ui/Img.astro';
-import RevealText from '../ui/RevealText.astro';
 
 const data = site.journey;
 const total = String(data.steps.length).padStart(2, '0');
 ---
-<section class="journey" id="journey" data-section="journey" aria-labelledby="journey-title">
-  <div class="journey__stage" data-journey-stage>
-    <div class="journey__recede" data-journey-recede>
-      <div class="journey__content" data-journey-content>
-        <header class="journey__head container">
-          <p class="label label--dark" data-reveal="fade" data-reveal-trigger="manual" data-journey-label>{data.label}</p>
-          <RevealText as="h2" id="journey-title" class="journey__title t-h2" lines={data.titleLines} manual />
-        </header>
+<SceneFrame
+  name="journey"
+  section="journey"
+  id="journey"
+  labelledby="journey-title"
+  frame="stage"
+  height="fixed"
+  pin="all"
+  length="var(--len-journey)"
+  enter="beneath"
+  tone="muted"
+  class="journey"
+  stageClass="journey__stage"
+>
+  <div class="journey__track" data-journey-track>
+    <header class="journey__head" data-journey-head>
+      <p class="label label--dark">{data.label}</p>
+      <h2 id="journey-title" class="journey__title t-h2">
+        {data.titleLines.map((line, i) => <span class="journey__title-line">{line}{i < data.titleLines.length - 1 ? ' ' : ''}</span>)}
+      </h2>
+    </header>
 
-        <p class="journey__count label" aria-hidden="true" data-journey-count>
-          <span>{data.stepLabel}</span><span class="journey__count-total">/ {total}</span>
-        </p>
+    <div class="journey__body">
+      <p class="jcount" aria-hidden="true">
+        <span class="jcount__mask">
+          {data.steps.map((s, i) => <span class="jnum" data-jnum style={`--i: ${i + 1}`}>{s.index}</span>)}
+        </span>
+        <span class="jcount__total">/ {total}</span>
+      </p>
 
-        <ol class="journey__steps" data-journey-steps>
+      <div class="jmodels">
+        <div class="jframe">
           {
-            data.steps.map((step, i) => (
-              <li class="jstep" data-jstep aria-current={i === 0 ? 'step' : undefined}>
-                <div class="jstep__num" aria-hidden="true">
-                  <span class="jstep__num-inner" data-jstep-num>
-                    {step.index}
-                  </span>
-                </div>
-                <figure class="jstep__model" data-jstep-model>
-                  <Img
-                    image={step.image}
-                    alt={step.imageAlt}
-                    sizes="(min-width: 1024px) 36vw, (min-width: 640px) 60vw, 88vw"
-                    widths={[480, 768, 1080]}
-                    cover
-                  />
-                </figure>
-                <div class="jstep__label" data-jstep-label>
-                  <span class="jstep__index" aria-hidden="true">
-                    {step.index}
-                  </span>
-                  <h3 class="jstep__title">
-                    <span class="visually-hidden">{data.stepLabel} {step.index}: </span>
-                    {step.title}
-                  </h3>
-                </div>
-                <p class="jstep__caption">
-                  <span class="jstep__caption-inner" data-jstep-caption>
-                    {step.caption}
-                  </span>
-                </p>
-              </li>
+            data.steps.map((s, i) => (
+              <figure class="jmodel" data-jmodel style={`--i: ${i + 1}`}>
+                <Img image={s.image} alt={s.imageAlt} sizes="(min-width: 1024px) 440px, (min-width: 640px) 460px, 88vw" widths={[480, 768, 960]} cover position="50% 55%" />
+              </figure>
             ))
           }
-        </ol>
-
-        <div class="journey__progress" aria-hidden="true">
-          <span data-journey-progress></span>
+        </div>
+        <div class="jcaps" aria-hidden="true">
+          {data.steps.map((s) => <p class="jcap" data-jcap>{s.caption}</p>)}
         </div>
       </div>
-    </div>
-    <div class="journey__shade journey__shade--in" data-journey-shade-in aria-hidden="true"></div>
-    <div class="journey__shade journey__shade--out" data-journey-shade-out aria-hidden="true"></div>
-  </div>
-</section>
 
-<style>
-  /* ============================================================ stacked list (reduced motion) */
-  .journey {
-    position: relative;
-    /* tuck under the Services panel's rounded bottom corners */
-    margin-top: calc(var(--radius-xl) * -1);
-    background: var(--color-bg);
+      <div class="jlist">
+        <p class="label jlist__label" aria-hidden="true">{data.listLabel}</p>
+        <div class="jlist__view">
+          <ol class="jsteps" data-jsteps>
+            {
+              data.steps.map((s, i) => (
+                <li class="jstep" data-jstep aria-current={i === 0 ? 'step' : undefined} style={`--i: ${i + 1}`}>
+                  <span class="jstep__row" data-jrow>
+                    <span class="jstep__index" aria-hidden="true">{s.index}</span>
+                    <h3 class="jstep__title">
+                      <span class="visually-hidden">{data.stepLabel} {s.index}: </span>
+                      {s.title}
+                    </h3>
+                  </span>
+                  <p class="jstep__caption">{s.caption}</p>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+
+      <div class="jprogress" aria-hidden="true"><span data-jprogress></span></div>
+    </div>
+  </div>
+</SceneFrame>
+
+<style is:global>
+  /* The journey stays pinned beneath the Doctors stage for its breath too (tail = rise overlap + --len-doctors),
+     so the covered journey never slides into view above the inset doctors stage (motion kit §4 #5 note). */
+  .scene.journey.scene--stage[data-scene],
+  .scene.doctors {
+    --jd-overlap: var(--overlap-rise); /* phones / reduced motion: 0 */
   }
-  .journey__stage {
-    position: relative;
-    padding-block: calc(var(--section-pad-sm) + var(--radius-xl)) var(--section-pad-sm);
+  @media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+    .scene.journey.scene--stage[data-scene],
+    .scene.doctors {
+      --jd-overlap: 100svh; /* tablet too: the journey must still be pinned when the doctors stage has covered it */
+    }
+  }
+  .scene.journey.scene--stage[data-scene] {
+    --scene-tail: calc(var(--jd-overlap) + var(--len-doctors));
+  }
+
+  /* ================================================================ static (reduced motion / fallback) */
+  .scene.journey[data-height] .journey__stage {
+    height: auto;
   }
   .journey__head {
     display: grid;
-    gap: var(--space-5);
+    justify-items: start;
+    gap: var(--space-4);
+    padding: var(--stage-pad-y) var(--stage-pad-x) var(--space-5);
   }
-  .journey__count,
-  .journey__progress,
-  .journey__shade,
-  .jstep__index {
+  .journey__title {
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+  .journey__body {
+    display: grid;
+    grid-template-columns: 2.75rem 88px minmax(0, 1fr);
+    column-gap: var(--space-4);
+    padding: 0 var(--stage-pad-x) var(--stage-pad-y);
+  }
+  .jcount,
+  .jcount__mask,
+  .jmodels,
+  .jframe,
+  .jlist,
+  .jlist__view,
+  .jsteps {
+    display: contents;
+  }
+  .jcount__total,
+  .jcaps,
+  .jlist__label,
+  .jprogress {
     display: none;
   }
-  .journey__steps {
-    width: 100%;
-    max-width: var(--container-max);
-    margin: var(--space-8) auto 0;
-    padding-inline: var(--gutter);
+  .jnum,
+  .jmodel,
+  .jstep {
+    grid-row: var(--i);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--border-soft);
+  }
+  .jnum {
+    grid-column: 1;
+    font-size: var(--fs-h4);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  .jmodel {
+    grid-column: 2;
+    margin: 0;
+  }
+  .jmodel .picture {
+    display: block;
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
   }
   .jstep {
+    grid-column: 3;
     display: grid;
-    grid-template-columns: 3.5rem minmax(0, 1fr);
-    column-gap: var(--space-4);
-    row-gap: var(--space-4);
-    padding-block: var(--space-6);
-    border-top: 1px solid var(--color-border);
+    align-content: start;
+    gap: var(--space-2);
   }
-  .jstep__num {
-    grid-row: 1 / 3;
-    font-size: var(--fs-h3);
-    line-height: 1;
-    letter-spacing: var(--ls-heading);
-    font-variant-numeric: tabular-nums;
-  }
-  .jstep__num-inner {
-    display: block;
-  }
-  .jstep__label {
-    grid-column: 2;
-    grid-row: 1;
+  .jstep__index {
+    display: none;
   }
   .jstep__title {
     font-size: var(--fs-h4);
@@ -145,294 +182,271 @@ const total = String(data.steps.length).padStart(2, '0');
     letter-spacing: var(--ls-tight);
   }
   .jstep__caption {
-    grid-column: 2;
-    grid-row: 2;
-    max-width: 28rem;
-    color: var(--color-text-2);
+    max-width: 32rem;
+    font-size: var(--fs-body-sm);
+    color: var(--text-secondary);
   }
-  .jstep__caption-inner {
-    display: block;
-  }
-  .jstep__model {
-    grid-column: 2;
-    grid-row: 3;
-    width: min(100%, 20rem);
-    aspect-ratio: 4 / 5;
-    overflow: hidden;
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
-  }
-  .jstep__model :global(.picture) {
-    height: 100%;
-  }
-
-  @media (min-width: 1024px) {
-    .jstep {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--grid-gap);
-      align-items: start;
+  @media (min-width: 640px) {
+    .journey__body {
+      grid-template-columns: 4rem 160px minmax(0, 1fr);
+      column-gap: var(--space-6);
     }
-    .jstep__num {
-      grid-column: 1 / 3;
-      grid-row: 1 / 3;
-      font-size: var(--fs-h2);
-    }
-    .jstep__label,
-    .jstep__caption {
-      grid-column: 3 / 7;
-    }
-    .jstep__model {
-      grid-column: 9 / -1;
-      grid-row: 1 / 4;
-      width: 100%;
-      aspect-ratio: 5 / 4;
+    .jnum {
+      font-size: var(--fs-num);
+      line-height: 1;
+      letter-spacing: -0.04em;
     }
   }
 
-  /* ============================================================ staged scene (motion) */
+  /* ================================================================ staged (motion): ONE pinned stage */
   @media (prefers-reduced-motion: no-preference) {
-    .journey {
-      --journey-lift: 0px;
-      --journey-steps: 180vh;
-      --edge: max(var(--gutter), calc((100% - var(--container-max)) / 2 + var(--gutter)));
-      --pad-b: clamp(20px, 4svh, 40px);
-      --block-h: 7.5rem;
-      --head-h: calc(1rem + var(--space-4) + var(--fs-h2) * 2.04);
-      --head-top: calc(var(--header-h) + clamp(16px, 3.5svh, 40px));
-      height: calc(100svh + var(--journey-steps) + var(--journey-cover, 0px));
+    .journey:not(.motion-fallback)[data-height] .journey__stage {
+      height: var(--stage-h);
     }
-    .journey__stage {
-      position: sticky;
-      top: 0;
-      height: 100svh;
-      padding: 0;
-      overflow: hidden;
-      isolation: isolate;
+    .journey:not(.motion-fallback) {
+      --jpitch: 32px;
+      --jm: min(100%, calc(var(--stage-h) - 2 * var(--stage-pad-y) - 150px), 460px);
     }
-    .journey__recede,
-    .journey__content,
-    .journey__shade {
+    .journey:not(.motion-fallback) .journey__track {
       position: absolute;
-      inset: 0;
+      inset: 0 0 auto;
     }
-    .journey__content {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: auto minmax(0, 1fr);
+    .journey:not(.motion-fallback) .journey__head {
+      padding-bottom: 0;
     }
-    .journey__head {
-      grid-row: 1;
+    .journey:not(.motion-fallback) .journey__body {
+      position: relative;
+      height: var(--stage-h);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       gap: var(--space-4);
-      padding-top: var(--head-top);
+      padding: var(--stage-pad-y) var(--stage-pad-x);
     }
-    .journey__shade {
-      display: block;
-      z-index: 2;
-      background: var(--color-text);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .journey__steps {
-      grid-row: 2;
-      margin: 0;
-      padding: 0;
-    }
-    .jstep {
-      display: block;
+    .journey:not(.motion-fallback) .jnum,
+    .journey:not(.motion-fallback) .jmodel,
+    .journey:not(.motion-fallback) .jstep {
       padding: 0;
       border: 0;
     }
-    /* absolutely placed parts resolve against the stage, never against a grid area */
-    .jstep__num,
-    .jstep__model,
-    .jstep__label,
-    .jstep__caption {
-      grid-area: auto;
-    }
 
-    /* number: masked roll */
-    .jstep__num {
+    /* number: masked vertical roll */
+    .journey:not(.motion-fallback) .jcount {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
       position: absolute;
-      left: var(--edge);
-      top: calc(100% - var(--pad-b) - var(--block-h));
-      height: 0.86em;
-      overflow: hidden;
-      font-size: 4.25rem;
+      top: var(--stage-pad-y);
+      left: var(--stage-pad-x);
+      margin: 0;
+      font-size: var(--fs-num);
       font-weight: var(--fw-regular);
-      line-height: 0.86;
-      letter-spacing: -0.05em;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-primary);
     }
-    .jstep__num-inner {
-      will-change: transform;
+    .journey:not(.motion-fallback) .jcount__mask {
+      display: block;
+      position: relative;
+      width: 1.24em;
+      height: 1em;
+      overflow: hidden;
     }
-    /* model */
-    .jstep__model {
+    .journey:not(.motion-fallback) .jnum {
       position: absolute;
-      left: 50%;
-      top: calc(var(--head-top) + var(--head-h) + clamp(16px, 3svh, 32px));
-      bottom: calc(var(--pad-b) + var(--block-h) + clamp(12px, 2svh, 24px));
-      translate: -50% 0;
-      width: auto;
-      max-width: 88vw;
-      aspect-ratio: 4 / 5;
-      border-radius: var(--radius-md);
-      will-change: transform, opacity;
-      backface-visibility: hidden;
+      inset: 0 auto auto 0;
+      font-size: inherit;
+      line-height: 1;
     }
-    /* title + caption slots (mobile: shared, cross-fading) */
-    .jstep__label {
-      position: absolute;
-      left: calc(var(--edge) + 5.25rem);
-      right: var(--edge);
-      top: calc(100% - var(--pad-b) - var(--block-h) + 0.1rem);
-    }
-    .jstep__caption {
-      position: absolute;
-      left: calc(var(--edge) + 5.25rem);
-      right: calc(var(--edge) + 0.75rem);
-      top: calc(100% - var(--pad-b) - var(--block-h) + 2.1rem);
-      max-width: 24rem;
-      font-size: var(--fs-small);
-      line-height: 1.45;
-    }
-    .jstep:not(:first-child) .jstep__model,
-    .jstep:not(:first-child) .jstep__label,
-    .jstep:not(:first-child) .jstep__caption-inner {
-      opacity: 0;
-    }
-    .jstep:not(:first-child) .jstep__num-inner {
+    .journey:not(.motion-fallback) .jnum:not(:first-child) {
       transform: translate3d(0, 100%, 0);
     }
-
-    /* ultra-thin progress line */
-    .journey__progress {
-      display: block;
-      position: absolute;
-      right: calc(var(--gutter) * 0.45);
-      top: 50%;
-      height: 28svh;
-      width: 1px;
-      translate: 0 -50%;
-      background: var(--color-border);
+    .journey:not(.motion-fallback) .jcount__total {
+      display: inline;
+      font-size: var(--fs-label);
+      font-weight: var(--fw-medium);
+      letter-spacing: var(--ls-label);
+      color: var(--text-secondary);
     }
-    .journey__progress span {
+
+    /* model 1:1 + caption */
+    .journey:not(.motion-fallback) .jmodels {
+      display: contents;
+    }
+    .journey:not(.motion-fallback) .jframe {
+      display: block;
+      order: 1;
+      position: relative;
+      width: var(--jm);
+      aspect-ratio: 1;
+      flex: none;
+      border-radius: var(--media-radius);
+      overflow: hidden;
+      background: var(--surface-muted);
+      isolation: isolate;
+    }
+    .journey:not(.motion-fallback) .jmodel {
       position: absolute;
       inset: 0;
-      background: var(--color-text);
-      transform: scaleY(0);
-      transform-origin: 50% 0;
+      backface-visibility: hidden;
     }
-  }
-
-  @media (min-width: 640px) and (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
-    .journey {
-      --block-h: 9rem;
+    .journey:not(.motion-fallback) .jmodel .picture {
+      height: 100%;
+      aspect-ratio: auto;
+      border-radius: 0;
     }
-    .jstep__num {
-      font-size: 5.5rem;
+    .journey:not(.motion-fallback) .jmodel:not(:first-child) {
+      opacity: 0;
     }
-    .jstep__label,
-    .jstep__caption {
-      left: calc(var(--edge) + 7.5rem);
-    }
-    .jstep__caption {
-      font-size: var(--fs-body);
-    }
-  }
-
-  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .journey {
-      --journey-lift: 100svh;
-      --journey-steps: 250vh;
-      --pad-b: clamp(40px, 8svh, 88px);
-      --caption-h: 6rem;
-      --num-size: clamp(7rem, 11vw, 12rem);
-      /* the first 100svh sits beneath the Services panel, which lifts off it */
-      margin-top: calc(var(--journey-lift) * -1);
-      height: calc(100svh + var(--journey-lift) + var(--journey-steps) + var(--journey-cover, 0px));
-    }
-    .journey__head {
-      padding-top: calc(var(--header-h) + clamp(24px, 5svh, 56px));
-    }
-    .journey__title {
-      max-width: 9.5em;
-      font-size: min(var(--fs-h2), 5vw);
-    }
-    .journey__steps {
-      grid-row: 1 / -1;
-      align-self: center;
-      justify-self: end;
-      width: auto;
-      margin-right: calc(var(--edge) + 2.5rem);
+    .journey:not(.motion-fallback) .jcaps {
       display: grid;
-      gap: clamp(10px, 1.8svh, 18px);
+      order: 3;
+      width: var(--jm);
     }
-    .jstep__label {
-      position: static;
-      display: grid;
-      grid-template-columns: 2.25rem auto;
-      align-items: baseline;
-      opacity: 0.36;
+    .jcap {
+      grid-area: 1 / 1;
+      max-width: 34ch;
+      font-size: var(--fs-small);
+      line-height: 1.45;
+      color: var(--text-secondary);
     }
-    .jstep:not(:first-child) .jstep__label {
-      opacity: 0.36;
+    .journey:not(.motion-fallback) .jcap:not(:first-child) {
+      opacity: 0;
     }
-    .jstep:first-child .jstep__label {
-      opacity: 1;
+
+    /* step list: one swapping row (tablet / phone) */
+    .journey:not(.motion-fallback) .jlist {
+      display: block;
+      order: 2;
+      width: var(--jm);
     }
-    .jstep__index {
+    .journey:not(.motion-fallback) .jlist__view {
+      display: block;
+      height: var(--jpitch);
+      overflow: hidden;
+    }
+    .journey:not(.motion-fallback) .jsteps {
+      display: block;
+    }
+    .journey:not(.motion-fallback) .jstep {
+      display: block;
+      height: var(--jpitch);
+    }
+    .journey:not(.motion-fallback) .jstep__row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      height: 100%;
+    }
+    .journey:not(.motion-fallback) .jstep:not(:first-child) .jstep__row {
+      opacity: 0.2; /* = --text-faint */
+    }
+    .journey:not(.motion-fallback) .jstep__index {
       display: block;
       font-size: var(--fs-label);
       font-weight: var(--fw-medium);
       letter-spacing: var(--ls-label);
       font-variant-numeric: tabular-nums;
     }
-    .jstep__title {
-      font-size: var(--fs-h4);
+    .journey:not(.motion-fallback) .jstep__title {
       white-space: nowrap;
     }
-
-    .jstep__num {
-      top: auto;
-      bottom: calc(var(--pad-b) + var(--caption-h) + 1.25rem);
-      font-size: var(--num-size);
-    }
-    .journey__count {
-      display: inline-flex;
+    /* captions live in .jcaps visually; the list keeps them for screen readers */
+    .journey:not(.motion-fallback) .jstep__caption {
       position: absolute;
-      left: var(--edge);
-      bottom: calc(var(--pad-b) + var(--caption-h) + 1.25rem + var(--num-size) * 0.86 + 1.25rem);
-      gap: 0.75em;
-      color: var(--color-text);
-    }
-    .journey__count-total {
-      color: var(--color-text-2);
-    }
-    .jstep__caption {
-      left: var(--edge);
-      right: auto;
-      top: calc(100% - var(--pad-b) - var(--caption-h));
-      width: min(22rem, 25vw);
-      font-size: var(--fs-body);
-      line-height: var(--lh-body);
-    }
-    .jstep__model {
-      left: 56%;
-      top: calc(50% + var(--header-h) / 2);
-      bottom: auto;
-      height: min(56svh, 34vw, 700px);
-      translate: -50% -50%;
-      max-width: none;
-      border-radius: var(--radius-lg);
-    }
-    .journey__progress {
-      height: 34svh;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
     }
   }
-  @media (min-width: 1280px) and (prefers-reduced-motion: no-preference) {
-    .jstep__model {
-      left: 55%;
-      height: min(62svh, 40vw, 700px);
+
+  /* tablet: a little more air, bigger single row */
+  @media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+    .journey:not(.motion-fallback) {
+      --jpitch: 40px;
+    }
+    .journey:not(.motion-fallback) .journey__body {
+      gap: var(--space-5);
+    }
+  }
+
+  /* desktop: number | model | list | progress */
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .journey:not(.motion-fallback) {
+      --jpitch: 72px;
+      --jm: min(100%, calc(var(--stage-h) - 2 * var(--stage-pad-y) - 64px));
+    }
+    .journey:not(.motion-fallback) .journey__title {
+      max-width: none;
+    }
+    .journey:not(.motion-fallback) .journey__body {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      align-items: start;
+      align-content: center;
+    }
+    .journey:not(.motion-fallback) .jcount {
+      position: static;
+      grid-column: 1 / 3;
+      grid-row: 1;
+      align-self: center;
+      margin-bottom: 3.5rem; /* optical: centre on the model, not model + caption */
+    }
+    .journey:not(.motion-fallback) .jmodels {
+      display: grid;
+      gap: var(--space-4);
+      grid-column: 3 / 8;
+      grid-row: 1;
+      width: var(--jm);
+    }
+    .journey:not(.motion-fallback) .jframe,
+    .journey:not(.motion-fallback) .jcaps {
+      width: 100%;
+    }
+    .journey:not(.motion-fallback) .jlist {
+      grid-column: 9 / 13;
+      grid-row: 1;
+      width: auto;
+    }
+    .journey:not(.motion-fallback) .jlist__label {
+      display: block;
+      padding-bottom: var(--space-4);
+    }
+    .journey:not(.motion-fallback) .jlist__view {
+      height: calc(var(--jpitch) * 5);
+      border-top: 1px solid var(--border-soft);
+    }
+    .journey:not(.motion-fallback) .jstep {
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .journey:not(.motion-fallback) .jstep__row {
+      gap: var(--space-5);
+    }
+    .journey:not(.motion-fallback) .jstep__index {
+      width: 1.75rem;
+    }
+    /* thin progress line at the stage's right edge */
+    .journey:not(.motion-fallback) .jprogress {
+      display: block;
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      width: 1px;
+      height: 96px;
+      margin-top: -48px;
+      background: var(--border-soft);
+    }
+    .jprogress span {
+      position: absolute;
+      inset: 0;
+      background: var(--text-primary);
+      transform: scaleY(0);
+      transform-origin: 50% 0;
     }
   }
 </style>

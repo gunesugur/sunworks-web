@@ -1,289 +1,164 @@
 ---
 /**
- * §2–4 Hero with load intro + hero→statement transition.
- * Motion: src/scripts/sections/hero.ts. Desktop: sticky stage (200svh wrapper, -100svh margin)
- * so ClinicStatement slides over it while the stage compresses (scale .965 + radius).
+ * Scene 1 — Hero (docs/AUREA_MOTION_RULE_KIT_V3.md §5). SceneFrame stage, height fixed, pinned ≥640 for the
+ * intro's short rise (hand-off 1 is built by motion/scenes.ts). Load timeline in scripts/sections/hero.ts:
+ * a 21:9 window at 48 % of the stage width (clip bounds + cover-fit inner scale) opens to the full stage,
+ * then header, line-masked headline, copy + ONE dark CTA and a quiet text action.
+ * Phones: the image fills a 76svh stage and the text sits under it (no text over the photo).
  */
 import { site } from '../../content/site';
+import SceneFrame from '../scene/SceneFrame.astro';
+import MaskedMedia from '../scene/MaskedMedia.astro';
 import Button from '../ui/Button.astro';
-import Img from '../ui/Img.astro';
 import RevealText from '../ui/RevealText.astro';
 
 const { hero } = site;
 ---
-<section class="hero" id="top" data-section="hero" aria-labelledby="hero-title">
-  <div class="hero__stage" data-hero-stage>
-    <div class="hero__inner container">
-      <div class="hero__meta" data-hero-meta>
-        <span class="label label--dark hero__meta-index" data-intro>{hero.meta.index}</span>
-        <span class="label hero__meta-discipline" data-intro>{hero.meta.discipline}</span>
-        <span class="label hero__meta-location" data-intro>{hero.meta.location}</span>
-        <span class="hero__rule" data-hero-rule aria-hidden="true"></span>
-      </div>
-
-      <div class="hero__title-wrap" data-hero-title>
-        <RevealText as="h1" id="hero-title" class="hero__title t-hero" lines={hero.titleLines} manual />
-      </div>
-
-      <div class="hero__body">
-        <div class="hero__aside" data-hero-aside>
-          <p class="hero__caption label" data-intro>
-            <span class="hero__caption-dot" aria-hidden="true"></span>{hero.caption}
-          </p>
-          <div class="hero__aside-bottom">
-            <p class="hero__copy" data-intro>{hero.copy}</p>
-            <div class="hero__actions" data-intro>
-              <Button href={hero.primary.href}>{hero.primary.label}</Button>
-              <Button href={hero.secondary.href} variant="link" arrowDirection="down">{hero.secondary.label}</Button>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero__frame-wrap" data-hero-drift>
-          <figure class="hero__frame" data-intro="frame" data-hero-frame>
-            <div class="hero__media" data-hero-media>
-              <div class="hero__parallax" data-hero-parallax>
-                <Img
-                  image={hero.image}
-                  alt={hero.imageAlt}
-                  sizes="(min-width: 1024px) 72vw, 100vw"
-                  priority
-                  cover
-                  position="55% 50%"
-                  imgClass="hero__img"
-                />
-              </div>
-            </div>
-          </figure>
-        </div>
-      </div>
+<SceneFrame
+  name="hero"
+  section="hero"
+  id="top"
+  labelledby="hero-title"
+  frame="stage"
+  height="fixed"
+  pin="tablet"
+  length="var(--len-hero)"
+  ambient="hero-operatory"
+  class="hero"
+  stageClass="hero__stage"
+>
+  <MaskedMedia
+    image={hero.image}
+    alt={hero.imageAlt}
+    sizes="(min-width: 1024px) 91vw, (min-width: 640px) calc(100vw - 48px), calc(100vw - 24px)"
+    widths={[768, 1080, 1440, 1920, 2400]}
+    priority
+    fill
+    radius="none"
+    positions={{ desktop: '55% 55%', tablet: '44% 62%', mobile: '40% 62%' }}
+    class="hero__media"
+    attrs={{ 'data-hero-media': '' }}
+  />
+  <div class="hero__scrim" data-hero-scrim aria-hidden="true"></div>
+  <div class="hero__content">
+    <RevealText as="h1" id="hero-title" class="hero__title t-hero" lines={hero.titleLines} manual />
+    <p class="hero__copy" data-intro>{hero.copy}</p>
+    <div class="hero__actions" data-intro>
+      <Button href={hero.primary.href} size="sm">{hero.primary.label}</Button>
+      <Button href={hero.secondary.href} variant="link" arrowDirection="down">{hero.secondary.label}</Button>
     </div>
-    <div class="hero__shade" data-hero-shade aria-hidden="true"></div>
   </div>
-</section>
+</SceneFrame>
 
 <style>
-  .hero {
-    position: relative;
-    background: var(--color-surface);
-  }
-  .hero__stage {
-    position: relative;
-    background: var(--color-bg);
-    overflow: hidden;
-    transform-origin: 50% 0%;
-  }
-  .hero__inner {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--grid-gap);
-    padding-top: calc(var(--header-h) + 8px);
-    padding-bottom: calc(var(--space-8) + 28px);
-  }
-
-  /* meta row */
-  .hero__meta {
-    grid-column: 1 / -1;
-    position: relative;
-    display: grid;
-    grid-template-columns: subgrid;
-    align-items: center;
-    padding-block: 12px;
-  }
-  .hero__meta-index {
-    grid-column: 1 / 7;
-  }
-  .hero__meta-discipline {
-    display: none;
-  }
-  .hero__meta-location {
-    grid-column: 7 / -1;
-    justify-self: end;
-  }
-  .hero__rule {
+  /* stage children are authored here (scoped); the stage itself comes from SceneFrame (global) */
+  .hero__scrim {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    background: var(--color-border);
-    transform-origin: left center;
-  }
-
-  /* headline */
-  .hero__title-wrap {
-    grid-column: 1 / -1;
-    margin-top: clamp(28px, 5vh, 56px);
-  }
-
-  /* body */
-  .hero__body {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: subgrid;
-    margin-top: var(--space-6);
-    row-gap: var(--space-6);
-  }
-  .hero__aside {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    display: contents;
-  }
-  .hero__caption {
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
     display: none;
   }
-  .hero__aside-bottom {
-    grid-column: 1 / -1;
-    grid-row: 2;
+  .hero__content {
+    position: relative;
+    z-index: 2;
     display: grid;
-    gap: var(--space-5);
-    max-width: 30rem;
+    justify-items: start;
+    gap: var(--space-4);
+    padding: var(--space-5) 4px var(--space-2);
+  }
+  .hero__title {
+    max-width: 13ch;
+    font-weight: var(--fw-hero);
+    text-wrap: balance;
   }
   .hero__copy {
-    font-size: var(--fs-body-lg);
-    color: var(--color-text-2);
+    max-width: 34ch;
+    font-size: var(--fs-body-sm);
+    line-height: var(--lh-body);
+    color: var(--text-secondary);
   }
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-4) var(--space-5);
-  }
-  .hero__frame-wrap {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
-  .hero__frame {
-    position: relative;
-    aspect-ratio: 4 / 4.4;
-    border-radius: var(--radius-md);
-    background: var(--color-white);
-    overflow: hidden;
-  }
-  .hero__media {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
-  .hero__parallax {
-    position: absolute;
-    inset: -6% 0;
-  }
-  .hero__parallax :global(.picture) {
-    height: 100%;
-  }
-  .hero__shade {
-    position: absolute;
-    inset: 0;
-    background: var(--color-text);
-    opacity: 0;
-    pointer-events: none;
+    gap: var(--space-3) var(--space-5);
+    margin-top: var(--space-2);
   }
 
+  /* phones: stage = image only (76svh), text below it, outside the photo */
+  @media (max-width: 639.98px) {
+    :global(.scene.hero[data-height]) :global(.stage) {
+      height: auto;
+      background: transparent;
+      overflow: visible;
+      contain: none;
+    }
+    :global(.hero .hero__media) {
+      position: relative;
+      inset: auto;
+      height: var(--stage-h);
+      border-radius: var(--stage-radius);
+    }
+  }
+
+  /* load start state (≥640 + motion) in CSS so nothing flashes before hero.ts measures the real window */
+  @media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+    :global(html:not(.is-ready) .hero .hero__media) {
+      clip-path: inset(28.5% 26% 28.5% 26% round 12px);
+    }
+    :global(html:not(.is-ready) .hero .hero__media > .mm__inner) {
+      transform: scale(0.5);
+    }
+    :global(html:not(.is-ready)) .hero__scrim {
+      opacity: 0;
+    }
+  }
+  :global(.motion-fallback .hero .hero__media) {
+    clip-path: none !important;
+  }
+  :global(.motion-fallback .hero .hero__media > .mm__inner) {
+    transform: none !important;
+  }
+
+  /* tablet + desktop: text inside the stage, lower-left, over a soft warm scrim */
   @media (min-width: 640px) {
-    .hero__frame {
-      aspect-ratio: 16 / 11;
-    }
-    .hero__meta-index {
-      grid-column: 1 / 5;
-    }
-    .hero__meta-discipline {
+    .hero__scrim {
       display: block;
-      grid-column: 5 / 9;
+      background: linear-gradient(0deg, rgba(248, 248, 245, 0.9) 0%, rgba(248, 248, 245, 0.72) 30%, rgba(248, 248, 245, 0.3) 50%, rgba(248, 248, 245, 0) 66%);
     }
-    .hero__meta-location {
-      grid-column: 9 / -1;
-    }
-  }
-
-  /* ---- desktop: full-viewport editorial composition ---- */
-  @media (min-width: 1024px) {
-    .hero__stage {
-      height: 100svh;
-      min-height: 640px;
-    }
-    .hero__inner {
-      height: 100%;
-      grid-template-rows: auto auto minmax(0, 1fr);
-      padding-top: calc(var(--header-h) + 4px);
-      padding-bottom: clamp(20px, 3.2vh, 36px);
-    }
-    .hero__meta-index {
-      grid-column: 1 / 4;
-    }
-    .hero__meta-discipline {
-      grid-column: 4 / 10;
-    }
-    .hero__meta-location {
-      grid-column: 10 / -1;
-    }
-    .hero__title-wrap {
-      margin-top: clamp(20px, 4.2vh, 48px);
-    }
-    /* second line steps in to the image's left edge (col 4) */
-    .hero__title :global(.mask-line:nth-child(2)) {
-      padding-left: calc((100% + var(--grid-gap)) / 12 * 3);
-    }
-    .hero__body {
-      min-height: 0;
-      margin-top: clamp(20px, 4vh, 44px);
-      grid-template-rows: minmax(0, 1fr);
-    }
-    .hero__aside {
-      grid-column: 1 / 4;
-      grid-row: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: var(--space-6);
-      padding-right: var(--space-4);
-    }
-    .hero__caption {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .hero__caption-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--color-accent);
-    }
-    .hero__aside-bottom {
-      grid-column: auto;
-      grid-row: auto;
-      gap: var(--space-6);
-    }
-    .hero__copy {
-      font-size: var(--fs-body);
-      max-width: 26ch;
-    }
-    .hero__actions {
-      flex-direction: column;
-      align-items: flex-start;
+    .hero__content {
+      position: absolute;
+      left: var(--stage-pad-x);
+      right: var(--stage-pad-x);
+      bottom: var(--stage-pad-y);
+      padding: 0;
       gap: var(--space-4);
     }
-    .hero__frame-wrap {
-      grid-column: 4 / -1;
-      grid-row: 1;
-      min-height: 0;
-    }
-    .hero__frame {
-      aspect-ratio: auto;
-      height: 100%;
-      min-height: 260px;
+    .hero__title {
+      max-width: 16ch;
     }
   }
-
-  /* sticky stage → ClinicStatement slides over the lower part */
-  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .hero {
-      height: 200svh;
-      margin-bottom: -100svh;
+  @media (min-width: 1024px) {
+    .hero__scrim {
+      background:
+        linear-gradient(90deg, rgba(248, 248, 245, 0.86) 0%, rgba(248, 248, 245, 0.7) 26%, rgba(248, 248, 245, 0.28) 48%, rgba(248, 248, 245, 0) 64%),
+        linear-gradient(0deg, rgba(248, 248, 245, 0.3) 0%, rgba(248, 248, 245, 0) 40%);
     }
-    .hero__stage {
-      position: sticky;
-      top: 0;
+    .hero__content {
+      right: auto;
+      bottom: calc(var(--stage-pad-y) * 1.5);
+      width: min(62%, 760px);
+      gap: 18px;
+    }
+    .hero__title {
+      max-width: none;
+    }
+    .hero__copy {
+      max-width: 40ch;
+    }
+    .hero__actions {
+      margin-top: var(--space-3);
     }
   }
 </style>

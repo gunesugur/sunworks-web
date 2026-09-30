@@ -86,27 +86,25 @@ export const site = {
   },
 
   hero: {
-    meta: { index: '01 / AUREA DENTAL', discipline: 'Advanced Dental Care', location: 'Bursa — Türkiye' },
     titleLines: ['Precision and comfort,', 'crafted around your smile.'],
     copy: 'Personalized dental care combining modern diagnostics, experienced clinicians and a calmer patient experience.',
     primary: { label: 'Book a consultation', href: '#booking' } satisfies NavLink,
     secondary: { label: 'Explore treatments', href: '#services' } satisfies NavLink,
     image: 'hero-operatory' as ImageKey,
     imageAlt: 'A calm, daylit treatment room at AUREA Dental: patient chair, overhead light and a garden view.',
-    caption: 'Treatment room — natural daylight',
   },
 
   statement: {
     label: '02 / The clinic',
-    lines: [
+    // semantic phrases — each one inks from --text-ink-start to --text-primary as the reader scrolls (inkPhrases)
+    phrases: [
       'We combine thoughtful dentistry,',
-      'modern technology and genuine care',
-      'to make every visit feel clearer,',
-      'calmer and more predictable.',
+      'modern technology',
+      'and genuine care',
+      'to make every visit',
+      'feel clearer, calmer',
+      'and more predictable.',
     ],
-    secondary:
-      'Every plan starts with listening. Digital scans help us plan treatment with greater accuracy and explain each step before treatment begins — so you always know what happens next, and why.',
-    link: { label: 'Meet our team', href: '#team' } satisfies NavLink,
     image: 'clinic-detail' as ImageKey,
     imageAlt: 'Dental handpieces resting on the treatment unit, ready for the next patient.',
     // CMS-editable PLACEHOLDERS — unverified (verified: false). Do not publish as fact.
@@ -243,6 +241,8 @@ export const site = {
     titleLines: ['From first call', 'to confident smile.'],
     /** prefix for step numbers ("Step 01") — screen readers + the stage counter */
     stepLabel: 'Step',
+    /** small label above the right-hand step list */
+    listLabel: 'Steps',
     steps: [
       {
         index: '01',
@@ -284,8 +284,8 @@ export const site = {
 
   doctors: {
     label: '06 / Our team',
-    titleLines: ['AUREA is the team', 'you trust with your smile.'],
-    intro: 'Four specialists, one shared plan. Each case is reviewed together before treatment begins.',
+    /** claim, upper-left on the portrait stage (3 short lines) */
+    titleLines: ['AUREA is the team', 'you trust with', 'your smile.'],
     selectorLabel: 'Choose a specialist',
     /** object-position of each portrait's face (placeholders & real photos): avatar crop + mobile crop */
     focus: { elif: '50% 36%', emre: '52% 38%', selin: '47% 40%', can: '56% 36%' } as Record<string, string>,
@@ -328,6 +328,7 @@ export const site = {
   results: {
     label: '07 / Results',
     titleLines: ['Real results,', 'real people.'],
+    intro: 'Every result starts with a plan you can see. Drag the divider to compare the same smile before and after treatment.',
     slider: {
       before: 'result-before' as ImageKey,
       after: 'result-after' as ImageKey,
@@ -336,10 +337,15 @@ export const site = {
       beforeLabel: 'Before',
       afterLabel: 'After',
       ariaLabel: 'Before and after comparison',
-      hint: 'Drag or use arrow keys to compare',
+      hint: 'Drag or use the arrow keys to compare',
       valueText: '{before}% before, {after}% after',
     },
+    /**
+     * PLACEHOLDER testimonial (placeholder: true) — not a real patient statement. Replace with a consented,
+     * verified quote before launch; rendered with data-placeholder so QA can find it. No stars / counts / awards.
+     */
     testimonial: {
+      placeholder: true,
       quote: 'I stopped hiding my teeth in photos.',
       body: 'They explained every step before we started and never rushed me. Six months later I smile without thinking about it.',
       // Placeholder identity — real patient details are only published with written consent.
@@ -347,7 +353,6 @@ export const site = {
       treatment: 'Aligners & whitening',
       note: 'Name withheld for privacy.',
       label: 'Patient story',
-      monogram: 'P',
     },
   },
 
@@ -355,7 +360,7 @@ export const site = {
     label: 'FAQ',
     titleLines: ['Common', 'questions.'],
     intro: 'If your question is not here, our patient coordinators are happy to help by phone or email.',
-    cta: { label: 'Ask our team', href: '#booking' } satisfies NavLink,
+    cta: { label: 'Ask our team directly', href: '#booking' } satisfies NavLink,
     items: [
       {
         id: 'consultation',
@@ -434,13 +439,26 @@ export const site = {
 
   footer: {
     tagline: 'Dental care with clarity.',
+    blurb: 'Specialist dentistry in Bursa: modern diagnostics, clear plans and a calmer way to be treated.',
+    navTitle: 'Navigate',
     nav: [
-      { label: 'Services', href: '#services' },
       { label: 'About', href: '#about' },
+      { label: 'Technology', href: '#technology' },
+      { label: 'Services', href: '#services' },
+      { label: 'Process', href: '#journey' },
       { label: 'Our Team', href: '#team' },
       { label: 'Results', href: '#results' },
       { label: 'FAQ', href: '#faq' },
     ] satisfies readonly NavLink[],
+    servicesTitle: 'Treatments',
+    services: [
+      { label: 'Teeth whitening', href: '#services' },
+      { label: 'Dental implants', href: '#services' },
+      { label: 'Braces & aligners', href: '#services' },
+      { label: "Children's dentistry", href: '#services' },
+      { label: 'Smile design', href: '#services' },
+    ] satisfies readonly NavLink[],
+    socialTitle: 'Follow',
     hours: {
       title: 'Opening hours',
       rows: [
@@ -466,7 +484,6 @@ export const site = {
     ] satisfies readonly NavLink[],
     copyright: '© 2026 AUREA Dental Clinic',
     backToTop: 'Back to top',
-    texture: 'benefits-clinic' as ImageKey,
   },
 } as const;
 

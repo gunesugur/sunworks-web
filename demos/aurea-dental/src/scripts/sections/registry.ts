@@ -12,7 +12,6 @@ export const registry: Record<string, SectionLoader> = {
   hero: () => import('./hero'),
   statement: () => import('./statement'),
   benefits: () => import('./benefits'),
-  footer: () => import('./footer'),
   services: () => import('./services'),
   journey: () => import('./journey'),
   doctors: () => import('./doctors'),

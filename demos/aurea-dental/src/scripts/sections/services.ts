@@ -1,12 +1,14 @@
 /**
- * §7–8 Services panel + ServiceAccordion.
+ * Scenes 4–5 — Services panel + treatments accordion (motion kit §5).
  *
- * Panel: `.panel-rise` already slides over the sticky Benefits stage through document flow; this
- * module only adds the panel's own rise (side inset opening to full bleed + head lagging behind).
+ * Panel: a RisingPanel — its rise over the Benefits stage (and Journey lying beneath it) is declared in markup
+ * and built by motion/scenes.ts. This module only drives the list.
  *
  * Accordion (one open, default first):
  *  - FLIP: read visual rects (First) → toggle classes → read layout rects (Last) in one batch, then
- *    tween translate/scale + clip-path back to identity. Rows never animate height; interrupted
+ *    tween translate/scale + clip-path back to identity (collapsed 88 → active 208 px, 650 ms EASE.primary).
+ *    The media also interpolates its corner radius (round thumb → 12 px image) in last-layout units, and the
+ *    active title line-masks in (yPercent 105 → 0). Rows never animate height; interrupted
  *    transitions restart from the current visual state (rects include in-flight transforms).
  *  - Input: click / Enter / Space (native button), ArrowUp/Down/Home/End between headers,
  *    hover intent (120ms, fine pointer, real pointer movement only, ≥640px). Phones: tap only.
@@ -31,6 +33,7 @@ interface Part {
   media: HTMLElement;
   detail: HTMLElement;
   name: HTMLElement | null;
+  title: HTMLElement | null;
   img: HTMLImageElement | null;
 }
 interface Snap {
@@ -39,16 +42,16 @@ interface Snap {
   media: DOMRect;
   detail: DOMRect;
   name: DOMRect | null;
+  radius: number;
 }
 
 export function init(root: HTMLElement): () => void {
   const list = root.querySelector<HTMLElement>('[data-svc-list]');
-  const head = root.querySelector<HTMLElement>('[data-services-head]');
   const parts: Part[] = Array.from(root.querySelectorAll<HTMLElement>('[data-svc]')).flatMap((row) => {
     const trigger = row.querySelector<HTMLButtonElement>('[data-svc-trigger]');
     const media = row.querySelector<HTMLElement>('[data-svc-media]');
     const detail = row.querySelector<HTMLElement>('[data-svc-detail]');
-    return trigger && media && detail ? [{ row, trigger, media, detail, name: row.querySelector<HTMLElement>('[data-svc-name]'), img: media.querySelector('img') }] : [];
+    return trigger && media && detail ? [{ row, trigger, media, detail, name: row.querySelector<HTMLElement>('[data-svc-name]'), title: row.querySelector<HTMLElement>('[data-svc-title-inner]'), img: media.querySelector('img') }] : [];
   });
   if (!list || parts.length === 0) return () => undefined;
 
@@ -81,15 +84,29 @@ export function init(root: HTMLElement): () => void {
       p.row.style.transform = '';
       p.row.style.clipPath = '';
       p.media.style.transform = '';
+      p.media.style.borderRadius = '';
       p.detail.style.transform = '';
       if (p.name) p.name.style.transform = '';
     });
   };
 
+  // corner radius of the media in its own (untransformed) px — '50%' resolves against the layout width
+  const radiusOf = (el: HTMLElement): number => {
+    const raw = getComputedStyle(el).borderTopLeftRadius;
+    const v = parseFloat(raw) || 0;
+    return raw.endsWith('%') ? (v / 100) * el.offsetWidth : v;
+  };
   const snap = (): Snap[] =>
     parts.map((p) => {
       const r = p.row.getBoundingClientRect();
-      return { top: r.top, h: r.height, media: p.media.getBoundingClientRect(), detail: p.detail.getBoundingClientRect(), name: p.name?.getBoundingClientRect() ?? null };
+      return {
+        top: r.top,
+        h: r.height,
+        media: p.media.getBoundingClientRect(),
+        detail: p.detail.getBoundingClientRect(),
+        name: p.name?.getBoundingClientRect() ?? null,
+        radius: radiusOf(p.media) * (p.media.offsetWidth > 0 ? p.media.getBoundingClientRect().width / p.media.offsetWidth : 1),
+      };
     });
 
   const fadeDetails = (prev: number, next: number, withY: boolean): void => {
@@ -159,7 +176,10 @@ export function init(root: HTMLElement): () => void {
       const mediaMoves = Math.abs(mx) > 0.5 || Math.abs(my) > 0.5 || Math.abs(ms - 1) > 0.002;
       const detailMoves = Math.abs(dx) > 0.5 || Math.abs(ddy) > 0.5;
       const nx = f.name && l.name ? f.name.left - l.name.left : 0;
-      return { p, i, dy, dClip, mx, my, ms, dx, ddy, nx, mediaMoves, detailMoves };
+      // radius: first radius expressed in last-layout units (the element is scaled by ms while inverted)
+      const r0 = ms > 0 ? f.radius / ms : f.radius;
+      const r1 = l.radius;
+      return { p, i, dy, dClip, mx, my, ms, dx, ddy, nx, r0, r1, mediaMoves, detailMoves };
     });
 
     const render = (k: number): void => {
@@ -173,6 +193,7 @@ export function init(root: HTMLElement): () => void {
         if (pl.mediaMoves) {
           const s = 1 + (pl.ms - 1) * k;
           p.media.style.transform = `translate3d(${(pl.mx * k).toFixed(2)}px, ${(pl.my * k).toFixed(2)}px, 0) scale(${s.toFixed(4)})`;
+          p.media.style.borderRadius = `${(pl.r1 + (pl.r0 - pl.r1) * k).toFixed(2)}px`;
         }
         if (pl.nx && p.name) p.name.style.transform = `translate3d(${(pl.nx * k).toFixed(2)}px, 0, 0)`;
         if (pl.detailMoves) p.detail.style.transform = `translate3d(${(pl.dx * k).toFixed(2)}px, ${(pl.ddy * k).toFixed(2)}px, 0)`;
@@ -194,6 +215,8 @@ export function init(root: HTMLElement): () => void {
       },
     });
     fadeDetails(prev, next, true);
+    const title = parts[next]!.title;
+    if (title) gsap.fromTo(title, { yPercent: 105 }, { yPercent: 0, duration: DURATION.medium, delay: 0.08, ease: EASE.primary, overwrite: true, clearProps: 'transform' });
     const img = parts[next]!.img;
     if (img) gsap.fromTo(img, { scale: 1.06 }, { scale: 1, duration: DURATION.large, ease: EASE.primary, clearProps: 'transform' });
   };
@@ -263,21 +286,6 @@ export function init(root: HTMLElement): () => void {
     animate = desktop || mobile;
     auto = animate;
 
-    // Panel's own rise: side inset opens to full bleed while the head lags slightly behind.
-    if (desktop) {
-      const rise = gsap.timeline({
-        defaults: { ease: 'none' },
-        scrollTrigger: { trigger: root, start: 'top bottom', end: 'top top', scrub: true },
-      });
-      rise.fromTo(
-        root,
-        { clipPath: `inset(0% 2.4% 0% 2.4% round 30px)` },
-        { clipPath: `inset(0% 0% 0% 0% round 30px)` },
-        0,
-      );
-      if (head) rise.fromTo(head, { y: () => window.innerHeight * 0.14 }, { y: 0 }, 0);
-    }
-
     if (auto) {
       const pick = (progress: number): void => {
         if (!auto || !wide.matches) return;
@@ -285,8 +293,9 @@ export function init(root: HTMLElement): () => void {
       };
       ScrollTrigger.create({
         trigger: list,
-        start: 'top 70%',
-        end: 'bottom 40%',
+        // the row crossing the 60 % line is the active one (reference: active row sits just under the heading)
+        start: 'top 60%',
+        end: 'bottom 60%',
         onUpdate: (self) => {
           if (manualAt !== null) {
             if (Math.abs(self.scroll() - manualAt) < window.innerHeight * RELEASE_VH) return;

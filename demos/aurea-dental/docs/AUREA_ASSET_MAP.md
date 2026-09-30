@@ -94,4 +94,4 @@ doctor-01…04, result-after (tone warm), booking-patient. Scaled ×1.25, blur 6
 `src/assets/images/*.jpg` (23 abstract "light study" placeholders) — removed. `scripts/placeholders.mjs`,
 `scripts/derive-before.mjs` — removed with their npm scripts. `footer.texture` in site.ts temporarily points to
 `benefits-clinic` only to keep the current Footer building; the V3 footer uses **no photo** (see design kit) —
-footer agent: drop the texture and the key.
+footer agent: drop the texture and the key. **Done (phase 2B): texture and key removed.**

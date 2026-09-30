@@ -1,88 +1,113 @@
 ---
 /**
- * §11 ResultsSection. 55/45: before/after comparison left, testimonial right; a heavily blurred,
- * low-opacity enlargement of the result sits behind. Continues the Doctors panel surface so the
- * portrait → comparison wipe reads as one cut. Mobile: stacked.
+ * §8 ResultsSection — interactive, MED (motion kit §4 #6–7, §5 Results).
+ *
+ * <SceneFrame enter="beneath" height="auto" length="var(--len-results)" exit="recede" ambient warm>: the stage lies
+ * UNDER the Doctors stage and settles (.965 → 1, dim .10 → 0) as Doctors lifts off; holds for --len-results; then
+ * recedes (y −8 vh, opacity .4) as the quiet FAQ column arrives. Warm ambient spill (result-after, .16).
+ *
+ * Desktop: heading left + short copy right on the top row; registered 1:1 before/after (--ba square) left,
+ * restrained testimonial panel (--surface, same height) right. Tablet: the same two columns, smaller.
+ * Phone: stacked, not pinned. The testimonial is a PLACEHOLDER (site.results.testimonial.placeholder).
  */
 import { site } from '../../content/site';
-import Img from '../ui/Img.astro';
-import RevealText from '../ui/RevealText.astro';
+import SceneFrame from '../scene/SceneFrame.astro';
 import BeforeAfterSlider from './results/BeforeAfterSlider.astro';
 import TestimonialCard from './results/TestimonialCard.astro';
 
 const data = site.results;
-const t = data.testimonial;
 ---
-<section class="results" id="results" data-section="results" aria-labelledby="results-title">
-  <div class="results__depth" data-results-depth aria-hidden="true">
-    <Img image={data.slider.after} alt="" sizes="50vw" widths={[480, 768]} cover quality={40} />
-  </div>
-
-  <div class="results__inner container">
+<SceneFrame
+  name="results"
+  section="results"
+  id="results"
+  labelledby="results-title"
+  frame="stage"
+  height="auto"
+  length="var(--len-results)"
+  enter="beneath"
+  exit="recede"
+  tone="muted"
+  ambient={data.slider.after}
+  ambientTone="warm"
+  class="results"
+  stageClass="results__stage"
+>
+  <div class="results__inner">
     <header class="results__head">
-      <p class="label label--dark" data-reveal="fade">{data.label}</p>
-      <RevealText as="h2" id="results-title" class="t-h2" lines={data.titleLines} />
+      <p class="label label--dark">{data.label}</p>
+      <h2 id="results-title" class="t-h2 results__title">
+        {data.titleLines.map((line, i) => <span class="results__title-line">{line}{i < data.titleLines.length - 1 ? ' ' : ''}</span>)}
+      </h2>
     </header>
-
-    <div class="results__grid">
-      <div class="results__compare">
-        <BeforeAfterSlider {...data.slider} caption={t.treatment} />
-      </div>
-      <div class="results__story">
-        <TestimonialCard {...t} />
-      </div>
+    <p class="results__intro">{data.intro}</p>
+    <div class="results__compare">
+      <BeforeAfterSlider {...data.slider} />
+    </div>
+    <div class="results__story">
+      <TestimonialCard {...data.testimonial} />
     </div>
   </div>
-</section>
+</SceneFrame>
 
-<style>
-  .results {
-    position: relative;
-    background: var(--color-panel);
-    padding-block: var(--section-pad-sm) var(--section-pad);
-    overflow: clip;
-    isolation: isolate;
-  }
-  .results__depth {
-    position: absolute;
-    z-index: -1;
-    top: 30%;
-    left: 2%;
-    width: 52%;
-    height: 56%;
-    opacity: 0.14;
-    filter: blur(80px);
-    transform: scale(1.3);
-    pointer-events: none;
-  }
-  .results__depth :global(.picture) {
-    height: 100%;
-  }
+<style is:global>
   .results__inner {
+    --ba: 100%;
     display: grid;
-    gap: var(--space-7);
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+    padding: var(--stage-pad-y) var(--stage-pad-x);
   }
   .results__head {
     display: grid;
-    gap: var(--space-5);
+    justify-items: start;
+    gap: var(--space-3);
   }
-  .results__grid {
-    display: grid;
-    gap: var(--space-8);
+  .results__title-line {
+    display: block;
+  }
+  .results__intro {
+    max-width: 36ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .results__compare {
+    width: var(--ba);
+  }
+
+  @media (min-width: 640px) {
+    .results__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--grid-gap);
+      row-gap: var(--space-6);
+      align-items: end;
+    }
+    .results__intro {
+      justify-self: end;
+      max-width: 30ch;
+    }
+    .results__compare {
+      align-self: stretch;
+    }
+    .results__story {
+      align-self: stretch;
+    }
   }
 
   @media (min-width: 1024px) {
     .results__inner {
-      gap: clamp(48px, 5vw, 88px);
+      --ba: clamp(300px, calc(var(--stage-h) - 190px), 480px);
+      grid-template-columns: var(--ba) minmax(0, 1fr);
+      column-gap: 32px;
+      row-gap: clamp(24px, 3.4svh, 40px);
     }
-    .results__grid {
-      grid-template-columns: minmax(0, 55fr) minmax(0, 45fr);
-      column-gap: 0;
-      align-items: end;
+    .results__intro {
+      max-width: 34ch;
+      margin-bottom: 0.35rem;
     }
-    .results__story {
-      padding-left: clamp(40px, 6vw, 120px);
-      padding-bottom: calc(var(--space-4) + 1.3em);
+    .results__story .testimonial {
+      height: var(--ba);
     }
   }
 </style>

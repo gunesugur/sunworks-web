@@ -1,486 +1,395 @@
 ---
 /**
- * §10 DoctorsShowcase. A rounded panel that rises over the end of the Journey's sticky stage
- * (negative top margin = --panel-rise-overlap on desktop + motion) while a veil dims the stage beneath.
- * Tablist of circular portraits (lower left) switches one landscape portrait card with a hard
- * clip-path wipe; name/specialty crossfade. On exit the card is wiped left, handing off to the
- * Results comparison, which wipes in the same direction. Mobile: portrait-format card, scrollable selector.
+ * §7 DoctorsShowcase — the HUMAN scene (motion kit §4 #5, §5 Doctors).
+ *
+ * <RisingPanel frame="stage" height="stage" length="var(--len-doctors)">: an inset stage that rises over the still
+ * pinned Journey (scenes.ts: journey stage .955 / −2 % / dim .10), holds for --len-doctors (a breath), then lifts
+ * off Results (which lies beneath). Ambient follows the selected doctor (data-ambient + ambientChanged()).
+ *
+ * Composition (≥640): each doctor is ONE MaskedMedia layer = blurred self-backdrop (the portrait's own clinic
+ * colour, low-res) + the real 4:5 portrait composed centre-right with feathered edges. Claim upper-left, bio
+ * upper-right, avatar tablist bottom-left, name · specialty · count on the bottom row, text over a dark scrim.
+ * Switch = maskWipe() (directional clip-path, 650 ms) + name/specialty/bio y 8 → 0 + opacity.
+ * Phone: portrait-first 4:5 card on a light stage, text + selector below (wipe kept).
  */
 import { site } from '../../content/site';
+import RisingPanel from '../scene/RisingPanel.astro';
+import MaskedMedia from '../scene/MaskedMedia.astro';
 import Img from '../ui/Img.astro';
-import RevealText from '../ui/RevealText.astro';
 
 const data = site.doctors;
 const total = String(data.items.length).padStart(2, '0');
 const first = data.items[0]!;
 ---
-<section class="doctors" id="team" data-section="doctors" aria-labelledby="team-title">
-  <div class="doctors__veil" data-doctors-veil aria-hidden="true"></div>
-  <div class="doctors__surface" aria-hidden="true">
-    <div class="doctors__depth" data-doctors-depth>
+<RisingPanel
+  name="doctors"
+  section="doctors"
+  id="team"
+  labelledby="team-title"
+  frame="stage"
+  height="stage"
+  length="var(--len-doctors)"
+  tone="photo"
+  ambient={first.image}
+  class="doctors"
+  stageClass="doctors__stage"
+>
+  <div class="doctors__panel" id="doctors-panel" role="tabpanel" aria-labelledby={`doctor-tab-${first.id}`} data-doctors-panel>
+    <div class="doctors__media">
       {
         data.items.map((d, i) => (
-          <div class="doctors__depth-layer" data-doctors-depth-layer style={i === 0 ? undefined : 'opacity: 0'}>
-            <Img image={d.image} alt="" sizes="40vw" widths={[480]} cover quality={40} />
-          </div>
+          <MaskedMedia
+            image={d.image}
+            alt=""
+            sizes="320px"
+            widths={[320]}
+            quality={40}
+            fill
+            radius="none"
+            class={i === 0 ? 'dlayer is-active' : 'dlayer'}
+            attrs={i === 0 ? { 'data-dlayer': d.image } : { 'data-dlayer': d.image, 'aria-hidden': 'true' }}
+          >
+            <div class="dlayer__portrait">
+              <Img
+                image={d.image}
+                alt={d.imageAlt}
+                sizes="(min-width: 1024px) 520px, (min-width: 640px) 540px, 92vw"
+                widths={[480, 640, 960]}
+                cover
+                position={data.focus[d.id]}
+              />
+            </div>
+          </MaskedMedia>
+        ))
+      }
+      <div class="doctors__scrim" aria-hidden="true"></div>
+    </div>
+
+    {
+      data.items.map((d, i) => (
+        <div class="dinfo" data-dinfo hidden={i !== 0}>
+          <h3 class="dinfo__name" data-dinfo-part>{d.name}</h3>
+          <p class="dinfo__spec" data-dinfo-part>{d.specialty}</p>
+          <p class="dinfo__bio" data-dinfo-part>{d.bio}</p>
+        </div>
+      ))
+    }
+  </div>
+
+  <header class="doctors__head">
+    <p class="label doctors__label">{data.label}</p>
+    <h2 id="team-title" class="doctors__claim">
+      {data.titleLines.map((line, i) => <span class="doctors__claim-line">{line}{i < data.titleLines.length - 1 ? ' ' : ''}</span>)}
+    </h2>
+  </header>
+
+  <div class="doctors__select">
+    <p class="visually-hidden" id="doctors-select-label">{data.selectorLabel}</p>
+    <div class="doctors__tabs" role="tablist" aria-labelledby="doctors-select-label" data-doctors-tabs>
+      {
+        data.items.map((d, i) => (
+          <button
+            type="button"
+            class="dtab"
+            role="tab"
+            id={`doctor-tab-${d.id}`}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls="doctors-panel"
+            tabindex={i === 0 ? 0 : -1}
+            data-doctor-tab
+          >
+            <span class="dtab__avatar" aria-hidden="true">
+              <Img image={d.image} alt="" sizes="40px" widths={[120]} quality={60} cover position={data.focus[d.id]} />
+            </span>
+            <span class="visually-hidden">{d.name}, {d.specialty}</span>
+          </button>
         ))
       }
     </div>
   </div>
 
-  <div class="doctors__inner container">
-    <header class="doctors__head">
-      <div class="doctors__heading">
-        <p class="label label--dark" data-reveal="fade">{data.label}</p>
-        <RevealText as="h2" id="team-title" class="doctors__title t-h2" lines={data.titleLines} />
-      </div>
-      <p class="doctors__intro" data-reveal="fade" data-reveal-delay="0.15">{data.intro}</p>
-    </header>
+  <p class="doctors__count" aria-hidden="true"><span data-doctors-current>01</span> / {total}</p>
+</RisingPanel>
 
-    <div class="doctors__stage">
-      <div class="doctors__select" data-reveal="fade" data-reveal-delay="0.1">
-        <p class="label" id="doctors-select-label">{data.selectorLabel}</p>
-        <div class="doctors__tabs" role="tablist" aria-labelledby="doctors-select-label" data-doctors-tabs>
-          {
-            data.items.map((d, i) => (
-              <button
-                type="button"
-                class="doctor-tab"
-                role="tab"
-                id={`doctor-tab-${d.id}`}
-                aria-selected={i === 0 ? 'true' : 'false'}
-                aria-controls="doctors-panel"
-                tabindex={i === 0 ? 0 : -1}
-                data-doctor-tab
-              >
-                <span class="doctor-tab__avatar" aria-hidden="true" style={`--origin: ${data.focus[d.id] ?? '60% 38%'}`}>
-                  <Img
-                    image={d.image}
-                    alt=""
-                    sizes="64px"
-                    widths={[480]}
-                    cover
-                    quality={60}
-                    position={data.focus[d.id]}
-                    imgClass="doctor-tab__img"
-                  />
-                </span>
-                <span class="doctor-tab__text">
-                  <span class="doctor-tab__name">{d.name}</span>
-                  <span class="doctor-tab__spec">{d.specialty}</span>
-                </span>
-              </button>
-            ))
-          }
-        </div>
-      </div>
-
-      <div
-        class="doctors__panel"
-        id="doctors-panel"
-        role="tabpanel"
-        aria-labelledby={`doctor-tab-${first.id}`}
-        tabindex="0"
-        data-doctors-panel
-      >
-        <div class="doctors__card" data-doctors-card>
-          <div class="doctors__card-reveal" data-reveal="clip" data-reveal-from="center-y" data-reveal-start="top 85%">
-            <div class="doctors__card-parallax" data-doctors-parallax>
-              {
-                data.items.map((d, i) => (
-                  <div
-                    class:list={['doctor-portrait', { 'is-active': i === 0 }]}
-                    data-doctor-portrait
-                    aria-hidden={i === 0 ? undefined : 'true'}
-                    style={`--focus: ${data.focus[d.id] ?? '60% 40%'}`}
-                  >
-                    <Img
-                      image={d.image}
-                      alt={d.imageAlt}
-                      sizes="(min-width: 1024px) 70vw, 100vw"
-                      widths={[768, 1080, 1440, 1800]}
-                      cover
-                      imgClass="doctor-portrait__img"
-                    />
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-          <span class="doctors__count" aria-hidden="true"><span data-doctors-current>01</span> / {total}</span>
-        </div>
-
-        <div class="doctors__info">
-          {
-            data.items.map((d, i) => (
-              <div class="doctor-info" data-doctor-info hidden={i !== 0}>
-                <h3 class="doctor-info__name">{d.name}</h3>
-                <p class="doctor-info__spec label">{d.specialty}</p>
-                <p class="doctor-info__bio">{d.bio}</p>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<style>
-  .doctors {
-    --doctors-overlap: var(--radius-xl);
-    --doctors-radius: var(--radius-xl);
-    --card-radius: var(--radius-lg);
-    position: relative;
-    z-index: var(--z-panel);
-    margin-top: calc(var(--doctors-overlap) * -1);
-    padding-block: var(--section-pad-sm);
-    isolation: isolate;
-  }
-  /* panel surface: own element so the veil can sit behind its rounded corners */
-  .doctors__surface {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    background: var(--color-panel);
-    border-radius: var(--doctors-radius) var(--doctors-radius) 0 0;
-  }
-  .doctors__veil {
-    display: none;
-  }
-  .doctors__depth {
-    position: absolute;
-    top: 30%;
-    right: 6%;
-    width: 58%;
-    height: 56%;
-    opacity: 0.16;
-    filter: blur(72px);
-    transform: scale(1.2);
-    pointer-events: none;
-  }
-  .doctors__depth-layer {
-    position: absolute;
-    inset: 0;
-  }
-  .doctors__depth :global(.picture) {
-    height: 100%;
+<style is:global>
+  /* pairs with .journey's tail (TreatmentJourney.astro): the journey stays pinned beneath this stage for the whole
+     doctors breath, so the overlap into the journey scene is the rise overlap + --len-doctors */
+  .scene.doctors[data-enter='rise'] {
+    margin-top: calc(-1 * (var(--jd-overlap) + var(--len-doctors))); /* --jd-overlap: TreatmentJourney.astro */
   }
 
-  .doctors__inner {
-    display: grid;
-    gap: var(--space-7);
+  /* ================================================================ phone: portrait-first card on a light stage */
+  .doctors .doctors__stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: var(--stage-pad-y) var(--stage-pad-x);
+    background: var(--surface);
+    color: var(--text-primary);
   }
   .doctors__head {
+    order: 1;
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-3);
   }
-  .doctors__heading {
-    display: grid;
-    gap: var(--space-5);
+  .doctors__claim {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-display);
+    line-height: 1.06;
+    letter-spacing: var(--ls-heading);
+    text-wrap: balance;
   }
-  .doctors__intro {
-    max-width: 24rem;
-    color: var(--color-text-2);
-  }
-
-  /* ---- stage: selector + panel (mobile first) ---- */
-  .doctors__stage {
-    display: grid;
-    gap: var(--space-6);
+  .doctors__claim-line {
+    display: block;
   }
   .doctors__panel {
+    order: 2;
     display: grid;
-    gap: var(--space-5);
-    border-radius: var(--card-radius);
+    gap: var(--space-2);
   }
-  .doctors__panel:focus-visible {
-    outline-offset: 6px;
-  }
-  .doctors__card {
+  .doctors__media {
     position: relative;
     aspect-ratio: 4 / 5;
-    max-height: 78svh;
-    width: 100%;
-    border-radius: var(--card-radius);
+    border-radius: var(--media-radius);
     overflow: hidden;
-    background: var(--color-surface);
-    /* Safari: keep rounded clipping with transformed children */
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
+    background: var(--surface-muted);
+    isolation: isolate;
+    margin-bottom: var(--space-3);
   }
-  .doctors__card-reveal,
-  .doctors__card-parallax {
-    position: absolute;
-    inset: 0;
-  }
-  .doctor-portrait {
-    position: absolute;
-    inset: 0;
+  .dlayer:not(.is-active) {
     clip-path: inset(0% 0% 0% 100%);
   }
-  .doctor-portrait.is-active {
-    clip-path: inset(0% 0% 0% 0%);
+  .dlayer > .mm__inner {
+    display: none; /* phones: no self-backdrop, the portrait fills the card */
   }
-  .doctor-portrait :global(.picture) {
+  .dlayer__portrait {
+    position: absolute;
+    inset: 0;
+  }
+  .dlayer__portrait .picture {
     height: 100%;
   }
-  .doctor-portrait :global(.doctor-portrait__img) {
-    object-position: var(--focus);
+  .doctors__scrim {
+    display: none;
   }
-  .doctors__count {
-    position: absolute;
-    top: 18px;
-    left: 20px;
-    z-index: 2;
+  .dinfo {
+    display: contents;
+  }
+  .dinfo[hidden] {
+    display: none;
+  }
+  .dinfo__name {
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-snug);
+  }
+  .dinfo__spec {
     font-size: var(--fs-label);
     font-weight: var(--fw-medium);
     letter-spacing: var(--ls-label);
-    font-variant-numeric: tabular-nums;
-    color: var(--color-text);
+    text-transform: uppercase;
+    color: var(--text-secondary);
   }
-
-  .doctors__info {
-    display: grid;
-  }
-  .doctor-info {
-    grid-area: 1 / 1;
-    display: grid;
-    align-content: start;
-    gap: var(--space-2);
-  }
-  .doctor-info__name {
-    font-size: var(--fs-h3);
-    font-weight: var(--fw-book);
-    letter-spacing: var(--ls-heading);
-    line-height: var(--lh-snug);
-  }
-  .doctor-info__bio {
-    margin-top: var(--space-2);
-    max-width: 30rem;
-    font-size: 0.9375rem;
+  .dinfo__bio {
+    max-width: 34ch;
+    font-size: var(--fs-body-sm);
     line-height: 1.5;
-    color: var(--color-text-2);
+    color: var(--text-secondary);
   }
-
-  /* ---- selector ---- */
   .doctors__select {
-    display: grid;
-    gap: var(--space-4);
-    min-width: 0;
+    order: 3;
   }
   .doctors__tabs {
     display: flex;
-    gap: 8px;
-    margin-inline: calc(var(--gutter) * -1);
-    padding: 4px var(--gutter);
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    scroll-padding-inline: var(--gutter);
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .doctors__tabs::-webkit-scrollbar {
-    display: none;
-  }
-  .doctor-tab {
-    display: flex;
-    align-items: center;
     gap: 12px;
-    flex: none;
-    padding: 6px 18px 6px 6px;
-    border-radius: var(--radius-round);
-    box-shadow: inset 0 0 0 1px var(--color-border);
-    scroll-snap-align: start;
-    text-align: left;
-    transition:
-      box-shadow var(--duration-ui) var(--ease-primary),
-      background-color var(--duration-ui) var(--ease-primary);
+    padding-top: 8px; /* room for the active dot */
   }
-  .doctor-tab[aria-selected='true'] {
-    background: var(--color-white);
-    box-shadow: inset 0 0 0 1px var(--color-border-strong);
-  }
-  .doctor-tab__avatar {
+  .dtab {
     position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  .dtab__avatar {
     display: block;
-    width: 44px;
-    height: 44px;
-    flex: none;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
     overflow: hidden;
-    background: var(--color-surface);
+    background: var(--surface-muted);
+    opacity: 0.7;
     transition:
-      transform var(--duration-fast) var(--ease-primary),
-      opacity var(--duration-ui) var(--ease-primary);
+      opacity var(--duration-ui) var(--ease-soft),
+      box-shadow var(--duration-ui) var(--ease-soft);
   }
-  .doctor-tab__avatar :global(.picture) {
+  .dtab__avatar .picture {
     height: 100%;
   }
-  /* zoom into the face region of the landscape portrait */
-  .doctor-tab__avatar :global(.doctor-tab__img) {
-    transform: scale(2.1);
-    transform-origin: var(--origin, 60% 38%);
+  .dtab__avatar img {
+    transform: scale(1.5);
+    transform-origin: 50% 32%;
   }
-  .doctor-tab__text {
-    display: grid;
-    gap: 2px;
-    line-height: 1.2;
+  .dtab::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -9px;
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity var(--duration-ui) var(--ease-soft);
   }
-  .doctor-tab__name {
-    font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
-    white-space: nowrap;
+  .dtab[aria-selected='true']::before {
+    opacity: 1;
   }
-  .doctor-tab__spec {
-    font-size: 0.75rem;
-    color: var(--color-text-2);
-    white-space: nowrap;
+  .dtab[aria-selected='true'] .dtab__avatar,
+  .dtab:hover .dtab__avatar {
+    opacity: 1;
+  }
+  .dtab[aria-selected='true'] .dtab__avatar {
+    box-shadow:
+      0 0 0 2px var(--surface),
+      0 0 0 3px currentColor;
+  }
+  .dtab:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 5px;
+  }
+  .doctors__count {
+    display: none;
   }
 
+  /* ================================================================ ≥640: the wide landscape stage */
   @media (min-width: 640px) {
-    .doctors__card {
-      aspect-ratio: 4 / 3;
-    }
-  }
-
-  /* ---- desktop composition ---- */
-  @media (min-width: 1024px) {
-    .doctors__inner {
-      gap: clamp(40px, 4.5vw, 72px);
-    }
-    .doctors__head {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--grid-gap);
-      align-items: end;
-    }
-    .doctors__heading {
-      grid-column: 1 / 10;
-    }
-    .doctors__intro {
-      grid-column: 10 / -1;
-      justify-self: end;
-    }
-    .doctors__stage {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--grid-gap);
-      row-gap: 0;
-    }
-    /* the tabpanel spans the row; its info column sits above the selector in columns 1–3 */
-    .doctors__panel {
-      grid-column: 1 / -1;
-      grid-row: 1;
-      grid-template-columns: subgrid;
-      gap: 0;
-      align-items: stretch;
-    }
-    .doctors__card {
-      grid-column: 4 / -1;
-      grid-row: 1;
-      aspect-ratio: 16 / 9;
-      max-height: none;
-    }
-    .doctors__info {
-      grid-column: 1 / 4;
-      grid-row: 1;
-      align-self: end;
-      padding-bottom: calc(64px + var(--space-4) + 1.2em + var(--space-8));
-    }
-    .doctor-info__bio {
-      max-width: 17rem;
-    }
-    .doctors__select {
-      grid-column: 1 / 4;
-      grid-row: 1;
-      align-self: end;
-      z-index: 1;
-    }
-    .doctors__tabs {
-      margin: 0;
+    .doctors .doctors__stage {
+      display: block;
       padding: 0;
-      gap: 12px;
-      overflow: visible;
+      background: var(--scene-surface);
+      color: var(--white);
     }
-    .doctor-tab {
-      padding: 0;
-      border-radius: 50%;
-      box-shadow: none;
-      background: none;
-    }
-    .doctor-tab[aria-selected='true'] {
-      background: none;
-      box-shadow: none;
-    }
-    .doctor-tab__avatar {
-      width: 64px;
-      height: 64px;
-      opacity: 0.62;
-    }
-    .doctor-tab__avatar::after {
-      content: '';
+    .doctors__panel,
+    .doctors__media {
       position: absolute;
       inset: 0;
-      border-radius: 50%;
-      box-shadow: inset 0 0 0 1px var(--color-border);
-      transition: box-shadow var(--duration-ui) var(--ease-primary);
+      aspect-ratio: auto;
+      border-radius: 0;
+      margin: 0;
     }
-    .doctor-tab:hover .doctor-tab__avatar,
-    .doctor-tab:focus-visible .doctor-tab__avatar {
-      transform: scale(1.08);
-      opacity: 1;
+    .doctors__media {
+      z-index: 0;
     }
-    .doctor-tab[aria-selected='true'] .doctor-tab__avatar {
-      opacity: 1;
+    /* blurred self-backdrop: the portrait's own clinic colour fills the landscape stage */
+    .dlayer > .mm__inner {
+      display: block;
+      filter: blur(26px) saturate(0.85) brightness(0.93);
+      transform: scale(1.12);
+      will-change: transform;
     }
-    .doctor-tab[aria-selected='true'] .doctor-tab__avatar::after {
-      box-shadow:
-        inset 0 0 0 1px var(--color-text),
-        inset 0 0 0 3px var(--color-panel);
+    .dlayer__portrait {
+      left: 57%;
+      right: auto;
+      width: calc(var(--stage-h) * 0.8);
+      translate: -50% 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
     }
-    .doctor-tab:focus-visible {
-      outline-offset: 4px;
-      border-radius: 50%;
-    }
-    .doctor-tab__text {
+    .doctors__scrim {
+      display: block;
       position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip-path: inset(50%);
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, var(--scrim-dark) 0%, rgba(17, 17, 17, 0) 44%),
+        linear-gradient(270deg, rgba(17, 17, 17, 0.26) 0%, rgba(17, 17, 17, 0) 30%),
+        linear-gradient(0deg, rgba(17, 17, 17, 0.32) 0%, rgba(17, 17, 17, 0) 32%);
+    }
+    .doctors__head,
+    .dinfo > *,
+    .doctors__select,
+    .doctors__count {
+      position: absolute;
+      z-index: 4;
+    }
+    .doctors__head {
+      top: var(--stage-pad-y);
+      left: var(--stage-pad-x);
+      max-width: 22rem;
+    }
+    .doctors__label {
+      color: rgba(255, 255, 255, 0.78);
+    }
+    .doctors__claim {
+      color: var(--white);
+    }
+    .dinfo__name {
+      left: var(--stage-pad-x);
+      bottom: var(--stage-pad-y);
+      font-size: var(--fs-small);
+      font-weight: var(--fw-medium);
+      letter-spacing: 0;
+      line-height: 1.2;
+    }
+    .dinfo__spec {
+      left: 50%;
+      bottom: var(--stage-pad-y);
+      translate: -50% 0;
+      line-height: 1.4;
       white-space: nowrap;
+      color: rgba(255, 255, 255, 0.82);
+    }
+    .dinfo__bio {
+      right: var(--stage-pad-x);
+      bottom: calc(var(--stage-pad-y) + 2.5rem);
+      width: 28ch;
+      font-size: var(--fs-small);
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .doctors__select {
+      left: var(--stage-pad-x);
+      bottom: calc(var(--stage-pad-y) + 2.25rem);
+      color: var(--white);
+    }
+    .dtab[aria-selected='true'] .dtab__avatar {
+      box-shadow:
+        0 0 0 2px rgba(17, 17, 17, 0.25),
+        0 0 0 3px var(--white);
     }
     .doctors__count {
-      top: 22px;
-      left: 26px;
+      display: block;
+      right: var(--stage-pad-x);
+      bottom: var(--stage-pad-y);
+      font-size: var(--fs-label);
+      font-weight: var(--fw-medium);
+      letter-spacing: var(--ls-label);
+      line-height: 1.4;
+      font-variant-numeric: tabular-nums;
+      color: rgba(255, 255, 255, 0.82);
     }
   }
 
-  /* ---- rises over the Journey stage (desktop + motion) ---- */
-  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .doctors {
-      --doctors-overlap: var(--panel-rise-overlap);
+  @media (min-width: 1024px) {
+    .dlayer__portrait {
+      left: 55%;
     }
-    .doctors__veil {
-      display: block;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: calc(100% - var(--doctors-radius));
-      height: calc(100svh + var(--doctors-radius));
-      z-index: -2;
-      background: var(--color-text);
-      opacity: 0;
-      pointer-events: none;
+    .doctors__head {
+      max-width: 26rem;
     }
-    .doctors__card-parallax {
-      will-change: transform;
+    .dinfo__bio {
+      top: var(--stage-pad-y);
+      bottom: auto;
+      width: 30ch;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .doctor-tab,
-    .doctor-tab__avatar,
-    .doctor-tab__avatar::after {
+    .dtab__avatar,
+    .dtab::before {
       transition-duration: 1ms;
     }
   }

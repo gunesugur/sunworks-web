@@ -3,14 +3,13 @@
  * Accordion: one panel open at a time (first by default). Open = height 0 → auto + body opacity/translate,
  * close = reverse, 380–420ms; `hidden` is applied after closing so closed answers leave the a11y tree.
  * Reduced motion: instant height, opacity fade only. ScrollTrigger is refreshed after each change.
- * Connected transition (desktop + motion): the section recedes (drifts up, dims, scales .97) while
- * the Booking portrait rises over the viewport.
+ * The hand-off to Booking (column recede) is declared on <SceneFrame exit="recede"> and built by scenes.ts.
  */
 import { gsap, ScrollTrigger, EASE } from '../../motion/tokens';
-import { withMotion, prefersReducedMotion } from '../../motion/media';
+import { prefersReducedMotion } from '../../motion/media';
 
-const OPEN_S = 0.42;
-const CLOSE_S = 0.36;
+const OPEN_S = 0.38; // 300–450 ms (kit: 380)
+const CLOSE_S = 0.32;
 
 export function init(root: HTMLElement): () => void {
   const items = Array.from(root.querySelectorAll<HTMLElement>('[data-faq-item]'))
@@ -50,7 +49,7 @@ export function init(root: HTMLElement): () => void {
       { height: it.panel.offsetHeight ? it.panel.offsetHeight : 0 },
       { height: 'auto', duration: OPEN_S, ease: EASE.primary, onComplete: refresh },
     );
-    gsap.fromTo(it.body, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: OPEN_S, delay: 0.05, ease: EASE.primary });
+    gsap.fromTo(it.body, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: OPEN_S, delay: 0.04, ease: EASE.primary });
   };
 
   const close = (it: Item): void => {
@@ -86,28 +85,7 @@ export function init(root: HTMLElement): () => void {
   };
   root.addEventListener('click', onClick);
 
-  // recede under the rising Booking portrait
-  const recede = root.querySelector<HTMLElement>('[data-faq-recede]');
-  const next = root.nextElementSibling instanceof HTMLElement ? root.nextElementSibling : null;
-  const motion = withMotion(root, ({ desktop }) => {
-    if (!desktop || !recede || !next) return;
-    gsap.to(recede, {
-      y: () => -window.innerHeight * 0.08,
-      scale: 0.97,
-      opacity: 0.3,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: next,
-        start: 'top bottom',
-        end: 'top 25%',
-        scrub: true,
-        invalidateOnRefresh: true,
-      },
-    });
-  });
-
   return () => {
-    motion();
     window.clearTimeout(refreshTimer);
     root.removeEventListener('click', onClick);
   };

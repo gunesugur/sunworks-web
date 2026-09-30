@@ -1,82 +1,81 @@
 ---
 /**
- * §12 FAQSection (quiet). Intro + CTA left, accordion right: thin rules, tiny +/–, one open at a time.
- * No-JS: every answer is rendered open (aria-expanded="true"); faq.ts collapses all but the first
- * and animates height + opacity + small translate. As Booking rises, the section recedes (desktop).
+ * §9 FAQSection — QUIET (motion kit §4 #7–8, §5 FAQ). <SceneFrame frame="column" exit="recede">: no surface, no
+ * scroll choreography; the column recedes (y −8 vh, opacity .4) while the Booking image grows in beneath it.
+ * Left 4/12: label, heading, short copy, quiet text link. Right 7/12: accordion — 1 px rules, 76 px rows, 16 px
+ * questions, 22 px circle +/–, one open at a time (faq.ts: height + opacity + y 6 → 0, 380 ms).
+ * No-JS: every answer is rendered open (aria-expanded="true").
  */
 import { site } from '../../content/site';
+import SceneFrame from '../scene/SceneFrame.astro';
 import Button from '../ui/Button.astro';
-import RevealText from '../ui/RevealText.astro';
 
 const data = site.faq;
 ---
-<section class="faq" id="faq" data-section="faq" aria-labelledby="faq-title">
-  <div class="faq__inner container" data-faq-recede>
-    <div class="faq__intro">
-      <p class="label label--dark" data-reveal="fade">{data.label}</p>
-      <RevealText as="h2" id="faq-title" class="t-h2" lines={data.titleLines} />
-      <p class="faq__text" data-reveal="fade" data-reveal-delay="0.1">{data.intro}</p>
-      <div data-reveal="fade" data-reveal-delay="0.2">
-        <Button href={data.cta.href} variant="ghost" size="sm">{data.cta.label}</Button>
-      </div>
-    </div>
+<SceneFrame name="faq" section="faq" id="faq" labelledby="faq-title" frame="column" exit="recede" class="faq" stageClass="faq__column">
+  <div class="faq__intro">
+    <p class="label label--dark">{data.label}</p>
+    <h2 id="faq-title" class="t-h2 faq__title">
+      {data.titleLines.map((line, i) => <span class="faq__title-line">{line}{i < data.titleLines.length - 1 ? ' ' : ''}</span>)}
+    </h2>
+    <p class="faq__text">{data.intro}</p>
+    <Button href={data.cta.href} variant="link">{data.cta.label}</Button>
+  </div>
 
-    <div class="faq__list" data-faq-list data-reveal="stagger" data-reveal-start="top 85%">
-      {
-        data.items.map((item) => (
-          <div class="faq-item" data-faq-item>
-            <h3 class="faq-item__heading">
-              <button
-                type="button"
-                class="faq-item__trigger"
-                id={`faq-q-${item.id}`}
-                aria-expanded="true"
-                aria-controls={`faq-a-${item.id}`}
-                data-faq-trigger
-              >
-                <span class="faq-item__q">{item.question}</span>
-                <span class="faq-item__icon" aria-hidden="true" />
-              </button>
-            </h3>
-            <div class="faq-item__panel" id={`faq-a-${item.id}`} role="region" aria-labelledby={`faq-q-${item.id}`} data-faq-panel>
-              <div class="faq-item__body" data-faq-body>
-                <p>{item.answer}</p>
-              </div>
+  <div class="faq__list" data-faq-list>
+    {
+      data.items.map((item) => (
+        <div class="faq-item" data-faq-item>
+          <h3 class="faq-item__heading">
+            <button
+              type="button"
+              class="faq-item__trigger"
+              id={`faq-q-${item.id}`}
+              aria-expanded="true"
+              aria-controls={`faq-a-${item.id}`}
+              data-faq-trigger
+            >
+              <span class="faq-item__q">{item.question}</span>
+              <span class="faq-item__icon" aria-hidden="true" />
+            </button>
+          </h3>
+          <div class="faq-item__panel" id={`faq-a-${item.id}`} role="region" aria-labelledby={`faq-q-${item.id}`} data-faq-panel>
+            <div class="faq-item__body" data-faq-body>
+              <p>{item.answer}</p>
             </div>
           </div>
-        ))
-      }
-    </div>
+        </div>
+      ))
+    }
   </div>
-</section>
+</SceneFrame>
 
-<style>
-  .faq {
-    position: relative;
-    background: var(--color-panel);
-    padding-block: var(--section-pad-sm);
-  }
-  .faq__inner {
+<style is:global>
+  .faq .faq__column {
     display: grid;
-    gap: var(--space-8);
-    transform-origin: 50% 0%;
+    gap: var(--space-7);
+    padding: var(--section-pad-sm) var(--stage-pad-x);
   }
   .faq__intro {
     display: grid;
     align-content: start;
     justify-items: start;
-    gap: var(--space-5);
+    gap: var(--space-4);
+  }
+  .faq__title-line {
+    display: block;
   }
   .faq__text {
-    max-width: 22rem;
-    color: var(--color-text-2);
+    max-width: 30ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
   }
-
   .faq__list {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--border-soft);
   }
   .faq-item {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--border-soft);
   }
   .faq-item__heading {
     font: inherit;
@@ -89,39 +88,37 @@ const data = site.faq;
     gap: var(--space-5);
     width: 100%;
     min-height: 64px;
-    padding: 20px 0;
+    padding: 18px 0;
     text-align: left;
-    font-size: var(--fs-h4);
-    font-weight: var(--fw-book);
-    letter-spacing: var(--ls-tight);
-    line-height: var(--lh-snug);
-    color: var(--color-text);
-  }
-  .faq-item__q {
-    transition: transform var(--duration-ui) var(--ease-primary);
-  }
-  .faq-item__trigger:hover .faq-item__q {
-    transform: translateX(4px);
+    font-size: var(--fs-body);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.005em;
+    line-height: 1.35;
+    color: var(--text-primary);
   }
   .faq-item__trigger:focus-visible {
     outline-offset: -2px;
   }
-  /* tiny + / – */
+  /* 22 px circle with a thin + / – */
   .faq-item__icon {
     position: relative;
-    width: 11px;
-    height: 11px;
+    width: 22px;
+    height: 22px;
     flex: none;
-    color: var(--color-text-2);
-    transition: color var(--duration-ui) var(--ease-primary);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--border-soft);
+    color: var(--text-secondary);
+    transition:
+      color var(--duration-ui) var(--ease-soft),
+      box-shadow var(--duration-ui) var(--ease-soft);
   }
   .faq-item__icon::before,
   .faq-item__icon::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 5px;
+    left: 6px;
+    right: 6px;
+    top: 10.5px;
     height: 1px;
     background: currentColor;
     transition: transform var(--duration-ui) var(--ease-primary);
@@ -129,59 +126,59 @@ const data = site.faq;
   .faq-item__icon::after {
     transform: rotate(90deg);
   }
-  .faq-item__trigger[aria-expanded='true'] .faq-item__icon {
-    color: var(--color-text);
-  }
   .faq-item__trigger[aria-expanded='true'] .faq-item__icon::after {
     transform: rotate(0deg);
   }
+  .faq-item__trigger[aria-expanded='true'] .faq-item__icon,
   .faq-item__trigger:hover .faq-item__icon {
-    color: var(--color-text);
+    color: var(--text-primary);
+    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.28);
   }
-
   .faq-item__panel {
     overflow: hidden;
   }
   .faq-item__body {
-    padding: 0 var(--space-7) var(--space-6) 0;
+    padding: 0 var(--space-7) var(--space-5) 0;
   }
   .faq-item__body p {
-    max-width: 40rem;
-    color: var(--color-text-2);
+    max-width: 56ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
   }
 
-  @media (min-width: 1024px) {
-    .faq {
-      padding-block: var(--section-pad) var(--section-pad-sm);
-    }
-    .faq__inner {
+  @media (min-width: 640px) {
+    .faq .faq__column {
       grid-template-columns: repeat(12, minmax(0, 1fr));
       column-gap: var(--grid-gap);
     }
     .faq__intro {
+      grid-column: 1 / 6;
+    }
+    .faq__list {
+      grid-column: 6 / -1;
+    }
+  }
+  @media (min-width: 1024px) {
+    .faq .faq__column {
+      padding-block: var(--section-pad) var(--section-pad-sm);
+    }
+    .faq__intro {
       grid-column: 1 / 5;
-      position: sticky;
-      top: calc(var(--header-h) + var(--space-6));
-      align-self: start;
     }
     .faq__list {
       grid-column: 6 / -1;
     }
     .faq-item__trigger {
       min-height: 76px;
-      padding: 24px 0;
+      padding: 22px 0;
     }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .faq-item__q,
     .faq-item__icon,
     .faq-item__icon::before,
     .faq-item__icon::after {
       transition: none;
-    }
-    .faq__intro {
-      position: static;
     }
   }
 </style>

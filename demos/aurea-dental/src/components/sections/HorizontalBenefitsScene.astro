@@ -1,278 +1,314 @@
 ---
 /**
- * §6 Signature scene. Desktop (≥1024, motion): section = 100svh stage + 150vh scrub + overlap;
- * the stage is CSS-sticky, the track is scrubbed right → left, and the following `.panel-rise`
- * (Services) rises over the still-sticky stage. Mobile / reduced motion: native scroll-snap row.
+ * Scene 3 — Benefits (signature, HIGH). SceneFrame stage, enter="grow": the clinic photo grows from a clipped
+ * window into the full 21:9 stage while the intro recedes (hand-off 2, motion/scenes.ts). Desktop: the stage
+ * stays pinned for --len-benefits while vertical scroll drives the translucent card track right → left
+ * (benefits.ts via scenePin); the centred card is the active one (brighter surface, primary text, scale ≤ 1.035).
+ * Then Services rises over the still-pinned stage (hand-off 3; cards dim with the stage).
+ * Tablet: photo stage + native scroll-snap row (no own pin). Phone: 16:10 photo band, swipe row below.
  */
 import { site } from '../../content/site';
-import Img from '../ui/Img.astro';
-import RevealText from '../ui/RevealText.astro';
+import SceneFrame from '../scene/SceneFrame.astro';
+import MaskedMedia from '../scene/MaskedMedia.astro';
 
 const { benefits } = site;
 const total = String(benefits.items.length).padStart(2, '0');
 ---
-<section class="benefits" id="technology" data-section="benefits" aria-labelledby="benefits-title">
-  <div class="benefits__stage" data-benefits-stage>
-    <div class="benefits__bg" data-benefits-bg aria-hidden="true">
-      <Img image={benefits.image} alt="" sizes="100vw" cover position="50% 60%" />
-    </div>
-    <div class="benefits__depth" data-benefits-depth aria-hidden="true">
-      <Img image={benefits.image} alt="" sizes="50vw" widths={[480, 768]} cover quality={50} />
-    </div>
-    <div class="benefits__scrim" aria-hidden="true"></div>
+<SceneFrame
+  name="benefits"
+  section="benefits"
+  id="technology"
+  labelledby="benefits-title"
+  frame="stage"
+  height="stage"
+  length="var(--len-benefits)"
+  enter="grow"
+  ambient="benefits-clinic"
+  tone="surface"
+  class="benefits"
+  stageClass="benefits__stage"
+>
+  <MaskedMedia
+    image={benefits.image}
+    alt={benefits.imageAlt}
+    sizes="(min-width: 1024px) 91vw, (min-width: 640px) calc(100vw - 48px), calc(100vw - 24px)"
+    widths={[768, 1080, 1440, 1920]}
+    fill
+    grow="rect"
+    radius="none"
+    positions={{ desktop: '50% 58%', tablet: '64% 50%', mobile: '66% 50%' }}
+    class="benefits__media"
+  />
+  <div class="benefits__scrim" aria-hidden="true"></div>
 
-    <div class="benefits__content" data-benefits-content>
-      <div class="benefits__head container">
-        <div class="benefits__heading">
-          <p class="label label--dark" data-reveal="fade">{benefits.label}</p>
-          <RevealText as="h2" id="benefits-title" class="benefits__title t-h2" lines={benefits.titleLines} />
-        </div>
-        <div class="benefits__meta" data-reveal="fade" data-reveal-delay="0.2">
-          <p class="benefits__intro">{benefits.intro}</p>
-          <div class="benefits__counter" aria-hidden="true">
-            <span class="benefits__count"><span data-benefits-current>01</span> / {total}</span>
-            <span class="benefits__progress"><span data-benefits-progress></span></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="benefits__viewport" data-benefits-viewport data-region-label={`${benefits.titleLines.join(" ")} (scrollable list)`}>
-        <ol class="benefits__track" data-benefits-track>
-          {
-            benefits.items.map((item) => (
-              <li class="benefit-card" data-benefit-card>
-                <span class="benefit-card__index label">{item.index}</span>
-                <div class="benefit-card__body">
-                  <h3 class="benefit-card__title">{item.title}</h3>
-                  <p class="benefit-card__copy">{item.copy}</p>
-                </div>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
+  <div class="benefits__head" data-benefits-head>
+    <div class="benefits__heading">
+      <p class="label label--dark"><span class="benefits__dot" aria-hidden="true"></span>{benefits.label}</p>
+      <h2 id="benefits-title" class="benefits__title">
+        {benefits.titleLines.map((line) => <span class="benefits__line">{line}</span>)}
+      </h2>
     </div>
-    <div class="benefits__shade" data-benefits-shade aria-hidden="true"></div>
+    <div class="benefits__meta">
+      <p class="benefits__intro">{benefits.intro}</p>
+      <p class="benefits__counter" aria-hidden="true">
+        <span data-benefits-current>01</span>
+        <span class="benefits__total">/ {total}</span>
+      </p>
+    </div>
   </div>
-</section>
+
+  <div class="benefits__viewport" data-benefits-viewport data-region-label={`${benefits.titleLines.join(' ')} — six commitments`}>
+    <ol class="benefits__track" data-benefits-track>
+      {
+        benefits.items.map((item) => (
+          <li class="benefit-card" data-benefit-card>
+            <span class="benefit-card__index">{item.index}</span>
+            <div class="benefit-card__body">
+              <h3 class="benefit-card__title">{item.title}</h3>
+              <p class="benefit-card__copy">{item.copy}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</SceneFrame>
 
 <style>
-  .benefits {
-    --benefits-scroll: 150vh;
-    --card-w: min(78vw, 300px);
-    --card-h: 230px;
-    position: relative;
-    background: var(--color-surface);
-  }
-  .benefits__stage {
-    position: relative;
-    overflow: hidden;
-    padding-block: var(--section-pad-sm);
-    isolation: isolate;
-  }
-  .benefits__bg,
-  .benefits__depth,
-  .benefits__scrim,
-  .benefits__shade {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-  .benefits__bg {
-    z-index: -3;
-  }
-  .benefits__bg :global(.picture),
-  .benefits__depth :global(.picture) {
-    height: 100%;
-  }
-  /* blurred, enlarged depth layer — diffuses the band the cards sit on */
-  .benefits__depth {
-    z-index: -2;
-    opacity: 0.16;
-    transform: scale(1.3);
-    filter: blur(56px);
-    -webkit-mask-image: linear-gradient(to top, #000 0%, #000 35%, transparent 70%);
-    mask-image: linear-gradient(to top, #000 0%, #000 35%, transparent 70%);
-  }
+  /* ---------------------------------------------------------------- shared (phone first) */
   .benefits__scrim {
-    z-index: -1;
-    background:
-      linear-gradient(180deg, rgba(244, 244, 241, 0.82) 0%, rgba(244, 244, 241, 0.35) 38%, rgba(244, 244, 241, 0) 60%),
-      linear-gradient(0deg, rgba(244, 244, 241, 0.5) 0%, rgba(244, 244, 241, 0) 40%);
+    display: none;
   }
-  .benefits__shade {
-    z-index: 2;
-    background: var(--color-text);
-    opacity: 0;
-  }
-
   .benefits__head {
+    position: relative;
+    z-index: 2;
     display: grid;
-    gap: var(--space-6);
+    gap: var(--space-5);
+    padding: var(--space-6) 4px var(--space-5);
   }
   .benefits__heading {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
+  }
+  .benefits__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .benefits__title {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-display);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-heading);
+  }
+  .benefits__line {
+    display: block;
   }
   .benefits__meta {
-    display: grid;
-    gap: var(--space-4);
-    max-width: 22rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-5);
   }
   .benefits__intro {
-    color: var(--color-text-2);
+    max-width: 30ch;
+    font-size: var(--fs-body-sm);
+    color: var(--text-secondary);
   }
   .benefits__counter {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
     font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
     letter-spacing: var(--ls-label);
     font-variant-numeric: tabular-nums;
-    color: var(--color-text);
+    color: var(--text-primary);
+    white-space: nowrap;
   }
-  .benefits__progress {
-    position: relative;
-    flex: 1;
-    max-width: 140px;
-    height: 1px;
-    background: var(--color-border-strong);
-    overflow: hidden;
-  }
-  .benefits__progress span {
-    position: absolute;
-    inset: 0;
-    background: var(--color-text);
-    transform: scaleX(0.1667);
-    transform-origin: left center;
+  .benefits__total {
+    color: var(--text-secondary);
   }
 
-  /* ---- native row (mobile, tablet, reduced motion) ---- */
+  /* native scroll-snap row (phone, tablet, reduced motion) */
   .benefits__viewport {
-    margin-top: var(--space-7);
+    position: relative;
+    z-index: 2;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--gutter);
+    scroll-padding-inline: 4px;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
   .benefits__viewport::-webkit-scrollbar {
     display: none;
   }
+  .benefits__viewport:focus-visible {
+    outline-offset: -3px;
+  }
   .benefits__track {
     display: flex;
     gap: 12px;
     width: max-content;
-    padding-inline: var(--gutter);
+    padding: 4px 4px 8px;
   }
   .benefit-card {
+    --focus: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: var(--space-6);
-    width: var(--card-w);
-    min-height: var(--card-h);
-    padding: 22px 22px 24px;
-    border-radius: 20px;
-    background: var(--color-card);
-    border: 1px solid var(--color-border-soft);
+    gap: var(--space-5);
+    width: var(--bc-w, 78vw);
+    height: var(--bc-h, 216px);
+    padding: 22px;
+    border-radius: var(--card-radius);
+    background: color-mix(in srgb, var(--glass-active) calc(var(--focus) * 100%), var(--glass));
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    backdrop-filter: blur(14px) saturate(1.1);
+    border: 1px solid rgba(255, 255, 255, 0.38);
     scroll-snap-align: start;
-    opacity: 0.8;
-    transition: opacity var(--duration-medium) var(--ease-primary);
+    transition:
+      background-color var(--duration-medium) var(--ease-soft),
+      color var(--duration-medium) var(--ease-soft);
   }
   .benefit-card.is-active {
-    opacity: 1;
+    --focus: 1;
   }
   .benefit-card__index {
-    color: var(--color-text);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--text-primary) calc(40% + var(--focus) * 60%), var(--text-secondary));
   }
   .benefit-card__title {
     font-size: var(--fs-h4);
-    font-weight: var(--fw-medium);
-    letter-spacing: var(--ls-tight);
+    font-weight: 480;
     line-height: var(--lh-snug);
+    letter-spacing: var(--ls-tight);
+    color: color-mix(in srgb, var(--text-primary) calc(55% + var(--focus) * 45%), var(--text-secondary));
   }
   .benefit-card__copy {
-    margin-top: var(--space-3);
-    font-size: 0.9375rem;
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
     line-height: 1.45;
-    color: var(--color-text-2);
+    color: color-mix(in srgb, var(--text-primary) calc(var(--focus) * 45%), var(--text-secondary));
   }
-  .benefits__viewport:focus-visible {
-    outline-offset: -4px;
+
+  /* phone: 16:10 photo band on top, heading + swipe row on the surface below */
+  @media (max-width: 639.98px) {
+    .benefits__viewport {
+      --bc-w: 78vw;
+      --bc-h: 216px;
+    }
+    :global(.scene.benefits .stage) {
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+      padding-bottom: var(--space-5);
+    }
+    :global(.benefits .benefits__media) {
+      position: relative;
+      inset: auto;
+      order: -1;
+      aspect-ratio: 16 / 10;
+      border-radius: var(--stage-radius) var(--stage-radius) 0 0;
+    }
+    .benefits__head {
+      padding-inline: var(--stage-pad-x);
+    }
+    .benefits__viewport {
+      scroll-padding-inline: var(--stage-pad-x);
+    }
+    .benefits__track {
+      padding-inline: var(--stage-pad-x);
+    }
+    .benefit-card {
+      background: color-mix(in srgb, var(--surface-muted) calc(45% + var(--focus) * 55%), var(--surface));
+      border-color: var(--border-hair);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+
+  /* ---------------------------------------------------------------- tablet + desktop: photo stage */
+  @media (min-width: 640px) {
+    .benefits__viewport {
+      --bc-w: 272px;
+      --bc-h: 224px;
+    }
+    .benefits__scrim {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(248, 248, 245, 0.8) 0%, rgba(248, 248, 245, 0.46) 24%, rgba(248, 248, 245, 0) 46%),
+        linear-gradient(0deg, rgba(40, 36, 30, 0.14) 0%, rgba(40, 36, 30, 0) 34%);
+    }
+    .benefits__head {
+      position: absolute;
+      top: var(--stage-pad-y);
+      left: var(--stage-pad-x);
+      right: var(--stage-pad-x);
+      padding: 0;
+    }
+    .benefits__viewport {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: var(--stage-pad-y);
+      scroll-padding-inline: var(--stage-pad-x);
+    }
+    .benefits__track {
+      padding: 6px var(--stage-pad-x);
+    }
   }
 
   @media (min-width: 1024px) {
-    .benefits {
-      --card-w: clamp(260px, 21vw, 320px);
-      --card-h: clamp(210px, 17vw, 260px);
+    .benefits__viewport {
+      --bc-w: 300px;
+      --bc-h: min(236px, calc(var(--stage-h) * 0.44));
     }
     .benefits__head {
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      column-gap: var(--grid-gap);
-      align-items: end;
-    }
-    .benefits__heading {
-      grid-column: 1 / 8;
+      top: calc(var(--header-h) + var(--stage-pad-y));
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: var(--space-6);
     }
     .benefits__meta {
-      grid-column: 9 / -1;
-      justify-self: end;
-      width: 100%;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-3);
+      padding-top: 2px;
+      text-align: right;
     }
-    .benefit-card {
-      height: var(--card-h);
-      padding: 24px 26px 26px;
-      border-radius: 22px;
+    .benefits__intro {
+      max-width: 26ch;
+    }
+    .benefits__viewport {
+      /* row top at 44 % of the stage (reference 43 %), never under the heading on short stages */
+      top: max(44%, calc(var(--header-h) + var(--stage-pad-y) + 150px));
+      bottom: auto;
+    }
+    .benefits__track {
+      gap: 32px;
     }
   }
 
-  /* ---- pinned, scrubbed scene ---- */
+  /* pinned + scrubbed (desktop, motion): the track is transformed by benefits.ts; --focus drives emphasis */
   @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
-    .benefits {
-      height: calc(100svh + var(--benefits-scroll) + var(--panel-rise-overlap));
-    }
-    .benefits__stage {
-      position: sticky;
-      top: 0;
-      height: 100svh;
-      min-height: 640px;
-      padding: 0;
-    }
-    .benefits__content {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      grid-template-rows: auto 1fr;
-      padding-top: calc(var(--header-h) + clamp(24px, 6vh, 72px));
-      padding-bottom: clamp(40px, 9vh, 96px);
-    }
     .benefits__viewport {
-      position: relative;
-      align-self: end;
-      margin: 0;
       overflow: visible;
       scroll-snap-type: none;
     }
     .benefits__track {
       padding: 0;
-      will-change: transform;
     }
-    /* --focus (0…1) is written by benefits.ts: active card scale 1.035 + full opacity */
     .benefit-card {
-      --focus: 0;
-      opacity: calc(0.72 + 0.28 * var(--focus));
-      transform: scale(calc(1 + 0.035 * var(--focus)));
-      background: color-mix(in srgb, var(--color-white) calc(var(--focus) * 60%), var(--color-card));
       transition: none;
-      transform-origin: 50% 100%;
-      will-change: transform, opacity;
-    }
-    .benefits__bg,
-    .benefits__depth {
-      will-change: transform;
+      transform: scale(calc(1 + 0.035 * var(--focus)));
+      transform-origin: 50% 60%;
     }
   }
 </style>

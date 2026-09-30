@@ -153,6 +153,44 @@ Scroll lengths are the `--len-*` tokens (tokens.css): desktop · tablet · phone
 | Booking | 0 | grow (hand-off 8); heading lines + field stagger 50 ms via reveals | image above form | static |
 | Footer | 0 | hand-off 9 only | — | static |
 
+### 5.1 As built — Hero → Services (phase 2A; no primitive/token changes)
+
+- **Hero**: the window's inner image refits like `object-fit: cover` while the clip opens — inner scale starts at
+  `max(windowW/stageW, windowH/stageH)·1.04` (≈ .50) → 1 instead of 1.08 → 1, so the whole operatory is visible in
+  the small window (reference f001) and the growth reads as bounds + refit, never a uniform frame scale. CSS start
+  state `html:not(.is-ready) .hero__media` (≥640 + motion) prevents a first-paint flash. The header's
+  `[data-intro]` is removed after its fade so its own hide-on-scroll CSS works (no inline opacity left behind).
+  QA: `?qa-hero=0 | 0.16 (≈ half-expanded) | 1`.
+- **Intro → Benefits**: the intro root has `margin-bottom: calc(-1 * var(--stage-top))` (≥640 + motion) so the
+  panel's lower edge meets the Benefits stage's upper edge — the photo grows inside a surface that continues the
+  intro instead of after an ambient gap. `[data-recede]` = the statement column only (the panel stays).
+- **Benefits**: during the grow range (`top bottom → top top`) the card row travels in from the right
+  (viewport x .28·stageW → 0, opacity 0 → 1) and the heading settles in the last third (y 24 → 0) — interior
+  choreography riding hand-off 2, not a separate reveal. Row top = `max(44 %, header band + 150 px)` so short
+  stages (1024×768) never put cards under the heading. Native rows mark the leftmost fully visible card active.
+- **Services**: scroll → active mapping band is `top 60% → bottom 60%` (the active row sits just under the
+  heading, as in the reference); manual pick / keyboard focus lock = 45 vh. Active title line-masks in
+  (yPercent 105 → 0, 650 ms); the media FLIP also interpolates its corner radius (round thumb → 12 px) in
+  last-layout units so the scaled image never shows distorted corners.
+
+### 5.1 Additions — Journey → Footer (phase 2B, additive; no primitive/token changed)
+
+- **Journey heading lift**: the heading lives at the top of the journey stage and lifts out of it during the first
+  14 % of `--len-journey` (`[data-journey-track]` y 0 → −head height, measured on refresh); the 4 transitions share
+  the remaining 86 % (each in the middle 50 % of its quarter). The stage itself never moves.
+- **Journey stays pinned under the doctors breath**: `.journey` `--scene-tail` = `--jd-overlap + --len-doctors` and
+  `.doctors` `margin-top` = −(`--jd-overlap + --len-doctors`), with `--jd-overlap` = 100 svh on ≥ 640 + motion
+  (= `--overlap-rise` otherwise, i.e. 0 on phones / reduced). Without it the covered journey slid into view above the
+  inset doctors stage during `--len-doctors`, and on tablet (overlap 70 svh) it unpinned before being covered. The
+  `rise` recipe itself is unchanged (trigger `top bottom → top top`). Declared in TreatmentJourney/DoctorsShowcase CSS.
+- **Doctors layers**: each doctor = one `<MaskedMedia fill radius="none">` (low-res self-backdrop, blurred in CSS) with
+  the real 4:5 portrait in its slot (feathered edges, centre-right). `maskWipe` swaps whole layers; the switch waits
+  ≤ 350 ms for an undecoded portrait so a wipe never reveals an empty frame.
+- **Results hint** triggers on the scene root (`top -45%` ≥ 640), not on the frame inside the CSS-sticky stage.
+- **Booking**: `MaskedMedia fill grow="y"` inside a positioned `.booking__visual` (left 55 % ≥ 1280, 52 % 1024–1279;
+  16:9 / 4:3 above the form below 1024) with a right-edge fade to `--surface` in the media slot.
+- **Footer**: `footer.ts` module removed (texture gone); motion = `beneath` column counter-drift only.
+
 ## 6. Reduced motion (`prefers-reduced-motion: reduce`)
 
 No Lenis, no pins (CSS: `.scene__pin` static, lengths/overlaps 0), no scrubs, no parallax, no grow clips (start

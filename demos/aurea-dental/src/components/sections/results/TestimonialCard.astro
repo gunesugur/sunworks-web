@@ -1,7 +1,8 @@
 ---
 /**
- * Patient testimonial — editorial block, not a boxed card. Identity is a privacy-safe placeholder:
- * a neutral monogram disc, age and treatment only (real details only with written consent).
+ * Restrained patient story panel (--surface, same height as the comparison on desktop). PLACEHOLDER content:
+ * `placeholder` renders data-placeholder="true" so QA / content review can find it; the identity is privacy-safe
+ * (age + treatment only). No stars, review counts or awards.
  */
 interface Props {
   label: string;
@@ -10,87 +11,62 @@ interface Props {
   patient: string;
   treatment: string;
   note: string;
-  monogram: string;
+  placeholder?: boolean;
 }
-const { label, quote, body, patient, treatment, note, monogram } = Astro.props;
+const { label, quote, body, patient, treatment, note, placeholder = false } = Astro.props;
 ---
-<figure class="testimonial" data-testimonial>
+<figure class="testimonial" data-testimonial data-placeholder={placeholder ? 'true' : undefined}>
   <p class="label testimonial__label">{label}</p>
   <blockquote class="testimonial__quote">
-    <p class="testimonial__lead" data-testimonial-lead>“{quote}”</p>
-    <p class="testimonial__body" data-testimonial-body>{body}</p>
+    <p class="testimonial__lead">“{quote}”</p>
+    <p class="testimonial__body">{body}</p>
   </blockquote>
-  <figcaption class="testimonial__meta" data-testimonial-meta>
-    <span class="testimonial__avatar" aria-hidden="true">{monogram}</span>
-    <span class="testimonial__who">
-      <span class="testimonial__name">{patient}</span>
-      <span class="testimonial__treat">{treatment}</span>
-    </span>
+  <figcaption class="testimonial__meta">
+    <span class="testimonial__who">{patient} · {treatment}</span>
     <span class="testimonial__note">{note}</span>
   </figcaption>
 </figure>
 
-<style>
+<style is:global>
   .testimonial {
-    display: grid;
-    gap: var(--space-6);
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    height: 100%;
+    margin: 0;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
   }
   .testimonial__quote {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
+    margin: 0;
   }
   .testimonial__lead {
-    font-size: var(--fs-statement);
+    max-width: 20ch;
+    font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.75rem);
     font-weight: var(--fw-book);
-    line-height: 1.08;
-    letter-spacing: var(--ls-heading);
-    text-indent: -0.42em;
+    line-height: 1.16;
+    letter-spacing: var(--ls-tight);
+    text-indent: -0.4em;
     text-wrap: balance;
   }
   .testimonial__body {
-    max-width: 28rem;
-    font-size: var(--fs-body-lg);
-    color: var(--color-text-2);
+    max-width: 44ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
   }
   .testimonial__meta {
     display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    column-gap: var(--space-4);
-    row-gap: var(--space-3);
-    padding-top: var(--space-5);
-    border-top: 1px solid var(--color-border);
-  }
-  .testimonial__avatar {
-    display: grid;
-    place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--color-surface);
-    box-shadow: inset 0 0 0 1px var(--color-border-soft);
-    font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
-    color: var(--color-text-2);
-  }
-  .testimonial__who {
-    display: grid;
     gap: 2px;
-    line-height: 1.3;
-  }
-  .testimonial__name {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-soft);
     font-size: var(--fs-small);
-    font-weight: var(--fw-medium);
-  }
-  .testimonial__treat {
-    font-size: var(--fs-small);
-    color: var(--color-text-2);
   }
   .testimonial__note {
-    grid-column: 1 / -1;
-    font-size: 0.75rem;
-    color: var(--color-text-2);
+    color: var(--text-secondary);
   }
 </style>
