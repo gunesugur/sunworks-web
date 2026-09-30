@@ -1,118 +1,21 @@
 ---
-/**
- * SceneFrame — the one shell every scene uses (docs/AUREA_MOTION_RULE_KIT_V3.md §Primitives).
- *
- *   frame="stage"  (default) centred cinematic stage: --stage-w × --stage-h, radius --stage-radius, inside a
- *                  100svh sticky wrapper when pinned. Scene height = 100svh + head + length + tail.
- *   frame="panel"  flow surface --panel-w wide (rising panels such as Services / Intro).
- *   frame="column" quiet, surface-less column --stage-w wide (FAQ, footer).
- *
- * Hand-offs are DECLARED here and executed by src/motion/scenes.ts (initScenes):
- *   enter="flow"    normal document flow (default)
- *   enter="rise"    rises OVER the previous pinned stage (prev gets --scene-tail automatically via :has)
- *   enter="beneath" lies UNDER the previous scene, which lifts off it (stage: pinned head; column: counter-drift)
- *   enter="grow"    a [data-grow] MaskedMedia inside grows from a clipped window to the full stage on entry
- *   exit="recede"   drifts up + softens while leaving (quiet hand-overs)
- * Ambient: ambient={ImageKey} registers the scene with <AmbientBackdrop/> (only Hero, Benefits, Doctors,
- * Results (tone warm), Booking).
- */
-import type { ImageKey } from '../../lib/images';
-
+/** Shared editorial shell. Sections stay in document flow; only their own controls animate. */
 interface Props {
-  /** scene name (hero, intro, benefits, services, journey, doctors, results, faq, booking, footer) */
   name: string;
-  /** data-section module name (src/scripts/sections/<section>.ts); omit if the scene has no module */
   section?: string;
   id?: string;
   labelledby?: string;
   label?: string;
   as?: 'section' | 'footer' | 'div';
   frame?: 'stage' | 'panel' | 'column';
-  /** stage height: 'stage' = --stage-h from 640px up (auto on phones) · 'fixed' = --stage-h everywhere · 'auto' = content, min --stage-h */
   height?: 'stage' | 'fixed' | 'auto';
-  /** where the stage is pinned (sticky 100svh): 'tablet' (≥640, default) · 'desktop' (≥1024) · 'all' · 'none'. Never under reduced motion. */
-  pin?: 'tablet' | 'desktop' | 'all' | 'none';
-  /** extra pinned scroll for the scene's own choreography, e.g. 'var(--len-journey)' */
-  length?: string;
-  /** stage narrower by --stage-inset per side, --panel-radius corners (stages that rise over another) */
-  inset?: boolean;
-  enter?: 'flow' | 'rise' | 'beneath' | 'grow';
-  /** rise overlap: 'full' = --overlap-rise (default) · 'short' = 60% of it (hero → intro) */
-  overlap?: 'full' | 'short';
-  exit?: 'none' | 'recede';
-  ambient?: ImageKey;
-  ambientTone?: 'neutral' | 'warm';
   tone?: 'surface' | 'muted' | 'bg' | 'soft' | 'photo';
   class?: string;
   stageClass?: string;
 }
-
-const {
-  name,
-  section,
-  id,
-  labelledby,
-  label,
-  as: Tag = 'section',
-  frame = 'stage',
-  height = 'stage',
-  pin = 'tablet',
-  length,
-  inset = false,
-  enter = 'flow',
-  overlap = 'full',
-  exit = 'none',
-  ambient,
-  ambientTone = 'neutral',
-  tone = 'surface',
-  class: className,
-  stageClass,
-} = Astro.props;
-
-const style = length ? `--scene-len: ${length}` : undefined;
+const {name,section,id,labelledby,label,as:Tag='section',frame='stage',height='stage',tone='surface',class:className,stageClass}=Astro.props;
 ---
-<Tag
-  id={id}
-  class:list={['scene', `scene--${frame}`, className]}
-  data-scene={name}
-  data-section={section}
-  data-enter={enter}
-  data-overlap={enter === 'rise' && overlap === 'short' ? 'short' : undefined}
-  data-exit={exit === 'none' ? undefined : exit}
-  data-pin={frame === 'stage' ? pin : undefined}
-  data-height={frame === 'stage' ? height : undefined}
-  data-inset={inset ? '' : undefined}
-  data-tone={tone}
-  data-ambient={ambient}
-  data-ambient-tone={ambient ? ambientTone : undefined}
-  aria-labelledby={labelledby}
-  aria-label={label}
-  style={style}
->
-  {
-    frame === 'stage' && (
-      <div class="scene__pin" data-scene-pin>
-        <div class:list={['stage', stageClass]} data-stage>
-          <slot />
-          <div class="scene__dim" data-scene-dim aria-hidden="true" />
-        </div>
-      </div>
-    )
-  }
-  {
-    frame === 'panel' && (
-      <div class:list={['panel', stageClass]} data-stage>
-        <slot />
-        <div class="scene__dim" data-scene-dim aria-hidden="true" />
-      </div>
-    )
-  }
-  {
-    frame === 'column' && (
-      <div class:list={['scene__column', stageClass]} data-stage>
-        <slot />
-      </div>
-    )
-  }
+<Tag id={id} class:list={['scene',`scene--${frame}`,className]} data-scene={name} data-section={section} data-enter="flow" data-pin={frame==='stage'?'none':undefined} data-height={frame==='stage'?height:undefined} data-tone={tone} aria-labelledby={labelledby} aria-label={label}>
+  {frame==='stage' ? <div class="scene__pin"><div class:list={['stage',stageClass]} data-stage><slot /></div></div> : <div class:list={[frame==='panel'?'panel':'scene__column',stageClass]} data-stage><slot /></div>}
   <slot name="after" />
 </Tag>

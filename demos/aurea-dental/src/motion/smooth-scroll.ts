@@ -40,22 +40,17 @@ export function lockScroll(locked: boolean): void {
   else lenis.start();
 }
 
-const headerOffset = (): number => {
-  const header = document.querySelector<HTMLElement>('[data-site-header]');
-  return header ? header.offsetHeight : 0;
-};
 
 /** Scroll to an element/selector/y with the fixed header taken into account. */
 export function scrollToTarget(target: HTMLElement | string | number, opts: { immediate?: boolean } = {}): void {
   const el = typeof target === 'string' ? document.querySelector<HTMLElement>(target) : target;
   if (el === null) return;
-  const offset = typeof el === 'number' ? 0 : -headerOffset();
+  const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const y = typeof el === 'number' ? el : el.getBoundingClientRect().top + window.scrollY - padding;
   if (lenis) {
-    // Lenis already subtracts the root's scroll-padding-top (= --header-h) for element targets.
-    lenis.scrollTo(el, { offset: 0, immediate: opts.immediate ?? false, duration: 1.2 });
+    lenis.scrollTo(y, { immediate: opts.immediate ?? false, duration: 0.65 });
   } else {
-    const y = typeof el === 'number' ? el : el.getBoundingClientRect().top + window.scrollY + offset;
-    window.scrollTo({ top: y, behavior: opts.immediate || prefersReducedMotion() ? 'auto' : 'smooth' });
+    window.scrollTo({ top: y, behavior: 'instant' });
   }
   if (typeof el !== 'number') {
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '-1');
@@ -65,6 +60,14 @@ export function scrollToTarget(target: HTMLElement | string | number, opts: { im
 
 /** Delegated in-page anchor handling (href="#id"). */
 export function bindAnchorLinks(root: Document | HTMLElement = document): () => void {
+  const hashTarget = (hash: string): HTMLElement | null => {
+    try { return document.getElementById(decodeURIComponent(hash.slice(1))); }
+    catch { return null; }
+  };
+  const onHashChange = (): void => {
+    const target = hashTarget(window.location.hash);
+    if (target) scrollToTarget(target, { immediate: true });
+  };
   const onClick = (event: Event): void => {
     const e = event as MouseEvent;
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -72,12 +75,16 @@ export function bindAnchorLinks(root: Document | HTMLElement = document): () => 
     if (!link) return;
     const hash = link.getAttribute('href') ?? '';
     if (hash.length < 2) return;
-    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    const target = hashTarget(hash);
     if (!target) return;
     e.preventDefault();
     scrollToTarget(target);
     history.pushState(null, '', hash);
   };
   root.addEventListener('click', onClick);
-  return () => root.removeEventListener('click', onClick);
+  window.addEventListener('hashchange', onHashChange);
+  return () => {
+    root.removeEventListener('click', onClick);
+    window.removeEventListener('hashchange', onHashChange);
+  };
 }

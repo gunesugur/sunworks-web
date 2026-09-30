@@ -1,0 +1,21 @@
+/* Editorial layout: sections stay in document flow. Content is never hidden by scroll position. */
+html .scene { margin-top: 0; height: auto; z-index: 1; padding-block: clamp(32px,4vw,64px); }
+html .scene.hero { padding: 0; }
+html .scene > .scene__pin { position: relative; height: auto; min-height: 0; padding: 0; }
+html .scene .stage { contain: none; }
+html .scene .panel { border-radius: var(--panel-radius); }
+html .scene__dim { display: none; }
+html [data-grow], html [data-reveal] { clip-path: none; }
+html [data-grow] > .mm__inner { transform: none; }
+html [data-ink] { color: var(--text-primary); }
+html h2, html .t-h2 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.025em; line-height: 1.12; }
+html .site-header { top: 16px; }
+html .site-header .site-header__bar { height: 64px; width: calc(100% - 48px); max-width: 1320px; padding-inline: 24px; background: rgba(255,253,248,.97); border-radius: 4px; border-color: var(--border-soft); }
+html .site-header .site-header__capsule { background: transparent; border: 0; backdrop-filter: none; }
+html .site-header .site-header__capsule a { font-size: 15px; padding-inline: 16px; }
+html .site-header .site-header__wordmark { font-size: 14px; letter-spacing: .12em; }
+html .results .results__stage { min-height: 0; }
+@media(max-width:1023.98px) { html .results .results__inner { grid-template-columns: 1fr; } html .results .results__intro { justify-self: start; max-width: 38ch; } }
+@media(max-width:639.98px) { html .site-header .site-header__bar { width: calc(100% - 24px); padding-inline: 16px; } html .site-header .site-header__wordmark { font-size: 12px; } :root { --stage-pad-y: 32px; } }
+
+@media(min-width:1024px) { html main > .scene { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; } }

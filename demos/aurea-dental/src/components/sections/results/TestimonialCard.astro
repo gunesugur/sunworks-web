@@ -16,14 +16,14 @@ interface Props {
 const { label, quote, body, patient, treatment, note, placeholder = false } = Astro.props;
 ---
 <figure class="testimonial" data-testimonial data-placeholder={placeholder ? 'true' : undefined}>
-  <p class="label testimonial__label">{label}</p>
+  <p class="label testimonial__label">{placeholder ? 'Understanding your options' : label}</p>
   <blockquote class="testimonial__quote">
-    <p class="testimonial__lead">“{quote}”</p>
-    <p class="testimonial__body">{body}</p>
+    <p class="testimonial__lead">{placeholder ? 'A result is only part of the story.' : `“${quote}”`}</p>
+    <p class="testimonial__body">{placeholder ? 'Ask about the treatment involved, the time it takes and how the result is maintained. A comparison image helps start that conversation.' : body}</p>
   </blockquote>
   <figcaption class="testimonial__meta">
-    <span class="testimonial__who">{patient} · {treatment}</span>
-    <span class="testimonial__note">{note}</span>
+    <span class="testimonial__who">{placeholder ? 'Illustrative demo comparison' : `${patient} · ${treatment}`}</span>
+    <span class="testimonial__note">{placeholder ? 'These images are not evidence of a clinical outcome.' : note}</span>
   </figcaption>
 </figure>
 

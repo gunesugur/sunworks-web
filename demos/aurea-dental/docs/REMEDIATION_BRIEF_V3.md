@@ -1,3 +1,5 @@
+> Archived V3 reference. Superseded on 2026-10-01 by [Design kit V4](AUREA_DESIGN_KIT_V4.md) and [Motion rule kit V4](AUREA_MOTION_RULE_KIT_V4.md). Do not use this file as the current implementation contract.
+
 # AUREA — Reference-fidelity remediation brief (V3, condensed from client spec)
 
 Existing site: demos/aurea-dental (live: https://aurea-dental.0ugurgunes0.workers.dev/ — not reachable from the sandbox; use local build).

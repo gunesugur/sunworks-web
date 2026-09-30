@@ -1,7 +1,8 @@
 ---
-import '@fontsource-variable/inter-tight';
-import interLatin from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url';
+import '@fontsource-variable/manrope';
+import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import '../styles/base.css';
+import '../styles/editorial.css';
 import { getImage } from 'astro:assets';
 import { site } from '../content/site';
 import { images } from '../lib/images';
@@ -23,9 +24,9 @@ const ogUrl = new URL(og.src, Astro.site ?? site.url).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#f4f4f1" />
+    <meta name="theme-color" content="#f5f2eb" />
     <meta name="color-scheme" content="light" />
-    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={manropeLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />

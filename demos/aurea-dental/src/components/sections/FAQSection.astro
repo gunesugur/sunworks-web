@@ -1,6 +1,6 @@
 ---
 /**
- * §9 FAQSection — QUIET (motion kit §4 #7–8, §5 FAQ). <SceneFrame frame="column" exit="recede">: no surface, no
+ * §9 FAQSection — QUIET (motion kit §4 #7–8, §5 FAQ). <SceneFrame frame="column">: no surface, no
  * scroll choreography; the column recedes (y −8 vh, opacity .4) while the Booking image grows in beneath it.
  * Left 4/12: label, heading, short copy, quiet text link. Right 7/12: accordion — 1 px rules, 76 px rows, 16 px
  * questions, 22 px circle +/–, one open at a time (faq.ts: height + opacity + y 6 → 0, 380 ms).
@@ -12,7 +12,7 @@ import Button from '../ui/Button.astro';
 
 const data = site.faq;
 ---
-<SceneFrame name="faq" section="faq" id="faq" labelledby="faq-title" frame="column" exit="recede" class="faq" stageClass="faq__column">
+<SceneFrame name="faq" section="faq" id="faq" labelledby="faq-title" frame="column" class="faq" stageClass="faq__column">
   <div class="faq__intro">
     <p class="label label--dark">{data.label}</p>
     <h2 id="faq-title" class="t-h2 faq__title">

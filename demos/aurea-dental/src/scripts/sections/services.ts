@@ -11,21 +11,14 @@
  *    active title line-masks in (yPercent 105 → 0). Rows never animate height; interrupted
  *    transitions restart from the current visual state (rects include in-flight transforms).
  *  - Input: click / Enter / Space (native button), ArrowUp/Down/Home/End between headers,
- *    hover intent (120ms, fine pointer, real pointer movement only, ≥640px). Phones: tap only.
- *  - Scroll auto-activation (≥640px, motion): list progress → row. A manual pick is kept until the
- *    user scrolls 45vh away from where they picked, or the list leaves the viewport.
- *  - Reduced motion: instant switch, detail fades (opacity only), no auto-activation, no rise.
+ *  - Selection changes only on explicit activation; scrolling and hovering never replace it.
+ *  - Reduced motion: instant switch with an opacity-only detail transition.
  */
 import { gsap, ScrollTrigger, EASE, DURATION } from '../../motion/tokens';
 import { withMotion } from '../../motion/media';
 import { getLenis } from '../../motion/smooth-scroll';
 
-const HOVER_INTENT_MS = 120;
-const RELEASE_VH = 0.45;
 const WIDE = '(min-width: 640px)';
-const FINE = '(hover: hover) and (pointer: fine)';
-
-type Source = 'auto' | 'manual';
 
 interface Part {
   row: HTMLElement;
@@ -57,14 +50,12 @@ export function init(root: HTMLElement): () => void {
 
   const n = parts.length;
   const wide = window.matchMedia(WIDE);
-  const fine = window.matchMedia(FINE);
+
   let current = Math.max(
     0,
     parts.findIndex((p) => p.row.classList.contains('is-open')),
   );
   let animate = false; // FLIP allowed (motion conditions)
-  let auto = false; // scroll auto-activation allowed
-  let manualAt: number | null = null; // scroll position of the last manual pick
   let flip: gsap.core.Tween | null = null;
   const clip = parts.map(() => 0); // live bottom clip inset per row (px; negative = extended)
 
@@ -127,11 +118,10 @@ export function init(root: HTMLElement): () => void {
     }
   };
 
-  const activate = (next: number, source: Source): void => {
+  const activate = (next: number): void => {
     if (next === current || next < 0 || next >= n) return;
     const prev = current;
     current = next;
-    if (source === 'manual') manualAt = window.scrollY;
 
     if (!animate) {
       clearFlip();
@@ -233,24 +223,9 @@ export function init(root: HTMLElement): () => void {
     offs.push(() => el.removeEventListener(type, fn));
   };
 
-  let hoverTimer = 0;
-  let pending = -1;
-  let lastX = NaN;
-  let lastY = NaN;
-  const cancelHover = (): void => {
-    window.clearTimeout(hoverTimer);
-    pending = -1;
-  };
-
   parts.forEach((p, i) => {
     on(p.trigger, 'click', () => {
-      cancelHover();
-      activate(i, 'manual');
-    });
-    // Keyboard focus holds the current row like a manual pick, so auto-activation does not
-    // swap rows (and hide the focused row's link) while the user tabs through the list.
-    on(p.trigger, 'focus', () => {
-      if (p.trigger.matches(':focus-visible')) manualAt = window.scrollY;
+      activate(i);
     });
     on(p.trigger, 'keydown', (e) => {
       const keys: Record<string, number> = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: n - 1 };
@@ -259,70 +234,13 @@ export function init(root: HTMLElement): () => void {
       e.preventDefault();
       parts[(target + n) % n]?.trigger.focus();
     });
-    on(p.row, 'pointermove', (e) => {
-      if (e.pointerType !== 'mouse' || !fine.matches || !wide.matches) return;
-      // Scrolling under a still cursor emits synthetic moves with unchanged coordinates — ignore them.
-      if (e.clientX === lastX && e.clientY === lastY) return;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      if (i === current) {
-        cancelHover();
-        return;
-      }
-      if (pending === i) return;
-      cancelHover();
-      pending = i;
-      hoverTimer = window.setTimeout(() => {
-        pending = -1;
-        activate(i, 'manual');
-      }, HOVER_INTENT_MS);
-    });
-    on(p.row, 'pointerleave', () => {
-      if (pending === i) cancelHover();
-    });
   });
 
   // ---------------------------------------------------------------- motion conditions
   const motion = withMotion(root, ({ desktop, mobile }) => {
     animate = desktop || mobile;
-    auto = animate;
-
-    if (auto) {
-      const pick = (progress: number): void => {
-        if (!auto || !wide.matches) return;
-        activate(Math.min(n - 1, Math.floor(progress * n)), 'auto');
-      };
-      ScrollTrigger.create({
-        trigger: list,
-        // the row crossing the 60 % line is the active one (reference: active row sits just under the heading)
-        start: 'top 60%',
-        end: 'bottom 60%',
-        onUpdate: (self) => {
-          if (manualAt !== null) {
-            if (Math.abs(self.scroll() - manualAt) < window.innerHeight * RELEASE_VH) return;
-            manualAt = null;
-          }
-          pick(self.progress);
-        },
-      });
-      // Leaving the list entirely always releases a manual pick.
-      ScrollTrigger.create({
-        trigger: list,
-        start: 'top bottom',
-        end: 'bottom top',
-        onLeave: () => {
-          manualAt = null;
-        },
-        onLeaveBack: () => {
-          manualAt = null;
-        },
-      });
-    }
-
     return () => {
       animate = false;
-      auto = false;
-      cancelHover();
       clearFlip();
       gsap.set(
         parts.flatMap((p) => [p.detail, p.detail.firstElementChild]).filter(Boolean),
@@ -333,7 +251,6 @@ export function init(root: HTMLElement): () => void {
 
   return () => {
     motion();
-    cancelHover();
     offs.forEach((off) => off());
   };
 }

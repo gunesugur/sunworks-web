@@ -1,14 +1,13 @@
 /**
- * §7 DoctorsShowcase — interior only (the rise over Journey / lift-off from Results are built by scenes.ts).
+ * Doctors selector: portrait and biography changes without moving the section.
  * Selector: ARIA tablist (roving tabindex, ←/→/↑/↓/Home/End, automatic activation).
  * Switch: maskWipe(out, in, { forward: next > prev }) — directional clip-path, DURATION.wipe (650 ms);
  * name / specialty / bio: out opacity → 0 (220 ms), in y 8 → 0 + opacity (320 ms, 80 ms delay);
- * the ambient spill follows the selected doctor (data-ambient + ambientChanged()).
  * Reduced motion: opacity cross-fade (maskWipe reduce) and instant text swap fade.
  */
 import { gsap, EASE, DURATION } from '../../motion/tokens';
 import { prefersReducedMotion } from '../../motion/media';
-import { maskWipe, ambientChanged } from '../../motion/scenes';
+import { maskWipe } from '../../motion/scenes';
 
 export function init(root: HTMLElement): () => void {
   const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-doctor-tab]'));
@@ -82,12 +81,7 @@ export function init(root: HTMLElement): () => void {
       { opacity: 1, y: 0, duration: DURATION.ui, delay: 0.08, ease: EASE.primary, clearProps: 'transform' },
     );
 
-    // ambient spill follows the selected clinician
-    const key = layers[next]!.dataset.dlayer;
-    if (key) {
-      root.dataset.ambient = key;
-      ambientChanged();
-    }
+
   };
 
   const onClick = (e: Event): void => {

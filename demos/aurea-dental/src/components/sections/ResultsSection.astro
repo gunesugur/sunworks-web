@@ -2,7 +2,7 @@
 /**
  * §8 ResultsSection — interactive, MED (motion kit §4 #6–7, §5 Results).
  *
- * <SceneFrame enter="beneath" height="auto" length="var(--len-results)" exit="recede" ambient warm>: the stage lies
+ * <SceneFrame height="auto" ambient warm>: the stage lies
  * UNDER the Doctors stage and settles (.965 → 1, dim .10 → 0) as Doctors lifts off; holds for --len-results; then
  * recedes (y −8 vh, opacity .4) as the quiet FAQ column arrives. Warm ambient spill (result-after, .16).
  *
@@ -24,12 +24,7 @@ const data = site.results;
   labelledby="results-title"
   frame="stage"
   height="auto"
-  length="var(--len-results)"
-  enter="beneath"
-  exit="recede"
   tone="muted"
-  ambient={data.slider.after}
-  ambientTone="warm"
   class="results"
   stageClass="results__stage"
 >

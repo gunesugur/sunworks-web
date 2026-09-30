@@ -11,21 +11,8 @@ import ResultsSection from '../components/sections/ResultsSection.astro';
 import FAQSection from '../components/sections/FAQSection.astro';
 import BookingCTA from '../components/sections/BookingCTA.astro';
 import Footer from '../components/sections/Footer.astro';
-import AmbientBackdrop from '../components/scene/AmbientBackdrop.astro';
 ---
 <Base>
-  <AmbientBackdrop
-    sources={[
-      { key: 'hero-operatory' },
-      { key: 'benefits-clinic' },
-      { key: 'doctor-01' },
-      { key: 'doctor-02' },
-      { key: 'doctor-03' },
-      { key: 'doctor-04' },
-      { key: 'result-after', tone: 'warm' },
-      { key: 'booking-patient' },
-    ]}
-  />
   <Header />
   <main id="main" tabindex="-1">
     <HeroIntro />

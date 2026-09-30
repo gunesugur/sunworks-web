@@ -55,7 +55,7 @@ export const site = {
   url: 'https://aurea-dental.0ugurgunes0.workers.dev',
   locale: 'en',
   meta: {
-    title: 'AUREA Dental — Precision and comfort, crafted around your smile',
+    title: 'AUREA Dental — Considered dental care in Bursa',
     description:
       'Personalized dental care in Bursa combining modern diagnostics, experienced clinicians and a calmer patient experience.',
   },
@@ -86,8 +86,8 @@ export const site = {
   },
 
   hero: {
-    titleLines: ['Precision and comfort,', 'crafted around your smile.'],
-    copy: 'Personalized dental care combining modern diagnostics, experienced clinicians and a calmer patient experience.',
+    titleLines: ['Good care starts', 'with a conversation.'],
+    copy: 'From your first check-up to a longer treatment plan, we make time to explain your options and answer your questions.',
     primary: { label: 'Book a consultation', href: '#booking' } satisfies NavLink,
     secondary: { label: 'Explore treatments', href: '#services' } satisfies NavLink,
     image: 'hero-operatory' as ImageKey,
@@ -95,7 +95,7 @@ export const site = {
   },
 
   statement: {
-    label: '02 / The clinic',
+    label: 'The clinic',
     // semantic phrases — each one inks from --text-ink-start to --text-primary as the reader scrolls (inkPhrases)
     phrases: [
       'We combine thoughtful dentistry,',
@@ -109,14 +109,14 @@ export const site = {
     imageAlt: 'Dental handpieces resting on the treatment unit, ready for the next patient.',
     // CMS-editable PLACEHOLDERS — unverified (verified: false). Do not publish as fact.
     stats: [
-      { value: '4,800+', label: 'Patients treated', verified: false },
-      { value: '12 yrs', label: 'Clinical experience', verified: false },
-      { value: '98%', label: 'Patient satisfaction', verified: false },
+      { value: '01', label: 'Discuss your concerns', verified: false },
+      { value: '02', label: 'Agree on a plan', verified: false },
+      { value: '03', label: 'Care at your pace', verified: false },
     ] satisfies readonly Stat[],
   },
 
   benefits: {
-    label: '03 / Why patients choose AUREA',
+    label: 'Why patients choose AUREA',
     titleLines: ['Care that feels clear', 'at every step.'],
     intro: 'Six things we hold ourselves to, on every visit.',
     image: 'benefits-clinic' as ImageKey,
@@ -156,7 +156,7 @@ export const site = {
   },
 
   services: {
-    label: '04 / Treatments',
+    label: 'Treatments',
     titleLines: ['All your dental needs,', 'under one roof.'],
     intro:
       'From routine checkups to full smile restoration, our specialists work together through one coordinated diagnostic and treatment process.',
@@ -237,8 +237,8 @@ export const site = {
   },
 
   journey: {
-    label: '05 / Your treatment journey',
-    titleLines: ['From first call', 'to confident smile.'],
+    label: 'Your treatment journey',
+    titleLines: ['Your care,', 'step by step.'],
     /** prefix for step numbers ("Step 01") — screen readers + the stage counter */
     stepLabel: 'Step',
     /** small label above the right-hand step list */
@@ -283,7 +283,7 @@ export const site = {
   },
 
   doctors: {
-    label: '06 / Our team',
+    label: 'Our team',
     /** claim, upper-left on the portrait stage (3 short lines) */
     titleLines: ['AUREA is the team', 'you trust with', 'your smile.'],
     selectorLabel: 'Choose a specialist',
@@ -326,8 +326,8 @@ export const site = {
   },
 
   results: {
-    label: '07 / Results',
-    titleLines: ['Real results,', 'real people.'],
+    label: 'Results',
+    titleLines: ['A closer look', 'at treatment.'],
     intro: 'Every result starts with a plan you can see. Drag the divider to compare the same smile before and after treatment.',
     slider: {
       before: 'result-before' as ImageKey,
@@ -408,8 +408,8 @@ export const site = {
   },
 
   booking: {
-    label: '08 / Booking',
-    titleLines: ['Ready for your best smile?', 'Book a consultation.'],
+    label: 'Booking',
+    titleLines: ['Let’s talk', 'about your care.'],
     intro: 'Try the consultation form with sample details. This demo does not send requests or book appointments.',
     image: 'booking-patient' as ImageKey,
     imageAlt: 'A smiling patient resting her cheek on her hand in a bright treatment room.',
@@ -421,7 +421,7 @@ export const site = {
     },
     interestLegend: 'Treatment interest',
     chips: ['Consultation', 'Whitening', 'Implants', 'Aligners', 'General dentistry'],
-    submit: 'Send request',
+    submit: 'Try the demo form',
     privacy: 'Demo only. Please use sample details; nothing is sent or saved by this form.',
     success: 'The form validation worked. No details were sent and no appointment was booked.',
     successTitle: 'Demo completed.',

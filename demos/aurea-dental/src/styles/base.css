@@ -353,7 +353,7 @@ html:not(.motion-enabled) .scene > .scene__pin {
   position: relative !important;
   height: auto !important;
 }
-html:not(.motion-enabled) .site-header__toggle { display: none; }
+html:not(.js-enabled) .site-header__toggle { display: none; }
 
 /* ---- Lenis ---- */
 html.lenis,

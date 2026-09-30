@@ -1,24 +1,24 @@
-/* AUREA Dental — design tokens V3 (docs/AUREA_DESIGN_KIT_V3.md). Every section consumes these; do not hard-code values.
+/* AUREA Dental — design tokens V4 (docs/AUREA_DESIGN_KIT_V4.md). Every section consumes these; do not hard-code values.
    V3 names are canonical; the V2 `--color-*` names below are kept as aliases so existing sections keep working. */
 :root {
   /* ---- palette V3 (warm neutral; colour comes from photography) ---- */
-  --bg-main: #f4f4f1;
-  --bg-soft: #f8f8f5;
-  --surface: #fcfcfa;
-  --surface-muted: #ecece7;
-  --text-primary: #151515;
-  --text-secondary: #696965;
+  --bg-main: #f5f2eb;
+  --bg-soft: #ebece5;
+  --surface: #fffdf8;
+  --surface-muted: #e6ebe5;
+  --text-primary: #203e38;
+  --text-secondary: #54645e;
   --text-faint: rgba(20, 20, 20, 0.2);
   --text-ink-start: rgba(20, 20, 20, 0.14); /* statement inking start */
   --border-soft: rgba(20, 20, 20, 0.1);
   --border-hair: rgba(20, 20, 20, 0.06);
-  --black: #111111;
+  --black: #203e38;
   --white: #ffffff;
   /* surfaces over photography */
-  --glass: rgba(248, 248, 245, 0.42); /* benefit cards, inactive */
-  --glass-active: rgba(252, 252, 250, 0.94); /* benefit card, active */
+  --glass: rgba(248, 248, 245, 0.96); /* readable even over the darkest part of a photo */
+  --glass-active: rgba(252, 252, 250, 0.99); /* benefit card, active */
   --capsule: rgba(252, 252, 250, 0.72); /* nav capsule */
-  --scrim-dark: rgba(17, 17, 17, 0.36); /* text-over-photo protection (doctors) */
+  --scrim-dark: rgba(17, 17, 17, 0.64); /* white text over bright clinic photography */
   --dim: #111111; /* receding-scene dim layer colour (opacity via motion) */
 
   /* ---- V2 aliases (stable names used by sections) ---- */
@@ -27,23 +27,23 @@
   --color-white: var(--surface);
   --color-panel: var(--surface);
   --color-surface: var(--surface-muted);
-  --color-footer: #eeede8;
+  --color-footer: var(--bg-soft);
   --color-border: var(--border-soft);
   --color-border-soft: rgba(20, 20, 20, 0.08);
   --color-border-strong: rgba(20, 20, 20, 0.22);
   --color-text: var(--text-primary);
   --color-text-2: var(--text-secondary);
-  --color-text-3: #71716c; /* inactive/decorative only — not for body copy */
+  --color-text-3: var(--text-secondary);
   --color-cta: var(--black);
-  --color-cta-hover: #242424;
+  --color-cta-hover: #31564d;
   --color-cta-text: var(--white);
-  --color-accent: #b5a994; /* warm metal — tiny states only (active dot, progress) */
+  --color-accent: var(--text-primary);
   --color-card: var(--glass);
   --color-header: var(--capsule);
   --color-scrim: rgba(20, 20, 20, 0.12);
 
   /* ---- type (Inter Tight; premium via space, not size) ---- */
-  --font-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Manrope Variable', 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --fs-hero: clamp(52px, 4.4vw, 64px); /* 64 @1440, 52 @≤1181; phones override below */
   --fs-h2: clamp(2.125rem, 1.2rem + 2.6vw, 3.5rem); /* section headings: 34 → 46 @1024 → 56 @1440 */
   --fs-statement: clamp(1.625rem, 1rem + 1.6vw, 2.5rem); /* intro statement: 26 → 39 @1440 */
@@ -52,11 +52,11 @@
   --fs-num: clamp(2.75rem, 1.75rem + 2.4vw, 4rem); /* journey current number: 44 → 62 @1440 */
   --fs-stat: clamp(1.5rem, 1.1rem + 1vw, 2rem); /* intro metrics: 24 → 32 */
   --fs-body-lg: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); /* 16 → 18 */
-  --fs-body: 1rem; /* 16 */
-  --fs-body-sm: 0.9375rem; /* 15 */
-  --fs-small: 0.8125rem; /* 13 */
-  --fs-button: 0.8125rem; /* 13 */
-  --fs-label: 0.6875rem; /* 11 */
+  --fs-body: 1.125rem; /* 16 */
+  --fs-body-sm: 1.0625rem; /* 15 */
+  --fs-small: 0.9375rem; /* 13 */
+  --fs-button: 0.9375rem; /* 13 */
+  --fs-label: 0.75rem; /* 11 */
 
   --fw-regular: 400;
   --fw-book: 440;
@@ -90,7 +90,8 @@
 
   /* ---- cinematic stage (phones: <640) ---- */
   --stage-max: 1320px;
-  --stage-w: calc(100vw - 24px);
+  --stage-w: calc(100% - 24px);
+  --hero-phone-h: clamp(240px, 36svh, 360px);
   --stage-h: 76svh; /* phones: only the hero uses a fixed stage height; other scenes are auto */
   --stage-radius: 10px;
   --stage-inset: 6px; /* rising panels are this much narrower than the stage, per side */
@@ -136,7 +137,7 @@
   /* ---- scene scroll lengths (extra scroll under a pinned stage; 0 = no pin). Phones default. ---- */
   --len-hero: 0px; /* hero holds only while the intro rises (tail); keep 0 unless QA asks for a breath */
   --len-benefits: 0px;
-  --len-journey: 200vh; /* phones: shorter pin, 5 states */
+  --len-journey: 0px; /* phones: all five steps in natural flow */
   --len-doctors: 0px;
   --len-results: 0px;
   /* overlap of a scene entering over / under the previous one (see SceneFrame `enter`) */
@@ -166,7 +167,7 @@
 /* ---- tablet (640–1023): 834×1194 portrait composition ---- */
 @media (min-width: 640px) {
   :root {
-    --stage-w: calc(100vw - 48px);
+    --stage-w: calc(100% - 48px);
     --stage-h: clamp(480px, 56svh, 720px);
     --stage-radius: 12px;
     --stage-inset: 10px;
@@ -193,7 +194,7 @@
 /* ---- desktop (≥1024): the cinematic stage — 91vw × 58svh, centred ---- */
 @media (min-width: 1024px) {
   :root {
-    --stage-w: min(91vw, var(--stage-max));
+    --stage-w: min(91%, var(--stage-max));
     --stage-h: clamp(440px, 58svh, 680px); /* 626 @1080, 522 @900, 445 @768 */
     --stage-radius: 12px;
     --stage-inset: 16px;
@@ -220,3 +221,6 @@
     --panel-rise-overlap: 100svh;
   }
 }
+
+/* V4: editorial flow, no pinned ranges or overlapping sections. */
+:root { --font-display: Georgia, "Times New Roman", serif; --header-top: 16px; --header-h: 64px; --scroll-pad: 104px; --stage-radius: 4px; --panel-radius: 4px; --stage-pad-y: 48px; --fs-hero: clamp(3rem, 5.2vw, 5.5rem); --lh-display: 1.03; --ls-display: -0.035em; --fs-h2: clamp(2.25rem, 3.5vw, 3.75rem); }

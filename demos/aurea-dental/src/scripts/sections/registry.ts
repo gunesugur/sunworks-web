@@ -9,11 +9,7 @@ export type SectionLoader = () => Promise<{ init: SectionInit }>;
 
 export const registry: Record<string, SectionLoader> = {
   header: () => import('./header'),
-  hero: () => import('./hero'),
-  statement: () => import('./statement'),
-  benefits: () => import('./benefits'),
   services: () => import('./services'),
-  journey: () => import('./journey'),
   doctors: () => import('./doctors'),
   results: () => import('./results'),
   faq: () => import('./faq'),

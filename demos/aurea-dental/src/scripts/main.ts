@@ -2,13 +2,12 @@
  * Boot: smooth scroll → section modules (DOM order) → generic reveals → ScrollTrigger refresh.
  */
 import { ScrollTrigger } from '../motion/tokens';
-import { initSmoothScroll, bindAnchorLinks, getLenis, scrollToTarget } from '../motion/smooth-scroll';
-import { initReveals } from '../motion/reveal';
-import { initScenes } from '../motion/scenes';
+import { bindAnchorLinks, getLenis, scrollToTarget } from '../motion/smooth-scroll';
 import { registry } from './sections/registry';
 
 const root = document.documentElement;
-root.classList.add('motion-enabled');
+// Menu availability is independent of scroll animation.
+root.classList.add('js-enabled');
 
 function debounce(fn: () => void, ms: number): () => void {
   let t = 0;
@@ -19,7 +18,6 @@ function debounce(fn: () => void, ms: number): () => void {
 }
 
 async function boot(): Promise<void> {
-  initSmoothScroll();
   bindAnchorLinks();
 
   const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
@@ -49,8 +47,6 @@ async function boot(): Promise<void> {
   });
 
   // declared scene hand-offs (<SceneFrame enter/exit/ambient>) + ambient layer — after sections, before reveals
-  initScenes(document);
-  initReveals(document);
   ScrollTrigger.sort();
   ScrollTrigger.refresh();
 
@@ -88,5 +84,5 @@ function keepScrollAcrossBreakpoints(): void {
 boot().catch((error: unknown) => {
   console.error('[aurea] motion boot failed', error);
   root.classList.add('motion-fallback');
-  root.classList.remove('motion-enabled');
+  root.classList.remove('js-enabled');
 });

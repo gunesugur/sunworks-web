@@ -1,6 +1,6 @@
 ---
 /**
- * §11 Footer — VERY LOW intensity (motion kit §4 #9). <SceneFrame as="footer" frame="column" enter="beneath">:
+ * §11 Footer — VERY LOW intensity (motion kit §4 #9). <SceneFrame as="footer" frame="column">:
  * it lies beneath the booking stage; scenes.ts counter-drifts the block (−22 vh → 0) so it is revealed as the
  * booking stage moves up. Warm neutral --bg-soft block, radius top --panel-radius; identity, navigation,
  * treatments, hours, address, contact, social, legal; an extremely faint wordmark (opacity .04). No photo,
@@ -11,7 +11,7 @@ import SceneFrame from '../scene/SceneFrame.astro';
 
 const { footer, wordmark } = site;
 ---
-<SceneFrame as="footer" name="footer" frame="column" enter="beneath" class="footer" stageClass="footer__block">
+<SceneFrame as="footer" name="footer" frame="column" class="footer" stageClass="footer__block">
   <p class="footer__ghost" aria-hidden="true">{wordmark}</p>
 
   <div class="footer__grid">

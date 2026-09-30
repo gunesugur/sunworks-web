@@ -1,17 +1,8 @@
 ---
-/**
- * RisingPanel — a scene that rises OVER the previous pinned stage (SceneFrame enter="rise").
- * frame="panel" (default): flow surface, e.g. Services over Benefits, Intro over Hero.
- * frame="stage": an inset pinned stage, e.g. Doctors over Journey.
- * The previous scene must be a pinned stage (it receives --scene-tail = the overlap automatically).
- */
+/** Compatibility wrapper for existing panel components; it has no rise or overlap behavior. */
 import SceneFrame from './SceneFrame.astro';
 import type { ComponentProps } from 'astro/types';
-
-type Props = Omit<ComponentProps<typeof SceneFrame>, 'enter'>;
-const { frame = 'panel', inset = true, ...rest } = Astro.props;
+type Props = ComponentProps<typeof SceneFrame>;
+const { frame='panel',...rest }=Astro.props;
 ---
-<SceneFrame {...rest} frame={frame} inset={inset} enter="rise">
-  <slot />
-  <slot name="after" slot="after" />
-</SceneFrame>
+<SceneFrame {...rest} frame={frame}><slot /><slot name="after" slot="after" /></SceneFrame>

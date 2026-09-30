@@ -1,3 +1,5 @@
+> Archived V3 reference. Superseded on 2026-10-01 by [Design kit V4](AUREA_DESIGN_KIT_V4.md) and [Motion rule kit V4](AUREA_MOTION_RULE_KIT_V4.md). Do not use this file as the current implementation contract.
+
 # AUREA — Motion rule kit V3 (implementation source of truth)
 
 Goal: ONE continuously directed film. A scene never "ends and fades"; the next scene physically takes the

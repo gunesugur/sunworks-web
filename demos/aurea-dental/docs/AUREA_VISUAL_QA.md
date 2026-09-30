@@ -1,3 +1,5 @@
+> Archived V3 reference. Superseded on 2026-10-01 by [Design kit V4](AUREA_DESIGN_KIT_V4.md) and [Motion rule kit V4](AUREA_MOTION_RULE_KIT_V4.md). Do not use this file as the current implementation contract.
+
 # AUREA — Visual QA (V3)
 
 Capture at **1440×1080, DPR 1**, Chromium (Playwright), `npm run build && npx astro preview`. Scroll to each state

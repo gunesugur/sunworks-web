@@ -7,25 +7,7 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 export function init(root: HTMLElement): () => void {
   const cleanups: (() => void)[] = [];
 
-  /* ---- hide while scrolling down past the first viewport, show again on any scroll up ----
-     ScrollTrigger's cached scroll value + direction only (no layout reads). Focus inside keeps it visible (CSS). */
   const desktop = window.matchMedia(MQ.desktop);
-  let hidden = false;
-  const setHidden = (next: boolean): void => {
-    if (next === hidden) return;
-    hidden = next;
-    root.classList.toggle('is-hidden', next);
-  };
-  const direction = ScrollTrigger.create({
-    start: 0,
-    end: 'max',
-    onUpdate: (self) => {
-      if (prefersReducedMotion()) return setHidden(false);
-      setHidden(self.direction === 1 && self.scroll() > window.innerHeight * 0.6);
-    },
-  });
-  cleanups.push(() => direction.kill());
-
   /* ---- current section → aria-current on nav links ---- */
   const links = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
   links.forEach((link) => {

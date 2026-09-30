@@ -1,8 +1,8 @@
 ---
 /**
  * §10 BookingCTA — the FINALE (motion kit §4 #8–9, §5 Booking).
- * <SceneFrame enter="grow" height="auto" pin="none" ambient="booking-patient">: the 16:9 booking image is a
- * <MaskedMedia grow="y"> that opens from a horizontal band, clip inset(30% 0 30% 0) → inset(0) + scale 1.16 → 1,
+ * <SceneFrame height="auto">: the 16:9 booking image is a
+ * <MaskedMedia> that opens from a horizontal band, clip inset(30% 0 30% 0) → inset(0) + scale 1.16 → 1,
  * scrubbed while the scene enters (FAQ recedes above it); phones play it once. Never pinned — the form is never
  * trapped. The footer lies beneath and is exposed as this stage moves up.
  * Desktop: image left ≈55 % (right edge dissolves into the surface under the form), form right 45 %.
@@ -26,9 +26,6 @@ const f = data.fields;
   labelledby="booking-title"
   frame="stage"
   height="auto"
-  pin="none"
-  enter="grow"
-  ambient={data.image}
   class="booking"
   stageClass="booking__stage"
 >
@@ -39,7 +36,6 @@ const f = data.fields;
       sizes="(min-width: 1024px) 56vw, 92vw"
       widths={[768, 1080, 1440]}
       fill
-      grow="y"
       radius="none"
       positions={{ desktop: '36% 38%', tablet: '42% 36%', mobile: '40% 34%' }}
     >
