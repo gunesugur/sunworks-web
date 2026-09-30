@@ -1,52 +1,76 @@
-/* AUREA Dental — design tokens. Every section consumes these; do not hard-code values. */
+/* AUREA Dental — design tokens V3 (docs/AUREA_DESIGN_KIT_V3.md). Every section consumes these; do not hard-code values.
+   V3 names are canonical; the V2 `--color-*` names below are kept as aliases so existing sections keep working. */
 :root {
-  /* ---- palette (near-monochrome) ---- */
-  --color-bg: #f4f4f1;
-  --color-bg-alt: #f8f8f6;
-  --color-white: #fcfcfa;
-  --color-panel: #fafaf8;
-  --color-surface: #ecece8;
-  --color-footer: #e8e6e1;
-  --color-border: rgba(20, 20, 20, 0.1);
+  /* ---- palette V3 (warm neutral; colour comes from photography) ---- */
+  --bg-main: #f4f4f1;
+  --bg-soft: #f8f8f5;
+  --surface: #fcfcfa;
+  --surface-muted: #ecece7;
+  --text-primary: #151515;
+  --text-secondary: #696965;
+  --text-faint: rgba(20, 20, 20, 0.2);
+  --text-ink-start: rgba(20, 20, 20, 0.14); /* statement inking start */
+  --border-soft: rgba(20, 20, 20, 0.1);
+  --border-hair: rgba(20, 20, 20, 0.06);
+  --black: #111111;
+  --white: #ffffff;
+  /* surfaces over photography */
+  --glass: rgba(248, 248, 245, 0.42); /* benefit cards, inactive */
+  --glass-active: rgba(252, 252, 250, 0.94); /* benefit card, active */
+  --capsule: rgba(252, 252, 250, 0.72); /* nav capsule */
+  --scrim-dark: rgba(17, 17, 17, 0.36); /* text-over-photo protection (doctors) */
+  --dim: #111111; /* receding-scene dim layer colour (opacity via motion) */
+
+  /* ---- V2 aliases (stable names used by sections) ---- */
+  --color-bg: var(--bg-main);
+  --color-bg-alt: var(--bg-soft);
+  --color-white: var(--surface);
+  --color-panel: var(--surface);
+  --color-surface: var(--surface-muted);
+  --color-footer: #eeede8;
+  --color-border: var(--border-soft);
   --color-border-soft: rgba(20, 20, 20, 0.08);
   --color-border-strong: rgba(20, 20, 20, 0.22);
-  --color-text: #141414;
-  --color-text-2: #686864;
+  --color-text: var(--text-primary);
+  --color-text-2: var(--text-secondary);
   --color-text-3: #71716c; /* inactive/decorative only — not for body copy */
-  --color-cta: #111111;
+  --color-cta: var(--black);
   --color-cta-hover: #242424;
-  --color-cta-text: #ffffff;
+  --color-cta-text: var(--white);
   --color-accent: #b5a994; /* warm metal — tiny states only (active dot, progress) */
-  --color-card: rgba(245, 245, 242, 0.92);
-  --color-header: rgba(248, 248, 246, 0.88);
+  --color-card: var(--glass);
+  --color-header: var(--capsule);
   --color-scrim: rgba(20, 20, 20, 0.12);
 
-  /* ---- type ---- */
+  /* ---- type (Inter Tight; premium via space, not size) ---- */
   --font-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --fs-hero: clamp(2.625rem, 0.9rem + 5.2vw, 6rem); /* 42 → 96 (≈6vw on desktop) */
-  --fs-h2: clamp(2.25rem, 1.35rem + 3.1vw, 4.5rem); /* 36 → 72 */
-  --fs-statement: clamp(1.75rem, 1rem + 2.35vw, 3.25rem); /* 28 → 52 */
-  --fs-h3: clamp(1.375rem, 1.15rem + 0.8vw, 2rem); /* 22 → 32 */
-  --fs-h4: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem); /* 18 → 21 */
-  --fs-stat: clamp(2rem, 1.5rem + 1.6vw, 3rem);
-  --fs-body-lg: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem); /* 17 → 19 */
-  --fs-body: 1rem;
-  --fs-small: 0.875rem;
+  --fs-hero: clamp(52px, 4.4vw, 64px); /* 64 @1440, 52 @≤1181; phones override below */
+  --fs-h2: clamp(2.125rem, 1.2rem + 2.6vw, 3.5rem); /* section headings: 34 → 46 @1024 → 56 @1440 */
+  --fs-statement: clamp(1.625rem, 1rem + 1.6vw, 2.5rem); /* intro statement: 26 → 39 @1440 */
+  --fs-h3: clamp(1.75rem, 1rem + 1.8vw, 2.625rem); /* active treatment / doctor claim: 28 → 42 @1440 */
+  --fs-h4: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem); /* card titles, row names: 17 → 20 */
+  --fs-num: clamp(2.75rem, 1.75rem + 2.4vw, 4rem); /* journey current number: 44 → 62 @1440 */
+  --fs-stat: clamp(1.5rem, 1.1rem + 1vw, 2rem); /* intro metrics: 24 → 32 */
+  --fs-body-lg: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); /* 16 → 18 */
+  --fs-body: 1rem; /* 16 */
+  --fs-body-sm: 0.9375rem; /* 15 */
+  --fs-small: 0.8125rem; /* 13 */
   --fs-button: 0.8125rem; /* 13 */
   --fs-label: 0.6875rem; /* 11 */
 
   --fw-regular: 400;
-  --fw-book: 450;
-  --fw-medium: 520;
-  --fw-display: 480;
+  --fw-book: 440;
+  --fw-medium: 500;
+  --fw-display: 460; /* h2/h3 */
+  --fw-hero: 500;
 
-  --lh-display: 0.95;
-  --lh-heading: 1.02;
+  --lh-display: 0.94;
+  --lh-heading: 1.04;
   --lh-snug: 1.2;
-  --lh-body: 1.55;
+  --lh-body: 1.5;
 
   --ls-display: -0.045em;
-  --ls-heading: -0.035em;
+  --ls-heading: -0.032em;
   --ls-tight: -0.015em;
   --ls-label: 0.12em;
 
@@ -61,22 +85,44 @@
   --space-8: 4rem;
   --space-9: 6rem;
   --space-10: 8rem;
-  --section-pad: clamp(5rem, 3rem + 8vw, 12rem);
-  --section-pad-sm: clamp(3.5rem, 2.5rem + 4vw, 7rem);
+  --section-pad: clamp(4.5rem, 3rem + 6vw, 10rem);
+  --section-pad-sm: clamp(3rem, 2.25rem + 3vw, 6rem);
+
+  /* ---- cinematic stage (phones: <640) ---- */
+  --stage-max: 1320px;
+  --stage-w: calc(100vw - 24px);
+  --stage-h: 76svh; /* phones: only the hero uses a fixed stage height; other scenes are auto */
+  --stage-radius: 10px;
+  --stage-inset: 6px; /* rising panels are this much narrower than the stage, per side */
+  --stage-pad-x: 20px; /* content gutter inside a stage / panel */
+  --stage-pad-y: 20px;
+  --stage-top: calc((100svh - var(--stage-h)) / 2);
+  --panel-w: calc(var(--stage-w) - 2 * var(--stage-inset));
+  --panel-radius: 16px;
+  --media-radius: 10px; /* images inside a stage */
+  --card-radius: 18px;
+
+  /* ---- ambient spill layer (outside the stage) ---- */
+  --ambient-opacity: 0.12;
+  --ambient-opacity-warm: 0.16;
+  --ambient-blur: 60px;
+  --ambient-scale: 1.25;
+  --ambient-saturate: 0.65;
 
   /* ---- layout ---- */
-  --container-max: 1560px;
-  --gutter: 20px; /* mobile 18–24 */
+  --container-max: var(--stage-max);
+  --gutter: 20px;
   --grid-cols: 12;
   --grid-gap: 16px;
-  --header-h: 64px;
+  --header-h: 56px;
+  --header-top: 10px;
 
-  /* ---- radii (soft, not pills) ---- */
+  /* ---- radii (8–22; no pills except buttons/capsule) ---- */
   --radius-xs: 6px;
   --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 24px;
-  --radius-xl: 30px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
   --radius-round: 999px;
 
   /* ---- motion (the only allowed values) ---- */
@@ -85,39 +131,92 @@
   --duration-fast: 220ms;
   --duration-ui: 320ms;
   --duration-medium: 650ms;
-  --duration-large: 1100ms;
+  --duration-large: 1050ms;
+
+  /* ---- scene scroll lengths (extra scroll under a pinned stage; 0 = no pin). Phones default. ---- */
+  --len-hero: 0px; /* hero holds only while the intro rises (tail); keep 0 unless QA asks for a breath */
+  --len-benefits: 0px;
+  --len-journey: 200vh; /* phones: shorter pin, 5 states */
+  --len-doctors: 0px;
+  --len-results: 0px;
+  /* overlap of a scene entering over / under the previous one (see SceneFrame `enter`) */
+  --overlap-rise: 0px;
+  --overlap-beneath: 0px;
 
   /* ---- layers ---- */
+  --z-ambient: 0;
   --z-base: 1;
   --z-panel: 2;
   --z-header: 50;
   --z-menu: 60;
   --z-skip: 100;
 
-  /* overlap used by `.panel-rise` (Services rises over the pinned Benefits scene) */
+  /* V2 compat: overlap used by `.panel-rise` (Services over Benefits) — desktop + motion only */
   --panel-rise-overlap: 0px;
+  /* anchor offset (html scroll-padding-top); 0 on desktop where scenes centre their own stage */
+  --scroll-pad: calc(var(--header-top) + var(--header-h));
 }
 
+@media (max-width: 639.98px) {
+  :root {
+    --fs-hero: 2.75rem; /* 44 on phones */
+  }
+}
+
+/* ---- tablet (640–1023): 834×1194 portrait composition ---- */
 @media (min-width: 640px) {
   :root {
-    --gutter: 32px; /* tablet */
+    --stage-w: calc(100vw - 48px);
+    --stage-h: clamp(480px, 56svh, 720px);
+    --stage-radius: 12px;
+    --stage-inset: 10px;
+    --stage-pad-x: 40px;
+    --stage-pad-y: 32px;
+    --panel-radius: 18px;
+    --media-radius: 12px;
+    --card-radius: 20px;
+    --gutter: 32px;
     --grid-gap: 20px;
+    --header-h: 60px;
+    --header-top: 14px;
   }
 }
+@media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+  :root {
+    --len-journey: 200vh;
+    --len-doctors: 30vh;
+    --overlap-rise: 70svh;
+    --overlap-beneath: 50svh;
+  }
+}
+
+/* ---- desktop (≥1024): the cinematic stage — 91vw × 58svh, centred ---- */
 @media (min-width: 1024px) {
   :root {
-    --gutter: clamp(48px, 4.4vw, 72px); /* desktop 48–72 */
+    --stage-w: min(91vw, var(--stage-max));
+    --stage-h: clamp(440px, 58svh, 680px); /* 626 @1080, 522 @900, 445 @768 */
+    --stage-radius: 12px;
+    --stage-inset: 16px;
+    --stage-pad-x: clamp(48px, 8vw, 116px); /* 115 @1440 */
+    --stage-pad-y: clamp(24px, 4.4svh, 48px);
+    --panel-radius: 22px;
+    --media-radius: 12px;
+    --card-radius: 20px;
+    --gutter: clamp(48px, 4.4vw, 72px);
     --grid-gap: 24px;
-    --header-h: 76px;
-  }
-}
-@media (min-width: 1600px) {
-  :root {
-    --gutter: clamp(80px, 5.2vw, 96px); /* large 80–96 */
+    --header-h: 40px; /* the capsule row */
+    --header-top: max(16px, calc(var(--stage-top) + 16px)); /* sits inside the stage's top band */
+    --scroll-pad: 0px;
   }
 }
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   :root {
+    --len-benefits: 180vh;
+    --len-journey: 240vh;
+    --len-doctors: 40vh;
+    --len-results: 30vh;
+    --overlap-rise: 100svh;
+    --overlap-beneath: 60svh;
     --panel-rise-overlap: 100svh;
   }
 }

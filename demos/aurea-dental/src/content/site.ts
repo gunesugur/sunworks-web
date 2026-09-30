@@ -11,6 +11,8 @@ export interface NavLink {
 export interface Stat {
   value: string;
   label: string;
+  /** false = placeholder figure, must not be presented as fact until the clinic verifies it */
+  verified: boolean;
 }
 export interface Benefit {
   index: string;
@@ -60,10 +62,19 @@ export const site = {
   skipLink: 'Skip to content',
 
   header: {
+    /** desktop capsule (V3): four destinations only */
     nav: [
       { label: 'Services', href: '#services' },
-      { label: 'About', href: '#about' },
+      { label: 'Process', href: '#journey' },
       { label: 'Our Team', href: '#team' },
+      { label: 'FAQ', href: '#faq' },
+    ] satisfies readonly NavLink[],
+    /** mobile menu: capsule items + the secondary destinations */
+    menu: [
+      { label: 'Services', href: '#services' },
+      { label: 'Process', href: '#journey' },
+      { label: 'Our Team', href: '#team' },
+      { label: 'About', href: '#about' },
       { label: 'Technology', href: '#technology' },
       { label: 'Results', href: '#results' },
       { label: 'FAQ', href: '#faq' },
@@ -80,8 +91,8 @@ export const site = {
     copy: 'Personalized dental care combining modern diagnostics, experienced clinicians and a calmer patient experience.',
     primary: { label: 'Book a consultation', href: '#booking' } satisfies NavLink,
     secondary: { label: 'Explore treatments', href: '#services' } satisfies NavLink,
-    image: 'hero-clinic' as ImageKey,
-    imageAlt: 'A calm, daylit treatment room at AUREA Dental with a sculptural patient chair.',
+    image: 'hero-operatory' as ImageKey,
+    imageAlt: 'A calm, daylit treatment room at AUREA Dental: patient chair, overhead light and a garden view.',
     caption: 'Treatment room — natural daylight',
   },
 
@@ -96,13 +107,13 @@ export const site = {
     secondary:
       'Every plan starts with listening. Digital scans help us plan treatment with greater accuracy and explain each step before treatment begins — so you always know what happens next, and why.',
     link: { label: 'Meet our team', href: '#team' } satisfies NavLink,
-    image: 'detail-material' as ImageKey,
-    imageAlt: 'Detail of natural stone and soft daylight inside the clinic.',
-    // CMS-editable placeholder
+    image: 'clinic-detail' as ImageKey,
+    imageAlt: 'Dental handpieces resting on the treatment unit, ready for the next patient.',
+    // CMS-editable PLACEHOLDERS — unverified (verified: false). Do not publish as fact.
     stats: [
-      { value: '4,800+', label: 'Patients treated' }, // CMS-editable placeholder
-      { value: '12 yrs', label: 'Clinical experience' }, // CMS-editable placeholder
-      { value: '98%', label: 'Patient satisfaction' }, // CMS-editable placeholder
+      { value: '4,800+', label: 'Patients treated', verified: false },
+      { value: '12 yrs', label: 'Clinical experience', verified: false },
+      { value: '98%', label: 'Patient satisfaction', verified: false },
     ] satisfies readonly Stat[],
   },
 
@@ -110,7 +121,7 @@ export const site = {
     label: '03 / Why patients choose AUREA',
     titleLines: ['Care that feels clear', 'at every step.'],
     intro: 'Six things we hold ourselves to, on every visit.',
-    image: 'clinic-wide' as ImageKey,
+    image: 'benefits-clinic' as ImageKey,
     imageAlt: '',
     items: [
       {
@@ -120,18 +131,18 @@ export const site = {
       },
       {
         index: '002',
-        title: 'Pain-controlled treatment',
+        title: 'Pain-aware care',
         copy: 'Modern anaesthesia, gentle technique and unhurried appointments keep discomfort to a minimum.',
       },
       {
         index: '003',
-        title: '3D diagnostics',
+        title: 'Digital diagnostics',
         copy: 'Intraoral scanning and low-dose 3D imaging let us see precisely before we plan anything.',
       },
       {
         index: '004',
-        title: 'Transparent pricing',
-        copy: 'A written plan with itemised costs before treatment starts. No surprises along the way.',
+        title: 'Clear treatment planning',
+        copy: 'A written plan with steps, timing and itemised costs before anything starts. No surprises along the way.',
       },
       {
         index: '005',
@@ -140,7 +151,7 @@ export const site = {
       },
       {
         index: '006',
-        title: 'Long-term treatment support',
+        title: 'Long-term aftercare',
         copy: 'Scheduled reviews, clear aftercare and a team that stays reachable long after treatment ends.',
       },
     ] satisfies readonly Benefit[],
@@ -157,8 +168,8 @@ export const site = {
         index: '01',
         name: 'Teeth Whitening',
         description: 'Professional, enamel-safe whitening planned around your natural shade and sensitivity.',
-        image: 'svc-whitening',
-        imageAlt: 'Soft white sculptural forms in bright daylight.',
+        image: 'service-whitening',
+        imageAlt: 'A single natural-looking tooth model on a warm neutral surface.',
         cta: { label: 'Ask about whitening', href: '#booking' },
       },
       {
@@ -166,8 +177,8 @@ export const site = {
         index: '02',
         name: 'Dental Implants',
         description: 'Guided implant placement planned in 3D, restored with crowns matched to your smile.',
-        image: 'svc-implants',
-        imageAlt: 'A slender form resting on a stepped stone plinth.',
+        image: 'service-implant',
+        imageAlt: 'A dental implant: titanium post with a ceramic crown.',
         cta: { label: 'Ask about implants', href: '#booking' },
       },
       {
@@ -175,8 +186,8 @@ export const site = {
         index: '03',
         name: 'Braces & Aligners',
         description: 'Clear aligners and modern braces with a digital preview of your movement plan.',
-        image: 'svc-aligners',
-        imageAlt: 'Two translucent arcs resting on a pale surface.',
+        image: 'service-aligners',
+        imageAlt: 'A clear aligner tray.',
         cta: { label: 'Ask about aligners', href: '#booking' },
       },
       {
@@ -184,8 +195,8 @@ export const site = {
         index: '04',
         name: 'Cavity Treatment',
         description: 'Minimally invasive fillings that preserve healthy tooth structure wherever possible.',
-        image: 'svc-cavity',
-        imageAlt: 'A stone block with a smooth carved recess.',
+        image: 'service-cavity',
+        imageAlt: 'A molar crown model showing the biting surface.',
         cta: { label: 'Book a check-up', href: '#booking' },
       },
       {
@@ -193,8 +204,8 @@ export const site = {
         index: '05',
         name: "Children's Dentistry",
         description: 'Calm, unhurried visits that help children feel at ease — and build good habits early.',
-        image: 'svc-children',
-        imageAlt: 'Smooth pebbles balanced in warm light.',
+        image: 'service-children',
+        imageAlt: 'A small, smooth molar model.',
         cta: { label: 'Book a family visit', href: '#booking' },
       },
       {
@@ -202,8 +213,8 @@ export const site = {
         index: '06',
         name: 'Oral Surgery',
         description: 'Extractions and surgical procedures performed with precise planning and careful aftercare.',
-        image: 'svc-surgery',
-        imageAlt: 'A precise instrument-like line resting on a grey plate under raking light.',
+        image: 'service-surgery',
+        imageAlt: 'An extracted tooth model with its roots.',
         cta: { label: 'Ask about oral surgery', href: '#booking' },
       },
       {
@@ -211,8 +222,8 @@ export const site = {
         index: '07',
         name: 'Periodontal Care',
         description: 'Gum health assessment, deep cleaning and maintenance to protect teeth for the long term.',
-        image: 'svc-perio',
-        imageAlt: 'Nested arches of stone in soft layered tones.',
+        image: 'service-periodontal',
+        imageAlt: 'A cross-section model of a tooth in gum and bone.',
         cta: { label: 'Book a gum assessment', href: '#booking' },
       },
       {
@@ -220,8 +231,8 @@ export const site = {
         index: '08',
         name: 'Smile Design',
         description: 'A considered, digitally previewed plan that balances aesthetics, function and your face.',
-        image: 'svc-smile-design',
-        imageAlt: 'A sweeping curved form with a single sphere at its centre.',
+        image: 'service-smile-design',
+        imageAlt: 'A thin porcelain veneer.',
         cta: { label: 'Plan your smile', href: '#booking' },
       },
     ] satisfies readonly Service[],
@@ -237,36 +248,36 @@ export const site = {
         index: '01',
         title: 'Book consultation',
         caption: 'A relaxed first conversation about your goals, history and any concerns — in person or online.',
-        image: 'journey-1',
-        imageAlt: 'A sphere resting on a stone plinth in soft light.',
+        image: 'journey-01',
+        imageAlt: 'Plaster model of a lower dental arch.',
       },
       {
         index: '02',
         title: 'Digital diagnosis',
         caption: 'Intraoral scans and 3D imaging give us an exact picture of your teeth, bite and bone.',
-        image: 'journey-2',
-        imageAlt: 'A standing ring on a stone plinth.',
+        image: 'journey-02',
+        imageAlt: 'Dental arch model with a digital scan overlay.',
       },
       {
         index: '03',
         title: 'Treatment planning',
         caption: 'We walk you through options, timelines and costs in one clear written plan.',
-        image: 'journey-3',
-        imageAlt: 'Two stacked blocks on a stone plinth.',
+        image: 'journey-03',
+        imageAlt: 'Dental arch model with one tooth marked for treatment.',
       },
       {
         index: '04',
         title: 'Treatment',
         caption: 'Carefully paced appointments with the specialist best suited to each step.',
-        image: 'journey-4',
-        imageAlt: 'A slender upright form on a stone plinth.',
+        image: 'journey-04',
+        imageAlt: 'Dental arch model fitted with a clear aligner.',
       },
       {
         index: '05',
         title: 'Aftercare',
         caption: 'Follow-up reviews, maintenance guidance and a team that stays in touch.',
-        image: 'journey-5',
-        imageAlt: 'A half-disc form standing on a stone plinth.',
+        image: 'journey-05',
+        imageAlt: 'Finished dental arch model after treatment.',
       },
     ] satisfies readonly JourneyStep[],
   },
@@ -277,14 +288,14 @@ export const site = {
     intro: 'Four specialists, one shared plan. Each case is reviewed together before treatment begins.',
     selectorLabel: 'Choose a specialist',
     /** object-position of each portrait's face (placeholders & real photos): avatar crop + mobile crop */
-    focus: { elif: '62% 38%', emre: '57% 40%', selin: '64% 38%', can: '59% 36%' } as Record<string, string>,
+    focus: { elif: '50% 36%', emre: '52% 38%', selin: '47% 40%', can: '56% 36%' } as Record<string, string>,
     items: [
       {
         id: 'elif',
         name: 'Dr. Elif Kaya',
         specialty: 'Orthodontics',
         bio: 'Plans aligner and brace treatment digitally, with a focus on stable, natural-looking results.',
-        image: 'doctor-elif',
+        image: 'doctor-01',
         imageAlt: 'Portrait of Dr. Elif Kaya in the clinic.',
       },
       {
@@ -292,7 +303,7 @@ export const site = {
         name: 'Dr. Emre Arslan',
         specialty: 'Implantology',
         bio: 'Leads guided implant surgery, from 3D planning through to the final restoration.',
-        image: 'doctor-emre',
+        image: 'doctor-02',
         imageAlt: 'Portrait of Dr. Emre Arslan in the clinic.',
       },
       {
@@ -300,7 +311,7 @@ export const site = {
         name: 'Dr. Selin Aydın',
         specialty: 'Restorative Dentistry',
         bio: 'Restores function and appearance with conservative, carefully matched ceramic work.',
-        image: 'doctor-selin',
+        image: 'doctor-03',
         imageAlt: 'Portrait of Dr. Selin Aydın in the clinic.',
       },
       {
@@ -308,7 +319,7 @@ export const site = {
         name: 'Dr. Can Demir',
         specialty: 'Oral Surgery',
         bio: 'Performs extractions and surgical procedures with an emphasis on comfort and recovery.',
-        image: 'doctor-can',
+        image: 'doctor-04',
         imageAlt: 'Portrait of Dr. Can Demir in the clinic.',
       },
     ] satisfies readonly Doctor[],
@@ -395,8 +406,8 @@ export const site = {
     label: '08 / Booking',
     titleLines: ['Ready for your best smile?', 'Book a consultation.'],
     intro: 'Leave your details and a coordinator will call you within one working day to find a time that suits you.',
-    image: 'booking-portrait' as ImageKey,
-    imageAlt: 'A patient relaxing in natural light at AUREA Dental.',
+    image: 'booking-patient' as ImageKey,
+    imageAlt: 'A smiling patient resting her cheek on her hand in a bright treatment room.',
     fields: {
       name: { label: 'Name', placeholder: 'Your full name', autocomplete: 'name' },
       phone: { label: 'Phone', placeholder: '+90', autocomplete: 'tel' },
@@ -455,7 +466,7 @@ export const site = {
     ] satisfies readonly NavLink[],
     copyright: '© 2026 AUREA Dental Clinic',
     backToTop: 'Back to top',
-    texture: 'clinic-wide' as ImageKey,
+    texture: 'benefits-clinic' as ImageKey,
   },
 } as const;
 

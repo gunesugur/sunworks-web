@@ -4,6 +4,7 @@
 import { ScrollTrigger } from '../motion/tokens';
 import { initSmoothScroll, bindAnchorLinks, getLenis } from '../motion/smooth-scroll';
 import { initReveals } from '../motion/reveal';
+import { initScenes } from '../motion/scenes';
 import { registry } from './sections/registry';
 
 const root = document.documentElement;
@@ -45,6 +46,8 @@ async function boot(): Promise<void> {
     }
   });
 
+  // declared scene hand-offs (<SceneFrame enter/exit/ambient>) + ambient layer — after sections, before reveals
+  initScenes(document);
   initReveals(document);
   ScrollTrigger.sort();
   ScrollTrigger.refresh();

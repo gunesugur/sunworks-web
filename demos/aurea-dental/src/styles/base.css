@@ -1,5 +1,6 @@
 /* AUREA Dental — reset, typography, shared primitives. */
 @import './tokens.css';
+@import './scene.css';
 
 *,
 *::before,
@@ -12,7 +13,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  scroll-padding-top: var(--header-h);
+  scroll-padding-top: var(--scroll-pad);
 }
 body {
   margin: 0;
@@ -250,6 +251,17 @@ button {
 }
 .img--cover {
   object-fit: cover;
+  object-position: var(--pos, 50% 50%);
+}
+@media (min-width: 640px) {
+  .img--cover {
+    object-position: var(--pos-t, var(--pos, 50% 50%));
+  }
+}
+@media (min-width: 1024px) {
+  .img--cover {
+    object-position: var(--pos-d, var(--pos-t, var(--pos, 50% 50%)));
+  }
 }
 /* Interactive image zoom: wrap in .media-zoom (overflow hidden) */
 .media-zoom {

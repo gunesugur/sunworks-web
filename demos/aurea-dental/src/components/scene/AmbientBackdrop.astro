@@ -1,0 +1,31 @@
+---
+/**
+ * AmbientBackdrop — ONE fixed layer for the page, behind all content. For each registered image it renders
+ * a tiny (96px) WebP, scaled ×1.25 and blurred 60px / saturate .65, at opacity 0. scenes.ts (initAmbient)
+ * marks the layer of the active [data-ambient] scene with [data-active] → CSS crossfades opacity to
+ * --ambient-opacity (.12; warm .16). Opacity-only, compositor-friendly; hidden below 640px.
+ * Place once, as the first child of <body> (index.astro).
+ */
+import { getImage } from 'astro:assets';
+import { images, type ImageKey } from '../../lib/images';
+
+interface Props {
+  sources: { key: ImageKey; tone?: 'neutral' | 'warm' }[];
+}
+const { sources } = Astro.props;
+const layers = await Promise.all(
+  sources.map(async ({ key, tone = 'neutral' }) => {
+    const img = await getImage({ src: images[key], width: 96, format: 'webp', quality: 60 });
+    return { key, tone, src: img.src };
+  }),
+);
+---
+<div class="ambient" data-ambient-root aria-hidden="true">
+  {
+    layers.map((l) => (
+      <div class="ambient__layer" data-ambient-layer={l.key} data-tone={l.tone}>
+        <img src={l.src} alt="" width="96" height="54" decoding="async" loading="eager" />
+      </div>
+    ))
+  }
+</div>

@@ -7,9 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check",
-    "images:placeholders": "node scripts/placeholders.mjs",
-    "images:before": "node scripts/derive-before.mjs"
+    "check": "astro check"
   },
   "dependencies": {
     "@fontsource-variable/inter-tight": "^5.3.0",

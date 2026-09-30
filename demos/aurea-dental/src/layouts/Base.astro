@@ -12,7 +12,7 @@ interface Props {
 }
 const { title = site.meta.title, description = site.meta.description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
-const og = await getImage({ src: images['hero-clinic'], width: 1200, height: 630, format: 'jpg', fit: 'cover' });
+const og = await getImage({ src: images['hero-operatory'], width: 1200, height: 630, format: 'jpg', fit: 'cover' });
 const ogUrl = new URL(og.src, Astro.site ?? site.url).href;
 ---
 <!doctype html>
@@ -41,10 +41,15 @@ const ogUrl = new URL(og.src, Astro.site ?? site.url).href;
       <style>
         [data-reveal],
         [data-reveal] .mask-line__inner,
-        [data-intro] {
+        [data-intro],
+        [data-grow],
+        [data-grow] > [data-mm-inner] {
           opacity: 1 !important;
           transform: none !important;
           clip-path: none !important;
+        }
+        [data-ink] {
+          --ink: 1 !important;
         }
       </style>
     </noscript>

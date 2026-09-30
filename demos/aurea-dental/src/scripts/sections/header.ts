@@ -7,25 +7,24 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 export function init(root: HTMLElement): () => void {
   const cleanups: (() => void)[] = [];
 
-  /* ---- transparent over the hero → solid once the next section reaches the bar ----
-     Below desktop (or with reduced motion) the hero is not a sticky stage: its copy scrolls straight
-     under the bar, so the bar turns solid as soon as the page moves. */
+  /* ---- hide while scrolling down past the first viewport, show again on any scroll up ----
+     ScrollTrigger's cached scroll value + direction only (no layout reads). Focus inside keeps it visible (CSS). */
   const desktop = window.matchMedia(MQ.desktop);
-  const solidFrom = root.dataset.solidFrom ? document.querySelector<HTMLElement>(root.dataset.solidFrom) : null;
-  const solid = ScrollTrigger.create({
-    trigger: solidFrom ?? document.body,
-    start: solidFrom
-      ? () =>
-          desktop.matches && !prefersReducedMotion()
-            ? `top top+=${root.offsetHeight}`
-            : `top top+=${Math.round(solidFrom.getBoundingClientRect().top + window.scrollY) - 16}`
-      : 'top+=80 top',
-    invalidateOnRefresh: true,
-    // no end: once past the start the bar stays solid until the user scrolls back above it
-    onEnter: () => root.classList.add('is-solid'),
-    onLeaveBack: () => root.classList.remove('is-solid'),
+  let hidden = false;
+  const setHidden = (next: boolean): void => {
+    if (next === hidden) return;
+    hidden = next;
+    root.classList.toggle('is-hidden', next);
+  };
+  const direction = ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onUpdate: (self) => {
+      if (prefersReducedMotion()) return setHidden(false);
+      setHidden(self.direction === 1 && self.scroll() > window.innerHeight * 0.6);
+    },
   });
-  cleanups.push(() => solid.kill());
+  cleanups.push(() => direction.kill());
 
   /* ---- current section → aria-current on nav links ---- */
   const links = Array.from(root.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));

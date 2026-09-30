@@ -23,9 +23,11 @@ export const DURATION = {
   fast: 0.22,
   ui: 0.32,
   medium: 0.65,
-  large: 1.1,
-  /** image expansions 0.9–1.4 */
-  expand: 1.2,
+  large: 1.05,
+  /** image expansions (hero inner image, masked media) */
+  expand: 1.1,
+  /** doctor portrait mask wipe (550–750ms) */
+  wipe: 0.65,
 } as const;
 
 export const STAGGER = {
@@ -35,5 +37,36 @@ export const STAGGER = {
 
 /** the reveal distance for fades (px) */
 export const FADE_Y = 16;
+
+/**
+ * Scene hand-off constants (docs/AUREA_MOTION_RULE_KIT_V3.md §Hand-offs). motion/scenes.ts reads these;
+ * sections must not invent their own values.
+ */
+export const HANDOFF = {
+  /** outgoing pinned stage while the next scene rises over it */
+  riseOver: { scale: 0.955, yPercent: -2, dim: 0.1 },
+  /** incoming scene lying beneath: starts lowered/smaller, settles as the previous scene lifts off */
+  liftOff: { scale: 0.965, yPercent: 6, dim: 0.1 },
+  /** masked media growing into its stage */
+  grow: { clipRect: 'inset(22% 32% 22% 32% round 14px)', clipY: 'inset(30% 0% 30% 0% round 0px)', clipX: 'inset(0% 30% 0% 30% round 14px)', mediaScale: 1.16 },
+  /** a quiet scene handing over: drifts up and softens */
+  recede: { yVh: -8, opacity: 0.4 },
+  /** hero stage while the intro panel rises beneath/over it */
+  hero: { scale: 0.94, yVh: -6, dim: 0.06 },
+} as const;
+
+/** Intensity map (brief): drives how much of the vocabulary a scene may use. */
+export const INTENSITY = {
+  hero: 'high',
+  intro: 'low-med',
+  benefits: 'high',
+  services: 'med-high',
+  journey: 'high',
+  doctors: 'med',
+  results: 'med',
+  faq: 'low',
+  booking: 'med',
+  footer: 'very-low',
+} as const;
 
 export { gsap, ScrollTrigger };
