@@ -1,0 +1,193 @@
+---
+/**
+ * CTA. Renders <a> when `href` is set, otherwise <button>.
+ * variant: primary (dark, circular arrow region) | ghost (hairline) | link (text + growing underline)
+ * Hover: label shifts 2px left, arrow circle expands, arrow nudges 3px right, bg #111 → #242424. No scale.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import Arrow from './Arrow.astro';
+
+type Variant = 'primary' | 'ghost' | 'link';
+type Props = {
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: Variant;
+  size?: 'sm' | 'md' | 'lg';
+  arrow?: boolean;
+  arrowDirection?: 'right' | 'up-right' | 'down';
+  class?: string;
+} & Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'type' | 'class'>;
+
+const {
+  href,
+  type = 'button',
+  variant = 'primary',
+  size = 'md',
+  arrow = true,
+  arrowDirection = 'right',
+  class: className,
+  ...rest
+} = Astro.props;
+const Tag = href ? 'a' : 'button';
+const cls = ['btn', `btn--${variant}`, `btn--${size}`, className];
+---
+<Tag class:list={cls} href={href} type={href ? undefined : type} {...rest}>
+  <span class="btn__label"><slot /></span>
+  {
+    arrow && (
+      <span class="btn__icon" aria-hidden="true">
+        <Arrow direction={arrowDirection} class="btn__arrow" />
+      </span>
+    )
+  }
+</Tag>
+
+<style>
+  .btn {
+    --btn-h: 52px;
+    --btn-icon: 36px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: var(--btn-h);
+    padding: 0 8px 0 22px;
+    border-radius: var(--radius-round);
+    font-size: var(--fs-button);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.01em;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color var(--duration-ui) var(--ease-primary),
+      color var(--duration-ui) var(--ease-primary),
+      border-color var(--duration-ui) var(--ease-primary);
+  }
+  .btn--sm {
+    --btn-h: 42px;
+    --btn-icon: 28px;
+    gap: 10px;
+    padding: 0 7px 0 18px;
+  }
+  .btn--lg {
+    --btn-h: 60px;
+    --btn-icon: 44px;
+    padding-left: 28px;
+  }
+  .btn__label {
+    display: inline-block;
+    transition: transform var(--duration-ui) var(--ease-primary);
+  }
+  .btn__icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: var(--btn-icon);
+    height: var(--btn-icon);
+    flex: none;
+  }
+  .btn__icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    transition:
+      transform var(--duration-ui) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-primary);
+  }
+  .btn__icon :global(.btn__arrow) {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    transition: translate var(--duration-ui) var(--ease-primary);
+  }
+
+  /* primary */
+  .btn--primary {
+    background: var(--color-cta);
+    color: var(--color-cta-text);
+  }
+  .btn--primary .btn__icon::before {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .btn--primary:hover {
+    background: var(--color-cta-hover);
+  }
+
+  /* ghost */
+  .btn--ghost {
+    background: transparent;
+    color: var(--color-text);
+    box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  }
+  .btn--ghost .btn__icon::before {
+    background: var(--color-cta);
+  }
+  .btn--ghost .btn__icon {
+    color: var(--color-cta-text);
+  }
+  .btn--ghost:hover {
+    background: rgba(20, 20, 20, 0.04);
+  }
+
+  /* link */
+  .btn--link {
+    min-height: 0;
+    padding: 6px 0;
+    gap: 8px;
+    border-radius: 0;
+    color: var(--color-text);
+  }
+  .btn--link .btn__icon {
+    width: auto;
+    height: auto;
+  }
+  .btn--link .btn__label {
+    position: relative;
+    padding-block: 2px;
+  }
+  .btn--link .btn__label::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0.28);
+    transform-origin: left center;
+    transition: transform var(--duration-ui) var(--ease-primary);
+  }
+  .btn--link:hover .btn__label::after,
+  .btn--link:focus-visible .btn__label::after {
+    transform: scaleX(1);
+  }
+
+  /* shared hover micro-interaction (no scale on the button itself) */
+  .btn:not(.btn--link):hover .btn__label,
+  .btn:not(.btn--link):focus-visible .btn__label {
+    transform: translateX(-2px);
+  }
+  .btn:hover .btn__icon::before,
+  .btn:focus-visible .btn__icon::before {
+    transform: scale(1.1);
+  }
+  .btn:hover :global(.btn__arrow),
+  .btn:focus-visible :global(.btn__arrow) {
+    translate: 3px 0;
+  }
+  .btn:focus-visible {
+    outline-offset: 4px;
+  }
+  .btn[disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .btn *,
+    .btn__icon::before {
+      transition-duration: 1ms !important;
+    }
+  }
+</style>

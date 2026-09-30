@@ -1,0 +1,16 @@
+---
+/** Small editorial label. `index` renders as "01 / text" style prefix. */
+interface Props {
+  text: string;
+  index?: string;
+  as?: 'span' | 'p' | 'div' | 'h2' | 'h3';
+  tone?: 'muted' | 'dark';
+  class?: string;
+  [key: `data-${string}`]: string | undefined;
+}
+const { text, index, as: Tag = 'span', tone = 'muted', class: className, ...rest } = Astro.props;
+---
+<Tag class:list={['label', { 'label--dark': tone === 'dark' }, className]} {...rest}>
+  {index && <span class="label__index">{index}</span>}
+  <span>{text}</span>
+</Tag>

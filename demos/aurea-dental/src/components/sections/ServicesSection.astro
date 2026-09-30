@@ -1,0 +1,423 @@
+---
+/**
+ * Scenes 4–5 — Services panel + treatments list (MED–HIGH, "interactive"). RisingPanel (inset) that rises over
+ * the still-pinned Benefits stage (hand-off 3); its rounded bottom edge then lifts off the Journey stage lying
+ * beneath it (hand-off 4, declared by Journey's enter="beneath").
+ *
+ * Treatments = accordion, one row open at a time. Rows: thin rules, no cards. Collapsed (88 / 80 / 72 px):
+ * index · round object thumb · name · circle arrow. Active (208 / 172 px): --surface-muted field, title
+ * --fs-h3 in the lead column, 176 px image (radius 12), short copy + link. The layout change is FLIP'd by
+ * services.ts (rows / media / detail via transforms + clip-path; the title line-masks in).
+ * Every header is a real <button> (aria-expanded / aria-controls) + a labelled region.
+ */
+import { site } from '../../content/site';
+import RisingPanel from '../scene/RisingPanel.astro';
+import Img from '../ui/Img.astro';
+import RevealText from '../ui/RevealText.astro';
+import Button from '../ui/Button.astro';
+import Arrow from '../ui/Arrow.astro';
+
+const data = site.services;
+---
+<RisingPanel name="services" section="services" id="services" labelledby="services-title" class="services">
+  <div class="services__inner">
+    <header class="services__head">
+      <div class="services__heading">
+        <p class="label label--dark" data-reveal="fade"><span class="services__dot" aria-hidden="true"></span>{data.label}</p>
+        <RevealText as="h2" id="services-title" class="services__title" lines={data.titleLines} />
+      </div>
+      <p class="services__intro" data-reveal="fade" data-reveal-delay="0.12">{data.intro}</p>
+    </header>
+
+    <ul class="svc-list" data-svc-list>
+      {
+        data.items.map((item, i) => {
+          const open = i === 0;
+          return (
+            <li class:list={['svc', { 'is-open': open }]} data-svc>
+              <h3 class="svc__heading">
+                <button
+                  class="svc__trigger"
+                  type="button"
+                  id={`svc-trigger-${item.id}`}
+                  aria-expanded={open ? 'true' : 'false'}
+                  aria-controls={`svc-panel-${item.id}`}
+                  data-svc-trigger
+                >
+                  <span class="svc__index" aria-hidden="true">{item.index}</span>
+                  <span class="svc__title" aria-hidden="true" data-svc-title>
+                    <span class="svc__title-inner" data-svc-title-inner>{item.name}</span>
+                  </span>
+                  <span class="svc__name" data-svc-name>{item.name}</span>
+                  <span class="svc__arrow" aria-hidden="true">
+                    <Arrow class="svc__arrow-glyph" />
+                  </span>
+                </button>
+              </h3>
+              <div class="svc__media" data-svc-media>
+                <Img image={item.image} alt={item.imageAlt} sizes="(min-width: 1024px) 176px, (min-width: 640px) 140px, 112px" widths={[128, 256, 480]} cover position="50% 52%" />
+              </div>
+              <div class="svc__detail" id={`svc-panel-${item.id}`} role="region" aria-labelledby={`svc-trigger-${item.id}`} data-svc-detail>
+                <div class="svc__detail-inner">
+                  <p class="svc__desc">{item.description}</p>
+                  <Button href={item.cta.href} variant="link" class="svc__cta">
+                    {item.cta.label}
+                  </Button>
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</RisingPanel>
+
+<style>
+  .services__inner {
+    /* row geometry — phone first (on the inner wrapper: the scene root is rendered by RisingPanel) */
+    --row-h: 72px;
+    --thumb: 44px;
+    --media-open: 112px;
+    --lead: 24px;
+    --arrow: 32px;
+    --col-gap: 12px;
+  }
+  .services__inner {
+    padding: var(--space-7) var(--stage-pad-x) var(--space-8);
+  }
+  .services__head {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .services__heading {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .services__dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .services__title {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-display);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-heading);
+    text-wrap: balance;
+  }
+  .services__intro {
+    max-width: 34ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* ---------------------------------------------------------------- list */
+  .svc-list {
+    position: relative;
+    z-index: 0;
+    margin-top: var(--space-7);
+    border-bottom: 1px solid var(--border-soft);
+    overflow-anchor: none;
+  }
+  .svc {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--lead) var(--thumb) minmax(0, 1fr) var(--arrow);
+    grid-template-rows: var(--row-h) auto auto;
+    column-gap: var(--col-gap);
+    border-top: 1px solid var(--border-soft);
+  }
+  /* active field — painted behind; clipped with the row during the FLIP */
+  .svc::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 -1px;
+    z-index: -1;
+    border-radius: var(--radius-md);
+    background: var(--surface-muted);
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-primary);
+  }
+  .svc.is-open::before {
+    opacity: 1;
+  }
+  .svc.is-open,
+  .svc.is-open + .svc {
+    border-top-color: transparent;
+  }
+  .svc__heading {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: subgrid;
+    font: inherit;
+    letter-spacing: normal;
+  }
+  .svc__trigger {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
+    min-height: var(--row-h);
+    text-align: left;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+  .svc__trigger:focus-visible {
+    outline-offset: -2px;
+  }
+  .svc__index {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-secondary);
+    transition: color var(--duration-ui) var(--ease-primary);
+  }
+  .svc__title {
+    display: none;
+  }
+  .svc__name {
+    grid-column: 3;
+    grid-row: 1;
+    font-size: var(--fs-h4);
+    font-weight: 480;
+    line-height: var(--lh-snug);
+    letter-spacing: var(--ls-tight);
+    transition:
+      translate var(--duration-ui) var(--ease-primary),
+      opacity var(--duration-ui) var(--ease-soft);
+  }
+  .svc__arrow {
+    grid-column: 4;
+    grid-row: 1;
+    justify-self: end;
+    display: grid;
+    place-items: center;
+    width: var(--arrow);
+    height: var(--arrow);
+    border-radius: 50%;
+    color: var(--text-primary);
+    box-shadow: inset 0 0 0 1px var(--border-soft);
+    transition:
+      background-color var(--duration-ui) var(--ease-primary),
+      color var(--duration-ui) var(--ease-primary),
+      box-shadow var(--duration-ui) var(--ease-primary);
+  }
+  .svc__arrow :global(.svc__arrow-glyph) {
+    width: 12px;
+    height: 12px;
+    transition: rotate var(--duration-ui) var(--ease-primary);
+  }
+  .svc.is-open .svc__index {
+    color: var(--text-primary);
+  }
+  .svc.is-open .svc__arrow {
+    background: var(--black);
+    color: var(--white);
+    box-shadow: inset 0 0 0 1px var(--black);
+  }
+  .svc.is-open .svc__arrow :global(.svc__arrow-glyph) {
+    rotate: 45deg;
+  }
+  .svc:not(.is-open) .svc__trigger:hover .svc__name {
+    translate: 4px 0;
+  }
+  .svc:not(.is-open) .svc__trigger:hover .svc__arrow {
+    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.28);
+  }
+
+  /* media: ONE element — round thumb when collapsed, 176 px square when open (FLIP'd) */
+  .svc__media {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    width: var(--thumb);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--surface-muted);
+    pointer-events: none;
+    transform-origin: 0 0;
+  }
+  .svc__media :global(.picture) {
+    height: 100%;
+  }
+  .svc.is-open .svc__media {
+    width: var(--media-open);
+    border-radius: var(--media-radius);
+  }
+
+  /* detail: always in layout; zero height while collapsed */
+  .svc__detail {
+    position: relative;
+    z-index: 1;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+  }
+  .svc.is-open .svc__detail {
+    height: auto;
+    overflow: visible;
+    visibility: visible;
+    opacity: 1;
+  }
+  .svc__detail-inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+  .svc__desc {
+    max-width: 38ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .svc__cta {
+    font-size: var(--fs-button);
+  }
+
+  /* ---- phone: open row = image under the header, copy under the image ---- */
+  @media (max-width: 639.98px) {
+    .svc {
+      padding-inline: 10px;
+    }
+    .svc.is-open .svc__media {
+      grid-column: 2 / 4;
+      grid-row: 2;
+      align-self: start;
+    }
+    .svc.is-open .svc__name {
+      grid-column: 2 / 4;
+    }
+    .svc__detail {
+      grid-column: 2 / -1;
+      grid-row: 3;
+    }
+    .svc.is-open .svc__detail-inner {
+      padding: var(--space-4) 0 var(--space-5);
+    }
+  }
+
+  /* ---- tablet + desktop: lead column carries the index (collapsed) / the big title (open) ---- */
+  @media (min-width: 640px) {
+    .services__inner {
+      --row-h: 80px;
+      --thumb: 52px;
+      --media-open: 140px;
+      --lead: minmax(0, 11rem);
+      --arrow: 40px;
+      --col-gap: var(--grid-gap);
+    }
+    .services__inner {
+      padding-block: clamp(56px, 8svh, 88px) clamp(72px, 11svh, 128px);
+    }
+    .services__head {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 20rem);
+      align-items: end;
+      column-gap: var(--space-6);
+    }
+    .services__intro {
+      justify-self: end;
+    }
+    .svc-list {
+      margin-top: var(--space-8);
+    }
+    .svc {
+      grid-template-rows: auto;
+      align-items: center;
+      padding-inline: 20px;
+    }
+    .svc__heading {
+      align-self: stretch;
+    }
+    .svc__title {
+      grid-column: 1;
+      grid-row: 1;
+      display: block;
+      overflow: hidden;
+      padding-block: 0.06em;
+      visibility: hidden;
+    }
+    .svc__title-inner {
+      display: block;
+      font-size: var(--fs-h3);
+      font-weight: var(--fw-display);
+      line-height: 1.06;
+      letter-spacing: var(--ls-heading);
+      color: var(--text-primary);
+      text-wrap: balance;
+    }
+    .svc.is-open .svc__index {
+      visibility: hidden;
+    }
+    .svc.is-open .svc__title {
+      visibility: visible;
+    }
+    .svc.is-open .svc__name {
+      opacity: 0;
+    }
+    .svc.is-open .svc__media {
+      margin-block: 16px;
+    }
+    .svc__detail {
+      grid-column: 3;
+      grid-row: 1;
+      align-self: center;
+    }
+    .svc.is-open .svc__detail-inner {
+      padding-block: 4px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services__inner {
+      --row-h: 88px;
+      --thumb: 56px;
+      --media-open: 176px;
+      --lead: minmax(0, 2.4fr);
+      --arrow: 44px;
+    }
+    .services__head {
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 23rem);
+    }
+    .services__title {
+      white-space: nowrap;
+    }
+    .svc {
+      grid-template-columns: var(--lead) var(--media-open) minmax(0, 3fr) var(--arrow);
+      padding-inline: 24px;
+    }
+    .svc__media {
+      justify-self: start;
+    }
+    .svc__desc {
+      font-size: var(--fs-body);
+    }
+  }
+  /* tablet: the media column is as wide as the open image so the collapsed thumb and the image share an edge */
+  @media (min-width: 640px) and (max-width: 1023.98px) {
+    .svc {
+      grid-template-columns: var(--lead) var(--media-open) minmax(0, 1fr) var(--arrow);
+    }
+    .svc__media {
+      justify-self: start;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc::before,
+    .svc__name,
+    .svc__arrow,
+    .svc__index,
+    .svc__arrow :global(.svc__arrow-glyph) {
+      transition: none;
+    }
+  }
+</style>

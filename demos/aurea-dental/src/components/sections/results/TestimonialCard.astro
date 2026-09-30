@@ -1,0 +1,72 @@
+---
+/**
+ * Restrained patient story panel (--surface, same height as the comparison on desktop). PLACEHOLDER content:
+ * `placeholder` renders data-placeholder="true" so QA / content review can find it; the identity is privacy-safe
+ * (age + treatment only). No stars, review counts or awards.
+ */
+interface Props {
+  label: string;
+  quote: string;
+  body: string;
+  patient: string;
+  treatment: string;
+  note: string;
+  placeholder?: boolean;
+}
+const { label, quote, body, patient, treatment, note, placeholder = false } = Astro.props;
+---
+<figure class="testimonial" data-testimonial data-placeholder={placeholder ? 'true' : undefined}>
+  <p class="label testimonial__label">{label}</p>
+  <blockquote class="testimonial__quote">
+    <p class="testimonial__lead">“{quote}”</p>
+    <p class="testimonial__body">{body}</p>
+  </blockquote>
+  <figcaption class="testimonial__meta">
+    <span class="testimonial__who">{patient} · {treatment}</span>
+    <span class="testimonial__note">{note}</span>
+  </figcaption>
+</figure>
+
+<style is:global>
+  .testimonial {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    height: 100%;
+    margin: 0;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+  .testimonial__quote {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+  }
+  .testimonial__lead {
+    max-width: 20ch;
+    font-size: clamp(1.375rem, 1.1rem + 0.8vw, 1.75rem);
+    font-weight: var(--fw-book);
+    line-height: 1.16;
+    letter-spacing: var(--ls-tight);
+    text-indent: -0.4em;
+    text-wrap: balance;
+  }
+  .testimonial__body {
+    max-width: 44ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .testimonial__meta {
+    display: grid;
+    gap: 2px;
+    margin-top: auto;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-soft);
+    font-size: var(--fs-small);
+  }
+  .testimonial__note {
+    color: var(--text-secondary);
+  }
+</style>

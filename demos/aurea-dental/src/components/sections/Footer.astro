@@ -1,0 +1,210 @@
+---
+/**
+ * §11 Footer — VERY LOW intensity (motion kit §4 #9). <SceneFrame as="footer" frame="column" enter="beneath">:
+ * it lies beneath the booking stage; scenes.ts counter-drifts the block (−22 vh → 0) so it is revealed as the
+ * booking stage moves up. Warm neutral --bg-soft block, radius top --panel-radius; identity, navigation,
+ * treatments, hours, address, contact, social, legal; an extremely faint wordmark (opacity .04). No photo,
+ * marquee, glow or gradient.
+ */
+import { site } from '../../content/site';
+import SceneFrame from '../scene/SceneFrame.astro';
+
+const { footer, wordmark } = site;
+---
+<SceneFrame as="footer" name="footer" frame="column" enter="beneath" class="footer" stageClass="footer__block">
+  <p class="footer__ghost" aria-hidden="true">{wordmark}</p>
+
+  <div class="footer__grid">
+    <div class="footer__col footer__identity">
+      <p class="footer__wordmark">{wordmark}</p>
+      <p class="footer__blurb">{footer.blurb}</p>
+    </div>
+
+    <nav class="footer__col" aria-labelledby="footer-nav-title">
+      <h2 class="label" id="footer-nav-title">{footer.navTitle}</h2>
+      <ul>
+        {footer.nav.map((link) => <li><a class="link-line" href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <h2 class="label">{footer.servicesTitle}</h2>
+      <ul>
+        {footer.services.map((link) => <li><a class="link-line" href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="footer__col footer__visit">
+      <div class="footer__sub">
+        <h2 class="label">{footer.hours.title}</h2>
+        <dl class="footer__hours">
+          {
+            footer.hours.rows.map((row) => (
+              <div>
+                <dt>{row.days}</dt>
+                <dd>{row.time}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="footer__sub">
+        <h2 class="label">{footer.address.title}</h2>
+        <p>{footer.address.lines.map((line) => <span class="footer__line">{line}</span>)}</p>
+      </div>
+      <div class="footer__sub">
+        <h2 class="label">{footer.contact.title}</h2>
+        <address>
+          <a class="link-line" href={footer.contact.phone.href}>{footer.contact.phone.label}</a>
+          <a class="link-line" href={footer.contact.email.href}>{footer.contact.email.label}</a>
+        </address>
+      </div>
+      <div class="footer__sub">
+        <h2 class="label">{footer.socialTitle}</h2>
+        <ul class="footer__social">
+          {
+            footer.social.map((link) => (
+              <li>
+                <a class="link-line" href={link.href} rel="noopener noreferrer" target="_blank">
+                  {link.label}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p>{footer.copyright}</p>
+    <ul class="footer__legal">
+      {footer.legal.map((link) => <li><a class="link-line" href={link.href}>{link.label}</a></li>)}
+    </ul>
+    <a class="footer__top-link link-line" href="#top">{footer.backToTop} ↑</a>
+  </div>
+</SceneFrame>
+
+<style is:global>
+  .footer .footer__block {
+    position: relative;
+    display: grid;
+    gap: var(--space-7);
+    margin-top: var(--space-6);
+    padding: clamp(40px, 6vw, 88px) var(--stage-pad-x) calc(var(--space-5) + env(safe-area-inset-bottom));
+    border-radius: var(--panel-radius) var(--panel-radius) 0 0;
+    background: var(--bg-soft);
+    overflow: hidden;
+    font-size: var(--fs-small);
+    color: var(--text-primary);
+  }
+  .footer__ghost {
+    position: absolute;
+    right: calc(var(--stage-pad-x) * 0.5);
+    bottom: 2.25rem;
+    font-size: calc(var(--fs-h2) * 2.2);
+    font-weight: var(--fw-medium);
+    letter-spacing: -0.04em;
+    line-height: 0.8;
+    white-space: nowrap;
+    opacity: 0.035;
+    pointer-events: none;
+    user-select: none;
+  }
+  .footer__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+  .footer__col,
+  .footer__sub {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+  .footer__col ul,
+  .footer__col address {
+    display: grid;
+    justify-items: start;
+    gap: 6px;
+    font-style: normal;
+  }
+  .footer__visit {
+    gap: var(--space-5);
+  }
+  .footer__wordmark {
+    font-size: 0.75rem;
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.22em;
+  }
+  .footer__blurb {
+    max-width: 30ch;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+  .footer__line {
+    display: block;
+  }
+  .footer__hours {
+    display: grid;
+    gap: 4px;
+  }
+  .footer__hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    max-width: 14rem;
+  }
+  .footer__hours dt {
+    color: var(--text-secondary);
+  }
+  .footer__hours dd {
+    font-variant-numeric: tabular-nums;
+  }
+  .footer__social {
+    grid-auto-flow: column;
+    gap: var(--space-4) !important;
+  }
+  .footer__bottom {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-6);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-soft);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+  }
+  .footer__legal {
+    display: flex;
+    gap: var(--space-5);
+  }
+  .footer__top-link {
+    margin-left: auto;
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 640px) {
+    .footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      row-gap: var(--space-7);
+    }
+    .footer__visit {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+    }
+  }
+  @media (min-width: 1024px) {
+    .footer .footer__block {
+      gap: var(--space-8);
+    }
+    .footer__grid {
+      grid-template-columns: 1.3fr 0.8fr 0.9fr 2fr;
+      column-gap: var(--grid-gap);
+    }
+  }
+</style>

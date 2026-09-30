@@ -1,0 +1,285 @@
+/* AUREA — scene primitives (SceneFrame / RisingPanel / MaskedMedia / AmbientBackdrop).
+   Contract: docs/AUREA_MOTION_RULE_KIT_V3.md §Primitives. Motion is added by src/motion/scenes.ts. */
+
+/* Page layering: the fixed ambient layer sits behind everything; content above it. */
+body > main,
+body > footer {
+  position: relative;
+  z-index: var(--z-base);
+}
+
+/* ---------------------------------------------------------------- scene shell */
+.scene {
+  --scene-len: 0px; /* extra pinned scroll (own choreography), set per scene via style / token */
+  --scene-head: 0px; /* pinned scroll consumed while the previous scene lifts off (enter="beneath") */
+  --scene-tail: 0px; /* pinned scroll consumed while the next scene rises over (set by :has below) */
+  --scene-surface: var(--surface);
+  position: relative;
+  z-index: var(--z-base);
+}
+.scene[data-tone='muted'] {
+  --scene-surface: var(--surface-muted);
+}
+.scene[data-tone='bg'] {
+  --scene-surface: var(--bg-main);
+}
+.scene[data-tone='soft'] {
+  --scene-surface: var(--bg-soft);
+}
+.scene[data-tone='photo'] {
+  --scene-surface: #d9d6d0; /* shown only while a photo decodes */
+}
+
+/* enter="rise": this scene travels up OVER the previous (which stays pinned for --overlap) */
+.scene[data-enter='rise'] {
+  z-index: var(--z-panel);
+  margin-top: calc(-1 * var(--overlap-rise));
+}
+.scene[data-enter='rise'][data-overlap='short'] {
+  margin-top: calc(-1 * var(--overlap-rise) * 0.6);
+}
+.scene:has(+ .scene[data-enter='rise']) {
+  --scene-tail: var(--overlap-rise);
+}
+.scene:has(+ .scene[data-enter='rise'][data-overlap='short']) {
+  --scene-tail: calc(var(--overlap-rise) * 0.6);
+}
+/* enter="beneath": this scene lies UNDER the previous one, which lifts off it (pinned stages only) */
+.scene--stage[data-enter='beneath'] {
+  z-index: 0;
+  margin-top: calc(-1 * var(--overlap-beneath));
+  --scene-head: var(--overlap-beneath);
+}
+/* column scenes "beneath" (footer): no overlap in layout; scenes.ts counter-translates the content */
+.scene--column[data-enter='beneath'] {
+  z-index: 0;
+}
+
+/* ---------------------------------------------------------------- stage frame */
+.scene__pin {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding-block: 6px;
+}
+.stage {
+  position: relative;
+  width: var(--stage-w);
+  height: auto;
+  border-radius: var(--stage-radius);
+  background: var(--scene-surface);
+  overflow: hidden;
+  isolation: isolate;
+  contain: layout paint;
+  transform-origin: 50% 40%;
+}
+.scene[data-height='fixed'] .stage {
+  height: var(--stage-h);
+}
+.scene[data-inset] .stage {
+  width: var(--panel-w);
+  border-radius: var(--panel-radius);
+}
+.scene__dim {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: var(--dim);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .scene__pin {
+    padding-block: 12px;
+  }
+  .scene[data-height='stage'] .stage {
+    height: var(--stage-h);
+  }
+  .scene[data-height='auto'] .stage {
+    min-height: var(--stage-h);
+  }
+}
+
+/* pinned: tablet + desktop by default (data-pin="tablet"), desktop only, or everywhere (journey) */
+@media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+  .scene--stage[data-pin='tablet'] {
+    height: calc(100svh + var(--scene-head) + var(--scene-len) + var(--scene-tail));
+  }
+  .scene--stage[data-pin='tablet'] > .scene__pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding-block: 0;
+  }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .scene--stage[data-pin='desktop'] {
+    height: calc(100svh + var(--scene-head) + var(--scene-len) + var(--scene-tail));
+  }
+  .scene--stage[data-pin='desktop'] > .scene__pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding-block: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .scene--stage[data-pin='all'] {
+    height: calc(100svh + var(--scene-head) + var(--scene-len) + var(--scene-tail));
+  }
+  .scene--stage[data-pin='all'] > .scene__pin {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding-block: 0;
+  }
+}
+/* a stage taller than the viewport must never be pinned (content would be unreachable) */
+@media (max-height: 520px) {
+  .scene--stage[data-height='auto'] {
+    height: auto !important;
+  }
+  .scene--stage[data-height='auto'] > .scene__pin {
+    position: relative !important;
+    height: auto !important;
+  }
+}
+
+/* ---------------------------------------------------------------- panel frame (flow surface) */
+.panel {
+  position: relative;
+  width: var(--panel-w);
+  margin-inline: auto;
+  border-radius: var(--panel-radius);
+  background: var(--scene-surface);
+  overflow: clip;
+  isolation: isolate;
+  transform-origin: 50% 0%;
+}
+.scene[data-enter='rise'] > .panel {
+  border-radius: var(--panel-radius) var(--panel-radius) calc(var(--panel-radius) * 0.6) calc(var(--panel-radius) * 0.6);
+}
+
+/* ---------------------------------------------------------------- column frame (quiet, no surface) */
+.scene__column {
+  position: relative;
+  width: var(--stage-w);
+  margin-inline: auto;
+}
+
+/* shared inner gutter for stage/panel/column content */
+.stage-pad {
+  padding-inline: var(--stage-pad-x);
+  padding-block: var(--stage-pad-y);
+}
+
+/* ---------------------------------------------------------------- MaskedMedia */
+.mm {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--mm-radius, var(--media-radius));
+  background: var(--surface-muted);
+  margin: 0;
+}
+.mm--fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.mm__inner {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 50%;
+}
+.mm__inner .picture,
+.mm__inner .img {
+  width: 100%;
+  height: 100%;
+}
+.mm__inner .img {
+  object-fit: cover;
+}
+/* start state of growing media (tablet/desktop + motion) — set in CSS so nothing flashes before JS */
+@media (min-width: 640px) and (prefers-reduced-motion: no-preference) {
+  .mm[data-grow='rect'] {
+    clip-path: inset(22% 32% 22% 32% round 14px);
+  }
+  .mm[data-grow='y'] {
+    clip-path: inset(30% 0% 30% 0% round 0px);
+  }
+  .mm[data-grow='x'] {
+    clip-path: inset(0% 30% 0% 30% round 14px);
+  }
+  .mm[data-grow] > .mm__inner {
+    transform: scale(1.16);
+  }
+}
+.motion-fallback .mm[data-grow] {
+  clip-path: none !important;
+}
+.motion-fallback .mm[data-grow] > .mm__inner {
+  transform: none !important;
+}
+
+/* ---------------------------------------------------------------- inking text (intro statement) */
+[data-ink] {
+  --ink: 0;
+  color: rgba(20, 20, 20, calc(0.14 + 0.86 * var(--ink)));
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ink] {
+    --ink: 1 !important;
+  }
+}
+.motion-fallback [data-ink] {
+  --ink: 1 !important;
+}
+
+/* ---------------------------------------------------------------- AmbientBackdrop */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-ambient);
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg-main);
+  display: none;
+}
+@media (min-width: 640px) {
+  .ambient {
+    display: block;
+  }
+}
+.ambient__layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(var(--ambient-scale));
+  transition: opacity var(--duration-large) var(--ease-soft);
+  will-change: opacity;
+}
+.ambient__layer[data-active] {
+  opacity: var(--ambient-opacity);
+}
+.ambient__layer[data-active][data-tone='warm'] {
+  opacity: var(--ambient-opacity-warm);
+}
+.ambient__layer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(var(--ambient-blur)) saturate(var(--ambient-saturate));
+}
+/* edges dissolve into warm white */
+.ambient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(130% 110% at 50% 50%, transparent 45%, var(--bg-main) 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ambient__layer {
+    transition-duration: var(--duration-ui);
+  }
+}

@@ -1,0 +1,56 @@
+---
+/**
+ * MaskedMedia — an image inside a clip-path mask (the only way scenes reveal / expand / swap imagery).
+ *   fill         absolutely fills its positioned parent (stage backgrounds); otherwise give `ratio`.
+ *   grow         'rect' | 'y' | 'x' → clipped start window that SceneFrame enter="grow" (scenes.ts) opens to full
+ *                on scene entry (tablet/desktop + motion; start state is in CSS, no flash). Inner image settles 1.16 → 1.
+ *   positions    object-position per breakpoint { mobile, tablet, desktop } (see AUREA_ASSET_MAP.md).
+ *   radius       'media' (--media-radius, default) · 'stage' · 'none'.
+ * Swaps between two MaskedMedia (doctor portraits) use maskWipe() from src/motion/scenes.ts.
+ */
+import Img from '../ui/Img.astro';
+import type { ImageKey } from '../../lib/images';
+
+interface Props {
+  image: ImageKey;
+  alt: string;
+  sizes: string;
+  widths?: number[];
+  priority?: boolean;
+  quality?: number;
+  fill?: boolean;
+  ratio?: string;
+  grow?: 'rect' | 'y' | 'x';
+  position?: string;
+  positions?: { mobile?: string; tablet?: string; desktop?: string };
+  radius?: 'media' | 'stage' | 'none';
+  class?: string;
+  /** extra attributes for scripting hooks, e.g. { 'data-doctor-portrait': 'elif' } */
+  attrs?: Record<string, string>;
+}
+const {
+  image,
+  alt,
+  sizes,
+  widths,
+  priority = false,
+  quality,
+  fill = false,
+  ratio,
+  grow,
+  position,
+  positions,
+  radius = 'media',
+  class: className,
+  attrs = {},
+} = Astro.props;
+
+const radiusVar = radius === 'none' ? '0px' : radius === 'stage' ? 'var(--stage-radius)' : 'var(--media-radius)';
+const style = [`--mm-radius: ${radiusVar}`, ratio && !fill ? `aspect-ratio: ${ratio}` : ''].filter(Boolean).join('; ');
+---
+<figure class:list={['mm', { 'mm--fill': fill }, className]} data-masked-media data-grow={grow} style={style} {...attrs}>
+  <div class="mm__inner" data-mm-inner>
+    <Img image={image} alt={alt} sizes={sizes} widths={widths} priority={priority} quality={quality} cover position={position} positions={positions} />
+  </div>
+  <slot />
+</figure>

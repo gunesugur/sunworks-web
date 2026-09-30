@@ -1,0 +1,113 @@
+---
+/**
+ * §8 ResultsSection — interactive, MED (motion kit §4 #6–7, §5 Results).
+ *
+ * <SceneFrame enter="beneath" height="auto" length="var(--len-results)" exit="recede" ambient warm>: the stage lies
+ * UNDER the Doctors stage and settles (.965 → 1, dim .10 → 0) as Doctors lifts off; holds for --len-results; then
+ * recedes (y −8 vh, opacity .4) as the quiet FAQ column arrives. Warm ambient spill (result-after, .16).
+ *
+ * Desktop: heading left + short copy right on the top row; registered 1:1 before/after (--ba square) left,
+ * restrained testimonial panel (--surface, same height) right. Tablet: the same two columns, smaller.
+ * Phone: stacked, not pinned. The testimonial is a PLACEHOLDER (site.results.testimonial.placeholder).
+ */
+import { site } from '../../content/site';
+import SceneFrame from '../scene/SceneFrame.astro';
+import BeforeAfterSlider from './results/BeforeAfterSlider.astro';
+import TestimonialCard from './results/TestimonialCard.astro';
+
+const data = site.results;
+---
+<SceneFrame
+  name="results"
+  section="results"
+  id="results"
+  labelledby="results-title"
+  frame="stage"
+  height="auto"
+  length="var(--len-results)"
+  enter="beneath"
+  exit="recede"
+  tone="muted"
+  ambient={data.slider.after}
+  ambientTone="warm"
+  class="results"
+  stageClass="results__stage"
+>
+  <div class="results__inner">
+    <header class="results__head">
+      <p class="label label--dark">{data.label}</p>
+      <h2 id="results-title" class="t-h2 results__title">
+        {data.titleLines.map((line, i) => <span class="results__title-line">{line}{i < data.titleLines.length - 1 ? ' ' : ''}</span>)}
+      </h2>
+    </header>
+    <p class="results__intro">{data.intro}</p>
+    <div class="results__compare">
+      <BeforeAfterSlider {...data.slider} />
+    </div>
+    <div class="results__story">
+      <TestimonialCard {...data.testimonial} />
+    </div>
+  </div>
+</SceneFrame>
+
+<style is:global>
+  .results__inner {
+    --ba: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+    padding: var(--stage-pad-y) var(--stage-pad-x);
+  }
+  .results__head {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+  .results__title-line {
+    display: block;
+  }
+  .results__intro {
+    max-width: 36ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+  .results__compare {
+    width: var(--ba);
+  }
+
+  @media (min-width: 640px) {
+    .results__inner {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      column-gap: var(--grid-gap);
+      row-gap: var(--space-6);
+      align-items: end;
+    }
+    .results__intro {
+      justify-self: end;
+      max-width: 30ch;
+    }
+    .results__compare {
+      align-self: stretch;
+    }
+    .results__story {
+      align-self: stretch;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .results__inner {
+      --ba: clamp(300px, calc(var(--stage-h) - 190px), 480px);
+      grid-template-columns: var(--ba) minmax(0, 1fr);
+      column-gap: 32px;
+      row-gap: clamp(24px, 3.4svh, 40px);
+    }
+    .results__intro {
+      max-width: 34ch;
+      margin-bottom: 0.35rem;
+    }
+    .results__story .testimonial {
+      height: var(--ba);
+    }
+  }
+</style>

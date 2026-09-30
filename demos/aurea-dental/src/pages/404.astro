@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/ui/Button.astro';
+---
+<Base title="Page not found — AUREA Dental">
+  <main id="main" class="container nf">
+    <p class="label">404</p>
+    <h1 class="t-h2">This page could not be found.</h1>
+    <Button href="/">Back to the clinic</Button>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    gap: var(--space-6);
+    justify-items: start;
+    align-content: center;
+    min-height: 100svh;
+  }
+</style>

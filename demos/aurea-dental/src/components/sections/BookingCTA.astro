@@ -1,0 +1,442 @@
+---
+/**
+ * §10 BookingCTA — the FINALE (motion kit §4 #8–9, §5 Booking).
+ * <SceneFrame enter="grow" height="auto" pin="none" ambient="booking-patient">: the 16:9 booking image is a
+ * <MaskedMedia grow="y"> that opens from a horizontal band, clip inset(30% 0 30% 0) → inset(0) + scale 1.16 → 1,
+ * scrubbed while the scene enters (FAQ recedes above it); phones play it once. Never pinned — the form is never
+ * trapped. The footer lies beneath and is exposed as this stage moves up.
+ * Desktop: image left ≈55 % (right edge dissolves into the surface under the form), form right 45 %.
+ * Tablet: 16:9 image above the form. Phone: 4:3 image above the form.
+ * Form (booking.ts, unchanged behaviour): real labels, bottom-border inputs, interest chips (real checkboxes),
+ * honeypot, inline accessible errors, success state; dark simple submit.
+ */
+import { site } from '../../content/site';
+import SceneFrame from '../scene/SceneFrame.astro';
+import MaskedMedia from '../scene/MaskedMedia.astro';
+import Arrow from '../ui/Arrow.astro';
+import RevealText from '../ui/RevealText.astro';
+
+const data = site.booking;
+const f = data.fields;
+---
+<SceneFrame
+  name="booking"
+  section="booking"
+  id="booking"
+  labelledby="booking-title"
+  frame="stage"
+  height="auto"
+  pin="none"
+  enter="grow"
+  ambient={data.image}
+  class="booking"
+  stageClass="booking__stage"
+>
+  <div class="booking__visual">
+    <MaskedMedia
+      image={data.image}
+      alt={data.imageAlt}
+      sizes="(min-width: 1024px) 56vw, 92vw"
+      widths={[768, 1080, 1440]}
+      fill
+      grow="y"
+      radius="none"
+      positions={{ desktop: '36% 38%', tablet: '42% 36%', mobile: '40% 34%' }}
+    >
+      <span class="booking__fade" aria-hidden="true"></span>
+    </MaskedMedia>
+  </div>
+
+  <div class="booking__content">
+    <header class="booking__head">
+      <p class="label label--dark" data-reveal="fade">{data.label}</p>
+      <RevealText as="h2" id="booking-title" class="booking__title" lines={data.titleLines} />
+      <p class="booking__intro" data-reveal="fade" data-reveal-delay="0.1">{data.intro}</p>
+    </header>
+
+      <form class="booking-form" action="/api/booking" method="post" data-booking-form aria-describedby="booking-privacy">
+        <div class="booking-form__fields" data-reveal="stagger" data-reveal-start="top 88%">
+          <fieldset class="field field--full chips">
+            <legend class="field__label">{data.interestLegend}</legend>
+            <div class="chips__list">
+              {
+                data.chips.map((chip, i) => (
+                  <label class="chip">
+                    <input class="chip__input" type="checkbox" name="interest" value={chip} checked={i === 0} />
+                    <span class="chip__text">{chip}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+          <div class="field" data-field="name">
+            <label class="field__label" for="bk-name">{f.name.label}</label>
+            <input class="field__input" id="bk-name" name="name" type="text" autocomplete={f.name.autocomplete} placeholder={f.name.placeholder} required minlength="2" aria-describedby="bk-name-error" />
+            <p class="field__error" id="bk-name-error" data-error-for="name" data-message={data.errors.name}></p>
+          </div>
+          <div class="field" data-field="phone">
+            <label class="field__label" for="bk-phone">{f.phone.label}</label>
+            <input class="field__input" id="bk-phone" name="phone" type="tel" inputmode="tel" autocomplete={f.phone.autocomplete} placeholder={f.phone.placeholder} required pattern="[\+0-9 \(\)\-]{7,20}" aria-describedby="bk-phone-error" />
+            <p class="field__error" id="bk-phone-error" data-error-for="phone" data-message={data.errors.phone}></p>
+          </div>
+          <div class="field field--full" data-field="email">
+            <label class="field__label" for="bk-email">{f.email.label}</label>
+            <input class="field__input" id="bk-email" name="email" type="email" autocomplete={f.email.autocomplete} placeholder={f.email.placeholder} required aria-describedby="bk-email-error" />
+            <p class="field__error" id="bk-email-error" data-error-for="email" data-message={data.errors.email}></p>
+          </div>
+          <div class="field field--full">
+            <label class="field__label" for="bk-message">
+              {f.message.label} <span class="field__optional">({data.optional})</span>
+            </label>
+            <textarea class="field__input field__input--area" id="bk-message" name="message" rows="2" placeholder={f.message.placeholder}></textarea>
+          </div>
+          <div class="booking-form__footer">
+            <p class="booking-form__privacy" id="booking-privacy">{data.privacy}</p>
+            <button class="submit" type="submit" data-booking-submit>
+              <span class="submit__label" data-submit-label data-sending={data.sending}>{data.submit}</span>
+              <span class="submit__circle" aria-hidden="true">
+                <Arrow class="submit__arrow" />
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="booking-form__hp" aria-hidden="true">
+          <label for="bk-company">{data.honeypot}</label>
+          <input id="bk-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <p class="booking-form__summary" role="alert" data-booking-summary data-message={data.errors.summary}></p>
+      </form>
+
+      <div class="booking-success" data-booking-success hidden>
+        <span class="booking-success__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <h3 class="booking-success__title" tabindex="-1" data-booking-success-title>{data.successTitle}</h3>
+        <p class="booking-success__text">{data.success}</p>
+        <button type="button" class="booking-success__again link-line" data-booking-again>{data.again}</button>
+      </div>
+  </div>
+</SceneFrame>
+
+<style is:global>
+  /* ---------------------------------------------------------------- phone / tablet: image above the form */
+  .booking .booking__stage {
+    display: grid;
+  }
+  .booking__visual {
+    position: relative;
+    aspect-ratio: 4 / 3;
+  }
+  .booking__fade {
+    display: none;
+  }
+  .booking__visual .mm {
+    background: var(--surface); /* no muted hairline at the sub-pixel edge under the fade */
+  }
+  .booking__content {
+    display: grid;
+    align-content: start;
+    gap: var(--space-6);
+    padding: var(--space-6) var(--stage-pad-x) var(--stage-pad-y);
+  }
+  .booking__head {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+  }
+  .booking__title {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-display);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-heading);
+    text-wrap: balance;
+  }
+  .booking__title .mask-line:nth-child(2) {
+    color: var(--text-secondary);
+  }
+  .booking__intro {
+    max-width: 40ch;
+    font-size: var(--fs-body-sm);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* ---------------------------------------------------------------- form */
+  .booking-form__fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5) var(--space-5);
+  }
+  .field {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .field__label {
+    padding: 0;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+  .field__optional {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: var(--fw-regular);
+  }
+  .field__input {
+    width: 100%;
+    min-height: 40px;
+    padding: 6px 0 9px;
+    border: 0;
+    border-bottom: 1px solid rgba(20, 20, 20, 0.22);
+    border-radius: 0;
+    background: transparent;
+    font-size: var(--fs-body);
+    font-weight: var(--fw-regular);
+    line-height: 1.4;
+    color: var(--text-primary);
+    transition:
+      border-color var(--duration-ui) var(--ease-soft),
+      box-shadow var(--duration-ui) var(--ease-soft);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field__input--area {
+    min-height: 64px;
+    resize: vertical;
+  }
+  .field__input::placeholder {
+    color: #8a8a85;
+    opacity: 1;
+  }
+  .field__input:hover {
+    border-bottom-color: rgba(20, 20, 20, 0.4);
+  }
+  /* 1 px → 1.5 px --text-primary on focus */
+  .field__input:focus-visible {
+    outline: none;
+    border-bottom-color: var(--text-primary);
+    box-shadow: 0 0.5px 0 0 var(--text-primary);
+  }
+  .field__input[aria-invalid='true'] {
+    border-bottom-color: #8a3b2e;
+    box-shadow: 0 0.5px 0 0 #8a3b2e;
+  }
+  .field__error {
+    font-size: var(--fs-small);
+    line-height: 1.35;
+    color: #8a3b2e;
+  }
+  .field__error:empty {
+    display: none;
+  }
+
+  /* interest chips = real checkboxes, 32 px pills */
+  .chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 14px;
+    border-radius: var(--radius-round);
+    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.16);
+    font-size: var(--fs-small);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-ui) var(--ease-soft),
+      color var(--duration-ui) var(--ease-soft),
+      box-shadow var(--duration-ui) var(--ease-soft);
+  }
+  .chip__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .chip:hover {
+    box-shadow: inset 0 0 0 1px var(--text-primary);
+  }
+  .chip:has(.chip__input:checked) {
+    background: var(--black);
+    color: var(--white);
+    box-shadow: inset 0 0 0 1px var(--black);
+  }
+  .chip:has(.chip__input:focus-visible) {
+    outline: 2px solid var(--text-primary);
+    outline-offset: 3px;
+  }
+
+  .booking-form__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-top: var(--space-2);
+  }
+  .booking-form__privacy {
+    max-width: 30ch;
+    font-size: var(--fs-small);
+    line-height: 1.45;
+    color: var(--text-secondary);
+  }
+  /* dark, simple submit: visible label + 56 px circle */
+  .submit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex: none;
+    font-size: var(--fs-button);
+    font-weight: var(--fw-medium);
+    color: var(--text-primary);
+  }
+  .submit__circle {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--black);
+    color: var(--white);
+    transition:
+      transform var(--duration-fast) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-soft);
+  }
+  .submit .submit__arrow {
+    width: 16px;
+    height: 16px;
+  }
+  .submit:hover .submit__circle,
+  .submit:focus-visible .submit__circle {
+    transform: scale(1.06);
+    background: #242424;
+  }
+  .submit:focus-visible {
+    outline-offset: 6px;
+    border-radius: var(--radius-round);
+  }
+  .submit[aria-disabled='true'] {
+    cursor: progress;
+    opacity: 0.7;
+  }
+  .booking-form__hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .booking-form__summary {
+    margin-top: var(--space-4);
+    font-size: var(--fs-small);
+    color: #8a3b2e;
+  }
+  .booking-form__summary:empty {
+    display: none;
+  }
+
+  /* success */
+  .booking-success {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-soft);
+  }
+  .booking-success__mark {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.22);
+  }
+  .booking-success__title {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-display);
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-snug);
+  }
+  .booking-success__text {
+    max-width: 36ch;
+    color: var(--text-secondary);
+  }
+  .booking-success__again {
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+  }
+
+  @media (min-width: 640px) {
+    .booking__visual {
+      aspect-ratio: 16 / 9;
+    }
+    .booking-form__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .field--full,
+    .booking-form__footer {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* ---------------------------------------------------------------- desktop: image left 55 %, form right */
+  @media (min-width: 1024px) {
+    .booking .booking__stage {
+      grid-template-columns: 52fr 48fr;
+    }
+    .booking__visual {
+      aspect-ratio: auto;
+      min-height: 100%;
+      margin-right: -2px; /* bleed under the form column: no sub-pixel seam where the fade meets the surface */
+    }
+    .booking__fade {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(252, 252, 250, 0) 62%, var(--surface) 100%);
+      pointer-events: none;
+    }
+    .booking__content {
+      align-self: center;
+      gap: clamp(20px, 3svh, 32px);
+      padding: var(--stage-pad-y) min(var(--stage-pad-x), 6vw) var(--stage-pad-y) clamp(24px, 3vw, 48px);
+    }
+    .booking__title {
+      font-size: clamp(2rem, 0.9rem + 2.1vw, 2.875rem);
+    }
+    .booking-form__fields {
+      gap: clamp(16px, 2.2svh, 24px) var(--space-5);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .booking .booking__stage {
+      grid-template-columns: 55fr 45fr;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .field__input,
+    .chip,
+    .submit__circle {
+      transition: none;
+    }
+  }
+</style>

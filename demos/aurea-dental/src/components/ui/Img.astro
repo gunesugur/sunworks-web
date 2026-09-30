@@ -1,0 +1,53 @@
+---
+/**
+ * Responsive <picture> (AVIF source + WebP <img>) from an image key (src/lib/images.ts).
+ * priority → eager + fetchpriority=high (hero only). Everything else lazy.
+ * cover → fills its (sized) parent with object-fit: cover.
+ * position → object-position (all breakpoints); positions → per breakpoint
+ *   { mobile (<640), tablet (640–1023), desktop (≥1024) } via --pos / --pos-t / --pos-d (base.css).
+ */
+import { Picture } from 'astro:assets';
+import { images, type ImageKey } from '../../lib/images';
+
+interface Props {
+  image: ImageKey;
+  alt: string;
+  sizes: string;
+  widths?: number[];
+  priority?: boolean;
+  cover?: boolean;
+  position?: string;
+  positions?: { mobile?: string; tablet?: string; desktop?: string };
+  class?: string;
+  imgClass?: string;
+  quality?: number;
+}
+const { image, alt, sizes, widths, priority = false, cover = false, position, positions, class: className, imgClass, quality = 72 } = Astro.props;
+const src = images[image];
+const candidates = widths ?? [480, 768, 1080, 1440, 1920, 2400];
+let ws = candidates.filter((w) => w <= src.width);
+if (ws.length === 0) ws = [src.width];
+const posVars = [
+  (positions?.mobile ?? position) && `--pos: ${positions?.mobile ?? position}`,
+  positions?.tablet && `--pos-t: ${positions.tablet}`,
+  positions?.desktop && `--pos-d: ${positions.desktop}`,
+]
+  .filter(Boolean)
+  .join('; ');
+const pictureClass = ['picture', cover ? 'picture--cover' : '', className ?? ''].filter(Boolean).join(' ');
+---
+<Picture
+  src={src}
+  alt={alt}
+  sizes={sizes}
+  widths={ws}
+  formats={['avif']}
+  fallbackFormat="webp"
+  quality={quality}
+  loading={priority ? 'eager' : 'lazy'}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  class:list={['img', { 'img--cover': cover }, imgClass]}
+  style={posVars || undefined}
+  pictureAttributes={{ class: pictureClass }}
+/>
