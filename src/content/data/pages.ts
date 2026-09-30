@@ -229,6 +229,7 @@ Sitenin çalışması ve tercihlerinizin hatırlanması için gereklidir; kapat�
 
 - **sw-consent** (bu site, tarayıcı depolaması): Çerez tercihlerinizi saklar. Süre: 12 ay.
 - **sw-prefs** (bu site, tarayıcı depolaması): Tema ve erişilebilirlik ayarlarınızı saklar. Yalnızca bir ayarı değiştirdiğinizde oluşur; siz silene kadar kalır.
+- **sw-kartela-demo** (bu site, tarayıcı depolaması): Kartela demosunda yaptığınız değişiklikleri saklar. Yalnızca demoda bir şey değiştirdiğinizde oluşur; “Demoyu sıfırla” ile ya da siz silene kadar kalır.
 - **sw-intro** (bu site, oturum depolaması): Açılış animasyonunun aynı oturumda tekrar gösterilmemesini sağlar. Sekmeyi kapattığınızda silinir.
 - **Cloudflare ve Turnstile** (üçüncü taraf): Siteyi saldırılara karşı korumak ve formların bir insan tarafından gönderildiğini doğrulamak için güvenlik çerezleri ayarlayabilir.
 
@@ -267,6 +268,7 @@ Needed for the site to work and to remember your choices; these cannot be switch
 
 - **sw-consent** (this site, browser storage): Stores your cookie choices. Duration: 12 months.
 - **sw-prefs** (this site, browser storage): Stores your theme and accessibility settings. Created only when you change a setting; kept until you clear it.
+- **sw-kartela-demo** (this site, browser storage): Stores the changes you make in the Kartela demo. Created only when you change something in the demo; kept until you press “Reset demo” or clear it.
 - **sw-intro** (this site, session storage): Keeps the intro animation from replaying during the same session. Cleared when you close the tab.
 - **Cloudflare and Turnstile** (third party): May set security cookies to protect the site from attacks and to check that forms are sent by a person.
 

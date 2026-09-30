@@ -1,0 +1,1793 @@
+---
+import type { Locale } from '@/content/schema';
+import { routes } from '@/i18n/routes';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import { FREE_PRODUCT_LIMIT } from '@/lib/kartela';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+
+const copy = {
+  tr: {
+    title: 'Kartela demo',
+    seo: 'Kartela demo: toptancılar için bayi kataloğu',
+    description: 'Örnek bir ev tekstili toptancısının bayi kataloğunu deneyin: bayiye özel fiyat, toplu zam, WhatsApp sipariş ve PDF katalog.',
+    intro:
+      'Örnek bir ev tekstili toptancısının kataloğu. Bayi gibi gezin, firma panelinden fiyatları değiştirin, PDF kataloğu alın. Yaptığınız her şey yalnızca bu tarayıcıda kalır.',
+    crumb: 'Kartela',
+    views: 'Demo görünümleri',
+    tabCatalog: 'Katalog',
+    tabPanel: 'Firma paneli',
+    tabPdf: 'PDF katalog',
+    plan: 'Plan',
+    free: 'Ücretsiz',
+    pro: 'Pro',
+    reset: 'Demoyu sıfırla',
+    noscript: 'Demo JavaScript ile çalışır. Tarayıcınızda JavaScript açık olmalı.',
+    vatNote: 'Fiyatlara KDV dahil değildir',
+    writeWa: 'WhatsApp’tan yazın',
+    whoLooks: 'Kataloğa kim bakıyor?',
+    whoHint: 'Her bayi kendi koduyla girer ve yalnızca kendi fiyatını görür.',
+    guest: 'Misafir',
+    dealerCode: 'Bayi kodu',
+    codePlaceholder: 'Örn. DNZ-2041',
+    signIn: 'Giriş yap',
+    categories: 'Kategoriler',
+    search: 'Ürün adı veya kod',
+    searchLabel: 'Ürün ara',
+    empty: 'Bu aramaya uyan ürün yok.',
+    watermark: 'Bu katalog Kartela ile hazırlandı · Ücretsiz sürüm',
+    orderTitle: 'Sipariş listesi',
+    close: 'Kapat',
+    total: 'Toplam (KDV hariç)',
+    waMessage: 'WhatsApp’a gidecek mesaj',
+    openWa: 'WhatsApp’ta aç',
+    copyMsg: 'Mesajı kopyala',
+    orderNote: 'Sipariş firmaya WhatsApp mesajı olarak gider, firma teyit edip dönüş yapar.',
+    review: 'Siparişi gözden geçir',
+    firm: 'Firma',
+    firmName: 'Firma adı',
+    city: 'Şehir',
+    phone: 'WhatsApp numarası',
+    logo: 'Logo',
+    uploadLogo: 'Logo yükle',
+    removeLogo: 'Kaldır',
+    logoHint: 'PNG, JPG ya da SVG. Katalogda ve PDF kapağında görünür.',
+    brandColor: 'Marka rengi',
+    plans: 'Planlar',
+    freeList: [`${FREE_PRODUCT_LIMIT} ürüne kadar`, 'Tek bayi fiyat grubu', 'Katalog ve PDF’te Kartela filigranı', 'Logo, marka rengi ve WhatsApp sipariş'],
+    proList: ['Sınırsız ürün', 'Dört fiyat grubu', 'Toplu fiyat güncelleme', 'Filigransız katalog ve PDF', 'Kendi alan adınız'],
+    proPrice: 'Fiyat için yazın',
+    planHint: 'Demoda planı üstteki düğmeden değiştirebilirsiniz.',
+    groups: 'Fiyat grupları',
+    groupsHint: 'Her grup liste fiyatı üzerinden iskonto alır. Bayiler bir gruba bağlanır.',
+    thGroup: 'Grup',
+    thDiscount: 'İskonto (%)',
+    thExample: '₺1.000’lik ürün',
+    dealers: 'Bayiler',
+    thDealer: 'Bayi',
+    thCode: 'Giriş kodu',
+    thDealerGroup: 'Fiyat grubu',
+    bulk: 'Toplu fiyat güncelleme',
+    bulkHint: 'Zam geldiğinde bütün liste fiyatlarını tek seferde güncelleyin. Bayi fiyatları ve PDF kendiliğinden yenilenir.',
+    change: 'Değişim (%)',
+    round: 'Yuvarla',
+    applyAll: 'Bütün fiyatlara uygula',
+    products: 'Ürünler',
+    thProductCode: 'Kod',
+    thProduct: 'Ürün',
+    thPrice: 'Liste fiyatı',
+    thVis: 'Fiyatı kim görsün?',
+    thStock: 'Stok',
+    addProduct: 'Ürün ekle',
+    importTitle: 'Excel’den yapıştırın',
+    importHint: 'Her satıra kod, ürün adı ve fiyat. Excel ya da Google E-Tablolar’dan kopyalayıp yapıştırabilirsiniz. Var olan kodların fiyatı güncellenir.',
+    importLabel: 'Yapıştırılacak satırlar',
+    importPlaceholder: 'HV-150\tDesenli banyo havlusu\t385\nNV-440\tPike takımı\t1.290',
+    importBtn: 'İçe aktar',
+    pdfGroup: 'PDF’te hangi fiyatlar görünsün?',
+    pdfSave: 'PDF olarak kaydet',
+    pdfHint: 'Katalogdaki her değişiklik PDF’e anında yansır. Bir bayiye kendi fiyatlarıyla, fuarda tanıştığınız birine fiyatsız PDF gönderebilirsiniz. Yazdırma penceresinde “PDF olarak kaydet”i seçin.',
+    backToProduct: 'Kartela’yı tanıyın',
+  },
+  en: {
+    title: 'Kartela demo',
+    seo: 'Kartela demo: a dealer catalog for wholesalers',
+    description: 'Try the dealer catalog of a sample home textile wholesaler: dealer pricing, bulk price updates, WhatsApp orders and a PDF catalog.',
+    intro:
+      'The catalog of a sample home textile wholesaler. Browse it as a dealer, change prices in the company panel, save the PDF catalog. Everything you do stays in this browser.',
+    crumb: 'Kartela',
+    views: 'Demo views',
+    tabCatalog: 'Catalog',
+    tabPanel: 'Company panel',
+    tabPdf: 'PDF catalog',
+    plan: 'Plan',
+    free: 'Free',
+    pro: 'Pro',
+    reset: 'Reset demo',
+    noscript: 'The demo needs JavaScript. Please turn it on in your browser.',
+    vatNote: 'Prices exclude VAT',
+    writeWa: 'Message on WhatsApp',
+    whoLooks: 'Who is looking at the catalog?',
+    whoHint: 'Each dealer signs in with their own code and sees only their own prices.',
+    guest: 'Guest',
+    dealerCode: 'Dealer code',
+    codePlaceholder: 'e.g. DNZ-2041',
+    signIn: 'Sign in',
+    categories: 'Categories',
+    search: 'Product name or code',
+    searchLabel: 'Search products',
+    empty: 'No products match this search.',
+    watermark: 'Made with Kartela · Free plan',
+    orderTitle: 'Order list',
+    close: 'Close',
+    total: 'Total (excl. VAT)',
+    waMessage: 'Message to WhatsApp',
+    openWa: 'Open in WhatsApp',
+    copyMsg: 'Copy message',
+    orderNote: 'The order reaches the company as a WhatsApp message; they confirm and get back to you.',
+    review: 'Review order',
+    firm: 'Company',
+    firmName: 'Company name',
+    city: 'City',
+    phone: 'WhatsApp number',
+    logo: 'Logo',
+    uploadLogo: 'Upload logo',
+    removeLogo: 'Remove',
+    logoHint: 'PNG, JPG or SVG. Shown in the catalog and on the PDF cover.',
+    brandColor: 'Brand color',
+    plans: 'Plans',
+    freeList: [`Up to ${FREE_PRODUCT_LIMIT} products`, 'One dealer price group', 'Kartela watermark in the catalog and PDF', 'Logo, brand color and WhatsApp orders'],
+    proList: ['Unlimited products', 'Four price groups', 'Bulk price updates', 'No watermark', 'Your own domain'],
+    proPrice: 'Ask for pricing',
+    planHint: 'In the demo you can switch plans with the toggle above.',
+    groups: 'Price groups',
+    groupsHint: 'Each group gets a discount off the list price. Dealers belong to a group.',
+    thGroup: 'Group',
+    thDiscount: 'Discount (%)',
+    thExample: 'A ₺1,000 item',
+    dealers: 'Dealers',
+    thDealer: 'Dealer',
+    thCode: 'Sign-in code',
+    thDealerGroup: 'Price group',
+    bulk: 'Bulk price update',
+    bulkHint: 'When costs go up, update every list price at once. Dealer prices and the PDF follow on their own.',
+    change: 'Change (%)',
+    round: 'Round to',
+    applyAll: 'Apply to all prices',
+    products: 'Products',
+    thProductCode: 'Code',
+    thProduct: 'Product',
+    thPrice: 'List price',
+    thVis: 'Who sees the price?',
+    thStock: 'Stock',
+    addProduct: 'Add product',
+    importTitle: 'Paste from Excel',
+    importHint: 'One product per line: code, name and price. Copy from Excel or Google Sheets and paste here. Codes already in the catalog get the new price.',
+    importLabel: 'Rows to paste',
+    importPlaceholder: 'HV-150\tPatterned bath towel\t385\nNV-440\tThrow set\t1,290',
+    importBtn: 'Import',
+    pdfGroup: 'Which prices go in the PDF?',
+    pdfSave: 'Save as PDF',
+    pdfHint: 'Every change in the catalog shows up in the PDF right away. Send a dealer their own prices, or a price-free copy to someone you met at a fair. In the print window, choose “Save as PDF”.',
+    backToProduct: 'About Kartela',
+  },
+}[lang];
+
+/** Dynamic microcopy the script needs; {n} and {name} are filled in at runtime. */
+const js = {
+  tr: {
+    guest: 'Misafir',
+    case: '{n} koli',
+    pieces: '{n} adet',
+    viewingGuest: 'Misafir olarak bakıyorsunuz. Yalnızca herkese açık fiyatlar görünür.',
+    viewingDealer: '<b>{name}</b> olarak giriş yapıldı · {group} fiyatları, %{disc} iskonto',
+    proFallback: '{group} grubu Pro planda. Şimdilik bayi fiyatı gösteriliyor.',
+    badCode: 'Bu kodla kayıtlı bayi yok. Demo kodları: {codes}',
+    all: 'Tümü',
+    newBadge: 'Yeni',
+    low: 'Az kaldı',
+    out: 'Tükendi',
+    inStock: 'Stokta',
+    perCase: 'koli {n} adet',
+    colors: '{n} renk',
+    locked: 'Bayi fiyatı',
+    lockedSub: 'Bayi kodunuzla giriş yapınca görünür',
+    ask: 'Fiyat sorulur',
+    askSub: 'WhatsApp’tan yazın, fiyat verilsin',
+    piece: 'Adet fiyatı · KDV hariç',
+    discounted: 'Liste {list} · %{disc} iskonto',
+    cases: '{n} koli',
+    fewer: 'Bir koli azalt',
+    more: 'Bir koli artır',
+    add: 'Listeye ekle',
+    added: 'Eklendi',
+    soldOut: 'Stokta yok',
+    colorOf: '{name} rengi',
+    bar: '{lines} kalem · {cases} koli · {total}',
+    barAsk: ' + fiyatı sorulacak kalem',
+    onRequest: 'sorulacak',
+    remove: '{name} kalemini çıkar',
+    emptyCart: 'Liste boş.',
+    copied: 'Kopyalandı',
+    selected: 'Metin seçildi, kopyalayabilirsiniz',
+    logoTooBig: 'Dosya 1,5 MB’tan büyük. Daha küçük bir logo seçin.',
+    logoAdded: 'Logo eklendi. Katalogda ve PDF kapağında görünüyor.',
+    logoFailed: 'Dosya okunamadı. Başka bir dosya deneyin.',
+    guestsRow: 'Giriş yapmayanlar',
+    lockedRow: 'Ücretsiz planda kapalı',
+    proOption: '{name} (Pro)',
+    visAll: 'Herkes',
+    visDealer: 'Yalnızca bayiler',
+    visHidden: 'Kimse, fiyat sorulsun',
+    count: '{n} / {limit} ürün',
+    countPro: '{n} ürün · sınırsız',
+    limitReached: 'Ücretsiz planda en fazla {limit} ürün olabilir. Pro planda sınır yok.',
+    productAdded: 'Yeni ürün eklendi. Adını ve fiyatını düzenleyebilirsiniz.',
+    productRemoved: 'Ürün silindi.',
+    newProduct: 'Yeni ürün {n}',
+    removeProduct: '{name} ürününü sil',
+    del: 'Sil',
+    bulkPro: 'Toplu güncelleme Pro planda. Ücretsiz planda fiyatları tek tek değiştirebilirsiniz.',
+    bulkZero: 'Sıfırdan farklı bir yüzde girin.',
+    bulkDone: '{n} ürünün liste fiyatı %{pct} değişti. Bayi fiyatları, katalog ve PDF yenilendi.',
+    importNone: 'Okunabilen satır bulunamadı. Her satırda kod, ürün adı ve fiyat olmalı.',
+    importDone: '{added} ürün eklendi, {updated} ürünün fiyatı güncellendi.',
+    importSkipped: ' {skipped} satır ücretsiz plandaki {limit} ürün sınırı yüzünden eklenmedi.',
+    importErrors: ' Okunamayan satırlar: {rows}.',
+    updated: 'Fiyatlar {date} itibarıyla geçerlidir',
+    pdfNone: 'Fiyatsız',
+    pdfKind: 'Ürün kataloğu',
+    pdfFor: '{group} fiyatları',
+    pdfNoPrices: 'Fiyat listesi için bizimle iletişime geçin',
+    pdfPage: 'Sayfa {n} / {total}',
+    pdfFoot: 'Kartela ile hazırlandı',
+    pdfContact: 'Sipariş ve bilgi için WhatsApp: {phone}',
+    caseShort: 'Koli: {n} adet',
+  },
+  en: {
+    guest: 'Guest',
+    case: '{n} case',
+    pieces: '{n} pcs',
+    viewingGuest: 'You are browsing as a guest. Only public prices are shown.',
+    viewingDealer: 'Signed in as <b>{name}</b> · {group} prices, {disc}% off',
+    proFallback: 'The {group} group is on the Pro plan. Dealer prices are shown for now.',
+    badCode: 'No dealer has this code. Demo codes: {codes}',
+    all: 'All',
+    newBadge: 'New',
+    low: 'Low stock',
+    out: 'Sold out',
+    inStock: 'In stock',
+    perCase: '{n} pcs per case',
+    colors: '{n} colors',
+    locked: 'Dealer price',
+    lockedSub: 'Sign in with your dealer code to see it',
+    ask: 'Price on request',
+    askSub: 'Ask on WhatsApp for a quote',
+    piece: 'Per piece · excl. VAT',
+    discounted: 'List {list} · {disc}% off',
+    cases: '{n} cases',
+    fewer: 'One case fewer',
+    more: 'One case more',
+    add: 'Add to list',
+    added: 'Added',
+    soldOut: 'Out of stock',
+    colorOf: '{name} color',
+    bar: '{lines} lines · {cases} cases · {total}',
+    barAsk: ' + items on request',
+    onRequest: 'on request',
+    remove: 'Remove {name}',
+    emptyCart: 'The list is empty.',
+    copied: 'Copied',
+    selected: 'Text selected, you can copy it now',
+    logoTooBig: 'The file is over 1.5 MB. Please choose a smaller logo.',
+    logoAdded: 'Logo added. It shows in the catalog and on the PDF cover.',
+    logoFailed: 'The file could not be read. Try another one.',
+    guestsRow: 'Visitors who are not signed in',
+    lockedRow: 'Off on the free plan',
+    proOption: '{name} (Pro)',
+    visAll: 'Everyone',
+    visDealer: 'Dealers only',
+    visHidden: 'Nobody, on request',
+    count: '{n} / {limit} products',
+    countPro: '{n} products · unlimited',
+    limitReached: 'The free plan holds up to {limit} products. Pro has no limit.',
+    productAdded: 'New product added. You can edit its name and price.',
+    productRemoved: 'Product removed.',
+    newProduct: 'New product {n}',
+    removeProduct: 'Remove {name}',
+    del: 'Remove',
+    bulkPro: 'Bulk updates are on the Pro plan. On the free plan you can change prices one by one.',
+    bulkZero: 'Enter a percentage other than zero.',
+    bulkDone: 'List prices of {n} products changed by {pct}%. Dealer prices, the catalog and the PDF are up to date.',
+    importNone: 'No readable rows. Each line needs a code, a name and a price.',
+    importDone: '{added} products added, {updated} prices updated.',
+    importSkipped: ' {skipped} rows were not added because of the {limit} product limit on the free plan.',
+    importErrors: ' Rows that could not be read: {rows}.',
+    updated: 'Prices valid from {date}',
+    pdfNone: 'No prices',
+    pdfKind: 'Product catalog',
+    pdfFor: '{group} prices',
+    pdfNoPrices: 'Contact us for the price list',
+    pdfPage: 'Page {n} / {total}',
+    pdfFoot: 'Made with Kartela',
+    pdfContact: 'Orders and questions on WhatsApp: {phone}',
+    caseShort: 'Case: {n} pcs',
+  },
+}[lang];
+
+const productHref = routes.kartela[lang];
+---
+
+<Base
+  lang={lang}
+  title={copy.seo}
+  description={copy.description}
+  alternates={{ tr: routes.kartelaDemo.tr, en: routes.kartelaDemo.en }}
+>
+  <PageHeader lang={lang} title={copy.title} intro={copy.intro} crumbs={[{ label: copy.crumb, href: productHref }]}>
+    <div class="kt-head-links">
+      <Button href={productHref} variant="outline">{copy.backToProduct}</Button>
+    </div>
+  </PageHeader>
+
+  <section class="container kt" data-kartela data-lang={lang} data-strings={JSON.stringify(js)} aria-label={copy.title}>
+    <noscript><p class="kt-note">{copy.noscript}</p></noscript>
+    <template data-kt-icon="key"><Icon name="key" size={16} /></template>
+    <template data-kt-icon="chat"><Icon name="chat" size={16} /></template>
+    <template data-kt-icon="close"><Icon name="close" size={16} /></template>
+
+    <div class="kt-toolbar">
+      <div class="kt-tabs" role="tablist" aria-label={copy.views}>
+        <button class="kt-tab" type="button" role="tab" id="kt-tab-catalog" aria-controls="kt-view-catalog" aria-selected="true" data-kt-tab="catalog">
+          {copy.tabCatalog}
+        </button>
+        <button class="kt-tab" type="button" role="tab" id="kt-tab-panel" aria-controls="kt-view-panel" aria-selected="false" tabindex="-1" data-kt-tab="panel">
+          {copy.tabPanel}
+        </button>
+        <button class="kt-tab" type="button" role="tab" id="kt-tab-pdf" aria-controls="kt-view-pdf" aria-selected="false" tabindex="-1" data-kt-tab="pdf">
+          {copy.tabPdf}
+        </button>
+      </div>
+      <div class="kt-plan" role="group" aria-labelledby="kt-plan-label">
+        <span class="kt-label" id="kt-plan-label">{copy.plan}</span>
+        <div class="kt-seg">
+          <button type="button" data-kt-plan="free" aria-pressed="true">{copy.free}</button>
+          <button type="button" data-kt-plan="pro" aria-pressed="false">{copy.pro}</button>
+        </div>
+        <button type="button" class="kt-link" data-kt-reset>{copy.reset}</button>
+      </div>
+    </div>
+
+    <!-- CATALOG: what a dealer sees -->
+    <div class="kt-view" id="kt-view-catalog" role="tabpanel" aria-labelledby="kt-tab-catalog">
+      <div class="kt-shop">
+        <header class="kt-firm">
+          <span class="kt-mark" data-kt-mark aria-hidden="true"></span>
+          <div class="kt-firm__text">
+            <h2 class="kt-firm__name" data-kt-name></h2>
+            <p class="kt-firm__meta"><span data-kt-city></span><span>{copy.vatNote}</span><span data-kt-updated></span></p>
+          </div>
+          <a class="kt-pill kt-pill--line" data-kt-wa href="#" target="_blank" rel="noopener">
+            <Icon name="chat" size={18} />
+            {copy.writeWa}
+          </a>
+        </header>
+
+        <div class="kt-viewer">
+          <div class="kt-viewer__row">
+            <span class="kt-label">{copy.whoLooks}</span>
+            <span class="kt-hint">{copy.whoHint}</span>
+          </div>
+          <div class="kt-chips" data-kt-viewers></div>
+          <form class="kt-login" data-kt-login>
+            <label for="kt-code" class="kt-label">{copy.dealerCode}</label>
+            <input id="kt-code" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder={copy.codePlaceholder} />
+            <button type="submit" class="kt-pill kt-pill--line">{copy.signIn}</button>
+          </form>
+          <p class="kt-who" data-kt-who aria-live="polite"></p>
+        </div>
+
+        <div class="kt-filters">
+          <div class="kt-chips" data-kt-cats role="group" aria-label={copy.categories}></div>
+          <label class="kt-search">
+            <Icon name="search" size={18} />
+            <span class="sr-only">{copy.searchLabel}</span>
+            <input type="search" data-kt-q placeholder={copy.search} />
+          </label>
+        </div>
+
+        <div class="kt-grid" data-kt-grid></div>
+        <p class="kt-hint" data-kt-empty hidden>{copy.empty}</p>
+        <p class="kt-watermark" data-kt-wm>
+          <span class="kt-watermark__logo">kartela</span>
+          <span>{copy.watermark}</span>
+        </p>
+      </div>
+
+      <div class="kt-orderbar" data-kt-orderbar hidden>
+        <span data-kt-bar></span>
+        <button type="button" class="kt-pill kt-pill--accent" data-kt-open>{copy.review}</button>
+      </div>
+
+      <dialog class="kt-dialog" data-kt-dialog aria-labelledby="kt-order-title">
+        <div class="kt-dialog__body">
+          <div class="kt-dialog__head">
+            <h2 class="h3" id="kt-order-title">{copy.orderTitle}</h2>
+            <button type="button" class="kt-icon-btn" data-kt-close aria-label={copy.close}><Icon name="close" size={18} /></button>
+          </div>
+          <div class="kt-lines" data-kt-lines></div>
+          <p class="kt-total"><span class="kt-label">{copy.total}</span><b data-kt-total></b></p>
+          <div class="kt-field">
+            <span class="kt-label" id="kt-msg-label">{copy.waMessage}</span>
+            <pre class="kt-msg" data-kt-msg aria-labelledby="kt-msg-label" tabindex="0"></pre>
+          </div>
+          <div class="kt-actions">
+            <a class="kt-pill kt-pill--accent" data-kt-send href="#" target="_blank" rel="noopener"><Icon name="chat" size={18} />{copy.openWa}</a>
+            <button type="button" class="kt-pill kt-pill--line" data-kt-copy>{copy.copyMsg}</button>
+            <span class="kt-hint" data-kt-copied aria-live="polite"></span>
+          </div>
+          <p class="kt-hint">{copy.orderNote}</p>
+        </div>
+      </dialog>
+    </div>
+
+    <!-- PANEL: what the wholesaler manages -->
+    <div class="kt-view" id="kt-view-panel" role="tabpanel" aria-labelledby="kt-tab-panel" hidden>
+      <div class="kt-panel">
+        <div class="kt-col">
+          <section class="kt-box" aria-labelledby="kt-firm-h">
+            <h2 class="kt-box__title" id="kt-firm-h">{copy.firm}</h2>
+            <div class="kt-field"><label for="kt-f-name">{copy.firmName}</label><input id="kt-f-name" type="text" data-kt-firm="name" /></div>
+            <div class="kt-two">
+              <div class="kt-field"><label for="kt-f-city">{copy.city}</label><input id="kt-f-city" type="text" data-kt-firm="city" /></div>
+              <div class="kt-field"><label for="kt-f-phone">{copy.phone}</label><input id="kt-f-phone" type="tel" inputmode="tel" data-kt-firm="phone" /></div>
+            </div>
+            <div class="kt-field">
+              <span class="kt-field__label">{copy.logo}</span>
+              <div class="kt-logo">
+                <span class="kt-mark" data-kt-mark aria-hidden="true"></span>
+                <label class="kt-pill kt-pill--line kt-file">
+                  {copy.uploadLogo}
+                  <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" data-kt-logo class="sr-only" />
+                </label>
+                <button type="button" class="kt-link" data-kt-logo-rm hidden>{copy.removeLogo}</button>
+              </div>
+              <p class="kt-hint" data-kt-logo-msg aria-live="polite">{copy.logoHint}</p>
+            </div>
+            <div class="kt-field">
+              <label for="kt-f-color">{copy.brandColor}</label>
+              <div class="kt-color"><input id="kt-f-color" type="color" data-kt-color /><span data-kt-color-v></span></div>
+            </div>
+          </section>
+
+          <section class="kt-box" aria-labelledby="kt-plans-h">
+            <h2 class="kt-box__title" id="kt-plans-h">{copy.plans}</h2>
+            <div class="kt-plans">
+              <div class="kt-plancard" data-kt-plancard="free">
+                <h3>{copy.free}</h3>
+                <ul>{copy.freeList.map((x) => <li><Icon name="check" size={16} />{x}</li>)}</ul>
+              </div>
+              <div class="kt-plancard" data-kt-plancard="pro">
+                <h3>{copy.pro} <span class="kt-hint">· {copy.proPrice}</span></h3>
+                <ul>{copy.proList.map((x) => <li><Icon name="check" size={16} />{x}</li>)}</ul>
+              </div>
+            </div>
+            <p class="kt-hint">{copy.planHint}</p>
+          </section>
+        </div>
+
+        <div class="kt-col">
+          <section class="kt-box" aria-labelledby="kt-groups-h">
+            <h2 class="kt-box__title" id="kt-groups-h">{copy.groups}</h2>
+            <p class="kt-hint">{copy.groupsHint}</p>
+            <div class="kt-table">
+              <table>
+                <thead><tr><th scope="col">{copy.thGroup}</th><th scope="col">{copy.thDiscount}</th><th scope="col">{copy.thExample}</th><th scope="col"><span class="sr-only">Not</span></th></tr></thead>
+                <tbody data-kt-groups></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="kt-box" aria-labelledby="kt-dealers-h">
+            <h2 class="kt-box__title" id="kt-dealers-h">{copy.dealers}</h2>
+            <div class="kt-table">
+              <table>
+                <thead><tr><th scope="col">{copy.thDealer}</th><th scope="col">{copy.thCode}</th><th scope="col">{copy.thDealerGroup}</th></tr></thead>
+                <tbody data-kt-dealers></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="kt-box" aria-labelledby="kt-bulk-h">
+            <h2 class="kt-box__title" id="kt-bulk-h">{copy.bulk} <span class="kt-badge kt-badge--pro" data-kt-bulk-badge>Pro</span></h2>
+            <p class="kt-hint">{copy.bulkHint}</p>
+            <form class="kt-bulk" data-kt-bulk>
+              <div class="kt-field"><label for="kt-b-pct">{copy.change}</label><input id="kt-b-pct" type="number" step="0.5" value="8" /></div>
+              <div class="kt-field">
+                <label for="kt-b-round">{copy.round}</label>
+                <select id="kt-b-round"><option value="1">₺1</option><option value="5" selected>₺5</option><option value="10">₺10</option></select>
+              </div>
+              <button type="submit" class="kt-pill kt-pill--dark">{copy.applyAll}</button>
+            </form>
+            <p class="kt-status" data-kt-bulk-msg role="status" hidden></p>
+          </section>
+
+          <section class="kt-box" aria-labelledby="kt-products-h">
+            <h2 class="kt-box__title" id="kt-products-h">{copy.products} <span class="kt-count" data-kt-count></span></h2>
+            <div class="kt-meter" data-kt-meter><i></i></div>
+            <div class="kt-table">
+              <table class="kt-products">
+                <thead>
+                  <tr><th scope="col">{copy.thProductCode}</th><th scope="col">{copy.thProduct}</th><th scope="col">{copy.thPrice}</th><th scope="col">{copy.thVis}</th><th scope="col">{copy.thStock}</th><th scope="col"><span class="sr-only">{copy.removeLogo}</span></th></tr>
+                </thead>
+                <tbody data-kt-products></tbody>
+              </table>
+            </div>
+            <div class="kt-actions">
+              <button type="button" class="kt-pill kt-pill--line" data-kt-add><Icon name="spark" size={16} />{copy.addProduct}</button>
+              <span class="kt-hint" data-kt-products-msg aria-live="polite"></span>
+            </div>
+            <details class="kt-import">
+              <summary>{copy.importTitle}</summary>
+              <form data-kt-import>
+                <p class="kt-hint">{copy.importHint}</p>
+                <label class="sr-only" for="kt-import-text">{copy.importLabel}</label>
+                <textarea id="kt-import-text" rows="4" placeholder={copy.importPlaceholder}></textarea>
+                <button type="submit" class="kt-pill kt-pill--dark">{copy.importBtn}</button>
+                <p class="kt-status" data-kt-import-msg role="status" hidden></p>
+              </form>
+            </details>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF: printable catalog -->
+    <div class="kt-view" id="kt-view-pdf" role="tabpanel" aria-labelledby="kt-tab-pdf" hidden>
+      <div class="kt-pdfbar">
+        <div class="kt-field"><label for="kt-pdf-group">{copy.pdfGroup}</label><select id="kt-pdf-group" data-kt-pdf-group></select></div>
+        <button type="button" class="kt-pill kt-pill--dark" data-kt-print>{copy.pdfSave}</button>
+      </div>
+      <p class="kt-hint kt-pdfhint">{copy.pdfHint}</p>
+      <div class="kt-pages" data-kt-pages></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kt-head-links {
+    margin-top: 1.5rem;
+  }
+</style>
+
+<style is:global>
+  /* Kartela demo. Markup is filled in by scripts/kartela.ts, so rules are global and scoped by .kt. */
+  .kt {
+    --kt-brand: #0f5c4d;
+    --kt-surface: var(--c-light);
+    --kt-sunk: var(--c-band);
+    --kt-r: 14px;
+    padding-bottom: var(--section);
+  }
+
+  .kt [hidden] {
+    display: none !important;
+  }
+
+  .kt-note {
+    padding: 1rem 1.25rem;
+    border-radius: var(--kt-r);
+    background: var(--kt-sunk);
+  }
+
+  .kt-label,
+  .kt-field__label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .kt-hint {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: var(--c-muted);
+  }
+
+  .kt input[type='text'],
+  .kt input[type='tel'],
+  .kt input[type='number'],
+  .kt input[type='search'],
+  .kt select,
+  .kt textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.5rem 0.9rem;
+    border: var(--stroke) solid color-mix(in srgb, var(--c-dark) 30%, transparent);
+    border-radius: 12px;
+    background: var(--kt-surface);
+    color: var(--c-dark);
+    font: inherit;
+    font-size: 1rem;
+  }
+
+  .kt textarea {
+    min-height: 7rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.875rem;
+    resize: vertical;
+  }
+
+  .kt :is(input, select, textarea):focus-visible {
+    outline: 2px solid var(--c-dark);
+    outline-offset: 1px;
+  }
+
+  /* Pills: the site's button shape without the arrow. */
+  .kt-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding: 0.5rem 1.15rem;
+    border: var(--stroke) solid var(--c-dark);
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--c-dark);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .kt-pill--line:hover {
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  .kt-pill--dark {
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  .kt-pill--dark:hover {
+    background: var(--c-dark-soft);
+  }
+
+  .kt-pill--accent {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  .kt-pill--accent:hover {
+    border-color: var(--c-dark);
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  .kt-pill:disabled,
+  .kt-pill[aria-disabled='true'] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .kt-link {
+    padding: 0.25rem;
+    border: 0;
+    background: none;
+    color: var(--c-dark);
+    font: inherit;
+    font-size: 0.9375rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    cursor: pointer;
+  }
+
+  .kt-icon-btn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: var(--stroke) solid var(--c-line);
+    border-radius: 50%;
+    background: none;
+    color: var(--c-dark);
+    cursor: pointer;
+  }
+
+  .kt-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--r-pill);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
+  .kt-badge--pro {
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  /* ---------- Toolbar ---------- */
+  .kt-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .kt-tabs,
+  .kt-seg {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.3rem;
+    border-radius: var(--r-pill);
+    background: var(--kt-sunk);
+    border: var(--stroke) solid var(--c-line);
+  }
+
+  .kt-tab,
+  .kt-seg button {
+    min-height: 44px;
+    padding: 0.4rem 1.1rem;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--c-muted);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kt-tab[aria-selected='true'],
+  .kt-seg button[aria-pressed='true'] {
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  .kt-seg button[data-kt-plan='pro'][aria-pressed='true'] {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  .kt-plan {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* ---------- Catalog ---------- */
+  .kt-shop {
+    padding: clamp(1rem, 3vw, 2rem);
+    border: var(--stroke) solid var(--c-line);
+    border-radius: var(--r-card);
+    background: var(--kt-surface);
+  }
+
+  .kt-firm {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 3px solid var(--kt-brand);
+  }
+
+  .kt-mark {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    flex: none;
+    overflow: hidden;
+    border-radius: 16px;
+    background: var(--kt-brand);
+    color: #fff;
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .kt-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #fff;
+  }
+
+  .kt-firm__name {
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .kt-firm__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 1rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.9375rem;
+    color: var(--c-muted);
+  }
+
+  .kt-viewer {
+    display: grid;
+    gap: 0.85rem;
+    margin-block: 1.5rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--kt-r);
+    background: var(--kt-sunk);
+  }
+
+  .kt-viewer__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    align-items: baseline;
+  }
+
+  .kt-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .kt-chip {
+    min-height: 44px;
+    padding: 0.4rem 1rem;
+    border: var(--stroke) solid color-mix(in srgb, var(--c-dark) 35%, transparent);
+    border-radius: var(--r-pill);
+    background: var(--kt-surface);
+    color: var(--c-dark);
+    font: inherit;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+
+  .kt-chip[aria-pressed='true'] {
+    border-color: var(--c-dark);
+    background: var(--c-dark);
+    color: var(--c-light);
+  }
+
+  .kt-login {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.75rem;
+  }
+
+  .kt .kt-login input {
+    width: 12rem;
+    text-transform: uppercase;
+  }
+
+  .kt-who {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .kt-who b {
+    font-weight: 600;
+  }
+
+  .kt-who .kt-warn,
+  .kt-warn {
+    color: #a12a1f;
+  }
+
+  :root[data-theme='dark'] .kt-warn {
+    color: #f08a7e;
+  }
+
+  .kt-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .kt-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: min(100%, 18rem);
+  }
+
+  .kt-search svg {
+    position: absolute;
+    left: 0.85rem;
+    color: var(--c-muted);
+    pointer-events: none;
+  }
+
+  .kt-search input[type='search'] {
+    padding-left: 2.5rem;
+    border-radius: var(--r-pill);
+  }
+
+  .kt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16.5rem), 1fr));
+    gap: 1rem;
+  }
+
+  .kt-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: var(--stroke) solid var(--c-line);
+    border-radius: var(--kt-r);
+    background: var(--kt-surface);
+  }
+
+  /* Fabric swatch: the colour of the chosen variant with a weave texture on top. */
+  .kt-swatch {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background-color: var(--sw);
+    box-shadow: inset 0 -3rem 4rem -2rem rgb(0 0 0 / 0.12);
+    transition: background-color var(--dur) var(--ease-out);
+  }
+
+  .kt-swatch--terry {
+    background-image:
+      radial-gradient(rgb(255 255 255 / 0.2) 1px, transparent 1.7px),
+      radial-gradient(rgb(0 0 0 / 0.13) 1px, transparent 1.7px);
+    background-size:
+      6px 6px,
+      6px 6px;
+    background-position:
+      0 0,
+      3px 3px;
+  }
+
+  .kt-swatch--waffle {
+    background-image:
+      linear-gradient(rgb(0 0 0 / 0.16) 2px, transparent 2px),
+      linear-gradient(90deg, rgb(0 0 0 / 0.16) 2px, transparent 2px);
+    background-size: 15px 15px;
+  }
+
+  .kt-swatch--satin {
+    background-image: linear-gradient(115deg, transparent 28%, rgb(255 255 255 / 0.34) 47%, transparent 66%);
+  }
+
+  .kt-swatch--muslin {
+    background-image:
+      repeating-linear-gradient(0deg, rgb(0 0 0 / 0.08) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(90deg, rgb(255 255 255 / 0.14) 0 1px, transparent 1px 4px);
+  }
+
+  .kt-swatch--percale {
+    background-image: repeating-linear-gradient(45deg, rgb(255 255 255 / 0.12) 0 1px, transparent 1px 3px);
+  }
+
+  .kt-swatch--pestemal {
+    background-image: repeating-linear-gradient(90deg, transparent 0 22px, rgb(255 255 255 / 0.55) 22px 26px, transparent 26px 30px, rgb(0 0 0 / 0.18) 30px 33px);
+  }
+
+  .kt-swatch__code,
+  .kt-swatch__badges span {
+    position: absolute;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--r-pill);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .kt-swatch__code {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    background: rgb(18 16 13 / 0.72);
+    color: #f5f6f7;
+    letter-spacing: 0.04em;
+    backdrop-filter: blur(6px);
+  }
+
+  .kt-swatch__badges {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .kt-swatch__badges span {
+    position: static;
+    background: #f5f6f7;
+    color: #12100d;
+  }
+
+  .kt-swatch__badges .is-new {
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  .kt-swatch__badges .is-out {
+    background: #12100d;
+    color: #f5f6f7;
+  }
+
+  .kt-card__body {
+    display: grid;
+    flex: 1;
+    gap: 0.85rem;
+    padding: 1rem 1rem 1.1rem;
+  }
+
+  .kt-card__name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .kt-card__spec {
+    margin: 0.2rem 0 0;
+    font-size: 0.875rem;
+    color: var(--c-muted);
+  }
+
+  .kt-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  /* 24px dots with a 44px hit area. */
+  .kt-dot {
+    position: relative;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 2px solid var(--kt-surface);
+    border-radius: 50%;
+    background: var(--sw);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--c-dark) 25%, transparent);
+    cursor: pointer;
+  }
+
+  .kt-dot::after {
+    content: '';
+    position: absolute;
+    inset: -9px;
+  }
+
+  .kt-dot[aria-pressed='true'] {
+    box-shadow: 0 0 0 2px var(--c-dark);
+  }
+
+  .kt-dotname {
+    margin: 0.35rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--c-muted);
+  }
+
+  .kt-price {
+    display: grid;
+    gap: 0.15rem;
+    align-content: start;
+    min-height: 3.6rem;
+    padding-top: 0.85rem;
+    border-top: var(--stroke) dashed var(--c-line);
+  }
+
+  .kt-price__value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+  }
+
+  .kt-price__state {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+  }
+
+  .kt-price__sub {
+    font-size: 0.8125rem;
+    color: var(--c-muted);
+  }
+
+  .kt-buy {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: auto;
+  }
+
+  .kt-step {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    border: var(--stroke) solid color-mix(in srgb, var(--c-dark) 30%, transparent);
+    border-radius: var(--r-pill);
+  }
+
+  .kt-step button {
+    width: 40px;
+    height: 42px;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: none;
+    color: var(--c-dark);
+    font-size: 1.15rem;
+    cursor: pointer;
+  }
+
+  .kt-step span {
+    min-width: 3.6rem;
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .kt-buy .kt-pill {
+    flex: 1;
+    padding-inline: 0.75rem;
+  }
+
+  .kt-watermark {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 0.85rem;
+    margin: 1.75rem 0 0;
+    padding: 0.85rem;
+    border: var(--stroke) dashed var(--c-line);
+    border-radius: var(--kt-r);
+    font-size: 0.875rem;
+    color: var(--c-muted);
+  }
+
+  .kt-watermark__logo {
+    font-weight: 700;
+    color: var(--c-dark);
+  }
+
+  .kt-orderbar {
+    position: sticky;
+    bottom: 1rem;
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    max-width: min(100%, 44rem);
+    margin-top: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+    border-radius: var(--r-pill);
+    background: var(--c-dark);
+    color: var(--c-light);
+    font-variant-numeric: tabular-nums;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+  }
+
+  .kt-orderbar .kt-pill {
+    margin-left: auto;
+  }
+
+  .kt-orderbar .kt-pill--accent:hover {
+    border-color: var(--c-light);
+    background: var(--c-light);
+    color: var(--c-dark);
+  }
+
+  .kt-dialog {
+    width: min(40rem, calc(100% - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    color: var(--c-dark);
+  }
+
+  .kt-dialog::backdrop {
+    background: var(--c-scrim);
+  }
+
+  .kt-dialog__body {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.1rem, 3vw, 1.75rem);
+  }
+
+  .kt-dialog__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .kt-lines {
+    border-top: var(--stroke) solid var(--c-line);
+  }
+
+  .kt-line {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: var(--stroke) solid var(--c-line);
+    font-size: 0.9375rem;
+  }
+
+  .kt-line small {
+    display: block;
+    color: var(--c-muted);
+    font-size: 0.8125rem;
+  }
+
+  .kt-line__sum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kt-total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 0;
+  }
+
+  .kt-total b {
+    font-size: 1.375rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kt-msg {
+    max-height: 14rem;
+    margin: 0.4rem 0 0;
+    padding: 0.9rem 1rem;
+    overflow: auto;
+    border-radius: 12px;
+    background: var(--kt-sunk);
+    font-family: inherit;
+    font-size: 0.875rem;
+    white-space: pre-wrap;
+  }
+
+  .kt-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  /* ---------- Panel ---------- */
+  .kt-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+    align-items: start;
+    gap: 1.25rem;
+  }
+
+  .kt-col {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  .kt-box {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    border: var(--stroke) solid var(--c-line);
+    border-radius: var(--r-card);
+    background: var(--kt-surface);
+  }
+
+  .kt-box__title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .kt-count {
+    margin-left: auto;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--c-muted);
+  }
+
+  .kt-field {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .kt-field > label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .kt-two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .kt-logo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .kt-file:focus-within {
+    outline: 2px solid var(--c-dark);
+    outline-offset: 2px;
+  }
+
+  .kt-color {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kt-color input {
+    width: 56px;
+    height: 44px;
+    padding: 3px;
+    border: var(--stroke) solid var(--c-line);
+    border-radius: 12px;
+    background: var(--kt-surface);
+    cursor: pointer;
+  }
+
+  .kt-plans {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .kt-plancard {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    border: var(--stroke) solid var(--c-line);
+    border-radius: var(--kt-r);
+  }
+
+  .kt-plancard.is-on {
+    border-color: var(--c-dark);
+    box-shadow: inset 0 0 0 1px var(--c-dark);
+  }
+
+  .kt-plancard h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .kt-plancard ul {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+  }
+
+  .kt-plancard li {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .kt-plancard li svg {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--c-accent-text);
+  }
+
+  .kt-table {
+    overflow-x: auto;
+    margin-inline: -0.25rem;
+    padding-inline: 0.25rem;
+  }
+
+  .kt table {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .kt th {
+    padding: 0.5rem 0.4rem;
+    border-bottom: var(--stroke) solid var(--c-line);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: left;
+    text-transform: uppercase;
+    color: var(--c-muted);
+  }
+
+  .kt td {
+    padding: 0.45rem 0.4rem;
+    border-bottom: var(--stroke) solid var(--c-line);
+    vertical-align: middle;
+  }
+
+  .kt td input,
+  .kt td select {
+    min-height: 40px;
+  }
+
+  .kt .kt-products {
+    min-width: 52rem;
+  }
+
+  .kt-code {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  .kt .kt-num {
+    width: 7rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .kt .kt-pct {
+    width: 5.5rem;
+  }
+
+  .kt-products td:nth-child(2) input {
+    min-width: 12rem;
+  }
+
+  .kt-products td select {
+    min-width: 9.5rem;
+  }
+
+  .kt-locked {
+    opacity: 0.55;
+  }
+
+  .kt-meter {
+    height: 6px;
+    overflow: hidden;
+    border-radius: var(--r-pill);
+    background: var(--kt-sunk);
+  }
+
+  .kt-meter i {
+    display: block;
+    height: 100%;
+    background: var(--c-accent);
+    transition: width var(--dur) var(--ease-out);
+  }
+
+  .kt-meter.is-full i {
+    background: #c9772e;
+  }
+
+  .kt-bulk {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.75rem;
+  }
+
+  .kt-bulk .kt-field {
+    width: 8.5rem;
+  }
+
+  .kt-status {
+    margin: 0;
+    padding: 0.7rem 0.9rem;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--c-accent) 18%, var(--c-light));
+    font-size: 0.9375rem;
+  }
+
+  .kt-status.is-warn {
+    background: color-mix(in srgb, #c9772e 18%, var(--c-light));
+  }
+
+  .kt-import {
+    border-top: var(--stroke) solid var(--c-line);
+    padding-top: 0.75rem;
+  }
+
+  .kt-import summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .kt-import form {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+    margin-top: 0.5rem;
+  }
+
+  /* ---------- PDF ---------- */
+  .kt-pdfbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.75rem 1rem;
+  }
+
+  .kt-pdfbar .kt-field {
+    min-width: min(100%, 16rem);
+  }
+
+  .kt-pdfhint {
+    max-width: 48rem;
+    margin: 0.85rem 0 1.5rem;
+  }
+
+  .kt-pages {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1.25rem;
+  }
+
+  /* One A4 sheet. Sizes use container units, so the preview and the printout share one layout. */
+  .kt-sheet {
+    position: relative;
+    aspect-ratio: 210 / 297;
+    overflow: hidden;
+    container-type: inline-size;
+    border-radius: 6px;
+    background: #fff;
+    color: #12100d;
+    box-shadow: 0 2px 14px rgb(0 0 0 / 0.12);
+  }
+
+  .kt-sheet__in {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 7cqw 7cqw 10cqw;
+    font-size: 2.1cqw;
+    line-height: 1.35;
+  }
+
+  .kt-sheet .kt-swatch__code {
+    left: 1.2cqw;
+    bottom: 1.2cqw;
+    padding: 0.4cqw 1.2cqw;
+    font-size: 1.6cqw;
+  }
+
+  .kt-sheet__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4cqw;
+    padding-bottom: 2cqw;
+    border-bottom: 0.5cqw solid var(--kt-brand);
+    font-size: 2cqw;
+  }
+
+  .kt-sheet__head b {
+    font-size: 2.8cqw;
+  }
+
+  .kt-sheet--cover .kt-sheet__in {
+    justify-content: center;
+    gap: 5cqw;
+  }
+
+  .kt-sheet--cover .kt-mark {
+    width: 18cqw;
+    height: 18cqw;
+    border-radius: 3cqw;
+    font-size: 9cqw;
+  }
+
+  .kt-sheet__title {
+    font-size: 9cqw;
+    font-weight: 600;
+    line-height: 1.05;
+  }
+
+  .kt-sheet__kind {
+    font-size: 2.4cqw;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a5856;
+  }
+
+  .kt-sheet__info {
+    display: grid;
+    gap: 1cqw;
+    padding-top: 3cqw;
+    border-top: 0.5cqw solid var(--kt-brand);
+    font-size: 2.3cqw;
+  }
+
+  .kt-sheet__items {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 3cqw;
+  }
+
+  .kt-sheet__item {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid #dcdcdb;
+    border-radius: 1.5cqw;
+  }
+
+  .kt-sheet__item .kt-swatch {
+    aspect-ratio: auto;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .kt-sheet__item-body {
+    display: grid;
+    gap: 0.6cqw;
+    padding: 1.8cqw 2cqw;
+  }
+
+  .kt-sheet__item-body b {
+    font-size: 2.4cqw;
+  }
+
+  .kt-sheet__dots {
+    display: flex;
+    gap: 0.8cqw;
+  }
+
+  .kt-sheet__dots i {
+    width: 2cqw;
+    height: 2cqw;
+    border: 1px solid rgb(0 0 0 / 0.15);
+    border-radius: 50%;
+    background: var(--sw);
+  }
+
+  .kt-sheet__price {
+    font-size: 2.8cqw;
+    font-weight: 600;
+  }
+
+  .kt-sheet__foot {
+    position: absolute;
+    right: 7cqw;
+    bottom: 3.5cqw;
+    left: 7cqw;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1.5cqw;
+    border-top: 1px solid #dcdcdb;
+    font-size: 1.7cqw;
+    color: #5a5856;
+  }
+
+  .kt-sheet__wm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 16cqw;
+    font-weight: 700;
+    color: rgb(15 92 77 / 0.08);
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, -50%) rotate(-32deg);
+  }
+
+  @media (max-width: 1023px) {
+    .kt-panel {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .kt-firm {
+      grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .kt-firm .kt-pill {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+
+    .kt-tabs {
+      width: 100%;
+    }
+
+    .kt-tab {
+      flex: 1;
+      padding-inline: 0.4rem;
+      font-size: 0.875rem;
+      line-height: 1.2;
+    }
+
+    .kt-search,
+    .kt-login input {
+      width: 100%;
+    }
+
+    .kt-two {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .kt-orderbar {
+      border-radius: var(--kt-r);
+      margin-right: calc(var(--fab) + 0.5rem);
+    }
+  }
+
+  @media print {
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body.kt-printing > :not(main),
+    body.kt-printing main > :not(.kt),
+    body.kt-printing .kt > :not(#kt-view-pdf),
+    body.kt-printing .kt-pdfbar,
+    body.kt-printing .kt-pdfhint {
+      display: none !important;
+    }
+
+    body.kt-printing .kt {
+      padding: 0;
+      max-width: none;
+    }
+
+    body.kt-printing .kt-pages {
+      display: block;
+    }
+
+    body.kt-printing .kt-sheet {
+      width: 210mm;
+      height: 297mm;
+      aspect-ratio: auto;
+      border-radius: 0;
+      box-shadow: none;
+      break-after: page;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+</style>

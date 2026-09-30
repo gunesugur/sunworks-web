@@ -67,6 +67,7 @@ export const navigation: Navigation[] = [
     header: [
       { label: 'Ana sayfa', href: '/' },
       { label: 'Hizmetler', href: '/hizmetler' },
+      { label: 'Kartela', href: '/kartela' },
       { label: 'Blog', href: '/blog' },
       { label: 'İletişim', href: '/iletisim' },
     ],
@@ -78,6 +79,7 @@ export const navigation: Navigation[] = [
         links: [
           { label: 'Ana sayfa', href: '/' },
           { label: 'Hizmetler', href: '/hizmetler' },
+          { label: 'Kartela', href: '/kartela' },
           { label: 'Blog', href: '/blog' },
           { label: 'İletişim', href: '/iletisim' },
         ],
@@ -116,6 +118,7 @@ export const navigation: Navigation[] = [
     header: [
       { label: 'Home', href: '/en' },
       { label: 'Services', href: '/en/services' },
+      { label: 'Kartela', href: '/en/kartela' },
       { label: 'Blog', href: '/en/blog' },
       { label: 'Contact', href: '/en/contact' },
     ],
@@ -127,6 +130,7 @@ export const navigation: Navigation[] = [
         links: [
           { label: 'Home', href: '/en' },
           { label: 'Services', href: '/en/services' },
+          { label: 'Kartela', href: '/en/kartela' },
           { label: 'Blog', href: '/en/blog' },
           { label: 'Contact', href: '/en/contact' },
         ],

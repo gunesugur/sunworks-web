@@ -5,6 +5,8 @@ export const routes = {
   services: { tr: '/hizmetler', en: '/en/services' },
   blog: { tr: '/blog', en: '/en/blog' },
   contact: { tr: '/iletisim', en: '/en/contact' },
+  kartela: { tr: '/kartela', en: '/en/kartela' },
+  kartelaDemo: { tr: '/kartela/demo', en: '/en/kartela/demo' },
   rss: { tr: '/rss.xml', en: '/en/rss.xml' },
 } as const satisfies Record<string, Record<Locale, string>>;
 

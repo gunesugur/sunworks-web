@@ -35,6 +35,12 @@ function boot() {
   // What the visitor may touch right away (the marquee's pause button included).
   cleanups.push(initMenu(), initHeader(), initThemeToggle(), initA11y(), initConsent(), initNotches(), initMotion(), initVelocity(), initForms(), initMap());
   // Motion and extras: in small idle slices, so no single long task blocks the first input.
+  // The Kartela demo ships as its own chunk, loaded only on its page.
+  if (document.querySelector('[data-kartela]')) {
+    void import('./kartela').then((m) => {
+      if (current === generation) cleanups.push(m.initKartela());
+    });
+  }
   const extras = [initJourney, initFocus, initCount, initToc, initQuick, initSpark];
   const next = () => {
     const init = extras.shift();

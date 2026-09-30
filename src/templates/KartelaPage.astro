@@ -1,0 +1,607 @@
+---
+import type { Locale } from '@/content/schema';
+import { routes } from '@/i18n/routes';
+import { t } from '@/i18n/ui';
+import Base from '@/layouts/Base.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import Button from '@/components/Button.astro';
+import Icon from '@/components/Icon.astro';
+import type { IconName } from '@/content/schema';
+import { COLORS, FREE_PRODUCT_LIMIT } from '@/lib/kartela';
+
+interface Props {
+  lang: Locale;
+}
+const { lang } = Astro.props;
+const s = t(lang);
+
+type Feature = { icon: IconName; title: string; text: string };
+
+const copy = {
+  tr: {
+    seo: 'Kartela: toptancılar için bayi kataloğu',
+    description:
+      'Bayiye özel fiyat, tek seferde zam, WhatsApp’a düşen sipariş ve PDF katalog. Kartela’yı toptancılar için kuruyoruz. Demoyu deneyin, erken erişim için yazın.',
+    eyebrow: 'Erken erişim',
+    title: 'Kartela',
+    intro:
+      'Toptancılar için bayi kataloğu. Kurulumu biz yapalım; zam geldiğinde fiyatlarınızı tek seferde güncelleyin, siparişler WhatsApp’ınıza düşsün.',
+    tryDemo: 'Demoyu deneyin',
+    earlyAccess: 'Erken erişim için yazın',
+    swatches: 'Kartela, kumaş kartelası gibi: her bayi kendi fiyatıyla, her ürün bütün renkleriyle.',
+    todayTitle: 'Bugün katalog işi nasıl yürüyor?',
+    today: [
+      { icon: 'refresh', title: 'Her zamda baştan', text: 'Fiyat değiştiğinde Excel yeniden düzenleniyor, PDF yeniden hazırlanıyor, bayilere tek tek yeniden gönderiliyor.' },
+      { icon: 'user', title: 'Herkese aynı liste', text: 'WhatsApp kataloğunda bayiye özel fiyat yok. Ya fiyat hiç yazılmıyor ya da herkes aynı fiyatı görüyor.' },
+      { icon: 'chat', title: 'Dağınık siparişler', text: 'Siparişler fotoğraf, ses kaydı ve yarım mesajlar hâlinde geliyor. Hangi renkten kaç koli istendiği her seferinde soruluyor.' },
+    ] as Feature[],
+    featTitle: 'Kartela ile',
+    features: [
+      { icon: 'key', title: 'Bayiye özel fiyat', text: 'Her bayi kendi koduyla girer ve yalnızca kendi iskontolu fiyatını görür. Misafirler herkese açık fiyatları görür.' },
+      { icon: 'refresh', title: 'Tek seferde zam', text: 'Bütün liste fiyatlarını yüzdeyle güncelleyin, istediğiniz tutara yuvarlayın. Bayi fiyatları ve PDF kendiliğinden yenilenir.' },
+      { icon: 'chat', title: 'WhatsApp’a düşen sipariş', text: 'Bayi renk ve koli seçip listesini hazırlar. Sipariş ürün kodlarıyla, düzenli bir mesaj olarak WhatsApp’ınıza gelir.' },
+      { icon: 'book', title: 'PDF katalog', text: 'İstediğiniz fiyat grubuyla ya da fiyatsız PDF alın. Fuarda, e-postada, yazdırıp masada kullanın.' },
+      { icon: 'eye', title: 'Fiyatı kim görsün?', text: 'Ürün ürün seçin: herkes, yalnızca bayiler ya da kimse. Gizli fiyatlı ürünlerde “fiyat sorun” yazar.' },
+      { icon: 'spark', title: 'Sizin markanız', text: 'Logonuz, renginiz ve Pro planda kendi alan adınız. Katalog sizin adınızla açılır.' },
+    ] as Feature[],
+    stepsTitle: 'Nasıl başlayalım?',
+    steps: [
+      { title: 'Ürün listenizi gönderin', text: 'Excel dosyanız, eski PDF kataloğunuz, hatta ürün fotoğraflarınız yeter. Düzenli olması gerekmiyor.' },
+      { title: 'Kataloğunuzu biz kuralım', text: 'Ürünleri, renkleri, fiyat gruplarını ve bayi kodlarını biz girelim. Siz yalnızca kontrol edin.' },
+      { title: 'Bayilerinize linki gönderin', text: 'Bayileriniz telefondan kendi koduyla girsin, siparişini WhatsApp’tan versin. Uygulama indirmek gerekmiyor.' },
+    ],
+    plansTitle: 'Planlar',
+    plansNote: 'Kartela şu an erken erişimde. İlk firmalarla birlikte geliştiriyoruz; Pro fiyatını bu süreçte birlikte netleştirelim.',
+    free: 'Ücretsiz',
+    freeTag: 'Başlamak için',
+    freeList: [`${FREE_PRODUCT_LIMIT} ürüne kadar`, 'Tek bayi fiyat grubu', 'WhatsApp sipariş ve PDF katalog', 'Katalog ve PDF’te Kartela filigranı'],
+    pro: 'Pro',
+    proTag: 'Fiyat için yazın',
+    proList: ['Sınırsız ürün', 'Dört fiyat grubu', 'Tek seferde zam', 'Filigransız katalog ve PDF', 'Kendi alan adınız'],
+    faq: [
+      { q: 'Bayilerim bir uygulama indirmek zorunda mı?', a: 'Hayır. Katalog bir web sayfası; bayileriniz telefondan ya da bilgisayardan linke tıklayıp kodlarıyla girer.' },
+      { q: 'Fiyatlarımı rakiplerim görebilir mi?', a: 'Fiyatı kimin göreceğini ürün ürün siz seçersiniz. Bayi fiyatları yalnızca kodla giren bayiye görünür, isterseniz fiyatı hiç göstermeyip “fiyat sorun” yazdırabilirsiniz.' },
+      { q: 'Ürünlerimi kim girecek?', a: 'Biz. Excel dosyanızı ya da eski kataloğunuzu gönderin, kataloğu biz kuralım. Sonrasında fiyat ve stok değişikliklerini panelden kendiniz yapabilirsiniz.' },
+      { q: 'Sipariş nasıl geliyor?', a: 'Bayi ürün, renk ve koli sayısını seçer. Sipariş, ürün kodları ve ara toplamla birlikte WhatsApp’ınıza düzenli bir mesaj olarak gelir. Teyidi siz verirsiniz.' },
+      { q: 'Demoya girdiğim bilgiler nereye gidiyor?', a: 'Hiçbir yere. Demo tamamen tarayıcınızda çalışır; değişiklikleriniz yalnızca sizin cihazınızda kalır.' },
+    ],
+    closingTitle: 'Kataloğunuzu birlikte kuralım',
+    closingText: 'Ürün listenizi gönderin, kataloğunuzun ilk hâlini size gösterelim. Beğenirseniz bayilerinize açalım.',
+  },
+  en: {
+    seo: 'Kartela: a dealer catalog for wholesalers',
+    description:
+      'Dealer-specific prices, one-step price updates, orders that land in WhatsApp and a PDF catalog. We build Kartela for wholesalers. Try the demo, ask for early access.',
+    eyebrow: 'Early access',
+    title: 'Kartela',
+    intro: 'A dealer catalog for wholesalers. Let us set it up; update your prices in one step when costs rise, and let orders land in your WhatsApp.',
+    tryDemo: 'Try the demo',
+    earlyAccess: 'Ask for early access',
+    swatches: 'Kartela works like a fabric swatch book: every dealer with their own prices, every product in all its colors.',
+    todayTitle: 'How catalog work runs today',
+    today: [
+      { icon: 'refresh', title: 'Start over at every price rise', text: 'When prices change, the spreadsheet is redone, the PDF is rebuilt and sent to each dealer again, one by one.' },
+      { icon: 'user', title: 'One list for everyone', text: 'A WhatsApp catalog has no dealer pricing. Either prices are left out or everyone sees the same ones.' },
+      { icon: 'chat', title: 'Scattered orders', text: 'Orders arrive as photos, voice notes and half messages. Which color and how many cases gets asked every time.' },
+    ] as Feature[],
+    featTitle: 'With Kartela',
+    features: [
+      { icon: 'key', title: 'Prices per dealer', text: 'Each dealer signs in with their own code and sees only their discounted prices. Guests see the public ones.' },
+      { icon: 'refresh', title: 'One-step price updates', text: 'Change every list price by a percentage and round to the amount you like. Dealer prices and the PDF follow.' },
+      { icon: 'chat', title: 'Orders in WhatsApp', text: 'Dealers pick colors and cases and build their list. The order reaches your WhatsApp as a tidy message with product codes.' },
+      { icon: 'book', title: 'PDF catalog', text: 'Save a PDF with any price group, or with no prices at all. Use it at fairs, in email or printed on the counter.' },
+      { icon: 'eye', title: 'Who sees the price?', text: 'Choose per product: everyone, dealers only or nobody. Hidden prices show “price on request”.' },
+      { icon: 'spark', title: 'Your brand', text: 'Your logo, your color and, on Pro, your own domain. The catalog opens under your name.' },
+    ] as Feature[],
+    stepsTitle: 'How we start',
+    steps: [
+      { title: 'Send your product list', text: 'Your spreadsheet, an old PDF catalog, even product photos will do. It does not need to be tidy.' },
+      { title: 'We set up your catalog', text: 'We enter products, colors, price groups and dealer codes. You only check it.' },
+      { title: 'Send your dealers the link', text: 'Dealers sign in on their phone with their code and order through WhatsApp. No app to install.' },
+    ],
+    plansTitle: 'Plans',
+    plansNote: 'Kartela is in early access. We are building it with the first companies and will settle Pro pricing together along the way.',
+    free: 'Free',
+    freeTag: 'To get started',
+    freeList: [`Up to ${FREE_PRODUCT_LIMIT} products`, 'One dealer price group', 'WhatsApp orders and PDF catalog', 'Kartela watermark in the catalog and PDF'],
+    pro: 'Pro',
+    proTag: 'Ask for pricing',
+    proList: ['Unlimited products', 'Four price groups', 'One-step price updates', 'No watermark', 'Your own domain'],
+    faq: [
+      { q: 'Do my dealers need to install an app?', a: 'No. The catalog is a web page; dealers open the link on their phone or computer and sign in with their code.' },
+      { q: 'Can competitors see my prices?', a: 'You choose who sees each price. Dealer prices show only to a dealer signed in with their code, and you can hide a price entirely and show “price on request”.' },
+      { q: 'Who enters my products?', a: 'We do. Send your spreadsheet or old catalog and we set it up. After that you can change prices and stock in the panel yourself.' },
+      { q: 'How do orders arrive?', a: 'Dealers choose the product, color and number of cases. The order reaches your WhatsApp as a tidy message with product codes and a subtotal. You confirm it.' },
+      { q: 'Where does the data I enter in the demo go?', a: 'Nowhere. The demo runs entirely in your browser; your changes stay on your device.' },
+    ],
+    closingTitle: 'Let’s set up your catalog together',
+    closingText: 'Send us your product list and we will show you a first version of your catalog. If you like it, we open it to your dealers.',
+  },
+}[lang];
+
+const demo = routes.kartelaDemo[lang];
+const contact = routes.contact[lang];
+const fan = ['sage', 'terracotta', 'navy', 'sand', 'anthracite', 'mustard'].map((k) => COLORS[k]?.hex ?? '#ccc');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: copy.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<Base lang={lang} title={copy.seo} description={copy.description} alternates={{ tr: routes.kartela.tr, en: routes.kartela.en }} jsonLd={jsonLd}>
+  <PageHeader lang={lang} title={copy.title} intro={copy.intro}>
+    <div class="kp-head">
+      <p class="kp-eyebrow"><span class="kp-dot" aria-hidden="true"></span>{copy.eyebrow}</p>
+      <div class="kp-ctas">
+        <Button href={demo} variant="accent">{copy.tryDemo}</Button>
+        <Button href={contact} variant="outline">{copy.earlyAccess}</Button>
+      </div>
+    </div>
+  </PageHeader>
+
+  <section class="container kp-fan-wrap" aria-label={copy.swatches}>
+    <div class="kp-fan" aria-hidden="true">
+      {fan.map((c, i) => <span class="kp-card" style={`--c:${c};--i:${i}`}><i></i></span>)}
+    </div>
+    <p class="kp-fan-note">{copy.swatches}</p>
+  </section>
+
+  <section class="container kp-section" aria-labelledby="kp-today">
+    <h2 id="kp-today" class="h2 kp-title">{copy.todayTitle}</h2>
+    <ul class="kp-cards" role="list">
+      {
+        copy.today.map((f) => (
+          <li class="kp-card-item" data-reveal>
+            <span class="kp-icon">
+              <Icon name={f.icon} size={22} />
+            </span>
+            <h3 class="kp-card-title">{f.title}</h3>
+            <p>{f.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="kp-band" aria-labelledby="kp-feat">
+    <div class="container kp-section">
+      <h2 id="kp-feat" class="h2 kp-title">{copy.featTitle}</h2>
+      <ul class="kp-grid" role="list">
+        {
+          copy.features.map((f) => (
+            <li class="kp-feature" data-reveal>
+              <span class="kp-icon kp-icon--accent">
+                <Icon name={f.icon} size={22} />
+              </span>
+              <h3 class="kp-card-title">{f.title}</h3>
+              <p>{f.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <Button href={demo} variant="solid">{copy.tryDemo}</Button>
+    </div>
+  </section>
+
+  <section class="container kp-section" aria-labelledby="kp-steps">
+    <h2 id="kp-steps" class="h2 kp-title">{copy.stepsTitle}</h2>
+    <ol class="kp-steps">
+      {
+        copy.steps.map((st, i) => (
+          <li class="kp-step" data-reveal>
+            <span class="kp-step__n" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="kp-card-title">{st.title}</h3>
+            <p>{st.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="container kp-section" aria-labelledby="kp-plans">
+    <div class="kp-plans-head">
+      <h2 id="kp-plans" class="h2 kp-title">{copy.plansTitle}</h2>
+      <p class="lead">{copy.plansNote}</p>
+    </div>
+    <div class="kp-plans">
+      <article class="kp-plan">
+        <header><h3 class="h3">{copy.free}</h3><span class="kp-plan__tag">{copy.freeTag}</span></header>
+        <ul role="list">{copy.freeList.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
+        <Button href={demo} variant="outline">{copy.tryDemo}</Button>
+      </article>
+      <article class="kp-plan kp-plan--pro scheme-invert">
+        <header><h3 class="h3">{copy.pro}</h3><span class="kp-plan__tag">{copy.proTag}</span></header>
+        <ul role="list">{copy.proList.map((x) => <li><Icon name="check" size={18} />{x}</li>)}</ul>
+        <Button href={contact} variant="accent">{copy.earlyAccess}</Button>
+      </article>
+    </div>
+  </section>
+
+  <section class="container kp-faq" aria-labelledby="kp-faq-title">
+    <h2 id="kp-faq-title" class="h2">{s.faqTitle}</h2>
+    <div class="kp-faq__list">
+      {
+        copy.faq.map((f) => (
+          <details class="kp-faq__item" data-reveal>
+            <summary>
+              <h3 class="kp-faq__q">{f.q}</h3>
+              <span class="kp-faq__toggle" aria-hidden="true" />
+            </summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="container kp-closing" aria-labelledby="kp-closing">
+    <div class="kp-closing__box">
+      <h2 id="kp-closing" class="h2">{copy.closingTitle}</h2>
+      <p class="lead">{copy.closingText}</p>
+      <div class="kp-ctas">
+        <Button href={contact} variant="solid">{copy.earlyAccess}</Button>
+        <Button href={demo} variant="outline">{copy.tryDemo}</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kp-head {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+  }
+
+  .kp-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+  }
+
+  .kp-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--c-accent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--c-accent) 25%, transparent);
+  }
+
+  .kp-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  /* Swatch fan: six fabric cards pinned at one corner, like a kartela book. */
+  .kp-fan-wrap {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+    padding-block: clamp(1rem, 4vw, 3rem) var(--section);
+  }
+
+  .kp-fan {
+    position: relative;
+    width: min(100%, 30rem);
+    aspect-ratio: 4 / 3;
+    margin-bottom: 1rem;
+  }
+
+  .kp-card {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 32%;
+    aspect-ratio: 3 / 5;
+    border-radius: 16px;
+    background-color: var(--c);
+    background-image:
+      radial-gradient(rgb(255 255 255 / 0.18) 1px, transparent 1.7px),
+      radial-gradient(rgb(0 0 0 / 0.12) 1px, transparent 1.7px);
+    background-size:
+      6px 6px,
+      6px 6px;
+    background-position:
+      0 0,
+      3px 3px;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.14);
+    transform-origin: 50% 92%;
+    transform: translateX(-50%) rotate(calc((var(--i) - 2.5) * 13deg));
+    transition: transform var(--dur-slow) var(--ease-out);
+  }
+
+  .kp-card i {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-radius: 50%;
+    background: var(--c-light);
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--c-dark) 30%, transparent);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .kp-fan:hover .kp-card {
+      transform: translateX(-50%) rotate(calc((var(--i) - 2.5) * 17deg));
+    }
+  }
+
+  .kp-fan-note {
+    max-width: 38rem;
+    text-align: center;
+    color: var(--c-muted);
+  }
+
+  .kp-section {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding-bottom: var(--section);
+    justify-items: start;
+  }
+
+  .kp-title {
+    max-width: 22ch;
+  }
+
+  .kp-cards,
+  .kp-grid,
+  .kp-steps {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kp-cards,
+  .kp-steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .kp-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .kp-card-item,
+  .kp-feature,
+  .kp-step {
+    display: grid;
+    align-content: start;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-card);
+  }
+
+  .kp-feature {
+    background: var(--c-light);
+  }
+
+  .kp-card-item p,
+  .kp-feature p,
+  .kp-step p {
+    color: var(--c-muted);
+  }
+
+  .kp-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .kp-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--c-line);
+  }
+
+  .kp-icon--accent {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  .kp-band {
+    padding-top: var(--section);
+    margin-bottom: var(--section);
+    background: var(--c-band);
+  }
+
+  .kp-step__n {
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1;
+    color: var(--c-accent-text);
+  }
+
+  .kp-plans-head {
+    display: grid;
+    gap: 1rem;
+    max-width: 48rem;
+  }
+
+  .kp-plans {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .kp-plan {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 1.25rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-card);
+    background: var(--c-light);
+    color: var(--c-dark);
+  }
+
+  .kp-plan header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+  }
+
+  .kp-plan__tag {
+    color: var(--c-muted);
+  }
+
+  .kp-plan ul {
+    display: grid;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kp-plan li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .kp-plan li :global(svg) {
+    flex: none;
+    margin-top: 0.25rem;
+    color: var(--c-accent-text);
+  }
+
+  .kp-faq {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: clamp(1.5rem, 5vw, 5rem);
+    align-items: start;
+    padding-bottom: var(--section);
+  }
+
+  .kp-faq__list {
+    border-top: 1px solid var(--c-line);
+  }
+
+  .kp-faq__item {
+    border-bottom: 1px solid var(--c-line);
+  }
+
+  .kp-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.35rem 0;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .kp-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .kp-faq__q {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .kp-faq__toggle {
+    position: relative;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--c-line);
+    border-radius: 50%;
+    transition: background-color var(--dur) var(--ease-out);
+  }
+
+  .kp-faq__toggle::before,
+  .kp-faq__toggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 1.5px;
+    margin: -0.75px 0 0 -6px;
+    background: currentColor;
+  }
+
+  .kp-faq__toggle::after {
+    transform: rotate(90deg);
+    transition: transform var(--dur) var(--ease-out);
+  }
+
+  .kp-faq__item:not([open]) summary:hover .kp-faq__toggle {
+    background: var(--c-band);
+  }
+
+  .kp-faq__item[open] .kp-faq__toggle {
+    border-color: var(--c-accent);
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+  }
+
+  .kp-faq__item[open] .kp-faq__toggle::after {
+    transform: rotate(0deg);
+  }
+
+  .kp-faq__item p {
+    max-width: 62ch;
+    padding-bottom: 1.5rem;
+    color: var(--c-muted);
+  }
+
+  .kp-closing {
+    padding-bottom: var(--section);
+  }
+
+  .kp-closing__box {
+    display: grid;
+    justify-items: start;
+    gap: 1.25rem;
+    padding: clamp(2rem, 5vw, 4rem);
+    border-radius: var(--r-footer);
+    background: var(--c-band);
+  }
+
+  .kp-closing__box .lead {
+    max-width: 46ch;
+  }
+
+  @media (max-width: 1023px) {
+    .kp-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .kp-cards,
+    .kp-steps,
+    .kp-plans,
+    .kp-faq {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .kp-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
