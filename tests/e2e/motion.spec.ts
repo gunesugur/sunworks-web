@@ -1,11 +1,28 @@
 import { expect, test } from '@playwright/test';
 
 test('first visit plays the intro, then gets out of the way', async ({ page }) => {
+  // The intro lasts ~2.4s: record what happens instead of racing it on a slow runner.
+  await page.addInitScript(() => {
+    const seen = window as unknown as { introClass?: boolean; introPlayed?: boolean };
+    new MutationObserver(() => {
+      if (document.documentElement.classList.contains('intro')) seen.introClass = true;
+    }).observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+    document.addEventListener(
+      'animationstart',
+      (e) => {
+        if (e.target instanceof Element && e.target.matches('[data-intro]')) seen.introPlayed = true;
+      },
+      true,
+    );
+  });
   await page.goto('/');
-  await expect(page.locator('html')).toHaveClass(/intro/);
-  const intro = page.locator('[data-intro]');
-  await expect(intro).toBeVisible();
-  await expect(intro).toBeHidden({ timeout: 5000 });
+  await expect(page.locator('html')).not.toHaveClass(/intro/, { timeout: 5000 });
+  await expect(page.locator('[data-intro]')).toBeHidden();
+  const seen = await page.evaluate(() => {
+    const w = window as unknown as { introClass?: boolean; introPlayed?: boolean };
+    return { introClass: w.introClass, introPlayed: w.introPlayed };
+  });
+  expect(seen).toEqual({ introClass: true, introPlayed: true });
   await page.goto('/hizmetler');
   await expect(page.locator('html')).not.toHaveClass(/intro/);
 });

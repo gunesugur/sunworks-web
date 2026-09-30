@@ -1,17 +1,18 @@
 ---
 /**
- * A label that always takes the width of its longer translation: the other language's text sits
+ * A label that always takes the width of its longest translation: the other languages' texts sit
  * invisibly in the same grid cell, so switching language never nudges the elements around it.
  */
 interface Props {
   text: string;
-  alt: string | undefined;
+  alt: string | (string | undefined)[] | undefined;
   class?: string;
 }
 const { text, alt, class: cls } = Astro.props;
+const ghosts = [...new Set([alt].flat())].filter((a): a is string => Boolean(a) && a !== text);
 ---
 
-<span class:list={['swap', cls]}><span class="swap__text">{text}</span>{alt && alt !== text && <span class="swap__ghost" aria-hidden="true">{alt}</span>}</span>
+<span class:list={['swap', cls]}><span class="swap__text">{text}</span>{ghosts.map((g) => <span class="swap__ghost" aria-hidden="true">{g}</span>)}</span>
 
 <style>
   .swap {

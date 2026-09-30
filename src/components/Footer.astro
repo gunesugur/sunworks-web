@@ -1,6 +1,6 @@
 ---
 import type { Locale, Navigation, SiteSettings } from '@/content/schema';
-import { otherLocale, routes } from '@/i18n/routes';
+import { localeNames, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import { siGithub, siInstagram, siX } from 'simple-icons';
 import Asterisk from './Asterisk.astro';
@@ -11,12 +11,11 @@ interface Props {
   lang: Locale;
   nav: Navigation;
   settings: SiteSettings;
-  altHref: string;
+  langLinks: { lang: Locale; href: string }[];
 }
-const { lang, nav, settings, altHref } = Astro.props;
+const { lang, nav, settings, langLinks } = Astro.props;
 const s = t(lang);
 const year = new Date().getUTCFullYear();
-const altLang = otherLocale(lang);
 const word = 'SUN | WORKS'.split('');
 // Brand glyphs (simple-icons, rendered at build time). LinkedIn is not in simple-icons, so its mark is drawn here.
 const LINKEDIN =
@@ -94,7 +93,15 @@ const GLYPH: Record<string, string> = { instagram: siInstagram.path, github: siG
             ))
           }
           <li><button type="button" class="footer__consent" data-consent-open>{s.cookieSettings}</button></li>
-          <li><a href={altHref} hreflang={altLang} lang={altLang}>{s.langSwitch}</a></li>
+          {
+            langLinks.map((l) => (
+              <li>
+                <a href={l.href} hreflang={l.lang} lang={l.lang}>
+                  {localeNames[l.lang].name}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
       <div class="footer__brand"><Logo href={routes.home[lang]} label={settings.siteName} tone="light" /></div>

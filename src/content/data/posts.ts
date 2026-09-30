@@ -384,4 +384,193 @@ Yes, everything is in the Shopify admin. If you need a custom theme, apps or a p
       description: 'Before opening your Shopify store: payment, shipping, tax, policy pages and domain settings. A checklist for a smooth first order.',
     },
   },
+
+  // ---------- Deutsch ----------
+  {
+    _id: 'post-wp-checklist-de',
+    _type: 'post',
+    language: 'de',
+    translationKey: 'post-wp-checklist',
+    title: 'WordPress-Checkliste vor dem Livegang: 7 Schritte',
+    slug: slug('wordpress-checkliste-vor-dem-livegang'),
+    publishedAt: '2026-09-15',
+    updatedAt: UPDATED,
+    author: 'SUN | WORKS',
+    excerpt: 'Die meisten Probleme der ersten Wochen lassen sich mit ein paar einfachen Prüfungen vermeiden. Die sieben Schritte, die wir vor jedem WordPress-Livegang durchgehen.',
+    image: img('post-planning', 'Eine Hand steckt eine neue Karte zwischen Planungskarten an eine weiße Wand'),
+    tags: ['WordPress', 'Wartung'],
+    body: pt(
+      'b',
+      `Eine WordPress-Website live zu schalten, sieht aus wie ein Klick auf „Veröffentlichen“. In der Praxis lassen sich die meisten Probleme der ersten Wochen mit ein paar einfachen Prüfungen vermeiden. Diese Liste ist eine gekürzte Fassung dessen, was wir vor jedem Livegang durchgehen.
+
+## 1. Backup erstellen und Wiederherstellung testen
+
+Sichern Sie Dateien und Datenbank. Spielen Sie dieses Backup dann einmal zurück und prüfen Sie, ob es funktioniert. Ein ungetestetes Backup ist kein Backup. Bewahren Sie es nicht auf dem Server auf, auf dem die Website läuft.
+
+## 2. Aktualisieren und Unbenutztes löschen
+
+Aktualisieren Sie WordPress, das Theme und die Plugins. Deaktivieren Sie unbenutzte Plugins und Themes nicht nur, sondern löschen Sie sie. Jedes Plugin, das keine Updates mehr bekommt, kann zur Sicherheitslücke werden.
+
+## 3. Permalinks und Weiterleitungen einrichten
+
+Wählen Sie unter **Einstellungen › Permalinks** eine lesbare Struktur, zum Beispiel den Beitragsnamen. Wenn Sie von einer alten Website umziehen, leiten Sie wichtige alte Adressen mit **301**-Weiterleitungen auf die neuen Seiten um. So behalten Sie Ihre Positionen in der Suche.
+
+## 4. Suchmaschinen nicht aussperren
+
+Die während der Entwicklung aktivierte Option „Suchmaschinen davon abhalten, diese Website zu indexieren“ ist die am häufigsten vergessene Einstellung. Prüfen Sie unter **Einstellungen › Lesen**, dass sie aus ist, und reichen Sie dann Ihre Sitemap in der Google Search Console ein.
+
+## 5. Formulare und E-Mail testen
+
+Senden Sie das Kontaktformular an eine echte Adresse und prüfen Sie, ob die Nachricht ankommt. Auf Shared Hosting landen E-Mails von WordPress oft im Spam. Ein SMTP-Plugin mit korrekten SPF- und DKIM-Einträgen löst das meist.
+
+## 6. Caching zuletzt aktivieren
+
+Schalten Sie das Caching-Plugin als Letztes ein. Testen Sie danach Formulare, Menüs und, falls vorhanden, den Warenkorb erneut. Bilder vor dem Hochladen auf ihre Anzeigegröße zu bringen, bringt oft mehr als jedes Plugin.
+
+## 7. Auf Handy und Desktop durchklicken
+
+Gehen Sie die ganze Website auf mindestens einem Handy und einem Desktop-Browser durch. Achten Sie auf:
+
+- Links in Menü und Footer
+- Formulare und Bestätigungsmeldungen
+- Externe Links und Dateien zum Herunterladen
+- Rechtstexte: Impressum, Datenschutzerklärung und Cookie-Hinweise
+
+## Die erste Woche nach dem Livegang
+
+Prüfen Sie Fehlerprotokolle und Formularnachrichten. Kleine Probleme lassen sich jetzt noch leicht finden. Wenn sich die Website langsam anfühlt, lesen Sie [warum ist Ihre Website langsam](/de/blog/warum-ist-ihre-website-langsam).
+
+## Häufige Fragen
+
+### Was ist der wichtigste Schritt vor dem Livegang?
+
+Das Backup. Alles andere lässt sich später beheben. Ohne funktionierendes Backup kann aus einem kleinen Fehler ein großer Verlust werden.
+
+### Kann ich diese Prüfungen selbst machen?
+
+Ja, die meisten Schritte erledigen Sie im Admin-Bereich. Wenn Sie bei Weiterleitungen oder E-Mail-Einstellungen nicht weiterkommen, übernehmen wir das im Rahmen unserer [WordPress-Leistung](/de/leistungen/wordpress-unternehmenswebsite).`,
+    ),
+    seo: {
+      title: 'WordPress-Checkliste vor dem Livegang: 7 Schritte',
+      description: 'Sieben Schritte vor dem Livegang einer WordPress-Website: Backups, Updates, 301-Weiterleitungen, Sichtbarkeit in der Suche, Formulare, Caching und Mobilansicht.',
+    },
+  },
+  {
+    _id: 'post-slow-site-de',
+    _type: 'post',
+    language: 'de',
+    translationKey: 'post-slow-site',
+    title: 'Warum ist Ihre Website langsam? Die 5 häufigsten Ursachen',
+    slug: slug('warum-ist-ihre-website-langsam'),
+    publishedAt: '2026-08-27',
+    updatedAt: UPDATED,
+    author: 'SUN | WORKS',
+    excerpt: 'Eine langsame Website verliert Besucher und Positionen in der Suche. Die meisten Ladezeit-Probleme haben wenige bekannte Ursachen, und die Lösung beginnt mit dem Messen.',
+    image: img('post-speed', 'Ein Laptop mit Tachoanzeige und Diagrammen, daneben ein Kaffee'),
+    tags: ['Performance', 'WordPress'],
+    body: pt(
+      'b',
+      `Wenn eine Seite mehr als ein paar Sekunden zum Laden braucht, gehen viele Besucher, bevor sie erscheint. Auch Google berücksichtigt die Nutzererfahrung beim Ranking. Die gute Nachricht: Die meisten Ladezeit-Probleme haben wenige bekannte Ursachen, und Sie finden sie durch Messen.
+
+## 1. Nicht zuerst messen
+
+Beginnen Sie mit Zahlen, nicht mit Vermutungen. Google PageSpeed Insights oder Lighthouse zeigt drei Werte:
+
+- **LCP:** Wann das größte Element der Seite erscheint. Ziel: unter 2,5 Sekunden.
+- **INP:** Wie schnell die Seite auf einen Klick reagiert. Ziel: unter 200 Millisekunden.
+- **CLS:** Wie stark sich Inhalte beim Laden verschieben. Ziel: unter 0,1.
+
+Messen Sie vor und nach jeder Änderung auf dieselbe Weise.
+
+## 2. Zu große Bilder
+
+Die Ursache, die wir am häufigsten sehen: Bilder direkt vom Handy oder von der Kamera, jedes mehrere Megabyte groß. Bringen Sie Bilder auf ihre Anzeigegröße und wandeln Sie sie in WebP oder AVIF um. Das allein macht oft einen großen Unterschied.
+
+## 3. Zu viele Plugins
+
+Jedes Plugin kann eigene Skripte und Styles auf die Seite laden. Löschen Sie die, die Sie nicht nutzen. Wenn zwei Plugins dieselbe Aufgabe erfüllen, behalten Sie eines. Page Builder und Slider sind meist die schwersten.
+
+## 4. Zu schwaches Hosting
+
+Günstiges Shared Hosting wird zum ersten Engpass, wenn die Besucherzahl wächst. Ist die Antwortzeit des Servers, die TTFB, dauerhaft hoch, bringen Verbesserungen am Code nur begrenzt etwas. Manchmal ist ein besserer Server die schnellste Lösung.
+
+## 5. Kein Caching und kein CDN
+
+Wenn Seiten zwischengespeichert und Dateien über ein CDN ausgeliefert werden, bekommen Besucher die Antwort vom nächstgelegenen Standort. Testen Sie nach dem Aktivieren des Cachings dynamische Seiten wie Formulare und den Warenkorb immer erneut.
+
+## Wo Sie anfangen
+
+Messen, das größte Problem beheben, erneut messen. Gehen Sie Schritt für Schritt vor, statt alles auf einmal zu ändern. So sehen Sie, was wirklich geholfen hat.
+
+## Häufige Fragen
+
+### Muss der Lighthouse-Wert 100 sein?
+
+Nein. Der Wert ist ein Werkzeug, nicht das Ziel. Entscheidend ist die Erfahrung echter Besucher. Alles über 90 ist trotzdem ein gutes Zeichen.
+
+### Kann ich Ladezeit-Probleme selbst beheben?
+
+Bildgrößen anpassen und unbenutzte Plugins entfernen sind einfache Schritte. Bei Server, Caching oder Theme findet unser [technischer Support](/de/leistungen/technischer-support) die Ursache und behebt sie.`,
+    ),
+    seo: {
+      title: 'Warum ist Ihre Website langsam? 5 häufige Ursachen',
+      description: 'Die fünf häufigsten Ursachen einer langsamen Website und was hilft: LCP, INP und CLS messen, Bildgrößen, Plugins, Hosting, Caching und CDN.',
+    },
+  },
+  {
+    _id: 'post-shopify-launch-de',
+    _type: 'post',
+    language: 'de',
+    translationKey: 'post-shopify-launch',
+    title: '5 Dinge vor der Eröffnung Ihres Shopify-Shops',
+    slug: slug('vor-der-eroeffnung-ihres-shopify-shops'),
+    publishedAt: '2026-07-14',
+    updatedAt: UPDATED,
+    author: 'SUN | WORKS',
+    excerpt: 'Mit Theme und Produkten sieht der Shop fertig aus. Ob die erste Bestellung reibungslos läuft, entscheiden aber Zahlung, Versand, Steuern, Rechtstexte und Domain.',
+    image: img('post-boutique', 'Eine helle Boutique mit Kleidung an Holzstangen'),
+    tags: ['Shopify', 'E-Commerce'],
+    body: pt(
+      'b',
+      `Wenn das Theme steht und die Produkte angelegt sind, sieht ein Shop fertig aus. In der Praxis entscheiden einige Einstellungen im Hintergrund, ob die erste Bestellung reibungslos durchläuft. Diese fünf Bereiche prüfen wir vor jedem Shopify-Start.
+
+## 1. Zahlungsarten
+
+Legen Sie Zahlungsanbieter und Gebühren früh fest. Machen Sie vor dem Start eine kleine Testbestellung mit einer echten Karte und erstatten Sie sie. Nichts zeigt den Bestellablauf besser.
+
+## 2. Versandzonen und Versandkosten
+
+Legen Sie Versandzonen, eine Grenze für kostenlosen Versand und Lieferzeiten fest. Schwere oder sperrige Produkte brauchen eventuell eigene Regeln. Versandkosten, die Kunden erst an der Kasse sehen, sind einer der häufigsten Gründe für abgebrochene Käufe.
+
+## 3. Steuern und Rechnungsangaben
+
+Entscheiden Sie, ob Preise inklusive Steuer angezeigt werden, und tragen Sie Ihre Firmendaten in den Shop-Einstellungen ein. Wenn Sie das mit Ihrem Steuerberater abstimmen, vermeiden Sie spätere Fragen.
+
+## 4. Rechtstexte
+
+Impressum, Widerrufsbelehrung, Datenschutzerklärung, AGB und Kontaktdaten sollten leicht zu finden sein. Diese Seiten schaffen Vertrauen und werden auch von Zahlungsanbietern verlangt.
+
+## 5. Domain und E-Mail
+
+Verbinden Sie Ihre eigene Domain und sorgen Sie dafür, dass Bestell-E-Mails von ihr verschickt werden. Passen Sie die Vorlagen für Benachrichtigungen an den Ton Ihrer Marke an. Zur Einrichtung von Domain und E-Mail lesen Sie [Domain und Hosting](/de/leistungen/domain-und-hosting).
+
+## Am Tag der Eröffnung
+
+Gehen Sie den ganzen Shop auf dem Handy durch. Verfolgen Sie eine Testbestellung bis zum Versand. Dann eröffnen Sie.
+
+## Häufige Fragen
+
+### Wie lange dauert die Einrichtung eines Shopify-Shops?
+
+Das hängt von der Größe des Sortiments und vom Umfang der Anpassungen ab. Bei einem kleinen Sortiment sind zwei bis vier Wochen realistisch.
+
+### Kann ich diese Einstellungen selbst vornehmen?
+
+Ja, alles liegt im Shopify-Admin. Wenn Sie ein eigenes Theme, Apps oder einen Produktkonfigurator brauchen, richten wir das gemeinsam im Rahmen unserer [Shopify-Leistung](/de/leistungen/shopify-shop-einrichten) ein.`,
+    ),
+    seo: {
+      title: '5 Dinge vor der Eröffnung Ihres Shopify-Shops',
+      description: 'Vor der Eröffnung Ihres Shopify-Shops: Zahlung, Versand, Steuern, Rechtstexte und Domain. Eine Checkliste für eine reibungslose erste Bestellung.',
+    },
+  },
 ];

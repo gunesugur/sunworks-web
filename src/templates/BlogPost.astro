@@ -1,10 +1,10 @@
 ---
 import type { Locale, Post } from '@/content/schema';
-import { getTranslation } from '@/lib/cms';
+import { translationPaths } from '@/lib/cms';
 import { breadcrumbLd } from '@/lib/seo';
 import { shareImageUrl } from '@/lib/images';
 import { plainWords } from '@/lib/portable-text';
-import { formatDate, otherLocale, postPath, routes } from '@/i18n/routes';
+import { formatDate, postPath, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
@@ -23,10 +23,7 @@ interface Props {
 }
 const { lang, post } = Astro.props;
 const s = t(lang);
-const other = otherLocale(lang);
-const translation = await getTranslation('post', post.translationKey, other);
-const alternates: Partial<Record<Locale, string>> = { [lang]: postPath(lang, post.slug.current) };
-if (translation) alternates[other] = postPath(other, translation.slug.current);
+const alternates = await translationPaths('post', post.translationKey, postPath);
 const site = Astro.site ?? new URL('https://sunworks.studio');
 const url = new URL(postPath(lang, post.slug.current), site).href;
 const shareImage = await shareImageUrl(post.image, site);

@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getPosts } from '@/lib/cms';
+import BlogPost from '@/templates/BlogPost.astro';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts('de');
+  return posts.map((post) => ({ params: { slug: post.slug.current }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { post } = Astro.props as Props;
+---
+
+<BlogPost lang="de" post={post} />

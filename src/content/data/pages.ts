@@ -157,7 +157,7 @@ Sitedeki bilgiler SUN | WORKS hizmetlerini tanıtmak amacıyla hazırlanmıştı
 
 ## Fikri haklar
 
-Sitedeki metinler, tasarım ve logo SUN | WORKS'e aittir; izinsiz kopyalanamaz. Fotoğraflar Unsplash lisansı kapsamında kullanılmaktadır.
+Sitedeki metinler, görseller, tasarım ve logo SUN | WORKS'e aittir; izinsiz kopyalanamaz.
 
 ## Blog içerikleri
 
@@ -192,7 +192,7 @@ The information on this site presents SUN | WORKS services and is not an offer. 
 
 ## Intellectual property
 
-The text, design and logo on this site belong to SUN | WORKS and may not be copied without permission. Photos are used under the Unsplash license.
+The text, images, design and logo on this site belong to SUN | WORKS and may not be copied without permission.
 
 ## Blog content
 
@@ -287,5 +287,256 @@ You can change your choices at any time with the **Cookie settings** link at the
     legalReviewRequired: true,
     updatedAt: UPDATED,
     seo: { description: 'SUN | WORKS cookie policy: the cookies we use, why, and for how long.' },
+  },
+
+  // ---------- Deutsch ----------
+  {
+    _id: 'page-contact-de',
+    _type: 'page',
+    language: 'de',
+    translationKey: 'page-contact',
+    kind: 'contact',
+    title: 'Kontakt',
+    slug: slug('kontakt'),
+    intro: 'Ein neues Projekt, ein Problem mit Ihrer Website oder eine Frage. Schreiben Sie uns, wir antworten innerhalb von 24 Stunden per E-Mail, auf Deutsch, Türkisch oder Englisch.',
+    body: pt(
+      'c',
+      `Wenn Sie die Adresse Ihrer Website und die Plattform nennen, die Sie nutzen (WordPress, Shopify oder etwas anderes), können wir Ihnen schneller helfen.`,
+    ),
+    legalReviewRequired: false,
+    updatedAt: UPDATED,
+    seo: { description: 'Kontakt zu SUN | WORKS: WordPress, Shopify, KI-gestützte Entwicklung und technischer Support. Formular und E-Mail, Antwort innerhalb von 24 Stunden.' },
+  },
+  {
+    _id: 'page-privacy-de',
+    _type: 'page',
+    language: 'de',
+    translationKey: 'page-privacy',
+    kind: 'legal',
+    title: 'Datenschutzerklärung',
+    slug: slug('datenschutz'),
+    intro: 'Welche personenbezogenen Daten diese Website verarbeitet, warum und wie lange, nach der DSGVO und dem türkischen Datenschutzgesetz (KVKK Nr. 6698).',
+    body: pt(
+      'p',
+      `## Verantwortlicher
+
+Verantwortlich ist SUN | WORKS, die Angaben finden Sie im [Impressum](/de/impressum). Für alle Anliegen zu Ihren Daten schreiben Sie an [hello@sunworks.studio](mailto:hello@sunworks.studio).
+
+## Welche Daten wir verarbeiten und warum
+
+- **Kontaktformular:** Ihr Name, Ihre E-Mail-Adresse, das Thema und Ihre Nachricht, nur um Ihre Anfrage zu beantworten.
+- **Newsletter:** Ihre E-Mail-Adresse, nur um neue Beiträge anzukündigen.
+- **Sicherheit:** Die Prüfung durch Cloudflare Turnstile und ein nicht umkehrbarer Hash Ihrer IP-Adresse, um Missbrauch der Formulare zu verhindern.
+- **Hosting:** Technische Daten wie IP-Adresse, Browserangaben und die aufgerufene Seite, die der Server zur Auslieferung der Website verarbeitet.
+
+Wir nutzen keine Analyse-, Werbe- oder Tracking-Werkzeuge.
+
+## Rechtsgrundlagen
+
+Formulardaten verarbeiten wir mit Ihrer Einwilligung und zur Beantwortung Ihrer Anfrage (Art. 6 Abs. 1 lit. a und b DSGVO). Sicherheits- und Hostingdaten verarbeiten wir aufgrund unseres berechtigten Interesses an einem sicheren Betrieb der Website (Art. 6 Abs. 1 lit. f DSGVO).
+
+## Übermittlung
+
+Die Website und die Formulardaten liegen auf der Infrastruktur unseres Hosters Cloudflare. Ihre Daten können daher auch auf Servern außerhalb der EU und der Türkei verarbeitet werden. Cloudflare ist nach dem EU-US Data Privacy Framework zertifiziert. Wir geben Ihre Daten an niemanden sonst weiter und verkaufen sie nie.
+
+## Speicherdauer
+
+- Kontaktnachrichten löschen wir spätestens 12 Monate nach Abschluss Ihrer Anfrage.
+- Ihre Newsletter-Anmeldung bleibt bestehen, bis Sie sich abmelden.
+- IP-Hashes für die Sicherheit löschen wir innerhalb von 24 Stunden.
+
+## Ihre Rechte
+
+Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch (Art. 15 bis 21 DSGVO). Eine Einwilligung können Sie jederzeit widerrufen. Sie können sich außerdem bei einer Datenschutz-Aufsichtsbehörde beschweren. Schreiben Sie an [hello@sunworks.studio](mailto:hello@sunworks.studio), wir antworten innerhalb von 30 Tagen.
+
+Zu Cookies und Browserspeicher lesen Sie die [Cookie-Richtlinie](/de/cookie-richtlinie).`,
+    ),
+    legalReviewRequired: true,
+    updatedAt: UPDATED,
+    seo: { description: 'Datenschutzerklärung von SUN | WORKS: welche personenbezogenen Daten wir verarbeiten, warum und wie lange.' },
+  },
+  {
+    _id: 'page-terms-de',
+    _type: 'page',
+    language: 'de',
+    translationKey: 'page-terms',
+    kind: 'legal',
+    title: 'Nutzungsbedingungen',
+    slug: slug('nutzungsbedingungen'),
+    intro: 'Die Bedingungen, die gelten, wenn Sie diese Website nutzen.',
+    body: pt(
+      't',
+      `## Nur zur Information
+
+Die Angaben auf dieser Website stellen die Leistungen von SUN | WORKS vor und sind kein Angebot. Umfang, Zeitplan und Preis jedes Projekts werden gesondert schriftlich vereinbart.
+
+## Urheberrecht
+
+Texte, Bilder, Gestaltung und Logo dieser Website gehören SUN | WORKS und dürfen nicht ohne Erlaubnis kopiert werden.
+
+## Blogbeiträge
+
+Die Hinweise in den Blogbeiträgen sind allgemeiner Natur. Wir empfehlen, vor der Umsetzung auf Ihrer eigenen Website ein Backup zu erstellen.
+
+## Formulare
+
+Bitte nutzen Sie die Formulare nur für echte Anfragen. Automatisierte oder missbräuchliche Einsendungen werden blockiert.
+
+## Änderungen
+
+Wir können diese Bedingungen bei Bedarf anpassen. Die aktuelle Fassung steht immer auf dieser Seite.`,
+    ),
+    legalReviewRequired: true,
+    updatedAt: UPDATED,
+    seo: { description: 'Nutzungsbedingungen der Website von SUN | WORKS.' },
+  },
+  {
+    _id: 'page-cookies-de',
+    _type: 'page',
+    language: 'de',
+    translationKey: 'page-cookies',
+    kind: 'legal',
+    title: 'Cookie-Richtlinie',
+    slug: slug('cookie-richtlinie'),
+    intro: 'Wir nutzen keine Werbe- oder Tracking-Cookies. Hier steht alles, was in Ihrem Browser gespeichert werden kann.',
+    body: pt(
+      'k',
+      `## Notwendig
+
+Erforderlich, damit die Website funktioniert und sich Ihre Auswahl merkt. Diese lassen sich nicht abschalten.
+
+- **sw-consent** (diese Website, Browserspeicher): Speichert Ihre Cookie-Auswahl. Dauer: 12 Monate.
+- **sw-prefs** (diese Website, Browserspeicher): Speichert Ihre Einstellungen zu Farbschema und Barrierefreiheit. Entsteht nur, wenn Sie eine Einstellung ändern, und bleibt, bis Sie sie löschen.
+- **sw-intro** (diese Website, Sitzungsspeicher): Verhindert, dass die Eingangsanimation in derselben Sitzung erneut abläuft. Wird gelöscht, wenn Sie den Tab schließen.
+- **Cloudflare und Turnstile** (Drittanbieter): Können Sicherheits-Cookies setzen, um die Website vor Angriffen zu schützen und zu prüfen, ob Formulare von einem Menschen gesendet werden.
+
+## Funktional
+
+Nur aktiv, wenn Sie zustimmen.
+
+- **OpenStreetMap** (Drittanbieter): Zeigt die Karte auf der Kontaktseite. Beim Laden der Karte wird Ihre IP-Adresse an OpenStreetMap übermittelt.
+
+## Analyse und Marketing
+
+Nutzen wir nicht.
+
+## Auswahl ändern
+
+Sie können Ihre Auswahl jederzeit über den Link **Cookie-Einstellungen** unten auf jeder Seite ändern. Einzelheiten finden Sie in der [Datenschutzerklärung](/de/datenschutz).`,
+    ),
+    legalReviewRequired: true,
+    updatedAt: UPDATED,
+    seo: { description: 'Cookie-Richtlinie von SUN | WORKS: welche Cookies wir nutzen, wozu und wie lange.' },
+  },
+
+  // ---------- Imprint ----------
+  {
+    _id: 'page-imprint-tr',
+    _type: 'page',
+    language: 'tr',
+    translationKey: 'page-imprint',
+    kind: 'legal',
+    title: 'Künye',
+    slug: slug('kunye'),
+    intro: 'SUN | WORKS markasının arkasındaki şirket ve iletişim bilgileri.',
+    body: pt(
+      'i',
+      `## Şirket
+
+SUN | WORKS, [Şirket unvanı] markasıdır.
+
+- **Unvan:** [Şirket unvanı]
+- **Adres:** [Açık adres], Bursa, Türkiye
+- **Ticaret sicil:** [Ticaret sicil müdürlüğü], sicil no [numara]
+- **MERSİS no:** [numara]
+- **Vergi dairesi ve no:** [Vergi dairesi], [vergi numarası]
+- **Yetkili:** [Ad Soyad]
+
+## İletişim
+
+- **E-posta:** [hello@sunworks.studio](mailto:hello@sunworks.studio)
+- **Telefon:** [telefon numarası]
+
+## İçerikten sorumlu
+
+[Ad Soyad], adres yukarıdaki gibidir.`,
+    ),
+    legalReviewRequired: true,
+    updatedAt: UPDATED,
+    seo: { description: 'SUN | WORKS künye: şirket unvanı, adres, sicil ve iletişim bilgileri.' },
+  },
+  {
+    _id: 'page-imprint-en',
+    _type: 'page',
+    language: 'en',
+    translationKey: 'page-imprint',
+    kind: 'legal',
+    title: 'Imprint',
+    slug: slug('imprint'),
+    intro: 'The company behind the SUN | WORKS brand, and how to reach it.',
+    body: pt(
+      'i',
+      `## Company
+
+SUN | WORKS is a brand of [Company name].
+
+- **Company:** [Company name]
+- **Address:** [Street address], Bursa, Türkiye
+- **Trade register:** [Trade registry office], no. [number]
+- **MERSIS no.:** [number]
+- **Tax office and number:** [Tax office], [tax number]
+- **Represented by:** [Full name]
+
+## Contact
+
+- **Email:** [hello@sunworks.studio](mailto:hello@sunworks.studio)
+- **Phone:** [phone number]
+
+## Responsible for content
+
+[Full name], address as above.`,
+    ),
+    legalReviewRequired: true,
+    updatedAt: UPDATED,
+    seo: { description: 'SUN | WORKS imprint: company name, address, registration and contact details.' },
+  },
+  {
+    _id: 'page-imprint-de',
+    _type: 'page',
+    language: 'de',
+    translationKey: 'page-imprint',
+    kind: 'legal',
+    title: 'Impressum',
+    slug: slug('impressum'),
+    intro: 'Angaben gemäß § 5 DDG zum Unternehmen hinter der Marke SUN | WORKS.',
+    body: pt(
+      'i',
+      `## Anbieter
+
+SUN | WORKS ist eine Marke der [Firmenname].
+
+- **Firma:** [Firmenname]
+- **Anschrift:** [Straße und Hausnummer], [PLZ] Bursa, Türkei
+- **Handelsregister:** [Handelsregisteramt], Nr. [Nummer]
+- **MERSIS-Nr.:** [Nummer]
+- **Steueramt und Steuernummer:** [Steueramt], [Steuernummer]
+- **Vertreten durch:** [Vor- und Nachname]
+
+## Kontakt
+
+- **E-Mail:** [hello@sunworks.studio](mailto:hello@sunworks.studio)
+- **Telefon:** [Telefonnummer]
+
+## Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
+
+[Vor- und Nachname], Anschrift wie oben.
+
+## Verbraucherstreitbeilegung
+
+Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`,
+    ),
+    legalReviewRequired: true,
+    updatedAt: UPDATED,
+    seo: { description: 'Impressum von SUN | WORKS: Firma, Anschrift, Registerangaben und Kontakt.' },
   },
 ];

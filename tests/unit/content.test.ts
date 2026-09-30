@@ -21,12 +21,12 @@ test('every document has a TR and an EN version', () => {
   const all = [...settings, ...navigation, ...home, ...services, ...posts, ...pages];
   const byKey = new Map<string, Set<string>>();
   for (const d of all) byKey.set(d.translationKey, (byKey.get(d.translationKey) ?? new Set()).add(d.language));
-  for (const [key, langs] of byKey) assert.deepEqual([...langs].sort(), ['en', 'tr'], key);
+  for (const [key, langs] of byKey) assert.deepEqual([...langs].sort(), ['de', 'en', 'tr'], key);
 });
 
 test('slugs are unique per language and type', () => {
   for (const list of [services, posts, pages]) {
-    for (const lang of ['tr', 'en']) {
+    for (const lang of ['tr', 'en', 'de']) {
       const slugs = list.filter((d) => d.language === lang).map((d) => d.slug.current);
       assert.equal(new Set(slugs).size, slugs.length);
     }

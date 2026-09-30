@@ -4,7 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import fontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
 import type { Locale } from '@/content/schema';
 import { getNavigation, getSettings } from '@/lib/cms';
-import { cleanPath, htmlLang, ogLocale, otherLocale, routes } from '@/i18n/routes';
+import { cleanPath, htmlLang, ogLocale, otherLocales, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
@@ -33,8 +33,8 @@ const site = Astro.site ?? new URL('https://sunworks.studio');
 const fullTitle = title ? `${title} · ${settings.siteName}` : settings.seo.title;
 const desc = description ?? settings.seo.description;
 const canonical = new URL(cleanPath(Astro.url.pathname), site).href;
-const altLang = otherLocale(lang);
-const altHref = alternates[altLang] ?? routes.home[altLang];
+/** This page in the other languages; pages without a translation link to that language's home. */
+const langLinks = otherLocales(lang).map((l) => ({ lang: l, href: alternates[l] ?? routes.home[l] }));
 const ogImage = image ?? new URL(`/og/${lang}.png`, site).href;
 
 const baseLd = {
@@ -83,7 +83,7 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content={ogLocale[lang]} />
-    <meta property="og:locale:alternate" content={ogLocale[altLang]} />
+    {langLinks.map((l) => <meta property="og:locale:alternate" content={ogLocale[l.lang]} />)}
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
@@ -127,11 +127,11 @@ const ld = [baseLd, ...jsonLd].map((o) => JSON.stringify(o).replaceAll('<', '\\u
   <body>
     <a class="skip-link" href="#main">{s.skip}</a>
     <Intro />
-    <Header lang={lang} nav={nav} siteName={settings.siteName} altHref={altHref} />
+    <Header lang={lang} nav={nav} siteName={settings.siteName} langLinks={langLinks} />
     <main id="main" tabindex="-1" transition:animate={pageTransition}>
       <slot />
     </main>
-    <Footer lang={lang} nav={nav} settings={settings} altHref={altHref} />
+    <Footer lang={lang} nav={nav} settings={settings} langLinks={langLinks} />
     <A11yPanel lang={lang} />
     <QuickActions lang={lang} whatsapp={settings.whatsapp} />
     <CookieConsent lang={lang} />

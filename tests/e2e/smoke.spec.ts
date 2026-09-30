@@ -23,6 +23,7 @@ for (const route of ROUTES) {
     if (route.alt) {
       await expect(page.locator('link[rel="alternate"][hreflang="tr"]')).toHaveCount(1);
       await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveCount(1);
+      await expect(page.locator('link[rel="alternate"][hreflang="de"]')).toHaveCount(1);
       await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveCount(1);
     }
     expect(errors).toEqual([]);
@@ -36,15 +37,22 @@ test('unknown URL serves the 404 page with a 404 status', async ({ page }) => {
 });
 
 test('language switch leads to the translated page', async ({ page }, info) => {
-  test.skip(Number(info.project.metadata['width']) <= 900, 'switch lives in the mobile menu');
+  const mobile = Number(info.project.metadata['width']) <= 900;
+  const pick = async (lang: string) => {
+    if (mobile) await page.locator('[data-menu-toggle]').click();
+    await page.locator(mobile ? `a.menu-lang[hreflang="${lang}"]` : `header a.lang[hreflang="${lang}"]`).click();
+  };
   await page.goto('/hizmetler/teknik-destek');
-  await page.locator('header a.lang').click();
+  await pick('en');
   await expect(page).toHaveURL(/\/en\/services\/technical-support$/);
   await expect(page.locator('html')).toHaveAttribute('lang', 'en-US');
+  await pick('de');
+  await expect(page).toHaveURL(/\/de\/leistungen\/technischer-support$/);
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de-DE');
 });
 
 test('RSS feeds and sitemap are served', async ({ request }) => {
-  for (const url of ['/rss.xml', '/en/rss.xml', '/sitemap-index.xml']) {
+  for (const url of ['/rss.xml', '/en/rss.xml', '/de/rss.xml', '/sitemap-index.xml']) {
     const res = await request.get(url);
     expect(res.status(), url).toBe(200);
     expect(await res.text()).toContain('<?xml');

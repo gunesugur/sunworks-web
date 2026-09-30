@@ -56,6 +56,29 @@ export const settings: SiteSettings[] = [
         'An independent web studio in Bursa, Türkiye. WordPress business sites, Shopify stores, AI-assisted development, technical support and care.',
     },
   },
+  {
+    _id: 'siteSettings-de',
+    _type: 'siteSettings',
+    language: 'de',
+    translationKey: 'siteSettings',
+    siteName: 'SUN | WORKS',
+    tagline: 'Ein unabhängiges Webstudio für WordPress, Shopify und KI-gestützte Entwicklung',
+    email: 'hello@sunworks.studio',
+    whatsapp: '905550000000',
+    city: 'Bursa',
+    socials,
+    map: { ...map, label: 'Bursa, Türkei' },
+    newsletter: {
+      title: 'Newsletter',
+      text: 'Wenn wir einen neuen Artikel veröffentlichen, schicken wir Ihnen eine kurze E-Mail.',
+    },
+    footerNote: 'Websites, Onlineshops und die Systeme, die dahinter arbeiten.',
+    seo: {
+      title: 'SUN | WORKS · Studio für WordPress, Shopify und Webentwicklung',
+      description:
+        'Ein unabhängiges Webstudio: WordPress-Unternehmenswebsites, Shopify-Shops, KI-gestützte Entwicklung, technischer Support und Wartung. Beratung auf Deutsch und Türkisch.',
+    },
+  },
 ];
 
 export const navigation: Navigation[] = [
@@ -103,6 +126,7 @@ export const navigation: Navigation[] = [
       },
     ],
     legalLinks: [
+      { label: 'Künye', href: '/kunye' },
       { label: 'Gizlilik', href: '/gizlilik' },
       { label: 'Kullanım koşulları', href: '/kullanim-kosullari' },
       { label: 'Çerez politikası', href: '/cerez-politikasi' },
@@ -152,9 +176,60 @@ export const navigation: Navigation[] = [
       },
     ],
     legalLinks: [
+      { label: 'Imprint', href: '/en/imprint' },
       { label: 'Privacy', href: '/en/privacy' },
       { label: 'Terms', href: '/en/terms' },
       { label: 'Cookie policy', href: '/en/cookies' },
+    ],
+  },
+  {
+    _id: 'navigation-de',
+    _type: 'navigation',
+    language: 'de',
+    translationKey: 'navigation',
+    header: [
+      { label: 'Startseite', href: '/de' },
+      { label: 'Leistungen', href: '/de/leistungen' },
+      { label: 'Blog', href: '/de/blog' },
+      { label: 'Kontakt', href: '/de/kontakt' },
+    ],
+    cta: { label: 'Projekt besprechen', href: '/de/kontakt' },
+    footerColumns: [
+      {
+        _key: 'pages',
+        title: 'Seiten',
+        links: [
+          { label: 'Startseite', href: '/de' },
+          { label: 'Leistungen', href: '/de/leistungen' },
+          { label: 'Blog', href: '/de/blog' },
+          { label: 'Kontakt', href: '/de/kontakt' },
+        ],
+      },
+      {
+        _key: 'services',
+        title: 'Leistungen',
+        links: [
+          { label: 'WordPress', href: '/de/leistungen/wordpress-unternehmenswebsite' },
+          { label: 'Shopify', href: '/de/leistungen/shopify-shop-einrichten' },
+          { label: 'KI-gestützte Entwicklung', href: '/de/leistungen/ki-gestuetzte-entwicklung' },
+          { label: 'Technischer Support', href: '/de/leistungen/technischer-support' },
+          { label: 'Domain und Hosting', href: '/de/leistungen/domain-und-hosting' },
+        ],
+      },
+      {
+        _key: 'contact',
+        title: 'Kontakt',
+        links: [
+          { label: 'hello@sunworks.studio', href: 'mailto:hello@sunworks.studio' },
+          { label: 'Kontaktformular', href: '/de/kontakt' },
+        ],
+      },
+    ],
+    legalLinks: [
+      { label: 'Impressum', href: '/de/impressum' },
+      { label: 'Datenschutz', href: '/de/datenschutz' },
+      { label: 'Nutzungsbedingungen', href: '/de/nutzungsbedingungen' },
+      { label: 'Cookie-Richtlinie', href: '/de/cookie-richtlinie' },
     ],
   },
 ];
@@ -356,6 +431,104 @@ export const home: HomePage[] = [
       image: img('closing-desk', 'A laptop on a wooden desk with a white chair in a calm, spacious room'),
       tag: 'Open for new projects',
       cta: { label: 'Get in touch', href: '/en/contact' },
+    },
+  },
+  {
+    _id: 'homePage-de',
+    _type: 'homePage',
+    language: 'de',
+    translationKey: 'homePage',
+    seo: {},
+    hero: {
+      title: 'Lassen Sie uns Ihr Projekt gemeinsam umsetzen',
+      note: 'Wir klären Ihren Bedarf und bauen eine Lösung, die leicht zu pflegen ist.',
+      image: img('hero-studio', 'Ein aufgeklappter Laptop auf einem ruhigen Schreibtisch mit Schreibtischlampe und Tasse'),
+      smallImage: img('duo-sketch', 'Eine Hand skizziert neben einem Laptop ein Website-Layout auf Papier'),
+      tags: ['WordPress', 'Shopify', 'KI-gestützte Entwicklung', 'Technischer Support', 'Wartung'],
+    },
+    tools: { title: 'Plattformen und Werkzeuge, mit denen wir arbeiten', items: tools },
+    intro: {
+      title: 'Jedes Projekt beginnt mit einem anderen Bedarf',
+      text: 'Jedes Unternehmen und jede Marke erwartet etwas anderes. Statt Vorlagen von der Stange besprechen wir genau, was Sie vorhaben, und planen gemeinsam den Weg, der am besten zu Ihrem Budget und Ihren Zielen passt.',
+      cta: { label: 'Leistungen ansehen', href: '/de/leistungen' },
+    },
+    duo: {
+      first: img('duo-sketch', 'Eine Hand skizziert neben einem Laptop ein Website-Layout auf Papier'),
+      second: img('duo-top-view', 'Draufsicht auf einen Laptop, eine Kaffeetasse, Stifte und ein offenes Notizbuch auf einem Holztisch'),
+      firstTag: 'Erst planen',
+      secondTag: 'Dann bauen',
+      link: { label: 'Unser Ablauf', href: '#process' },
+    },
+    approach: {
+      title: 'Weniger Überraschungen, mehr Klarheit',
+      image: img('approach-checklist', 'Eine Hand hakt eine Checkliste in einem Notizbuch ab, dahinter ein Laptop'),
+      tag: 'Mit Checkliste',
+      items: [
+        {
+          _key: 'root-cause',
+          icon: 'wrench',
+          title: 'Praktische, durchdachte Lösungen für Ihre Probleme',
+          text: 'Läuft auf Ihrer Website etwas schief, ist sie langsam oder haben Sie eine neue Idee? Wir sehen uns das gemeinsam an und gehen die Schritte, die Ihnen die Arbeit erleichtern, ohne unnötige Komplexität.',
+        },
+        {
+          _key: 'handover',
+          icon: 'book',
+          title: 'Auch nach dem Livegang an Ihrer Seite',
+          text: 'Wir übergeben nicht und verschwinden. Wir zeigen Ihnen, wie Sie Seiten und Produkte bequem selbst pflegen, und bleiben Ihr Ansprechpartner, wenn eine Frage aufkommt.',
+        },
+      ],
+      cta: { label: 'Projekt besprechen', href: '/de/kontakt' },
+    },
+    servicesSection: {
+      title: 'Leistungen',
+      text: 'Jedes Projekt braucht etwas anderes. Wir wählen den Weg, der für Sie am einfachsten ist und am meisten Sinn ergibt.',
+    },
+    process: {
+      title: 'Ablauf',
+      text: 'Lassen Sie uns jeden Schritt gemeinsam gehen, von der Idee bis zum Livegang. Sie wissen jederzeit, wo wir stehen.',
+      steps: [
+        {
+          _key: 's1',
+          title: 'Kennenlernen und Bedarf klären',
+          text: 'Wir sprechen über Ihre Idee und die Website, die Sie sich vorstellen, und legen gemeinsam den richtigen Weg fest.',
+          deliverables: ['Schriftliches Angebot', 'Zeitplan', 'Liste der nicht enthaltenen Leistungen'],
+        },
+        {
+          _key: 's2',
+          title: 'Gemeinsam gestalten',
+          text: 'Während wir Design und Seiten umsetzen, bleiben wir eng in Kontakt und gehen jeden Schritt erst mit Ihrer Freigabe.',
+          deliverables: ['Link zur Live-Vorschau', 'Regelmäßige Fortschrittsnotizen', 'Prüfung von Ladezeit und Barrierefreiheit'],
+        },
+        {
+          _key: 's3',
+          title: 'Livegang und Übergabe',
+          text: 'Wenn die Website online ist, zeigen wir Ihnen die Verwaltung. Danach sind wir weiter für alle Fragen da.',
+          deliverables: ['Checkliste für den Livegang', 'Einführung in die Verwaltung', 'Support nach dem Livegang'],
+        },
+      ],
+    },
+    highlight: {
+      value: 24,
+      suffix: 'Std.',
+      title: 'Wir melden uns am selben Tag',
+      text: 'Wenn Sie schreiben, antwortet Ihnen die Person, die die Arbeit macht, keine Formularantwort. Wir melden uns innerhalb von 24 Stunden und planen den Rest gemeinsam.',
+      items: [
+        { _key: 'h1', icon: 'user', title: 'Ein Ansprechpartner', text: 'Von Anfang bis Ende dieselbe Person.' },
+        { _key: 'h2', icon: 'key', title: 'Ihre Konten bleiben Ihre', text: 'Domain und Hosting laufen auf Ihren Namen.' },
+        { _key: 'h3', icon: 'refresh', title: 'Erst das Backup', text: 'Vor jedem Update eine Sicherung.' },
+        { _key: 'h4', icon: 'gauge', title: 'Schnelle Seiten', text: 'Wir zielen auf einen Lighthouse-Wert ab 90.' },
+        { _key: 'h5', icon: 'phone', title: 'Smartphone zuerst', text: 'Jede Seite funktioniert zuerst auf dem Handy.' },
+        { _key: 'h6', icon: 'eye', title: 'Live-Vorschau', text: 'Den Fortschritt jederzeit selbst sehen.' },
+        { _key: 'h7', icon: 'search', title: 'SEO-Grundlagen', text: 'Google liest Ihre Seite vom ersten Tag an richtig.' },
+        { _key: 'h8', icon: 'chat', title: 'Auch nach dem Livegang', text: 'Wir sind für Ihre Fragen da.' },
+      ],
+    },
+    closing: {
+      title: 'Lassen Sie uns gemeinsam bauen, was Sie vorhaben.',
+      text: 'Ob Idee für eine neue Website oder Unterstützung für Ihre bestehende: Schreiben Sie uns kurz, und wir entscheiden gemeinsam, wie wir helfen können. Gern auch auf Türkisch.',
+      image: img('closing-desk', 'Ein Laptop auf einem Holztisch neben einem weißen Stuhl in einem ruhigen, hellen Raum'),
+      tag: 'Offen für neue Projekte',
+      cta: { label: 'Kontakt aufnehmen', href: '/de/kontakt' },
     },
   },
 ];
