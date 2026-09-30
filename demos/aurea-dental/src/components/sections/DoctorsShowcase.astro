@@ -1,25 +1,487 @@
 ---
 /**
- * STUB — TODO(section agent): build §10: panel rises over journey stage, landscape portrait card, circular selector, clip-path swap.
- * Keep: id="team", data-section="doctors".
- * Data: site.doctors in src/content/site.ts. Motion: src/scripts/sections/doctors.ts + one line in registry.ts.
+ * §10 DoctorsShowcase. A rounded panel that rises over the end of the Journey's sticky stage
+ * (negative top margin = --panel-rise-overlap on desktop + motion) while a veil dims the stage beneath.
+ * Tablist of circular portraits (lower left) switches one landscape portrait card with a hard
+ * clip-path wipe; name/specialty crossfade. On exit the card is wiped left, handing off to the
+ * Results comparison, which wipes in the same direction. Mobile: portrait-format card, scrollable selector.
  */
 import { site } from '../../content/site';
+import Img from '../ui/Img.astro';
 import RevealText from '../ui/RevealText.astro';
 
 const data = site.doctors;
+const total = String(data.items.length).padStart(2, '0');
+const first = data.items[0]!;
 ---
 <section class="doctors" id="team" data-section="doctors" aria-labelledby="team-title">
-  <div class="container stub">
-    <p class="label">{data.label}</p>
-    <RevealText as="h2" id="team-title" class="t-h2" lines={data.titleLines} />
+  <div class="doctors__veil" data-doctors-veil aria-hidden="true"></div>
+  <div class="doctors__surface" aria-hidden="true">
+    <div class="doctors__depth" data-doctors-depth>
+      {
+        data.items.map((d, i) => (
+          <div class="doctors__depth-layer" data-doctors-depth-layer style={i === 0 ? undefined : 'opacity: 0'}>
+            <Img image={d.image} alt="" sizes="40vw" widths={[480]} cover quality={40} />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="doctors__inner container">
+    <header class="doctors__head">
+      <div class="doctors__heading">
+        <p class="label label--dark" data-reveal="fade">{data.label}</p>
+        <RevealText as="h2" id="team-title" class="doctors__title t-h2" lines={data.titleLines} />
+      </div>
+      <p class="doctors__intro" data-reveal="fade" data-reveal-delay="0.15">{data.intro}</p>
+    </header>
+
+    <div class="doctors__stage">
+      <div class="doctors__select" data-reveal="fade" data-reveal-delay="0.1">
+        <p class="label" id="doctors-select-label">{data.selectorLabel}</p>
+        <div class="doctors__tabs" role="tablist" aria-labelledby="doctors-select-label" data-doctors-tabs>
+          {
+            data.items.map((d, i) => (
+              <button
+                type="button"
+                class="doctor-tab"
+                role="tab"
+                id={`doctor-tab-${d.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                aria-controls="doctors-panel"
+                tabindex={i === 0 ? 0 : -1}
+                data-doctor-tab
+              >
+                <span class="doctor-tab__avatar" aria-hidden="true" style={`--origin: ${data.focus[d.id] ?? '60% 38%'}`}>
+                  <Img
+                    image={d.image}
+                    alt=""
+                    sizes="64px"
+                    widths={[480]}
+                    cover
+                    quality={60}
+                    position={data.focus[d.id]}
+                    imgClass="doctor-tab__img"
+                  />
+                </span>
+                <span class="doctor-tab__text">
+                  <span class="doctor-tab__name">{d.name}</span>
+                  <span class="doctor-tab__spec">{d.specialty}</span>
+                </span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div
+        class="doctors__panel"
+        id="doctors-panel"
+        role="tabpanel"
+        aria-labelledby={`doctor-tab-${first.id}`}
+        tabindex="0"
+        data-doctors-panel
+      >
+        <div class="doctors__card" data-doctors-card>
+          <div class="doctors__card-reveal" data-reveal="clip" data-reveal-from="center-y" data-reveal-start="top 85%">
+            <div class="doctors__card-parallax" data-doctors-parallax>
+              {
+                data.items.map((d, i) => (
+                  <div
+                    class:list={['doctor-portrait', { 'is-active': i === 0 }]}
+                    data-doctor-portrait
+                    aria-hidden={i === 0 ? undefined : 'true'}
+                    style={`--focus: ${data.focus[d.id] ?? '60% 40%'}`}
+                  >
+                    <Img
+                      image={d.image}
+                      alt={d.imageAlt}
+                      sizes="(min-width: 1024px) 70vw, 100vw"
+                      widths={[768, 1080, 1440, 1800]}
+                      cover
+                      imgClass="doctor-portrait__img"
+                    />
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+          <span class="doctors__count" aria-hidden="true"><span data-doctors-current>01</span> / {total}</span>
+        </div>
+
+        <div class="doctors__info">
+          {
+            data.items.map((d, i) => (
+              <div class="doctor-info" data-doctor-info hidden={i !== 0}>
+                <h3 class="doctor-info__name">{d.name}</h3>
+                <p class="doctor-info__spec label">{d.specialty}</p>
+                <p class="doctor-info__bio">{d.bio}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .stub {
+  .doctors {
+    --doctors-overlap: var(--radius-xl);
+    --doctors-radius: var(--radius-xl);
+    --card-radius: var(--radius-lg);
+    position: relative;
+    z-index: var(--z-panel);
+    margin-top: calc(var(--doctors-overlap) * -1);
+    padding-block: var(--section-pad-sm);
+    isolation: isolate;
+  }
+  /* panel surface: own element so the veil can sit behind its rounded corners */
+  .doctors__surface {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: var(--color-panel);
+    border-radius: var(--doctors-radius) var(--doctors-radius) 0 0;
+  }
+  .doctors__veil {
+    display: none;
+  }
+  .doctors__depth {
+    position: absolute;
+    top: 30%;
+    right: 6%;
+    width: 58%;
+    height: 56%;
+    opacity: 0.16;
+    filter: blur(72px);
+    transform: scale(1.2);
+    pointer-events: none;
+  }
+  .doctors__depth-layer {
+    position: absolute;
+    inset: 0;
+  }
+  .doctors__depth :global(.picture) {
+    height: 100%;
+  }
+
+  .doctors__inner {
+    display: grid;
+    gap: var(--space-7);
+  }
+  .doctors__head {
     display: grid;
     gap: var(--space-5);
-    padding-block: var(--section-pad);
+  }
+  .doctors__heading {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .doctors__intro {
+    max-width: 24rem;
+    color: var(--color-text-2);
+  }
+
+  /* ---- stage: selector + panel (mobile first) ---- */
+  .doctors__stage {
+    display: grid;
+    gap: var(--space-6);
+  }
+  .doctors__panel {
+    display: grid;
+    gap: var(--space-5);
+    border-radius: var(--card-radius);
+  }
+  .doctors__panel:focus-visible {
+    outline-offset: 6px;
+  }
+  .doctors__card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    max-height: 78svh;
+    width: 100%;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    background: var(--color-surface);
+    /* Safari: keep rounded clipping with transformed children */
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+  }
+  .doctors__card-reveal,
+  .doctors__card-parallax {
+    position: absolute;
+    inset: 0;
+  }
+  .doctor-portrait {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0% 0% 0% 100%);
+  }
+  .doctor-portrait.is-active {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+  .doctor-portrait :global(.picture) {
+    height: 100%;
+  }
+  .doctor-portrait :global(.doctor-portrait__img) {
+    object-position: var(--focus);
+  }
+  .doctors__count {
+    position: absolute;
+    top: 18px;
+    left: 20px;
+    z-index: 2;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text);
+  }
+
+  .doctors__info {
+    display: grid;
+  }
+  .doctor-info {
+    grid-area: 1 / 1;
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+  }
+  .doctor-info__name {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-book);
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-snug);
+  }
+  .doctor-info__bio {
+    margin-top: var(--space-2);
+    max-width: 30rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-text-2);
+  }
+
+  /* ---- selector ---- */
+  .doctors__select {
+    display: grid;
+    gap: var(--space-4);
+    min-width: 0;
+  }
+  .doctors__tabs {
+    display: flex;
+    gap: 8px;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 4px var(--gutter);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .doctors__tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .doctor-tab {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+    padding: 6px 18px 6px 6px;
+    border-radius: var(--radius-round);
+    box-shadow: inset 0 0 0 1px var(--color-border);
+    scroll-snap-align: start;
+    text-align: left;
+    transition:
+      box-shadow var(--duration-ui) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-primary);
+  }
+  .doctor-tab[aria-selected='true'] {
+    background: var(--color-white);
+    box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  }
+  .doctor-tab__avatar {
+    position: relative;
+    display: block;
+    width: 44px;
+    height: 44px;
+    flex: none;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-surface);
+    transition:
+      transform var(--duration-fast) var(--ease-primary),
+      opacity var(--duration-ui) var(--ease-primary);
+  }
+  .doctor-tab__avatar :global(.picture) {
+    height: 100%;
+  }
+  /* zoom into the face region of the landscape portrait */
+  .doctor-tab__avatar :global(.doctor-tab__img) {
+    transform: scale(2.1);
+    transform-origin: var(--origin, 60% 38%);
+  }
+  .doctor-tab__text {
+    display: grid;
+    gap: 2px;
+    line-height: 1.2;
+  }
+  .doctor-tab__name {
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+    white-space: nowrap;
+  }
+  .doctor-tab__spec {
+    font-size: 0.75rem;
+    color: var(--color-text-2);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 640px) {
+    .doctors__card {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  /* ---- desktop composition ---- */
+  @media (min-width: 1024px) {
+    .doctors__inner {
+      gap: clamp(40px, 4.5vw, 72px);
+    }
+    .doctors__head {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      align-items: end;
+    }
+    .doctors__heading {
+      grid-column: 1 / 10;
+    }
+    .doctors__intro {
+      grid-column: 10 / -1;
+      justify-self: end;
+    }
+    .doctors__stage {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      row-gap: 0;
+    }
+    /* the tabpanel spans the row; its info column sits above the selector in columns 1–3 */
+    .doctors__panel {
+      grid-column: 1 / -1;
+      grid-row: 1;
+      grid-template-columns: subgrid;
+      gap: 0;
+      align-items: stretch;
+    }
+    .doctors__card {
+      grid-column: 4 / -1;
+      grid-row: 1;
+      aspect-ratio: 16 / 9;
+      max-height: none;
+    }
+    .doctors__info {
+      grid-column: 1 / 4;
+      grid-row: 1;
+      align-self: end;
+      padding-bottom: calc(64px + var(--space-4) + 1.2em + var(--space-8));
+    }
+    .doctor-info__bio {
+      max-width: 17rem;
+    }
+    .doctors__select {
+      grid-column: 1 / 4;
+      grid-row: 1;
+      align-self: end;
+      z-index: 1;
+    }
+    .doctors__tabs {
+      margin: 0;
+      padding: 0;
+      gap: 12px;
+      overflow: visible;
+    }
+    .doctor-tab {
+      padding: 0;
+      border-radius: 50%;
+      box-shadow: none;
+      background: none;
+    }
+    .doctor-tab[aria-selected='true'] {
+      background: none;
+      box-shadow: none;
+    }
+    .doctor-tab__avatar {
+      width: 64px;
+      height: 64px;
+      opacity: 0.62;
+    }
+    .doctor-tab__avatar::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 1px var(--color-border);
+      transition: box-shadow var(--duration-ui) var(--ease-primary);
+    }
+    .doctor-tab:hover .doctor-tab__avatar,
+    .doctor-tab:focus-visible .doctor-tab__avatar {
+      transform: scale(1.08);
+      opacity: 1;
+    }
+    .doctor-tab[aria-selected='true'] .doctor-tab__avatar {
+      opacity: 1;
+    }
+    .doctor-tab[aria-selected='true'] .doctor-tab__avatar::after {
+      box-shadow:
+        inset 0 0 0 1px var(--color-text),
+        inset 0 0 0 3px var(--color-panel);
+    }
+    .doctor-tab:focus-visible {
+      outline-offset: 4px;
+      border-radius: 50%;
+    }
+    .doctor-tab__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+    .doctors__count {
+      top: 22px;
+      left: 26px;
+    }
+  }
+
+  /* ---- rises over the Journey stage (desktop + motion) ---- */
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .doctors {
+      --doctors-overlap: var(--panel-rise-overlap);
+    }
+    .doctors__veil {
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: calc(100% - var(--doctors-radius));
+      height: calc(100svh + var(--doctors-radius));
+      z-index: -2;
+      background: var(--color-text);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .doctors__card-parallax {
+      will-change: transform;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .doctor-tab,
+    .doctor-tab__avatar,
+    .doctor-tab__avatar::after {
+      transition-duration: 1ms;
+    }
   }
 </style>

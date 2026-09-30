@@ -1,25 +1,438 @@
 ---
 /**
- * STUB — TODO(section agent): build §9 signature: 400–500vh outer, sticky 100vh stage, 5 steps, model crossfade w/ perspective, masked number roll, progress line.
- * Keep: id="journey", data-section="journey".
- * Data: site.journey in src/content/site.ts. Motion: src/scripts/sections/journey.ts + one line in registry.ts.
+ * §9 Signature: treatment journey.
+ *
+ * Motion (prefers-reduced-motion: no-preference): outer section = sticky 100svh stage + scroll.
+ *  - Desktop ≥1024: `--journey-lift` (100svh) of the section sits UNDER the Services panel
+ *    (negative margin); the panel lifts off and the stage beneath comes forward (journey.ts).
+ *    Then `--journey-steps` (250vh) of scrubbed step changes. Own scroll ≈ 450vh incl. the cover zone.
+ *  - Mobile <1024: 100svh + 180vh (≈280vh), model dominant, no overlap.
+ *
+ * ── Coordination with DoctorsShowcase (next section) ──────────────────────────────────────────
+ *  The stage is `.journey__stage` ([data-journey-stage]). To slide the Doctors panel over the END
+ *  of the stage, give the Doctors root a negative `margin-top` (e.g. -100svh on desktop+motion) and
+ *  `position: relative; z-index: var(--z-panel)`. journey.ts reads that negative margin on every
+ *  refresh and appends it to this section as `--journey-cover`, so the stage stays sticky (and
+ *  quietly recedes) for exactly that distance while the Doctors panel rises over it. Nothing else
+ *  needs to be shared.
+ *
+ * Reduced motion / no JS layout: no pin — steps render as a readable stacked list.
+ * The same <ol> serves both modes: in staged mode each step's number, model and caption are
+ * absolutely placed into shared slots of the stage (li/ol stay unpositioned), titles form the
+ * right-hand list (desktop) or a shared slot (mobile).
  */
 import { site } from '../../content/site';
+import Img from '../ui/Img.astro';
 import RevealText from '../ui/RevealText.astro';
 
 const data = site.journey;
+const total = String(data.steps.length).padStart(2, '0');
 ---
 <section class="journey" id="journey" data-section="journey" aria-labelledby="journey-title">
-  <div class="container stub">
-    <p class="label">{data.label}</p>
-    <RevealText as="h2" id="journey-title" class="t-h2" lines={data.titleLines} />
+  <div class="journey__stage" data-journey-stage>
+    <div class="journey__recede" data-journey-recede>
+      <div class="journey__content" data-journey-content>
+        <header class="journey__head container">
+          <p class="label label--dark" data-reveal="fade" data-reveal-trigger="manual" data-journey-label>{data.label}</p>
+          <RevealText as="h2" id="journey-title" class="journey__title t-h2" lines={data.titleLines} manual />
+        </header>
+
+        <p class="journey__count label" aria-hidden="true" data-journey-count>
+          <span>{data.stepLabel}</span><span class="journey__count-total">/ {total}</span>
+        </p>
+
+        <ol class="journey__steps" data-journey-steps>
+          {
+            data.steps.map((step, i) => (
+              <li class="jstep" data-jstep aria-current={i === 0 ? 'step' : undefined}>
+                <div class="jstep__num" aria-hidden="true">
+                  <span class="jstep__num-inner" data-jstep-num>
+                    {step.index}
+                  </span>
+                </div>
+                <figure class="jstep__model" data-jstep-model>
+                  <Img
+                    image={step.image}
+                    alt={step.imageAlt}
+                    sizes="(min-width: 1024px) 36vw, (min-width: 640px) 60vw, 88vw"
+                    widths={[480, 768, 1080]}
+                    cover
+                  />
+                </figure>
+                <div class="jstep__label" data-jstep-label>
+                  <span class="jstep__index" aria-hidden="true">
+                    {step.index}
+                  </span>
+                  <h3 class="jstep__title">
+                    <span class="visually-hidden">{data.stepLabel} {step.index}: </span>
+                    {step.title}
+                  </h3>
+                </div>
+                <p class="jstep__caption">
+                  <span class="jstep__caption-inner" data-jstep-caption>
+                    {step.caption}
+                  </span>
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="journey__progress" aria-hidden="true">
+          <span data-journey-progress></span>
+        </div>
+      </div>
+    </div>
+    <div class="journey__shade journey__shade--in" data-journey-shade-in aria-hidden="true"></div>
+    <div class="journey__shade journey__shade--out" data-journey-shade-out aria-hidden="true"></div>
   </div>
 </section>
 
 <style>
-  .stub {
+  /* ============================================================ stacked list (reduced motion) */
+  .journey {
+    position: relative;
+    /* tuck under the Services panel's rounded bottom corners */
+    margin-top: calc(var(--radius-xl) * -1);
+    background: var(--color-bg);
+  }
+  .journey__stage {
+    position: relative;
+    padding-block: calc(var(--section-pad-sm) + var(--radius-xl)) var(--section-pad-sm);
+  }
+  .journey__head {
     display: grid;
     gap: var(--space-5);
-    padding-block: var(--section-pad);
+  }
+  .journey__count,
+  .journey__progress,
+  .journey__shade,
+  .jstep__index {
+    display: none;
+  }
+  .journey__steps {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: var(--space-8) auto 0;
+    padding-inline: var(--gutter);
+  }
+  .jstep {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    column-gap: var(--space-4);
+    row-gap: var(--space-4);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .jstep__num {
+    grid-row: 1 / 3;
+    font-size: var(--fs-h3);
+    line-height: 1;
+    letter-spacing: var(--ls-heading);
+    font-variant-numeric: tabular-nums;
+  }
+  .jstep__num-inner {
+    display: block;
+  }
+  .jstep__label {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .jstep__title {
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--ls-tight);
+  }
+  .jstep__caption {
+    grid-column: 2;
+    grid-row: 2;
+    max-width: 28rem;
+    color: var(--color-text-2);
+  }
+  .jstep__caption-inner {
+    display: block;
+  }
+  .jstep__model {
+    grid-column: 2;
+    grid-row: 3;
+    width: min(100%, 20rem);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .jstep__model :global(.picture) {
+    height: 100%;
+  }
+
+  @media (min-width: 1024px) {
+    .jstep {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      align-items: start;
+    }
+    .jstep__num {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+      font-size: var(--fs-h2);
+    }
+    .jstep__label,
+    .jstep__caption {
+      grid-column: 3 / 7;
+    }
+    .jstep__model {
+      grid-column: 9 / -1;
+      grid-row: 1 / 4;
+      width: 100%;
+      aspect-ratio: 5 / 4;
+    }
+  }
+
+  /* ============================================================ staged scene (motion) */
+  @media (prefers-reduced-motion: no-preference) {
+    .journey {
+      --journey-lift: 0px;
+      --journey-steps: 180vh;
+      --edge: max(var(--gutter), calc((100% - var(--container-max)) / 2 + var(--gutter)));
+      --pad-b: clamp(20px, 4svh, 40px);
+      --block-h: 7.5rem;
+      --head-h: calc(1rem + var(--space-4) + var(--fs-h2) * 2.04);
+      --head-top: calc(var(--header-h) + clamp(16px, 3.5svh, 40px));
+      height: calc(100svh + var(--journey-steps) + var(--journey-cover, 0px));
+    }
+    .journey__stage {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      padding: 0;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .journey__recede,
+    .journey__content,
+    .journey__shade {
+      position: absolute;
+      inset: 0;
+    }
+    .journey__content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr);
+    }
+    .journey__head {
+      grid-row: 1;
+      gap: var(--space-4);
+      padding-top: var(--head-top);
+    }
+    .journey__shade {
+      display: block;
+      z-index: 2;
+      background: var(--color-text);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .journey__steps {
+      grid-row: 2;
+      margin: 0;
+      padding: 0;
+    }
+    .jstep {
+      display: block;
+      padding: 0;
+      border: 0;
+    }
+    /* absolutely placed parts resolve against the stage, never against a grid area */
+    .jstep__num,
+    .jstep__model,
+    .jstep__label,
+    .jstep__caption {
+      grid-area: auto;
+    }
+
+    /* number: masked roll */
+    .jstep__num {
+      position: absolute;
+      left: var(--edge);
+      top: calc(100% - var(--pad-b) - var(--block-h));
+      height: 0.86em;
+      overflow: hidden;
+      font-size: 4.25rem;
+      font-weight: var(--fw-regular);
+      line-height: 0.86;
+      letter-spacing: -0.05em;
+    }
+    .jstep__num-inner {
+      will-change: transform;
+    }
+    /* model */
+    .jstep__model {
+      position: absolute;
+      left: 50%;
+      top: calc(var(--head-top) + var(--head-h) + clamp(16px, 3svh, 32px));
+      bottom: calc(var(--pad-b) + var(--block-h) + clamp(12px, 2svh, 24px));
+      translate: -50% 0;
+      width: auto;
+      max-width: 88vw;
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-md);
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+    }
+    /* title + caption slots (mobile: shared, cross-fading) */
+    .jstep__label {
+      position: absolute;
+      left: calc(var(--edge) + 5.25rem);
+      right: var(--edge);
+      top: calc(100% - var(--pad-b) - var(--block-h) + 0.1rem);
+    }
+    .jstep__caption {
+      position: absolute;
+      left: calc(var(--edge) + 5.25rem);
+      right: calc(var(--edge) + 0.75rem);
+      top: calc(100% - var(--pad-b) - var(--block-h) + 2.1rem);
+      max-width: 24rem;
+      font-size: var(--fs-small);
+      line-height: 1.45;
+    }
+    .jstep:not(:first-child) .jstep__model,
+    .jstep:not(:first-child) .jstep__label,
+    .jstep:not(:first-child) .jstep__caption-inner {
+      opacity: 0;
+    }
+    .jstep:not(:first-child) .jstep__num-inner {
+      transform: translate3d(0, 100%, 0);
+    }
+
+    /* ultra-thin progress line */
+    .journey__progress {
+      display: block;
+      position: absolute;
+      right: calc(var(--gutter) * 0.45);
+      top: 50%;
+      height: 28svh;
+      width: 1px;
+      translate: 0 -50%;
+      background: var(--color-border);
+    }
+    .journey__progress span {
+      position: absolute;
+      inset: 0;
+      background: var(--color-text);
+      transform: scaleY(0);
+      transform-origin: 50% 0;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+    .journey {
+      --block-h: 9rem;
+    }
+    .jstep__num {
+      font-size: 5.5rem;
+    }
+    .jstep__label,
+    .jstep__caption {
+      left: calc(var(--edge) + 7.5rem);
+    }
+    .jstep__caption {
+      font-size: var(--fs-body);
+    }
+  }
+
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .journey {
+      --journey-lift: 100svh;
+      --journey-steps: 250vh;
+      --pad-b: clamp(40px, 8svh, 88px);
+      --caption-h: 6rem;
+      --num-size: clamp(7rem, 11vw, 12rem);
+      /* the first 100svh sits beneath the Services panel, which lifts off it */
+      margin-top: calc(var(--journey-lift) * -1);
+      height: calc(100svh + var(--journey-lift) + var(--journey-steps) + var(--journey-cover, 0px));
+    }
+    .journey__head {
+      padding-top: calc(var(--header-h) + clamp(24px, 5svh, 56px));
+    }
+    .journey__title {
+      max-width: 9.5em;
+      font-size: min(var(--fs-h2), 5vw);
+    }
+    .journey__steps {
+      grid-row: 1 / -1;
+      align-self: center;
+      justify-self: end;
+      width: auto;
+      margin-right: calc(var(--edge) + 2.5rem);
+      display: grid;
+      gap: clamp(10px, 1.8svh, 18px);
+    }
+    .jstep__label {
+      position: static;
+      display: grid;
+      grid-template-columns: 2.25rem auto;
+      align-items: baseline;
+      opacity: 0.36;
+    }
+    .jstep:not(:first-child) .jstep__label {
+      opacity: 0.36;
+    }
+    .jstep:first-child .jstep__label {
+      opacity: 1;
+    }
+    .jstep__index {
+      display: block;
+      font-size: var(--fs-label);
+      font-weight: var(--fw-medium);
+      letter-spacing: var(--ls-label);
+      font-variant-numeric: tabular-nums;
+    }
+    .jstep__title {
+      font-size: var(--fs-h4);
+      white-space: nowrap;
+    }
+
+    .jstep__num {
+      top: auto;
+      bottom: calc(var(--pad-b) + var(--caption-h) + 1.25rem);
+      font-size: var(--num-size);
+    }
+    .journey__count {
+      display: inline-flex;
+      position: absolute;
+      left: var(--edge);
+      bottom: calc(var(--pad-b) + var(--caption-h) + 1.25rem + var(--num-size) * 0.86 + 1.25rem);
+      gap: 0.75em;
+      color: var(--color-text);
+    }
+    .journey__count-total {
+      color: var(--color-text-2);
+    }
+    .jstep__caption {
+      left: var(--edge);
+      right: auto;
+      top: calc(100% - var(--pad-b) - var(--caption-h));
+      width: min(22rem, 25vw);
+      font-size: var(--fs-body);
+      line-height: var(--lh-body);
+    }
+    .jstep__model {
+      left: 56%;
+      top: calc(50% + var(--header-h) / 2);
+      bottom: auto;
+      height: min(56svh, 34vw, 700px);
+      translate: -50% -50%;
+      max-width: none;
+      border-radius: var(--radius-lg);
+    }
+    .journey__progress {
+      height: 34svh;
+    }
+  }
+  @media (min-width: 1280px) and (prefers-reduced-motion: no-preference) {
+    .jstep__model {
+      left: 55%;
+      height: min(62svh, 40vw, 700px);
+    }
   }
 </style>

@@ -59,6 +59,15 @@ Space `--space-1…10`, `--section-pad`, `--section-pad-sm`, `--gutter`, `--grid
 Radii `--radius-xs|sm|md|lg|xl|round`. Motion `--ease-primary|soft`, `--duration-fast|ui|medium|large`. Layers `--z-panel|header|menu`.
 `--panel-rise-overlap` (100svh on desktop+motion, else 0).
 
+## Booking form
+
+`BookingCTA` posts `name, phone, email, interest[], message` (+ honeypot `company`, must stay empty) to
+`POST /api/booking`. Without JS the browser validates natively and submits; with JS `booking.ts` validates inline
+and — since no backend exists in this demo — intercepts the submit and shows the success state. To go live, add
+`data-endpoint="live"` to the form: it then `fetch`es the action and falls back to a normal POST on failure.
+The parent Sunworks repo's form stack (Worker route + D1 storage + Turnstile verification) can back this endpoint;
+add the Turnstile widget inside the form and allow `challenges.cloudflare.com` in `public/_headers` CSP.
+
 ## Security / deploy
 
 `public/_headers`: strict CSP (`script-src 'self'`, no inline scripts — Astro emits one external module; `assetsInlineLimit: 0`),

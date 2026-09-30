@@ -1,25 +1,396 @@
 ---
 /**
- * STUB — TODO(section agent): build ServiceAccordion (§7–8): overlapping panel, 8 rows, one expanded, FLIP-like height interpolation, hover intent 120ms, scroll auto-activation.
- * Keep: id="services", data-section="services", class "panel-rise" (rises over the Benefits scene).
- * Data: site.services in src/content/site.ts. Motion: src/scripts/sections/services.ts + one line in registry.ts.
+ * §7–8 Services. Root is the `.panel-rise` panel that slides over the still-sticky Benefits stage
+ * (base.css owns the overlap; services.ts owns only the panel's own rise: side inset + head lag).
+ * Bottom corners are rounded too: on desktop the panel lifts off the Journey stage lying beneath it
+ * (TreatmentJourney pulls itself up under this panel).
+ *
+ * ServiceAccordion: one row open at a time (default first). Every row is a real <button> header
+ * (aria-expanded / aria-controls) + a labelled region. Collapsed rows keep their detail in layout
+ * with zero height (content overflows, hidden) so services.ts can FLIP rows, media and detail with
+ * transforms + clip-path only. Row heights: 88 collapsed / 208 open (desktop), vertical card < 640.
  */
 import { site } from '../../content/site';
+import Img from '../ui/Img.astro';
 import RevealText from '../ui/RevealText.astro';
+import Button from '../ui/Button.astro';
+import Arrow from '../ui/Arrow.astro';
 
 const data = site.services;
 ---
 <section class="panel-rise services" id="services" data-section="services" aria-labelledby="services-title">
-  <div class="container stub">
-    <p class="label">{data.label}</p>
-    <RevealText as="h2" id="services-title" class="t-h2" lines={data.titleLines} />
+  <div class="services__inner container">
+    <header class="services__head" data-services-head>
+      <div class="services__heading">
+        <p class="label label--dark" data-reveal="fade">{data.label}</p>
+        <RevealText as="h2" id="services-title" class="services__title t-h2" lines={data.titleLines} />
+      </div>
+      <p class="services__intro" data-reveal="fade" data-reveal-delay="0.15">{data.intro}</p>
+    </header>
+
+    <ul class="svc-list" data-svc-list>
+      {
+        data.items.map((item, i) => {
+          const open = i === 0;
+          return (
+            <li class:list={['svc', { 'is-open': open }]} data-svc>
+              <h3 class="svc__heading">
+                <button
+                  class="svc__trigger"
+                  type="button"
+                  id={`svc-trigger-${item.id}`}
+                  aria-expanded={open ? 'true' : 'false'}
+                  aria-controls={`svc-panel-${item.id}`}
+                  data-svc-trigger
+                >
+                  <span class="svc__index" aria-hidden="true">{item.index}</span>
+                  <span class="svc__name" data-svc-name>{item.name}</span>
+                  <span class="svc__arrow" aria-hidden="true">
+                    <Arrow class="svc__arrow-glyph" />
+                  </span>
+                </button>
+              </h3>
+              <div class="svc__media" data-svc-media>
+                <Img
+                  image={item.image}
+                  alt={item.imageAlt}
+                  sizes="(min-width: 1024px) 240px, (min-width: 640px) 200px, 92vw"
+                  widths={[240, 480, 768, 1080]}
+                  cover
+                />
+              </div>
+              <div
+                class="svc__detail"
+                id={`svc-panel-${item.id}`}
+                role="region"
+                aria-labelledby={`svc-trigger-${item.id}`}
+                data-svc-detail
+              >
+                <div class="svc__detail-inner">
+                  <p class="svc__desc">{item.description}</p>
+                  <Button href={item.cta.href} variant="link" class="svc__cta">
+                    {item.cta.label}
+                  </Button>
+                </div>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
   </div>
 </section>
 
 <style>
-  .stub {
+  .services {
+    --row-h: 76px;
+    --media-w: 48px;
+    --media-top: 14px;
+    --col-gap: 12px;
+    border-radius: var(--radius-xl);
+    padding-block: var(--section-pad-sm) clamp(3rem, 2rem + 4vw, 6rem);
+  }
+  .services__head {
     display: grid;
     gap: var(--space-5);
-    padding-block: var(--section-pad);
+  }
+  .services__heading {
+    display: grid;
+    gap: var(--space-5);
+  }
+  .services__intro {
+    max-width: 26rem;
+    color: var(--color-text-2);
+  }
+
+  /* ---------------------------------------------------------------- accordion */
+  .svc-list {
+    margin-top: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+    overflow-anchor: none;
+  }
+  .svc {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.75rem var(--media-w) minmax(0, 1fr) 36px;
+    grid-template-rows: var(--row-h) auto auto;
+    column-gap: var(--col-gap);
+    align-items: start;
+    border-top: 1px solid var(--color-border);
+  }
+  /* open card surface (mobile) — painted behind, clipped with the row during FLIP */
+  .svc::before {
+    content: '';
+    position: absolute;
+    inset: -1px 0 0;
+    z-index: -1;
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    opacity: 0;
+    transition: opacity var(--duration-medium) var(--ease-primary);
+  }
+  .svc-list {
+    position: relative;
+    z-index: 0;
+  }
+  .svc__heading {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: subgrid;
+    font: inherit;
+    letter-spacing: normal;
+  }
+  .svc__trigger {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: var(--row-h);
+    align-items: center;
+    min-height: var(--row-h);
+    text-align: left;
+    border-radius: var(--radius-xs);
+  }
+  .svc__trigger:focus-visible {
+    outline-offset: -2px;
+  }
+  .svc__index {
+    grid-column: 1;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    font-variant-numeric: tabular-nums;
+    color: var(--color-text-3);
+    transition: color var(--duration-ui) var(--ease-primary);
+  }
+  .svc__name {
+    grid-column: 3;
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-medium);
+    line-height: var(--lh-snug);
+    letter-spacing: var(--ls-tight);
+    transition: translate var(--duration-ui) var(--ease-primary);
+  }
+  .svc__arrow {
+    grid-column: 4;
+    justify-self: end;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: var(--color-text);
+    box-shadow: inset 0 0 0 1px var(--color-border-strong);
+    transition:
+      transform var(--duration-fast) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-primary),
+      color var(--duration-ui) var(--ease-primary),
+      box-shadow var(--duration-ui) var(--ease-primary);
+  }
+  .svc__arrow :global(.svc__arrow-glyph) {
+    width: 14px;
+    height: 14px;
+    transition: rotate var(--duration-ui) var(--ease-primary);
+  }
+
+  /* media: one element, thumbnail when collapsed, large when open (FLIP'd by services.ts) */
+  .svc__media {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    width: var(--media-w);
+    aspect-ratio: 4 / 3;
+    margin-top: calc((var(--row-h) - var(--media-w) * 0.75) / 2);
+    overflow: hidden;
+    border-radius: var(--radius-xs);
+    background: var(--color-surface);
+    pointer-events: none;
+    transform-origin: 0 0;
+  }
+  .svc__media :global(.picture) {
+    height: 100%;
+  }
+  .svc__media :global(img) {
+    transition: transform 800ms var(--ease-soft);
+  }
+
+  /* detail: always in layout; zero-height (overflowing, hidden) while collapsed */
+  .svc__detail {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+  .svc__detail-inner {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding-bottom: var(--space-5);
+  }
+  .svc__desc {
+    max-width: 30rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-text-2);
+  }
+  .svc__cta {
+    font-size: var(--fs-button);
+  }
+
+  /* ---- open ---- */
+  .svc.is-open .svc__detail {
+    height: auto;
+    visibility: visible;
+    opacity: 1;
+  }
+  .svc.is-open .svc__index {
+    color: var(--color-text);
+  }
+  .svc.is-open .svc__arrow {
+    background: var(--color-cta);
+    color: var(--color-cta-text);
+    box-shadow: inset 0 0 0 1px var(--color-cta);
+  }
+  .svc.is-open .svc__arrow :global(.svc__arrow-glyph) {
+    rotate: 45deg;
+  }
+  .svc__trigger:hover .svc__arrow,
+  .svc__trigger:focus-visible .svc__arrow {
+    transform: scale(1.08);
+  }
+  .svc:not(.is-open) .svc__trigger:hover .svc__name {
+    translate: 4px 0;
+  }
+  .svc:not(.is-open):has(.svc__trigger:hover) .svc__media :global(img) {
+    transform: scale(1.025);
+  }
+
+  /* ---- phone: open row = vertical card ---- */
+  @media (max-width: 639.98px) {
+    .svc {
+      padding-inline: 12px;
+    }
+    .svc.is-open {
+      border-top-color: transparent;
+    }
+    .svc.is-open + .svc {
+      border-top-color: transparent;
+    }
+    .svc.is-open::before {
+      opacity: 1;
+    }
+    .svc.is-open .svc__name {
+      grid-column: 2 / 4;
+    }
+    .svc.is-open .svc__media {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      width: 100%;
+      margin-top: 0;
+      border-radius: var(--radius-sm);
+    }
+    .svc__detail-inner {
+      padding-top: var(--space-4);
+    }
+  }
+
+  /* ---- tablet + desktop: open row grows to 170–220px, detail sits under the name ---- */
+  @media (min-width: 640px) {
+    .services {
+      --row-h: 88px;
+      --media-w: 72px;
+      --media-open-w: 200px;
+      --col-gap: var(--grid-gap);
+    }
+    .services__head {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      align-items: end;
+    }
+    .services__heading {
+      grid-column: 1 / 9;
+    }
+    .services__intro {
+      grid-column: 9 / -1;
+      justify-self: end;
+    }
+    .svc-list {
+      margin-top: var(--space-9);
+    }
+    .svc {
+      grid-template-columns: 3rem var(--media-open-w) minmax(0, 1fr) 44px;
+      grid-template-rows: auto;
+    }
+    .svc__heading {
+      align-self: stretch;
+    }
+    .svc__arrow {
+      width: 44px;
+      height: 44px;
+    }
+    .svc__name {
+      font-size: var(--fs-h3);
+    }
+    .svc__detail {
+      grid-column: 3;
+      grid-row: 1;
+      /* first line sits just under the name */
+      margin-top: calc(var(--row-h) / 2 + 1.6rem);
+    }
+    .svc.is-open .svc__media {
+      width: var(--media-open-w);
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+    .svc__detail-inner {
+      padding-bottom: 14px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .services {
+      --media-open-w: 240px;
+    }
+    .services__heading {
+      grid-column: 1 / 8;
+    }
+    .services__intro {
+      max-width: 24rem;
+    }
+    .svc {
+      grid-template-columns: 4.5rem var(--media-open-w) minmax(0, 1fr) 44px;
+    }
+  }
+
+  /* wide desktop: description gets its own editorial column, aligned with the name */
+  @media (min-width: 1280px) {
+    .svc {
+      grid-template-columns: 4.5rem var(--media-open-w) minmax(0, 1fr) minmax(0, 22rem) 44px;
+    }
+    .svc__name {
+      grid-column: 3;
+    }
+    .svc__arrow {
+      grid-column: 5;
+    }
+    .svc__detail {
+      grid-column: 4;
+      margin-top: calc(var(--row-h) / 2 - 0.8rem);
+    }
+    .svc__desc {
+      font-size: var(--fs-body);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .svc::before,
+    .svc__name,
+    .svc__arrow,
+    .svc__index,
+    .svc__media :global(img),
+    .svc__arrow :global(.svc__arrow-glyph) {
+      transition: none;
+    }
   }
 </style>

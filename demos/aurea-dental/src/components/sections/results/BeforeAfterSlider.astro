@@ -1,0 +1,189 @@
+---
+/**
+ * Before/after comparison. `--pos` (0–100) drives everything with clip-path + transforms.
+ * The handle is the ARIA slider (keyboard: ←/→/↑/↓ ±2, PageUp/PageDown ±10, Home/End);
+ * pointer drag works anywhere on the frame (results.ts). Without JS it rests at 50%.
+ */
+import type { ImageKey } from '../../../lib/images';
+import Img from '../../ui/Img.astro';
+
+interface Props {
+  before: ImageKey;
+  after: ImageKey;
+  beforeAlt: string;
+  afterAlt: string;
+  beforeLabel: string;
+  afterLabel: string;
+  ariaLabel: string;
+  valueText: string;
+  hint: string;
+  caption?: string;
+}
+const { before, after, beforeAlt, afterAlt, beforeLabel, afterLabel, ariaLabel, valueText, hint, caption } = Astro.props;
+const initial = 50;
+const text = valueText.replace('{before}', String(initial)).replace('{after}', String(100 - initial));
+const sizes = '(min-width: 1024px) 52vw, 100vw';
+---
+<figure class="ba" data-ba data-value-text={valueText}>
+  <div class="ba__frame" data-ba-frame style={`--pos: ${initial}`}>
+    <div class="ba__reveal" data-ba-reveal>
+      <div class="ba__media" data-ba-media>
+        <div class="ba__layer ba__layer--after">
+          <Img image={after} alt={afterAlt} sizes={sizes} widths={[768, 1080, 1600]} cover />
+        </div>
+        <div class="ba__layer ba__layer--before" data-ba-before>
+          <Img image={before} alt={beforeAlt} sizes={sizes} widths={[768, 1080, 1600]} cover />
+        </div>
+      </div>
+      <span class="ba__tag ba__tag--before" aria-hidden="true">{beforeLabel}</span>
+      <span class="ba__tag ba__tag--after" aria-hidden="true">{afterLabel}</span>
+      <div class="ba__rail" data-ba-rail>
+        <span class="ba__line" aria-hidden="true"></span>
+        <span
+          class="ba__handle"
+          role="slider"
+          tabindex="0"
+          aria-label={ariaLabel}
+          aria-orientation="horizontal"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow={initial}
+          aria-valuetext={text}
+          data-ba-handle
+        >
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+            <path d="M6 4.5 2.5 8 6 11.5M10 4.5 13.5 8 10 11.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </span>
+      </div>
+    </div>
+  </div>
+  <figcaption class="ba__caption">
+    {caption && <span class="ba__caption-main">{caption}</span>}
+    <span class="ba__hint">{hint}</span>
+  </figcaption>
+</figure>
+
+<style>
+  .ba {
+    display: grid;
+    gap: var(--space-4);
+  }
+  .ba__frame {
+    --pos: 50;
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface);
+    touch-action: pan-y;
+    cursor: ew-resize;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+  }
+  .ba__reveal,
+  .ba__media,
+  .ba__layer {
+    position: absolute;
+    inset: 0;
+  }
+  .ba__layer :global(.picture) {
+    height: 100%;
+  }
+  .ba__layer :global(img) {
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+  .ba__layer--before {
+    clip-path: inset(0 calc(100% - var(--pos) * 1%) 0 0);
+  }
+  .ba__tag {
+    position: absolute;
+    top: 16px;
+    z-index: 2;
+    padding: 5px 8px 4px;
+    border-radius: var(--radius-xs);
+    background: var(--color-card);
+    font-size: 0.625rem;
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--color-text);
+    pointer-events: none;
+  }
+  .ba__tag--before {
+    left: 16px;
+  }
+  .ba__tag--after {
+    right: 16px;
+  }
+  /* full-width rail translated by --pos%: line + handle ride on its left edge */
+  .ba__rail {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    transform: translate3d(calc(var(--pos) * 1%), 0, 0);
+    pointer-events: none;
+  }
+  .ba__line {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -0.5px;
+    width: 1px;
+    background: var(--color-white);
+  }
+  .ba__handle {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border-radius: 50%;
+    background: var(--color-white);
+    color: var(--color-text);
+    box-shadow: inset 0 0 0 1px var(--color-border);
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+    transition:
+      transform var(--duration-fast) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-primary);
+  }
+  .ba__frame:hover .ba__handle,
+  .ba__handle:focus-visible {
+    transform: scale(1.08);
+  }
+  .ba__frame.is-dragging .ba__handle {
+    cursor: grabbing;
+    transform: scale(1.08);
+  }
+  .ba__handle:focus-visible {
+    outline: 2px solid var(--color-white);
+    outline-offset: 3px;
+  }
+  .ba__caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    text-transform: uppercase;
+    color: var(--color-text-2);
+  }
+  .ba__caption-main {
+    color: var(--color-text);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ba__handle {
+      transition: none;
+    }
+  }
+</style>

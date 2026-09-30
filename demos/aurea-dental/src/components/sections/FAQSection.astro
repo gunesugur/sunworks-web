@@ -1,25 +1,187 @@
 ---
 /**
- * STUB — TODO(section agent): build §12: quiet accordion, one open at a time, ARIA.
- * Keep: id="faq", data-section="faq".
- * Data: site.faq in src/content/site.ts. Motion: src/scripts/sections/faq.ts + one line in registry.ts.
+ * §12 FAQSection (quiet). Intro + CTA left, accordion right: thin rules, tiny +/–, one open at a time.
+ * No-JS: every answer is rendered open (aria-expanded="true"); faq.ts collapses all but the first
+ * and animates height + opacity + small translate. As Booking rises, the section recedes (desktop).
  */
 import { site } from '../../content/site';
+import Button from '../ui/Button.astro';
 import RevealText from '../ui/RevealText.astro';
 
 const data = site.faq;
 ---
 <section class="faq" id="faq" data-section="faq" aria-labelledby="faq-title">
-  <div class="container stub">
-    <p class="label">{data.label}</p>
-    <RevealText as="h2" id="faq-title" class="t-h2" lines={data.titleLines} />
+  <div class="faq__inner container" data-faq-recede>
+    <div class="faq__intro">
+      <p class="label label--dark" data-reveal="fade">{data.label}</p>
+      <RevealText as="h2" id="faq-title" class="t-h2" lines={data.titleLines} />
+      <p class="faq__text" data-reveal="fade" data-reveal-delay="0.1">{data.intro}</p>
+      <div data-reveal="fade" data-reveal-delay="0.2">
+        <Button href={data.cta.href} variant="ghost" size="sm">{data.cta.label}</Button>
+      </div>
+    </div>
+
+    <div class="faq__list" data-faq-list data-reveal="stagger" data-reveal-start="top 85%">
+      {
+        data.items.map((item) => (
+          <div class="faq-item" data-faq-item>
+            <h3 class="faq-item__heading">
+              <button
+                type="button"
+                class="faq-item__trigger"
+                id={`faq-q-${item.id}`}
+                aria-expanded="true"
+                aria-controls={`faq-a-${item.id}`}
+                data-faq-trigger
+              >
+                <span class="faq-item__q">{item.question}</span>
+                <span class="faq-item__icon" aria-hidden="true" />
+              </button>
+            </h3>
+            <div class="faq-item__panel" id={`faq-a-${item.id}`} role="region" aria-labelledby={`faq-q-${item.id}`} data-faq-panel>
+              <div class="faq-item__body" data-faq-body>
+                <p>{item.answer}</p>
+              </div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
   </div>
 </section>
 
 <style>
-  .stub {
+  .faq {
+    position: relative;
+    background: var(--color-panel);
+    padding-block: var(--section-pad-sm);
+  }
+  .faq__inner {
     display: grid;
+    gap: var(--space-8);
+    transform-origin: 50% 0%;
+  }
+  .faq__intro {
+    display: grid;
+    align-content: start;
+    justify-items: start;
     gap: var(--space-5);
-    padding-block: var(--section-pad);
+  }
+  .faq__text {
+    max-width: 22rem;
+    color: var(--color-text-2);
+  }
+
+  .faq__list {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .faq-item {
+    border-top: 1px solid var(--color-border);
+  }
+  .faq-item__heading {
+    font: inherit;
+    letter-spacing: normal;
+  }
+  .faq-item__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    width: 100%;
+    min-height: 64px;
+    padding: 20px 0;
+    text-align: left;
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-book);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-snug);
+    color: var(--color-text);
+  }
+  .faq-item__q {
+    transition: transform var(--duration-ui) var(--ease-primary);
+  }
+  .faq-item__trigger:hover .faq-item__q {
+    transform: translateX(4px);
+  }
+  .faq-item__trigger:focus-visible {
+    outline-offset: -2px;
+  }
+  /* tiny + / – */
+  .faq-item__icon {
+    position: relative;
+    width: 11px;
+    height: 11px;
+    flex: none;
+    color: var(--color-text-2);
+    transition: color var(--duration-ui) var(--ease-primary);
+  }
+  .faq-item__icon::before,
+  .faq-item__icon::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 5px;
+    height: 1px;
+    background: currentColor;
+    transition: transform var(--duration-ui) var(--ease-primary);
+  }
+  .faq-item__icon::after {
+    transform: rotate(90deg);
+  }
+  .faq-item__trigger[aria-expanded='true'] .faq-item__icon {
+    color: var(--color-text);
+  }
+  .faq-item__trigger[aria-expanded='true'] .faq-item__icon::after {
+    transform: rotate(0deg);
+  }
+  .faq-item__trigger:hover .faq-item__icon {
+    color: var(--color-text);
+  }
+
+  .faq-item__panel {
+    overflow: hidden;
+  }
+  .faq-item__body {
+    padding: 0 var(--space-7) var(--space-6) 0;
+  }
+  .faq-item__body p {
+    max-width: 40rem;
+    color: var(--color-text-2);
+  }
+
+  @media (min-width: 1024px) {
+    .faq {
+      padding-block: var(--section-pad) var(--section-pad-sm);
+    }
+    .faq__inner {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+    }
+    .faq__intro {
+      grid-column: 1 / 5;
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-6));
+      align-self: start;
+    }
+    .faq__list {
+      grid-column: 6 / -1;
+    }
+    .faq-item__trigger {
+      min-height: 76px;
+      padding: 24px 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .faq-item__q,
+    .faq-item__icon,
+    .faq-item__icon::before,
+    .faq-item__icon::after {
+      transition: none;
+    }
+    .faq__intro {
+      position: static;
+    }
   }
 </style>

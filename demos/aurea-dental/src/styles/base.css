@@ -299,7 +299,8 @@ button:hover .media-zoom img {
     scroll-behavior: auto !important;
   }
   [data-reveal='fade'],
-  [data-reveal='clip'] {
+  [data-reveal='clip'],
+  [data-reveal='clip'][data-reveal-from] {
     transform: none;
     clip-path: none;
     opacity: 0;

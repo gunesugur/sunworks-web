@@ -230,6 +230,8 @@ export const site = {
   journey: {
     label: '05 / Your treatment journey',
     titleLines: ['From first call', 'to confident smile.'],
+    /** prefix for step numbers ("Step 01") — screen readers + the stage counter */
+    stepLabel: 'Step',
     steps: [
       {
         index: '01',
@@ -274,6 +276,8 @@ export const site = {
     titleLines: ['AUREA is the team', 'you trust with your smile.'],
     intro: 'Four specialists, one shared plan. Each case is reviewed together before treatment begins.',
     selectorLabel: 'Choose a specialist',
+    /** object-position of each portrait's face (placeholders & real photos): avatar crop + mobile crop */
+    focus: { elif: '62% 38%', emre: '57% 40%', selin: '64% 38%', can: '59% 36%' } as Record<string, string>,
     items: [
       {
         id: 'elif',
@@ -322,6 +326,7 @@ export const site = {
       afterLabel: 'After',
       ariaLabel: 'Before and after comparison',
       hint: 'Drag or use arrow keys to compare',
+      valueText: '{before}% before, {after}% after',
     },
     testimonial: {
       quote: 'I stopped hiding my teeth in photos.',
@@ -330,6 +335,8 @@ export const site = {
       patient: 'Patient, 34',
       treatment: 'Aligners & whitening',
       note: 'Name withheld for privacy.',
+      label: 'Patient story',
+      monogram: 'P',
     },
   },
 
@@ -394,13 +401,24 @@ export const site = {
       name: { label: 'Name', placeholder: 'Your full name', autocomplete: 'name' },
       phone: { label: 'Phone', placeholder: '+90', autocomplete: 'tel' },
       email: { label: 'Email', placeholder: 'you@example.com', autocomplete: 'email' },
-      message: { label: 'Message', placeholder: 'Anything we should know? (optional)' },
+      message: { label: 'Message', placeholder: 'Anything we should know?' },
     },
     interestLegend: 'Treatment interest',
     chips: ['Consultation', 'Whitening', 'Implants', 'Aligners', 'General dentistry'],
     submit: 'Send request',
     privacy: 'We only use your details to arrange your appointment.',
     success: 'Thank you. We will be in touch within one working day.',
+    successTitle: 'Request received.',
+    again: 'Send another request',
+    sending: 'Sending…',
+    optional: 'Optional',
+    honeypot: 'Leave this field empty',
+    errors: {
+      summary: 'Please check the highlighted fields.',
+      name: 'Please enter your name.',
+      phone: 'Please enter a phone number we can reach you on.',
+      email: 'Please enter a valid email address.',
+    },
   },
 
   footer: {

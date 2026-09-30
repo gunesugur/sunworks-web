@@ -1,25 +1,451 @@
 ---
 /**
- * STUB — TODO(section agent): build §13: portrait clip reveal, typographic form, chips, round submit.
- * Keep: id="booking", data-section="booking".
- * Data: site.booking in src/content/site.ts. Motion: src/scripts/sections/booking.ts + one line in registry.ts.
+ * §13 BookingCTA. Left: editorial portrait (clip inset(35% 0 35% 0) → 0 as the section reaches centre,
+ * sticky on desktop). Right: heading + typographic form (real labels, bottom-border inputs, checkbox
+ * chips, honeypot, inline accessible errors, success state). Mobile: portrait above, form below.
+ * The form posts to /api/booking without JS (native validation); booking.ts validates and, until an
+ * endpoint exists, intercepts the submit and shows the success state (see README).
  */
 import { site } from '../../content/site';
+import Arrow from '../ui/Arrow.astro';
+import Img from '../ui/Img.astro';
 import RevealText from '../ui/RevealText.astro';
 
 const data = site.booking;
+const f = data.fields;
 ---
 <section class="booking" id="booking" data-section="booking" aria-labelledby="booking-title">
-  <div class="container stub">
-    <p class="label">{data.label}</p>
-    <RevealText as="h2" id="booking-title" class="t-h2" lines={data.titleLines} />
+  <div class="booking__inner container">
+    <div class="booking__media" data-booking-media>
+      <figure class="booking__portrait" data-booking-portrait>
+        <div class="booking__img" data-booking-img>
+          <Img image={data.image} alt={data.imageAlt} sizes="(min-width: 1024px) 50vw, 100vw" widths={[768, 1080, 1400]} cover position="50% 30%" />
+        </div>
+      </figure>
+    </div>
+
+    <div class="booking__content">
+      <header class="booking__head">
+        <p class="label label--dark" data-reveal="fade">{data.label}</p>
+        <RevealText as="h2" id="booking-title" class="booking__title" lines={data.titleLines} />
+        <p class="booking__intro" data-reveal="fade" data-reveal-delay="0.15">{data.intro}</p>
+      </header>
+
+      <form class="booking-form" action="/api/booking" method="post" data-booking-form aria-describedby="booking-privacy">
+        <div class="booking-form__fields" data-reveal="stagger" data-reveal-start="top 88%">
+          <div class="field field--full" data-field="name">
+            <label class="field__label" for="bk-name">{f.name.label}</label>
+            <input class="field__input" id="bk-name" name="name" type="text" autocomplete={f.name.autocomplete} placeholder={f.name.placeholder} required minlength="2" aria-describedby="bk-name-error" />
+            <p class="field__error" id="bk-name-error" data-error-for="name" data-message={data.errors.name}></p>
+          </div>
+          <div class="field" data-field="phone">
+            <label class="field__label" for="bk-phone">{f.phone.label}</label>
+            <input class="field__input" id="bk-phone" name="phone" type="tel" inputmode="tel" autocomplete={f.phone.autocomplete} placeholder={f.phone.placeholder} required pattern="[\+0-9 \(\)\-]{7,20}" aria-describedby="bk-phone-error" />
+            <p class="field__error" id="bk-phone-error" data-error-for="phone" data-message={data.errors.phone}></p>
+          </div>
+          <div class="field" data-field="email">
+            <label class="field__label" for="bk-email">{f.email.label}</label>
+            <input class="field__input" id="bk-email" name="email" type="email" autocomplete={f.email.autocomplete} placeholder={f.email.placeholder} required aria-describedby="bk-email-error" />
+            <p class="field__error" id="bk-email-error" data-error-for="email" data-message={data.errors.email}></p>
+          </div>
+          <fieldset class="field field--full chips">
+            <legend class="field__label">{data.interestLegend}</legend>
+            <div class="chips__list">
+              {
+                data.chips.map((chip, i) => (
+                  <label class="chip">
+                    <input class="chip__input" type="checkbox" name="interest" value={chip} checked={i === 0} />
+                    <span class="chip__text">{chip}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+          <div class="field field--full">
+            <label class="field__label" for="bk-message">
+              {f.message.label} <span class="field__optional">({data.optional})</span>
+            </label>
+            <textarea class="field__input field__input--area" id="bk-message" name="message" rows="3" placeholder={f.message.placeholder}></textarea>
+          </div>
+          <div class="booking-form__footer">
+            <p class="booking-form__privacy" id="booking-privacy">{data.privacy}</p>
+            <button class="submit" type="submit" data-booking-submit>
+              <span class="submit__label" data-submit-label data-sending={data.sending}>{data.submit}</span>
+              <span class="submit__circle" aria-hidden="true">
+                <Arrow class="submit__arrow" />
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="booking-form__hp" aria-hidden="true">
+          <label for="bk-company">{data.honeypot}</label>
+          <input id="bk-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <p class="booking-form__summary" role="alert" data-booking-summary data-message={data.errors.summary}></p>
+      </form>
+
+      <div class="booking-success" data-booking-success hidden>
+        <span class="booking-success__mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <h3 class="booking-success__title" tabindex="-1" data-booking-success-title>{data.successTitle}</h3>
+        <p class="booking-success__text">{data.success}</p>
+        <button type="button" class="booking-success__again link-line" data-booking-again>{data.again}</button>
+      </div>
+    </div>
   </div>
 </section>
 
 <style>
-  .stub {
+  .booking {
+    position: relative;
+    z-index: var(--z-base);
+    background: var(--color-panel);
+    padding-block: var(--section-pad-sm) var(--section-pad);
+  }
+  .booking__inner {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  /* ---- portrait ---- */
+  .booking__portrait {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    max-height: 76svh;
+    width: 100%;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface);
+    -webkit-mask-image: -webkit-radial-gradient(white, black);
+  }
+  .booking__img {
+    position: absolute;
+    inset: 0;
+  }
+  .booking__img :global(.picture) {
+    height: 100%;
+  }
+
+  /* ---- heading ---- */
+  .booking__content {
+    display: grid;
+    align-content: start;
+    gap: var(--space-8);
+  }
+  .booking__head {
     display: grid;
     gap: var(--space-5);
-    padding-block: var(--section-pad);
+  }
+  .booking__title {
+    font-size: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+    font-weight: var(--fw-display);
+    line-height: var(--lh-heading);
+    letter-spacing: var(--ls-display);
+  }
+  /* the question is a quiet kicker; the imperative carries the weight */
+  .booking__title :global(.mask-line:first-child) {
+    margin-bottom: 0.35em;
+    font-size: 0.5em;
+    font-weight: var(--fw-book);
+    letter-spacing: var(--ls-heading);
+    color: var(--color-text-2);
+  }
+  .booking__intro {
+    max-width: 30rem;
+    color: var(--color-text-2);
+  }
+
+  /* ---- form ---- */
+  .booking-form__fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6) var(--space-5);
+  }
+  .field {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .field__label {
+    padding: 0;
+    font-size: var(--fs-label);
+    font-weight: var(--fw-medium);
+    letter-spacing: var(--ls-label);
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--color-text-2);
+  }
+  .field__optional {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: var(--fw-regular);
+  }
+  .field__input {
+    width: 100%;
+    min-height: 48px;
+    padding: 8px 0 12px;
+    border: 0;
+    border-bottom: 1px solid var(--color-border-strong);
+    border-radius: 0;
+    background: transparent;
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+    font-weight: var(--fw-book);
+    letter-spacing: var(--ls-tight);
+    line-height: 1.3;
+    color: var(--color-text);
+    transition: border-color var(--duration-ui) var(--ease-primary);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field__input--area {
+    min-height: 96px;
+    resize: vertical;
+  }
+  .field__input::placeholder {
+    color: var(--color-text-3);
+    opacity: 1;
+  }
+  .field__input:hover {
+    border-bottom-color: rgba(20, 20, 20, 0.4);
+  }
+  .field__input:focus-visible {
+    outline: none;
+    border-bottom-color: var(--color-text);
+    box-shadow: 0 1px 0 0 var(--color-text);
+  }
+  .field__input[aria-invalid='true'] {
+    border-bottom-color: #8a3b2e;
+    box-shadow: 0 1px 0 0 #8a3b2e;
+  }
+  .field__error {
+    min-height: 1.2em;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: #8a3b2e;
+  }
+  .field__error:empty {
+    min-height: 0;
+  }
+
+  /* chips = real checkboxes */
+  .chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: var(--space-2);
+  }
+  .chip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 16px;
+    border-radius: var(--radius-sm);
+    box-shadow: inset 0 0 0 1px var(--color-border-strong);
+    font-size: var(--fs-small);
+    cursor: pointer;
+    transition:
+      background-color var(--duration-ui) var(--ease-primary),
+      color var(--duration-ui) var(--ease-primary),
+      box-shadow var(--duration-ui) var(--ease-primary);
+  }
+  .chip__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .chip:hover {
+    box-shadow: inset 0 0 0 1px var(--color-text);
+  }
+  .chip:has(.chip__input:checked) {
+    background: var(--color-cta);
+    color: var(--color-cta-text);
+    box-shadow: inset 0 0 0 1px var(--color-cta);
+  }
+  .chip:has(.chip__input:focus-visible) {
+    outline: 2px solid var(--color-text);
+    outline-offset: 3px;
+  }
+
+  .booking-form__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    margin-top: var(--space-3);
+  }
+  .booking-form__privacy {
+    max-width: 17rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-text-2);
+  }
+  .submit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex: none;
+    font-size: var(--fs-button);
+    font-weight: var(--fw-medium);
+    letter-spacing: 0.01em;
+    color: var(--color-text);
+  }
+  .submit__label {
+    transition: transform var(--duration-ui) var(--ease-primary);
+  }
+  .submit__circle {
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: var(--color-cta);
+    color: var(--color-cta-text);
+    transition:
+      transform var(--duration-fast) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-primary);
+  }
+  .submit :global(.submit__arrow) {
+    width: 18px;
+    height: 18px;
+    transition: translate var(--duration-ui) var(--ease-primary);
+  }
+  .submit:hover .submit__label,
+  .submit:focus-visible .submit__label {
+    transform: translateX(-2px);
+  }
+  .submit:hover .submit__circle,
+  .submit:focus-visible .submit__circle {
+    transform: scale(1.08);
+    background: var(--color-cta-hover);
+  }
+  .submit:hover :global(.submit__arrow),
+  .submit:focus-visible :global(.submit__arrow) {
+    translate: 3px 0;
+  }
+  .submit:focus-visible {
+    outline-offset: 6px;
+    border-radius: var(--radius-round);
+  }
+  .submit[aria-disabled='true'] {
+    cursor: progress;
+    opacity: 0.7;
+  }
+
+  .booking-form__hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .booking-form__summary {
+    margin-top: var(--space-4);
+    font-size: 0.8125rem;
+    color: #8a3b2e;
+  }
+  .booking-form__summary:empty {
+    display: none;
+  }
+
+  /* ---- success ---- */
+  .booking-success {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--color-border);
+  }
+  .booking-success__mark {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  }
+  .booking-success__title {
+    font-size: var(--fs-h3);
+    font-weight: var(--fw-book);
+    letter-spacing: var(--ls-heading);
+    line-height: var(--lh-snug);
+  }
+  .booking-success__text {
+    max-width: 26rem;
+    color: var(--color-text-2);
+  }
+  .booking-success__again {
+    margin-top: var(--space-3);
+    font-size: var(--fs-small);
+    font-weight: var(--fw-medium);
+  }
+
+  @media (min-width: 640px) {
+    .booking-form__fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .field--full,
+    .booking-form__footer {
+      grid-column: 1 / -1;
+    }
+    .booking__portrait {
+      aspect-ratio: 5 / 4;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .booking__inner {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      align-items: start;
+    }
+    .booking__media {
+      grid-column: 1 / 7;
+      align-self: stretch;
+    }
+    .booking__portrait {
+      aspect-ratio: auto;
+      height: min(calc(100svh - var(--header-h) - 48px), 880px);
+      min-height: 560px;
+      max-height: none;
+    }
+    .booking__content {
+      grid-column: 8 / -1;
+      padding-top: var(--space-6);
+      gap: var(--space-8);
+    }
+    .submit__circle {
+      width: 88px;
+      height: 88px;
+    }
+  }
+  @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+    .booking__portrait {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+    .booking__img {
+      will-change: transform;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .field__input,
+    .chip,
+    .submit__label,
+    .submit__circle,
+    .submit :global(.submit__arrow) {
+      transition: none;
+    }
   }
 </style>
