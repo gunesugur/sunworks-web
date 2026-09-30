@@ -7,11 +7,19 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 export function init(root: HTMLElement): () => void {
   const cleanups: (() => void)[] = [];
 
-  /* ---- transparent over the hero → solid once the next section reaches the bar ---- */
+  /* ---- transparent over the hero → solid once the next section reaches the bar ----
+     Below desktop (or with reduced motion) the hero is not a sticky stage: its copy scrolls straight
+     under the bar, so the bar turns solid as soon as the page moves. */
+  const desktop = window.matchMedia(MQ.desktop);
   const solidFrom = root.dataset.solidFrom ? document.querySelector<HTMLElement>(root.dataset.solidFrom) : null;
   const solid = ScrollTrigger.create({
     trigger: solidFrom ?? document.body,
-    start: solidFrom ? () => `top top+=${root.offsetHeight}` : 'top+=80 top',
+    start: solidFrom
+      ? () =>
+          desktop.matches && !prefersReducedMotion()
+            ? `top top+=${root.offsetHeight}`
+            : `top top+=${Math.round(solidFrom.getBoundingClientRect().top + window.scrollY) - 16}`
+      : 'top+=80 top',
     invalidateOnRefresh: true,
     // no end: once past the start the bar stays solid until the user scrolls back above it
     onEnter: () => root.classList.add('is-solid'),
@@ -103,7 +111,6 @@ export function init(root: HTMLElement): () => void {
   const onMenuClick = (e: Event): void => {
     if ((e.target as Element).closest('a')) setOpen(false, { restoreFocus: false });
   };
-  const desktop = window.matchMedia(MQ.desktop);
   const onBreakpoint = (): void => {
     if (desktop.matches) setOpen(false, { restoreFocus: false });
   };

@@ -2,7 +2,7 @@
  * Boot: smooth scroll → section modules (DOM order) → generic reveals → ScrollTrigger refresh.
  */
 import { ScrollTrigger } from '../motion/tokens';
-import { initSmoothScroll, bindAnchorLinks } from '../motion/smooth-scroll';
+import { initSmoothScroll, bindAnchorLinks, getLenis } from '../motion/smooth-scroll';
 import { initReveals } from '../motion/reveal';
 import { registry } from './sections/registry';
 
@@ -56,7 +56,26 @@ async function boot(): Promise<void> {
   document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => {
     if (!img.complete) img.addEventListener('load', refresh, { once: true });
   });
+  keepScrollAcrossBreakpoints();
   root.classList.add('is-ready');
+}
+
+/**
+ * GSAP quirk: ScrollTriggers created while gsap.matchMedia() re-runs (desktop ↔ mobile resize) refresh
+ * immediately and clear ScrollTrigger's recorded scroll position, so the full refresh that follows
+ * leaves the page at 0. Remember the last user position (scroll events are async, so the value is
+ * still the pre-change one when the synchronous matchMedia refresh ends) and put it back.
+ */
+function keepScrollAcrossBreakpoints(): void {
+  let lastY = window.scrollY;
+  window.addEventListener('scroll', () => void (lastY = window.scrollY), { passive: true });
+  ScrollTrigger.addEventListener('matchMedia', () => {
+    if (Math.abs(window.scrollY - lastY) < 2) return;
+    // native, not lenis.scrollTo: Lenis still holds lastY as its target and would treat it as a no-op
+    window.scrollTo(0, lastY);
+    getLenis()?.resize();
+    ScrollTrigger.update();
+  });
 }
 
 boot().catch((error: unknown) => {

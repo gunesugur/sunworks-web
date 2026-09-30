@@ -36,7 +36,7 @@ const total = String(benefits.items.length).padStart(2, '0');
         </div>
       </div>
 
-      <div class="benefits__viewport" data-benefits-viewport data-region-label={benefits.titleLines.join(" ")}>
+      <div class="benefits__viewport" data-benefits-viewport data-region-label={`${benefits.titleLines.join(" ")} (scrollable list)`}>
         <ol class="benefits__track" data-benefits-track>
           {
             benefits.items.map((item) => (

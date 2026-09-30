@@ -84,8 +84,11 @@ export function init(root: HTMLElement): () => void {
 
     measureCover();
     ScrollTrigger.addEventListener('refreshInit', measureCover);
+    // A breakpoint change reverts this context's sets, which restores the CSS start state (hidden):
+    // a title that has already played is put straight back at its end state.
     intro.forEach((el) => {
-      if (!revealed) prepareReveal(el);
+      if (revealed) revealElement(el).progress(1);
+      else prepareReveal(el);
     });
 
     const vh = (): number => window.innerHeight;

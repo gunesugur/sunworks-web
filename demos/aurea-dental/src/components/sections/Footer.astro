@@ -101,6 +101,8 @@ const { footer, wordmark } = site;
     position: relative;
     z-index: var(--z-panel);
     overflow: hidden;
+    /* the warm-grey footer is darker than the page: nudge the secondary grey to keep ≥4.5:1 */
+    --color-text-2: #5f5f5b;
     background: var(--color-footer);
     color: var(--color-text);
     font-size: var(--fs-small);

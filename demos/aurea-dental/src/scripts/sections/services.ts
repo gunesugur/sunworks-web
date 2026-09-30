@@ -223,6 +223,11 @@ export function init(root: HTMLElement): () => void {
       cancelHover();
       activate(i, 'manual');
     });
+    // Keyboard focus holds the current row like a manual pick, so auto-activation does not
+    // swap rows (and hide the focused row's link) while the user tabs through the list.
+    on(p.trigger, 'focus', () => {
+      if (p.trigger.matches(':focus-visible')) manualAt = window.scrollY;
+    });
     on(p.trigger, 'keydown', (e) => {
       const keys: Record<string, number> = { ArrowDown: i + 1, ArrowUp: i - 1, Home: 0, End: n - 1 };
       const target = keys[e.key];

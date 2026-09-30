@@ -150,6 +150,8 @@ const { statement } = site;
       grid-row: 1 / 3;
       align-self: start;
       margin-top: -0.15em;
+      /* keep each authored line on one row down to 1024px (the 7-col measure narrows faster than the clamp) */
+      font-size: min(var(--fs-statement), 3.5vw);
     }
     .statement__secondary {
       grid-column: 9 / -1;

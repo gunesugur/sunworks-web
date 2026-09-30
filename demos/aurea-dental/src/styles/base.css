@@ -236,7 +236,7 @@ button {
 }
 .mask-line__inner {
   display: block;
-  will-change: transform;
+  /* no permanent will-change: GSAP promotes the layer (translate3d) only while a line animates */
 }
 
 /* ---- media helpers ---- */

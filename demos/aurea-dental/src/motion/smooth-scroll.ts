@@ -35,7 +35,8 @@ export function scrollToTarget(target: HTMLElement | string | number, opts: { im
   if (el === null) return;
   const offset = typeof el === 'number' ? 0 : -headerOffset();
   if (lenis) {
-    lenis.scrollTo(el, { offset, immediate: opts.immediate ?? false, duration: 1.2 });
+    // Lenis already subtracts the root's scroll-padding-top (= --header-h) for element targets.
+    lenis.scrollTo(el, { offset: 0, immediate: opts.immediate ?? false, duration: 1.2 });
   } else {
     const y = typeof el === 'number' ? el : el.getBoundingClientRect().top + window.scrollY + offset;
     window.scrollTo({ top: y, behavior: opts.immediate || prefersReducedMotion() ? 'auto' : 'smooth' });
