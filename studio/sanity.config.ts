@@ -17,6 +17,7 @@ export default defineConfig({
       supportedLanguages: [
         { id: 'tr', title: 'Türkçe' },
         { id: 'en', title: 'English' },
+        { id: 'de', title: 'Deutsch' },
       ],
       schemaTypes: translatedTypes,
       languageField: 'language',

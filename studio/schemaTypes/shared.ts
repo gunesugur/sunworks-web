@@ -16,7 +16,7 @@ export const languageField = defineField({
 export const translationKeyField = defineField({
   name: 'translationKey',
   title: 'Translation key',
-  description: 'Same value on the TR and EN versions of this document (used for hreflang).',
+  description: 'Same value on the TR, EN and DE versions of this document (used for hreflang).',
   type: 'string',
   validation: (r) => r.required(),
 });
