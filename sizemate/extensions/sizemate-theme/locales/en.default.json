@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Size chart",
+    "close": "Close",
+    "units": "Units",
+    "cm": "cm",
+    "in": "in",
+    "tabs": {
+      "chart": "Size chart",
+      "guide": "How to measure",
+      "fit": "Find my size"
+    },
+    "fit": {
+      "intro": "Enter your measurements and we'll suggest a size.",
+      "preference": "Preferred fit",
+      "snug": "Snug",
+      "regular": "Regular",
+      "relaxed": "Relaxed",
+      "submit": "Find my size",
+      "exact": "We recommend size [size].",
+      "between": "You're between [other] and [size]. We recommend [size].",
+      "closest": "The closest size is [size].",
+      "above": "Your measurements are above our largest size. [size] may feel tight.",
+      "below": "Your measurements are below our smallest size. [size] may feel loose.",
+      "empty": "Enter at least one measurement.",
+      "select": "Select size [size]",
+      "selected": "Size [size] selected.",
+      "tight": "may feel tight",
+      "loose": "may feel loose",
+      "good": "fits well",
+      "privacy": "Your measurements stay on this device."
+    },
+    "powered_by": "Powered by Sizemate",
+    "editor_no_chart": "Sizemate: no size chart is assigned to this product. Assign one in the Sizemate app, or check that the chart is active.",
+    "how": {
+      "bust": "Measure around the fullest part of your bust, keeping the tape level under your arms.",
+      "chest": "Measure around the fullest part of your chest, just under your armpits, keeping the tape level.",
+      "underbust": "Measure snugly around your ribcage, directly under your bust.",
+      "waist": "Measure around your natural waistline, the narrowest part of your torso, usually just above the belly button.",
+      "hips": "Stand with your feet together and measure around the fullest part of your hips.",
+      "neck": "Measure around the base of your neck, leaving room for one finger under the tape.",
+      "shoulder": "Measure across your back from the edge of one shoulder to the other.",
+      "arm": "With your arm relaxed, measure from the shoulder seam down to your wrist bone.",
+      "inseam": "Measure from the top of your inner thigh down to your ankle.",
+      "thigh": "Measure around the fullest part of your thigh.",
+      "height": "Stand straight against a wall without shoes and measure from the floor to the top of your head.",
+      "foot_length": "Stand on paper with your heel against a wall and measure from the wall to the tip of your longest toe.",
+      "foot_width": "Measure across the widest part of your foot.",
+      "head": "Measure around your head just above the eyebrows and ears.",
+      "hand": "Measure around your palm at the widest point, excluding the thumb.",
+      "pet_neck": "Measure around the base of your pet's neck where the collar sits.",
+      "pet_chest": "Measure around the widest part of your pet's ribcage, just behind the front legs.",
+      "pet_back": "Measure from the base of the neck to the base of the tail.",
+      "garment_chest": "Lay the garment flat and measure straight across, just below the armholes.",
+      "garment_waist": "Lay the garment flat and measure straight across the waistband.",
+      "garment_length": "Lay the garment flat and measure from the highest point of the shoulder to the bottom hem.",
+      "sleeve": "Measure from the shoulder seam to the end of the sleeve."
+    }
+  }
+}

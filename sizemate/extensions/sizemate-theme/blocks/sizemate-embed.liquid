@@ -1,0 +1,23 @@
+{%- comment -%}
+  App embed: adds the size chart button to product pages automatically, with no
+  theme editing. Placement is set in the Sizemate app. If the "Size chart" app
+  block is also on the page, the block wins and this stays out of the way.
+{%- endcomment -%}
+{%- if template.name == 'product' and product -%}
+  {%- render 'sizemate-core', product: product, source: 'embed', block_id: 'embed' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sizemate size charts",
+  "target": "body",
+  "stylesheet": "sizemate.css",
+  "javascript": "sizemate.js",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Shows your size chart on product pages. Choose where the button appears in the Sizemate app, or add the \"Size chart\" block to your product page for exact placement."
+    }
+  ]
+}
+{% endschema %}

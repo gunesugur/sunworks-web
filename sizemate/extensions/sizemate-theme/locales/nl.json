@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Maattabel",
+    "close": "Sluiten",
+    "units": "Eenheden",
+    "cm": "cm",
+    "in": "inch",
+    "tabs": {
+      "chart": "Maattabel",
+      "guide": "Zo meet je",
+      "fit": "Vind mijn maat"
+    },
+    "fit": {
+      "intro": "Vul je maten in en we stellen een maat voor.",
+      "preference": "Gewenste pasvorm",
+      "snug": "Nauw",
+      "regular": "Normaal",
+      "relaxed": "Ruim",
+      "submit": "Vind mijn maat",
+      "exact": "We raden maat [size] aan.",
+      "between": "Je zit tussen [other] en [size]. We raden [size] aan.",
+      "closest": "De dichtstbijzijnde maat is [size].",
+      "above": "Je maten liggen boven onze grootste maat. [size] kan krap zitten.",
+      "below": "Je maten liggen onder onze kleinste maat. [size] kan ruim zitten.",
+      "empty": "Vul minstens één maat in.",
+      "select": "Maat [size] kiezen",
+      "selected": "Maat [size] gekozen.",
+      "tight": "kan krap zitten",
+      "loose": "kan ruim zitten",
+      "good": "past goed",
+      "privacy": "Je maten blijven op dit apparaat."
+    },
+    "powered_by": "Mogelijk gemaakt door Sizemate",
+    "editor_no_chart": "Sizemate: aan dit product is geen maattabel gekoppeld. Koppel er een in de Sizemate-app of controleer of de tabel actief is.",
+    "how": {
+      "bust": "Meet rond het volste deel van je borst, met het meetlint horizontaal onder je armen.",
+      "chest": "Meet rond het breedste deel van je borst, net onder je oksels, met het meetlint horizontaal.",
+      "underbust": "Meet strak rond je ribbenkast, direct onder je borst.",
+      "waist": "Meet rond je natuurlijke taille, het smalste deel van je romp, meestal net boven je navel.",
+      "hips": "Zet je voeten tegen elkaar en meet rond het breedste deel van je heupen.",
+      "neck": "Meet rond de onderkant van je hals en laat ruimte voor één vinger onder het meetlint.",
+      "shoulder": "Meet over je rug van de ene schouderpunt naar de andere.",
+      "arm": "Meet met ontspannen arm van de schoudernaad tot het botje van je pols.",
+      "inseam": "Meet van de bovenkant van je binnendij tot je enkel.",
+      "thigh": "Meet rond het breedste deel van je dij.",
+      "height": "Ga zonder schoenen rechtop tegen een muur staan en meet van de vloer tot je kruin.",
+      "foot_length": "Ga op papier staan met je hiel tegen de muur en meet van de muur tot het puntje van je langste teen.",
+      "foot_width": "Meet het breedste deel van je voet.",
+      "head": "Meet rond je hoofd, net boven je wenkbrauwen en oren.",
+      "hand": "Meet rond je handpalm op het breedste punt, zonder duim.",
+      "pet_neck": "Meet rond de onderkant van de nek van je huisdier, waar de halsband zit.",
+      "pet_chest": "Meet rond het breedste deel van de borstkas, net achter de voorpoten.",
+      "pet_back": "Meet van de onderkant van de nek tot de aanzet van de staart.",
+      "garment_chest": "Leg het kledingstuk plat en meet recht van zij naar zij, net onder de armsgaten.",
+      "garment_waist": "Leg het kledingstuk plat en meet recht over de tailleband.",
+      "garment_length": "Leg het kledingstuk plat en meet van het hoogste punt van de schouder tot de zoom.",
+      "sleeve": "Meet van de schoudernaad tot het einde van de mouw."
+    }
+  }
+}

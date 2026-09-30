@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Tabela de medidas",
+    "close": "Fechar",
+    "units": "Unidades",
+    "cm": "cm",
+    "in": "pol.",
+    "tabs": {
+      "chart": "Tabela de medidas",
+      "guide": "Como medir",
+      "fit": "Encontrar meu tamanho"
+    },
+    "fit": {
+      "intro": "Informe suas medidas e sugerimos um tamanho.",
+      "preference": "Caimento preferido",
+      "snug": "Justo",
+      "regular": "Regular",
+      "relaxed": "Folgado",
+      "submit": "Encontrar meu tamanho",
+      "exact": "Recomendamos o tamanho [size].",
+      "between": "Você está entre [other] e [size]. Recomendamos [size].",
+      "closest": "O tamanho mais próximo é [size].",
+      "above": "Suas medidas estão acima do nosso maior tamanho. [size] pode ficar justo.",
+      "below": "Suas medidas estão abaixo do nosso menor tamanho. [size] pode ficar folgado.",
+      "empty": "Informe pelo menos uma medida.",
+      "select": "Selecionar tamanho [size]",
+      "selected": "Tamanho [size] selecionado.",
+      "tight": "pode ficar justo",
+      "loose": "pode ficar folgado",
+      "good": "veste bem",
+      "privacy": "Suas medidas ficam neste dispositivo."
+    },
+    "powered_by": "Desenvolvido por Sizemate",
+    "editor_no_chart": "Sizemate: nenhuma tabela de medidas está atribuída a este produto. Atribua uma no app Sizemate ou verifique se ela está ativa.",
+    "how": {
+      "bust": "Meça ao redor da parte mais cheia do busto, com a fita nivelada sob os braços.",
+      "chest": "Meça ao redor da parte mais larga do tórax, logo abaixo das axilas, com a fita nivelada.",
+      "underbust": "Meça justo ao redor das costelas, logo abaixo do busto.",
+      "waist": "Meça ao redor da cintura natural, a parte mais estreita do tronco, geralmente logo acima do umbigo.",
+      "hips": "Com os pés juntos, meça ao redor da parte mais larga do quadril.",
+      "neck": "Meça ao redor da base do pescoço, deixando espaço para um dedo sob a fita.",
+      "shoulder": "Meça pelas costas, de uma ponta do ombro à outra.",
+      "arm": "Com o braço relaxado, meça da costura do ombro até o osso do pulso.",
+      "inseam": "Meça do alto da parte interna da coxa até o tornozelo.",
+      "thigh": "Meça ao redor da parte mais larga da coxa.",
+      "height": "Descalço, encostado na parede, meça do chão até o topo da cabeça.",
+      "foot_length": "Pise sobre um papel com o calcanhar na parede e meça da parede até a ponta do dedo mais longo.",
+      "foot_width": "Meça a parte mais larga do pé.",
+      "head": "Meça ao redor da cabeça, logo acima das sobrancelhas e orelhas.",
+      "hand": "Meça ao redor da palma na parte mais larga, sem o polegar.",
+      "pet_neck": "Meça ao redor da base do pescoço do seu pet, onde fica a coleira.",
+      "pet_chest": "Meça ao redor da parte mais larga da caixa torácica, logo atrás das patas dianteiras.",
+      "pet_back": "Meça da base do pescoço até a base da cauda.",
+      "garment_chest": "Estenda a peça e meça de um lado ao outro, logo abaixo das cavas.",
+      "garment_waist": "Estenda a peça e meça o cós de um lado ao outro.",
+      "garment_length": "Estenda a peça e meça do ponto mais alto do ombro até a barra.",
+      "sleeve": "Meça da costura do ombro até o fim da manga."
+    }
+  }
+}

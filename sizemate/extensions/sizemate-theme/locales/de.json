@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Größentabelle",
+    "close": "Schließen",
+    "units": "Einheiten",
+    "cm": "cm",
+    "in": "in",
+    "tabs": {
+      "chart": "Größentabelle",
+      "guide": "Richtig messen",
+      "fit": "Meine Größe finden"
+    },
+    "fit": {
+      "intro": "Gib deine Maße ein und wir schlagen dir eine Größe vor.",
+      "preference": "Bevorzugte Passform",
+      "snug": "Eng",
+      "regular": "Normal",
+      "relaxed": "Locker",
+      "submit": "Meine Größe finden",
+      "exact": "Wir empfehlen Größe [size].",
+      "between": "Du liegst zwischen [other] und [size]. Wir empfehlen [size].",
+      "closest": "Die passendste Größe ist [size].",
+      "above": "Deine Maße liegen über unserer größten Größe. [size] könnte eng sitzen.",
+      "below": "Deine Maße liegen unter unserer kleinsten Größe. [size] könnte weit sitzen.",
+      "empty": "Gib mindestens ein Maß ein.",
+      "select": "Größe [size] auswählen",
+      "selected": "Größe [size] ausgewählt.",
+      "tight": "könnte eng sitzen",
+      "loose": "könnte weit sitzen",
+      "good": "passt gut",
+      "privacy": "Deine Maße bleiben auf diesem Gerät."
+    },
+    "powered_by": "Powered by Sizemate",
+    "editor_no_chart": "Sizemate: Diesem Produkt ist keine Größentabelle zugewiesen. Weise in der Sizemate-App eine zu oder prüfe, ob die Tabelle aktiv ist.",
+    "how": {
+      "bust": "Miss um die stärkste Stelle der Brust, das Maßband waagerecht unter den Armen.",
+      "chest": "Miss um die breiteste Stelle der Brust, direkt unter den Achseln, das Maßband waagerecht.",
+      "underbust": "Miss eng anliegend um den Brustkorb, direkt unter der Brust.",
+      "waist": "Miss um die natürliche Taille, die schmalste Stelle des Oberkörpers, meist knapp über dem Bauchnabel.",
+      "hips": "Stelle die Füße zusammen und miss um die breiteste Stelle der Hüfte.",
+      "neck": "Miss um den Halsansatz und lass einen Finger Platz unter dem Maßband.",
+      "shoulder": "Miss über den Rücken von einer Schulterkante zur anderen.",
+      "arm": "Miss bei locker hängendem Arm von der Schulternaht bis zum Handgelenkknochen.",
+      "inseam": "Miss von der Oberkante des inneren Oberschenkels bis zum Knöchel.",
+      "thigh": "Miss um die stärkste Stelle des Oberschenkels.",
+      "height": "Stell dich ohne Schuhe gerade an eine Wand und miss vom Boden bis zum Scheitel.",
+      "foot_length": "Stell dich mit der Ferse an eine Wand auf ein Blatt Papier und miss von der Wand bis zur Spitze des längsten Zehs.",
+      "foot_width": "Miss über die breiteste Stelle des Fußes.",
+      "head": "Miss um den Kopf, knapp oberhalb der Augenbrauen und Ohren.",
+      "hand": "Miss um die breiteste Stelle der Handfläche, ohne den Daumen.",
+      "pet_neck": "Miss um den Halsansatz deines Tieres, dort wo das Halsband sitzt.",
+      "pet_chest": "Miss um die breiteste Stelle des Brustkorbs, direkt hinter den Vorderbeinen.",
+      "pet_back": "Miss vom Halsansatz bis zum Schwanzansatz.",
+      "garment_chest": "Lege das Kleidungsstück flach hin und miss gerade von Seite zu Seite, knapp unter den Armlöchern.",
+      "garment_waist": "Lege das Kleidungsstück flach hin und miss gerade über den Bund.",
+      "garment_length": "Lege das Kleidungsstück flach hin und miss vom höchsten Punkt der Schulter bis zum unteren Saum.",
+      "sleeve": "Miss von der Schulternaht bis zum Ärmelende."
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Guida alle taglie",
+    "close": "Chiudi",
+    "units": "Unità",
+    "cm": "cm",
+    "in": "in",
+    "tabs": {
+      "chart": "Guida alle taglie",
+      "guide": "Come misurarsi",
+      "fit": "Trova la mia taglia"
+    },
+    "fit": {
+      "intro": "Inserisci le tue misure e ti suggeriremo una taglia.",
+      "preference": "Vestibilità preferita",
+      "snug": "Aderente",
+      "regular": "Regolare",
+      "relaxed": "Morbida",
+      "submit": "Trova la mia taglia",
+      "exact": "Ti consigliamo la taglia [size].",
+      "between": "Sei tra la [other] e la [size]. Ti consigliamo la [size].",
+      "closest": "La taglia più vicina è [size].",
+      "above": "Le tue misure superano la nostra taglia più grande. La [size] potrebbe essere stretta.",
+      "below": "Le tue misure sono inferiori alla nostra taglia più piccola. La [size] potrebbe essere larga.",
+      "empty": "Inserisci almeno una misura.",
+      "select": "Seleziona la taglia [size]",
+      "selected": "Taglia [size] selezionata.",
+      "tight": "potrebbe essere stretta",
+      "loose": "potrebbe essere larga",
+      "good": "veste bene",
+      "privacy": "Le tue misure restano su questo dispositivo."
+    },
+    "powered_by": "Realizzato con Sizemate",
+    "editor_no_chart": "Sizemate: a questo prodotto non è assegnata nessuna guida alle taglie. Assegnane una nell'app Sizemate o verifica che sia attiva.",
+    "how": {
+      "bust": "Misura la circonferenza nel punto più pieno del seno, con il metro orizzontale sotto le braccia.",
+      "chest": "Misura la circonferenza nel punto più ampio del torace, appena sotto le ascelle, con il metro orizzontale.",
+      "underbust": "Misura aderente attorno alla gabbia toracica, subito sotto il seno.",
+      "waist": "Misura il punto vita naturale, la parte più stretta del busto, di solito appena sopra l'ombelico.",
+      "hips": "A piedi uniti, misura la circonferenza nel punto più ampio dei fianchi.",
+      "neck": "Misura alla base del collo, lasciando lo spazio di un dito sotto il metro.",
+      "shoulder": "Misura sulla schiena da un'estremità della spalla all'altra.",
+      "arm": "Con il braccio rilassato, misura dalla cucitura della spalla all'osso del polso.",
+      "inseam": "Misura dall'interno coscia fino alla caviglia.",
+      "thigh": "Misura la circonferenza nel punto più ampio della coscia.",
+      "height": "Senza scarpe, in piedi contro una parete, misura dal pavimento alla sommità della testa.",
+      "foot_length": "Appoggia il piede su un foglio con il tallone contro il muro e misura dal muro alla punta del dito più lungo.",
+      "foot_width": "Misura la parte più larga del piede.",
+      "head": "Misura la circonferenza della testa appena sopra sopracciglia e orecchie.",
+      "hand": "Misura la circonferenza del palmo nel punto più largo, escluso il pollice.",
+      "pet_neck": "Misura la base del collo del tuo animale, dove si posiziona il collare.",
+      "pet_chest": "Misura il punto più ampio della gabbia toracica, subito dietro le zampe anteriori.",
+      "pet_back": "Misura dalla base del collo all'attaccatura della coda.",
+      "garment_chest": "Stendi il capo e misura in orizzontale, appena sotto gli scalfi.",
+      "garment_waist": "Stendi il capo e misura in orizzontale lungo la cintura.",
+      "garment_length": "Stendi il capo e misura dal punto più alto della spalla all'orlo.",
+      "sleeve": "Misura dalla cucitura della spalla alla fine della manica."
+    }
+  }
+}

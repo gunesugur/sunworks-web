@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Beden tablosu",
+    "close": "Kapat",
+    "units": "Birimler",
+    "cm": "cm",
+    "in": "inç",
+    "tabs": {
+      "chart": "Beden tablosu",
+      "guide": "Nasıl ölçülür",
+      "fit": "Bedenimi bul"
+    },
+    "fit": {
+      "intro": "Ölçülerini gir, sana uygun bedeni önerelim.",
+      "preference": "Tercih ettiğin kalıp",
+      "snug": "Dar",
+      "regular": "Normal",
+      "relaxed": "Rahat",
+      "submit": "Bedenimi bul",
+      "exact": "Sana [size] bedeni öneriyoruz.",
+      "between": "[other] ile [size] arasındasın. [size] bedeni öneriyoruz.",
+      "closest": "En yakın beden: [size].",
+      "above": "Ölçülerin en büyük bedenimizin üzerinde. [size] dar gelebilir.",
+      "below": "Ölçülerin en küçük bedenimizin altında. [size] bol gelebilir.",
+      "empty": "En az bir ölçü gir.",
+      "select": "[size] bedeni seç",
+      "selected": "[size] bedeni seçildi.",
+      "tight": "dar gelebilir",
+      "loose": "bol gelebilir",
+      "good": "tam oturur",
+      "privacy": "Ölçülerin bu cihazda kalır."
+    },
+    "powered_by": "Sizemate ile hazırlandı",
+    "editor_no_chart": "Sizemate: Bu ürüne atanmış bir beden tablosu yok. Sizemate uygulamasından bir tablo ata veya tablonun etkin olduğunu kontrol et.",
+    "how": {
+      "bust": "Mezurayı kolların altından yere paralel tutarak göğsünün en dolgun yerinden ölç.",
+      "chest": "Mezurayı yere paralel tutarak göğsünün en geniş yerinden, koltuk altlarının hemen altından ölç.",
+      "underbust": "Göğsünün hemen altından, göğüs kafesinin çevresini sıkıca ölç.",
+      "waist": "Gövdenin en ince yeri olan doğal belinden, genellikle göbeğinin hemen üstünden ölç.",
+      "hips": "Ayaklarını birleştir ve kalçanın en geniş yerinden ölç.",
+      "neck": "Boynunun alt kısmından, mezuranın altında bir parmak boşluk bırakarak ölç.",
+      "shoulder": "Sırtından bir omuz ucundan diğerine kadar ölç.",
+      "arm": "Kolun serbestken omuz dikişinden bilek kemiğine kadar ölç.",
+      "inseam": "İç bacağının en üstünden ayak bileğine kadar ölç.",
+      "thigh": "Uyluğunun en geniş yerinden ölç.",
+      "height": "Ayakkabısız, duvara dik dur ve yerden başının en üst noktasına kadar ölç.",
+      "foot_length": "Topuğun duvara değecek şekilde bir kâğıdın üzerine bas ve duvardan en uzun parmağının ucuna kadar ölç.",
+      "foot_width": "Ayağının en geniş yerini ölç.",
+      "head": "Kaşlarının ve kulaklarının hemen üstünden başının çevresini ölç.",
+      "hand": "Başparmak hariç, avuç içinin en geniş yerinden elinin çevresini ölç.",
+      "pet_neck": "Evcil hayvanının boynunu, tasmanın durduğu yerden ölç.",
+      "pet_chest": "Ön bacakların hemen arkasından, göğüs kafesinin en geniş yerini ölç.",
+      "pet_back": "Boyun dibinden kuyruk dibine kadar ölç.",
+      "garment_chest": "Ürünü düz bir zemine ser ve kol altlarının hemen altından bir yandan diğerine düz ölç.",
+      "garment_waist": "Ürünü düz bir zemine ser ve bel kısmını bir yandan diğerine düz ölç.",
+      "garment_length": "Ürünü düz bir zemine ser ve omzun en yüksek noktasından etek ucuna kadar ölç.",
+      "sleeve": "Omuz dikişinden kol ucuna kadar ölç."
+    }
+  }
+}

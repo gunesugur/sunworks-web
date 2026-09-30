@@ -1,0 +1,450 @@
+/* Sizemate storefront styles. Also loaded by the admin preview, so keep selectors scoped to .sizemate*. */
+
+.sizemate {
+  --sizemate-accent: currentColor;
+  --sizemate-surface: #ffffff;
+  --sizemate-text: #1a1a1a;
+  --sizemate-muted: #5c5f62;
+  --sizemate-border: #e3e3e3;
+  --sizemate-subtle: #f6f6f7;
+  --sizemate-highlight: #fff4d6;
+  --sizemate-radius: 12px;
+  display: flex;
+  margin: 0.75rem 0;
+  font: inherit;
+}
+
+.sizemate[hidden] { display: none; }
+.sizemate--align-start { justify-content: flex-start; }
+.sizemate--align-center { justify-content: center; }
+.sizemate--align-end { justify-content: flex-end; }
+
+/* Trigger */
+
+.sizemate-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9375em;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.sizemate-trigger--link span {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.sizemate-trigger--link:hover span { text-decoration-thickness: 2px; }
+
+.sizemate-trigger--outline,
+.sizemate-trigger--filled {
+  padding: 0.55em 1em;
+  border: 1px solid var(--sizemate-accent);
+  border-radius: 6px;
+  color: var(--sizemate-accent);
+}
+
+.sizemate-trigger--filled {
+  background: var(--sizemate-accent);
+  border-color: var(--sizemate-accent);
+  color: #ffffff;
+}
+
+.sizemate-trigger--outline:hover { background: rgba(0, 0, 0, 0.04); }
+.sizemate-trigger--filled:hover { filter: brightness(1.1); }
+
+.sizemate-trigger:focus-visible,
+.sizemate-dialog button:focus-visible,
+.sizemate-dialog input:focus-visible,
+.sizemate-table-wrap:focus-visible {
+  outline: 2px solid var(--sizemate-focus, #005bd3);
+  outline-offset: 2px;
+}
+
+.sizemate-icon { flex: none; }
+
+/* Dialog */
+
+.sizemate-dialog {
+  box-sizing: border-box;
+  width: min(760px, calc(100vw - 32px));
+  max-width: none;
+  max-height: min(88vh, 880px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sizemate-radius);
+  background: var(--sizemate-surface);
+  color: var(--sizemate-text);
+  color-scheme: light;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.sizemate-dialog *,
+.sizemate-dialog *::before,
+.sizemate-dialog *::after { box-sizing: border-box; }
+
+.sizemate-dialog::backdrop {
+  background: rgba(17, 17, 17, 0.5);
+}
+
+.sizemate-dialog[open] { animation: sizemate-in 180ms ease-out; }
+
+.sizemate-dialog--drawer {
+  width: min(520px, 100vw);
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0 0 0 auto;
+  border-radius: 0;
+}
+
+.sizemate-dialog--drawer[open] { animation: sizemate-drawer-in 220ms ease-out; }
+
+@keyframes sizemate-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes sizemate-drawer-in {
+  from { transform: translateX(100%); }
+  to { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sizemate-dialog[open] { animation: none; }
+}
+
+.sizemate-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+  height: 100%;
+}
+
+.sizemate-dialog--modal .sizemate-panel { max-height: min(88vh, 880px); }
+
+.sizemate-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px 12px;
+}
+
+.sizemate-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 650;
+  line-height: 1.3;
+  letter-spacing: normal;
+  color: inherit;
+  font-family: inherit;
+}
+
+.sizemate-close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin: -6px -8px -6px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--sizemate-muted);
+  cursor: pointer;
+}
+
+.sizemate-close:hover { background: var(--sizemate-subtle); color: var(--sizemate-text); }
+
+.sizemate-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--sizemate-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sizemate-tab {
+  position: relative;
+  flex: none;
+  padding: 10px 12px;
+  border: 0;
+  background: none;
+  color: var(--sizemate-muted);
+  font: inherit;
+  font-weight: 550;
+  cursor: pointer;
+}
+
+.sizemate-tab[aria-selected="true"] { color: var(--sizemate-text); }
+
+.sizemate-tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 8px -1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--sizemate-text);
+}
+
+.sizemate-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 16px 24px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sizemate-section[hidden] { display: none; }
+
+/* Units */
+
+.sizemate-units {
+  display: inline-flex;
+  margin-bottom: 12px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--sizemate-subtle);
+}
+
+.sizemate-unit-button {
+  min-width: 52px;
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--sizemate-muted);
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sizemate-unit-button[aria-pressed="true"] {
+  background: var(--sizemate-surface);
+  color: var(--sizemate-text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+/* Table */
+
+.sizemate-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--sizemate-border);
+  border-radius: 10px;
+}
+
+.sizemate-table {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+}
+
+.sizemate-table th,
+.sizemate-table td {
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--sizemate-border);
+  white-space: nowrap;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.sizemate-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--sizemate-subtle);
+  color: var(--sizemate-text);
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.sizemate-table tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--sizemate-surface);
+  font-weight: 650;
+}
+
+.sizemate-table thead th:first-child { left: 0; z-index: 2; }
+.sizemate-table tbody tr:last-child > * { border-bottom: 0; }
+.sizemate-table tbody tr:hover > * { background: var(--sizemate-subtle); }
+
+.sizemate-table tbody tr.is-recommended > * {
+  background: var(--sizemate-highlight);
+}
+
+.sizemate-unit {
+  color: var(--sizemate-muted);
+  font-weight: 450;
+}
+
+.sizemate-note {
+  margin: 12px 0 0;
+  color: var(--sizemate-muted);
+  font-size: 0.875rem;
+}
+
+/* Guide */
+
+.sizemate-guide {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.sizemate-diagram {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: var(--sizemate-subtle);
+}
+
+.sizemate-guide-text > p { margin: 0 0 12px; }
+
+.sizemate-howto { margin: 0; }
+.sizemate-howto dt { margin: 12px 0 2px; font-weight: 650; }
+.sizemate-howto dt:first-child { margin-top: 0; }
+.sizemate-howto dd { margin: 0; color: var(--sizemate-muted); }
+
+/* Fit Finder */
+
+.sizemate-fit { display: grid; gap: 16px; }
+.sizemate-fit p { margin: 0; }
+.sizemate-fit-intro { color: var(--sizemate-muted); }
+
+.sizemate-fit-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.sizemate-field { display: grid; gap: 4px; font-size: 0.875rem; font-weight: 600; }
+
+.sizemate-field-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #8a8a8a;
+  border-radius: 8px;
+  background: var(--sizemate-surface);
+}
+
+.sizemate-field-input:focus-within { outline: 2px solid var(--sizemate-focus, #005bd3); outline-offset: 1px; }
+
+.sizemate-field input {
+  width: 100%;
+  min-width: 0;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 400;
+  outline: none;
+}
+
+.sizemate-field-suffix { padding-right: 10px; color: var(--sizemate-muted); font-weight: 450; }
+
+.sizemate-fit-preference {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sizemate-fit-preference legend { margin-bottom: 6px; padding: 0; font-size: 0.875rem; font-weight: 600; }
+.sizemate-fit-preference label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.sizemate-fit-preference input { accent-color: var(--sizemate-text); }
+
+.sizemate-fit-submit,
+.sizemate-fit-select {
+  justify-self: start;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--sizemate-text);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.sizemate-fit-select { margin-top: 8px; background: var(--sizemate-surface); color: var(--sizemate-text); box-shadow: inset 0 0 0 1px var(--sizemate-text); }
+
+.sizemate-fit-result:empty { display: none; }
+
+.sizemate-fit-result {
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: var(--sizemate-subtle);
+}
+
+.sizemate-fit-result.is-error { background: #fff1f0; color: #8e1f0b; }
+.sizemate-fit-size { display: block; font-size: 1.125rem; font-weight: 650; }
+.sizemate-fit-details { margin: 8px 0 0; padding: 0; list-style: none; color: var(--sizemate-muted); font-size: 0.875rem; }
+.sizemate-fit-privacy { color: var(--sizemate-muted); font-size: 0.8125rem; }
+
+/* Footer */
+
+.sizemate-footer {
+  padding: 10px 24px;
+  border-top: 1px solid var(--sizemate-border);
+  font-size: 0.75rem;
+  text-align: right;
+}
+
+.sizemate-footer a { color: var(--sizemate-muted); text-decoration: none; }
+.sizemate-footer a:hover { text-decoration: underline; }
+
+.sizemate-editor-notice {
+  padding: 12px 16px;
+  border: 1px dashed #8a8a8a;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+/* Small screens: the modal becomes a bottom sheet. */
+
+@media (max-width: 640px) {
+  .sizemate-dialog--modal {
+    width: 100vw;
+    max-height: 92vh;
+    max-height: 92dvh;
+    margin: auto 0 0;
+    border-radius: var(--sizemate-radius) var(--sizemate-radius) 0 0;
+  }
+
+  .sizemate-dialog--modal .sizemate-panel { max-height: 92vh; max-height: 92dvh; }
+  .sizemate-header { padding: 16px 16px 8px; }
+  .sizemate-tabs { padding: 0 8px; gap: 0; }
+  .sizemate-tab { padding: 10px 8px; font-size: 0.875rem; }
+  .sizemate-body { padding: 16px; }
+  .sizemate-guide { grid-template-columns: 1fr; }
+  .sizemate-diagram { max-width: 180px; }
+  .sizemate-table th, .sizemate-table td { padding: 9px 12px; }
+}

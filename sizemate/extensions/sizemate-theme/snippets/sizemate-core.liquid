@@ -1,0 +1,305 @@
+{%- comment -%}
+  Finds the chart for this product and renders the button and dialog.
+
+  The matching below mirrors app/lib/rules.ts; tests/unit/liquid-parity.test.ts
+  keeps the two in step. Precedence: product > collection/type/vendor/tag > all
+  products, and within each level the chart higher in the app's list wins.
+
+  Params: product, source ('block' | 'embed'), block_id, shopify_attributes
+{%- endcomment -%}
+{%- liquid
+  assign config = app.metafields.sizemate.config.value
+  assign chart_id = ''
+
+  if config and product
+    assign pid = product.id | append: ''
+    assign ptype = product.type | downcase
+    assign pvendor = product.vendor | downcase
+
+    for rule in config.rules
+      if rule.p contains pid
+        assign chart_id = rule.c
+        break
+      endif
+    endfor
+
+    if chart_id == ''
+      for rule in config.rules
+        if rule.all
+          continue
+        endif
+        assign matched = false
+        if ptype != '' and rule.ty contains ptype
+          assign matched = true
+        elsif pvendor != '' and rule.ve contains pvendor
+          assign matched = true
+        endif
+        if matched == false
+          for tag in product.tags
+            assign tag_lower = tag | downcase
+            if rule.tg contains tag_lower
+              assign matched = true
+              break
+            endif
+          endfor
+        endif
+        if matched == false
+          for collection in product.collections
+            assign collection_id = collection.id | append: ''
+            if rule.col contains collection_id
+              assign matched = true
+              break
+            endif
+          endfor
+        endif
+        if matched
+          assign chart_id = rule.c
+          break
+        endif
+      endfor
+    endif
+
+    if chart_id == ''
+      for rule in config.rules
+        if rule.all
+          assign chart_id = rule.c
+          break
+        endif
+      endfor
+    endif
+  endif
+
+  assign chart = nil
+  if chart_id != ''
+    assign chart_key = 'chart_' | append: chart_id
+    assign chart = app.metafields.sizemate[chart_key].value
+  endif
+-%}
+
+{%- if chart and chart.rows.size > 0 -%}
+  {%- liquid
+    assign settings = config.settings
+    assign uid = 'sizemate-' | append: block_id
+    assign locale = request.locale.iso_code | downcase
+    assign tr = chart.tr[locale]
+    if tr == nil
+      assign locale_short = locale | split: '-' | first
+      assign tr = chart.tr[locale_short]
+    endif
+
+    assign title = tr.t | default: chart.t
+    if title == blank
+      assign title = 'sizemate.button' | t
+    endif
+    assign note = tr.note | default: chart.note
+    assign guide_text = tr.guide | default: chart.guide.text
+    assign label = settings.buttonLabel
+    if label == blank
+      assign label = 'sizemate.button' | t
+    endif
+
+    assign default_unit = settings.defaultUnit
+    if default_unit == 'auto' or default_unit == blank
+      assign country = localization.country.iso_code
+      if country == 'US' or country == 'LR' or country == 'MM'
+        assign default_unit = 'in'
+      else
+        assign default_unit = 'cm'
+      endif
+    endif
+
+    assign has_measures = false
+    assign has_guide = false
+    for col in chart.cols
+      if col.k == 'measure'
+        assign has_measures = true
+        if col.m != 'other'
+          assign has_guide = true
+        endif
+      endif
+    endfor
+    if chart.guide.on != true
+      assign has_guide = false
+    elsif guide_text != blank
+      assign has_guide = true
+    endif
+    assign has_fit = false
+    if chart.fit and has_measures
+      assign has_fit = true
+    endif
+    assign tab_count = 1
+    if has_guide
+      assign tab_count = tab_count | plus: 1
+    endif
+    if has_fit
+      assign tab_count = tab_count | plus: 1
+    endif
+  -%}
+  <div
+    class="sizemate sizemate--align-{{ settings.alignment | default: 'start' }}"
+    id="{{ uid }}"
+    data-sizemate
+    data-sizemate-source="{{ source }}"
+    data-chart="{{ chart.id }}"
+    data-placement="{{ settings.autoPlacement | default: 'before_buy_buttons' }}"
+    data-chart-unit="{{ chart.u }}"
+    data-default-unit="{{ default_unit }}"
+    {% if settings.accentColor != blank %}style="--sizemate-accent: {{ settings.accentColor }};"{% endif %}
+    {% if source == 'embed' %}hidden{% endif %}
+    {{ shopify_attributes }}
+  >
+    <button
+      type="button"
+      class="sizemate-trigger sizemate-trigger--{{ settings.buttonStyle | default: 'link' }}"
+      aria-haspopup="dialog"
+      aria-controls="{{ uid }}-dialog"
+      data-sizemate-open
+    >
+      {%- render 'sizemate-icon', icon: settings.icon -%}
+      <span>{{ label | escape }}</span>
+    </button>
+
+    <dialog
+      class="sizemate-dialog sizemate-dialog--{{ settings.layout | default: 'modal' }}"
+      id="{{ uid }}-dialog"
+      aria-labelledby="{{ uid }}-title"
+      data-sizemate-dialog
+    >
+      <div class="sizemate-panel">
+        <header class="sizemate-header">
+          <h2 class="sizemate-title" id="{{ uid }}-title">{{ title | escape }}</h2>
+          <button type="button" class="sizemate-close" data-sizemate-close aria-label="{{ 'sizemate.close' | t }}">
+            <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </header>
+
+        {%- if tab_count > 1 -%}
+          <div class="sizemate-tabs" role="tablist" aria-label="{{ title | escape }}">
+            <button type="button" role="tab" class="sizemate-tab" id="{{ uid }}-tab-chart" aria-controls="{{ uid }}-panel-chart" aria-selected="true" data-sizemate-tab="chart">{{ 'sizemate.tabs.chart' | t }}</button>
+            {%- if has_guide -%}
+              <button type="button" role="tab" class="sizemate-tab" id="{{ uid }}-tab-guide" aria-controls="{{ uid }}-panel-guide" aria-selected="false" tabindex="-1" data-sizemate-tab="guide">{{ 'sizemate.tabs.guide' | t }}</button>
+            {%- endif -%}
+            {%- if has_fit -%}
+              <button type="button" role="tab" class="sizemate-tab" id="{{ uid }}-tab-fit" aria-controls="{{ uid }}-panel-fit" aria-selected="false" tabindex="-1" data-sizemate-tab="fit">{{ 'sizemate.tabs.fit' | t }}</button>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <div class="sizemate-body">
+          <section class="sizemate-section" id="{{ uid }}-panel-chart" data-sizemate-panel="chart" {% if tab_count > 1 %}role="tabpanel" aria-labelledby="{{ uid }}-tab-chart"{% endif %}>
+            {%- if has_measures -%}
+              <div class="sizemate-units" role="group" aria-label="{{ 'sizemate.units' | t }}">
+                <button type="button" class="sizemate-unit-button" data-sizemate-unit="cm" aria-pressed="false">{{ 'sizemate.cm' | t }}</button>
+                <button type="button" class="sizemate-unit-button" data-sizemate-unit="in" aria-pressed="false">{{ 'sizemate.in' | t }}</button>
+              </div>
+            {%- endif -%}
+            <div class="sizemate-table-wrap" role="region" aria-labelledby="{{ uid }}-title" tabindex="0">
+              <table class="sizemate-table" data-sizemate-table>
+                <thead>
+                  <tr>
+                    {%- for col in chart.cols -%}
+                      {%- assign col_label = tr.cols[forloop.index0] | default: col.l -%}
+                      <th scope="col" data-kind="{{ col.k }}" data-measure="{{ col.m }}" data-measure-kind="{{ col.mk }}">
+                        {{- col_label | escape -}}
+                        {%- if col.k == 'measure' %} <span class="sizemate-unit" data-sizemate-unit-label>({{ chart.u }})</span>{% endif -%}
+                      </th>
+                    {%- endfor -%}
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- for row in chart.rows -%}
+                    <tr data-sizemate-row="{{ forloop.index0 }}">
+                      {%- for cell in row -%}
+                        {%- assign col = chart.cols[forloop.index0] -%}
+                        {%- if forloop.first -%}
+                          <th scope="row">{{ cell | escape }}</th>
+                        {%- elsif col.k == 'measure' -%}
+                          <td data-raw="{{ cell | escape }}">{{ cell | escape }}</td>
+                        {%- else -%}
+                          <td>{{ cell | escape }}</td>
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+            {%- if note != blank -%}
+              <p class="sizemate-note">{{ note | escape | newline_to_br }}</p>
+            {%- endif -%}
+          </section>
+
+          {%- if has_guide -%}
+            <section class="sizemate-section" id="{{ uid }}-panel-guide" data-sizemate-panel="guide" role="tabpanel" aria-labelledby="{{ uid }}-tab-guide" hidden>
+              <div class="sizemate-guide">
+                {%- if chart.guide.d != 'none' and chart.guide.d != blank -%}
+                  {%- assign diagram = 'diagram-' | append: chart.guide.d | append: '.svg' -%}
+                  <img class="sizemate-diagram" src="{{ diagram | asset_url }}" alt="" width="200" height="240" loading="lazy">
+                {%- endif -%}
+                <div class="sizemate-guide-text">
+                  {%- if guide_text != blank -%}
+                    <p>{{ guide_text | escape | newline_to_br }}</p>
+                  {%- endif -%}
+                  <dl class="sizemate-howto">
+                    {%- for col in chart.cols -%}
+                      {%- if col.k == 'measure' and col.m != 'other' and col.m != blank -%}
+                        {%- assign col_label = tr.cols[forloop.index0] | default: col.l -%}
+                        {%- assign how_key = 'sizemate.how.' | append: col.m -%}
+                        <dt>{{ col_label | escape }}</dt>
+                        <dd>{{ how_key | t }}</dd>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </dl>
+                </div>
+              </div>
+            </section>
+          {%- endif -%}
+
+          {%- if has_fit -%}
+            <section
+              class="sizemate-section"
+              id="{{ uid }}-panel-fit"
+              data-sizemate-panel="fit"
+              role="tabpanel"
+              aria-labelledby="{{ uid }}-tab-fit"
+              hidden
+              data-t-exact="{{ 'sizemate.fit.exact' | t | escape }}"
+              data-t-between="{{ 'sizemate.fit.between' | t | escape }}"
+              data-t-closest="{{ 'sizemate.fit.closest' | t | escape }}"
+              data-t-above="{{ 'sizemate.fit.above' | t | escape }}"
+              data-t-below="{{ 'sizemate.fit.below' | t | escape }}"
+              data-t-empty="{{ 'sizemate.fit.empty' | t | escape }}"
+              data-t-select="{{ 'sizemate.fit.select' | t | escape }}"
+              data-t-selected="{{ 'sizemate.fit.selected' | t | escape }}"
+              data-t-tight="{{ 'sizemate.fit.tight' | t | escape }}"
+              data-t-loose="{{ 'sizemate.fit.loose' | t | escape }}"
+              data-t-good="{{ 'sizemate.fit.good' | t | escape }}"
+            >
+              <form class="sizemate-fit" data-sizemate-fit novalidate>
+                <p class="sizemate-fit-intro">{{ 'sizemate.fit.intro' | t }}</p>
+                <div class="sizemate-fit-fields" data-sizemate-fit-fields></div>
+                <fieldset class="sizemate-fit-preference">
+                  <legend>{{ 'sizemate.fit.preference' | t }}</legend>
+                  <label><input type="radio" name="preference" value="snug"> {{ 'sizemate.fit.snug' | t }}</label>
+                  <label><input type="radio" name="preference" value="regular" checked> {{ 'sizemate.fit.regular' | t }}</label>
+                  <label><input type="radio" name="preference" value="relaxed"> {{ 'sizemate.fit.relaxed' | t }}</label>
+                </fieldset>
+                <button type="submit" class="sizemate-fit-submit">{{ 'sizemate.fit.submit' | t }}</button>
+                <div class="sizemate-fit-result" data-sizemate-fit-result aria-live="polite"></div>
+                <p class="sizemate-fit-privacy">{{ 'sizemate.fit.privacy' | t }}</p>
+              </form>
+            </section>
+          {%- endif -%}
+        </div>
+
+        {%- if config.brand -%}
+          <footer class="sizemate-footer">
+            <a href="https://apps.shopify.com/sizemate?utm_source=storefront&utm_medium=powered_by" target="_blank" rel="noopener">{{ 'sizemate.powered_by' | t }}</a>
+          </footer>
+        {%- endif -%}
+      </div>
+    </dialog>
+  </div>
+{%- elsif request.design_mode and source == 'block' -%}
+  <p class="sizemate-editor-notice" {{ shopify_attributes }}>{{ 'sizemate.editor_no_chart' | t }}</p>
+{%- endif -%}

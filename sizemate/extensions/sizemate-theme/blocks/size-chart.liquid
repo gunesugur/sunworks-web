@@ -1,0 +1,21 @@
+{%- comment -%}
+  App block: place the size chart button exactly where you want it on product pages.
+  Content and style are managed in the Sizemate app.
+{%- endcomment -%}
+{%- render 'sizemate-core', product: product, source: 'block', block_id: block.id, shopify_attributes: block.shopify_attributes -%}
+
+{% schema %}
+{
+  "name": "Size chart",
+  "target": "section",
+  "templates": ["product"],
+  "stylesheet": "sizemate.css",
+  "javascript": "sizemate.js",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Charts, button text and style are managed in the Sizemate app. Products without an assigned chart show nothing."
+    }
+  ]
+}
+{% endschema %}

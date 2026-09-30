@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Guía de tallas",
+    "close": "Cerrar",
+    "units": "Unidades",
+    "cm": "cm",
+    "in": "pulg.",
+    "tabs": {
+      "chart": "Guía de tallas",
+      "guide": "Cómo medir",
+      "fit": "Encontrar mi talla"
+    },
+    "fit": {
+      "intro": "Introduce tus medidas y te sugeriremos una talla.",
+      "preference": "Ajuste preferido",
+      "snug": "Ceñido",
+      "regular": "Normal",
+      "relaxed": "Holgado",
+      "submit": "Encontrar mi talla",
+      "exact": "Te recomendamos la talla [size].",
+      "between": "Estás entre [other] y [size]. Te recomendamos [size].",
+      "closest": "La talla más cercana es [size].",
+      "above": "Tus medidas superan nuestra talla más grande. [size] podría quedarte ajustada.",
+      "below": "Tus medidas están por debajo de nuestra talla más pequeña. [size] podría quedarte holgada.",
+      "empty": "Introduce al menos una medida.",
+      "select": "Seleccionar talla [size]",
+      "selected": "Talla [size] seleccionada.",
+      "tight": "podría quedar ajustada",
+      "loose": "podría quedar holgada",
+      "good": "queda bien",
+      "privacy": "Tus medidas se quedan en este dispositivo."
+    },
+    "powered_by": "Con la tecnología de Sizemate",
+    "editor_no_chart": "Sizemate: este producto no tiene una guía de tallas asignada. Asigna una en la app Sizemate o comprueba que esté activa.",
+    "how": {
+      "bust": "Mide alrededor de la parte más prominente del pecho, con la cinta nivelada bajo los brazos.",
+      "chest": "Mide alrededor de la parte más ancha del pecho, justo debajo de las axilas, con la cinta nivelada.",
+      "underbust": "Mide ajustado alrededor de la caja torácica, justo debajo del pecho.",
+      "waist": "Mide alrededor de la cintura natural, la parte más estrecha del torso, normalmente justo encima del ombligo.",
+      "hips": "Con los pies juntos, mide alrededor de la parte más ancha de las caderas.",
+      "neck": "Mide alrededor de la base del cuello, dejando espacio para un dedo bajo la cinta.",
+      "shoulder": "Mide por la espalda de un extremo del hombro al otro.",
+      "arm": "Con el brazo relajado, mide desde la costura del hombro hasta el hueso de la muñeca.",
+      "inseam": "Mide desde la parte superior de la entrepierna hasta el tobillo.",
+      "thigh": "Mide alrededor de la parte más ancha del muslo.",
+      "height": "Descalzo y de espaldas a la pared, mide desde el suelo hasta la parte superior de la cabeza.",
+      "foot_length": "Colócate sobre un papel con el talón contra la pared y mide desde la pared hasta la punta del dedo más largo.",
+      "foot_width": "Mide la parte más ancha del pie.",
+      "head": "Mide alrededor de la cabeza, justo por encima de las cejas y las orejas.",
+      "hand": "Mide alrededor de la palma por su parte más ancha, sin incluir el pulgar.",
+      "pet_neck": "Mide alrededor de la base del cuello de tu mascota, donde va el collar.",
+      "pet_chest": "Mide alrededor de la parte más ancha de la caja torácica, justo detrás de las patas delanteras.",
+      "pet_back": "Mide desde la base del cuello hasta el nacimiento de la cola.",
+      "garment_chest": "Extiende la prenda y mide de lado a lado, justo debajo de las sisas.",
+      "garment_waist": "Extiende la prenda y mide la cintura de lado a lado.",
+      "garment_length": "Extiende la prenda y mide desde el punto más alto del hombro hasta el bajo.",
+      "sleeve": "Mide desde la costura del hombro hasta el final de la manga."
+    }
+  }
+}

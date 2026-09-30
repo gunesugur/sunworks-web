@@ -1,0 +1,60 @@
+{
+  "sizemate": {
+    "button": "Guide des tailles",
+    "close": "Fermer",
+    "units": "Unités",
+    "cm": "cm",
+    "in": "po",
+    "tabs": {
+      "chart": "Guide des tailles",
+      "guide": "Comment mesurer",
+      "fit": "Trouver ma taille"
+    },
+    "fit": {
+      "intro": "Saisissez vos mensurations et nous vous suggérerons une taille.",
+      "preference": "Coupe préférée",
+      "snug": "Ajustée",
+      "regular": "Normale",
+      "relaxed": "Ample",
+      "submit": "Trouver ma taille",
+      "exact": "Nous vous recommandons la taille [size].",
+      "between": "Vous êtes entre [other] et [size]. Nous vous recommandons [size].",
+      "closest": "La taille la plus proche est [size].",
+      "above": "Vos mensurations dépassent notre plus grande taille. [size] pourrait être serré.",
+      "below": "Vos mensurations sont inférieures à notre plus petite taille. [size] pourrait être ample.",
+      "empty": "Saisissez au moins une mesure.",
+      "select": "Choisir la taille [size]",
+      "selected": "Taille [size] sélectionnée.",
+      "tight": "pourrait être serré",
+      "loose": "pourrait être ample",
+      "good": "bien ajusté",
+      "privacy": "Vos mensurations restent sur cet appareil."
+    },
+    "powered_by": "Propulsé par Sizemate",
+    "editor_no_chart": "Sizemate : aucun guide des tailles n'est attribué à ce produit. Attribuez-en un dans l'application Sizemate ou vérifiez qu'il est actif.",
+    "how": {
+      "bust": "Mesurez autour de la partie la plus forte de la poitrine, le mètre à l'horizontale sous les bras.",
+      "chest": "Mesurez autour de la partie la plus large du torse, juste sous les aisselles, le mètre à l'horizontale.",
+      "underbust": "Mesurez en serrant légèrement autour de la cage thoracique, juste sous la poitrine.",
+      "waist": "Mesurez autour de la taille naturelle, la partie la plus fine du buste, généralement juste au-dessus du nombril.",
+      "hips": "Pieds joints, mesurez autour de la partie la plus forte des hanches.",
+      "neck": "Mesurez autour de la base du cou en laissant passer un doigt sous le mètre.",
+      "shoulder": "Mesurez dans le dos, d'une extrémité d'épaule à l'autre.",
+      "arm": "Bras détendu, mesurez de la couture d'épaule jusqu'à l'os du poignet.",
+      "inseam": "Mesurez du haut de l'intérieur de la cuisse jusqu'à la cheville.",
+      "thigh": "Mesurez autour de la partie la plus forte de la cuisse.",
+      "height": "Sans chaussures, dos contre un mur, mesurez du sol jusqu'au sommet de la tête.",
+      "foot_length": "Placez-vous sur une feuille, talon contre un mur, et mesurez du mur jusqu'au bout de l'orteil le plus long.",
+      "foot_width": "Mesurez la partie la plus large du pied.",
+      "head": "Mesurez le tour de tête juste au-dessus des sourcils et des oreilles.",
+      "hand": "Mesurez le tour de la paume à l'endroit le plus large, sans le pouce.",
+      "pet_neck": "Mesurez le tour de la base du cou de votre animal, là où se place le collier.",
+      "pet_chest": "Mesurez la partie la plus large de la cage thoracique, juste derrière les pattes avant.",
+      "pet_back": "Mesurez de la base du cou jusqu'à la naissance de la queue.",
+      "garment_chest": "Posez le vêtement à plat et mesurez d'un côté à l'autre, juste sous les emmanchures.",
+      "garment_waist": "Posez le vêtement à plat et mesurez la ceinture d'un côté à l'autre.",
+      "garment_length": "Posez le vêtement à plat et mesurez du point le plus haut de l'épaule jusqu'à l'ourlet.",
+      "sleeve": "Mesurez de la couture d'épaule jusqu'au bout de la manche."
+    }
+  }
+}

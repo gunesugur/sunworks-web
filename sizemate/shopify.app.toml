@@ -1,0 +1,45 @@
+# Shopify app configuration. `shopify app config link` fills in client_id
+# and the URLs for your own app; see docs/SETUP.tr.md.
+client_id = ""
+name = "Sizemate"
+handle = "sizemate"
+application_url = "https://example.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+include_config_on_deploy = true
+
+[access_scopes]
+# read_products: collection/product pickers and assignment suggestions
+# read_themes:   check whether the app embed is switched on (setup guide)
+# read_locales:  list store languages for chart translations
+scopes = "read_products,read_themes,read_locales"
+
+[auth]
+redirect_urls = ["https://example.com/auth/callback"]
+
+[webhooks]
+api_version = "2026-07"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/uninstalled"]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = ["app/scopes_update"]
+  uri = "/webhooks/app/scopes_update"
+
+  # Plan changes made on Shopify's pricing page: republish so paid features
+  # switch on or off on the storefront straight away.
+  [[webhooks.subscriptions]]
+  topics = ["app_subscriptions/update"]
+  uri = "/webhooks/app/subscriptions_update"
+
+  # Mandatory privacy webhooks for App Store apps.
+  [[webhooks.subscriptions]]
+  compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+  uri = "/webhooks/compliance"
+
+[pos]
+embedded = false
