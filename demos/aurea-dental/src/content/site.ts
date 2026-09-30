@@ -52,7 +52,7 @@ export interface FaqItem {
 export const site = {
   name: 'AUREA Dental',
   wordmark: 'AUREA DENTAL',
-  url: 'https://aurea-dental.example',
+  url: 'https://aurea-dental.0ugurgunes0.workers.dev',
   locale: 'en',
   meta: {
     title: 'AUREA Dental — Precision and comfort, crafted around your smile',
@@ -410,7 +410,7 @@ export const site = {
   booking: {
     label: '08 / Booking',
     titleLines: ['Ready for your best smile?', 'Book a consultation.'],
-    intro: 'Leave your details and a coordinator will call you within one working day to find a time that suits you.',
+    intro: 'Try the consultation form with sample details. This demo does not send requests or book appointments.',
     image: 'booking-patient' as ImageKey,
     imageAlt: 'A smiling patient resting her cheek on her hand in a bright treatment room.',
     fields: {
@@ -422,15 +422,16 @@ export const site = {
     interestLegend: 'Treatment interest',
     chips: ['Consultation', 'Whitening', 'Implants', 'Aligners', 'General dentistry'],
     submit: 'Send request',
-    privacy: 'We only use your details to arrange your appointment.',
-    success: 'Thank you. We will be in touch within one working day.',
-    successTitle: 'Request received.',
-    again: 'Send another request',
+    privacy: 'Demo only. Please use sample details; nothing is sent or saved by this form.',
+    success: 'The form validation worked. No details were sent and no appointment was booked.',
+    successTitle: 'Demo completed.',
+    again: 'Try again',
     sending: 'Sending…',
     optional: 'Optional',
     honeypot: 'Leave this field empty',
     errors: {
       summary: 'Please check the highlighted fields.',
+      sending: 'Your request could not be sent. Please try again; your details are still in the form.',
       name: 'Please enter your name.',
       phone: 'Please enter a phone number we can reach you on.',
       email: 'Please enter a valid email address.',
@@ -478,9 +479,9 @@ export const site = {
       { label: 'LinkedIn', href: 'https://linkedin.com/' },
     ] satisfies readonly NavLink[],
     legal: [
-      { label: 'Privacy', href: '#privacy' },
-      { label: 'Cookies', href: '#cookies' },
-      { label: 'Legal', href: '#legal' },
+      { label: 'Privacy', href: '/privacy/' },
+      { label: 'Cookies', href: '/cookies/' },
+      { label: 'Legal', href: '/legal/' },
     ] satisfies readonly NavLink[],
     copyright: '© 2026 AUREA Dental Clinic',
     backToTop: 'Back to top',

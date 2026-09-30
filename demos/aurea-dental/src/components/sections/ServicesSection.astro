@@ -31,8 +31,8 @@ const data = site.services;
 
     <ul class="svc-list" data-svc-list>
       {
-        data.items.map((item, i) => {
-          const open = i === 0;
+        data.items.map((item) => {
+          const open = true; // readable without JavaScript; init collapses all but the first
           return (
             <li class:list={['svc', { 'is-open': open }]} data-svc>
               <h3 class="svc__heading">

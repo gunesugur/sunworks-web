@@ -92,7 +92,7 @@ const f = data.fields;
           </div>
           <div class="booking-form__footer">
             <p class="booking-form__privacy" id="booking-privacy">{data.privacy}</p>
-            <button class="submit" type="submit" data-booking-submit>
+            <button class="submit" type="submit" data-booking-submit disabled>
               <span class="submit__label" data-submit-label data-sending={data.sending}>{data.submit}</span>
               <span class="submit__circle" aria-hidden="true">
                 <Arrow class="submit__arrow" />
@@ -104,7 +104,8 @@ const f = data.fields;
           <label for="bk-company">{data.honeypot}</label>
           <input id="bk-company" name="company" type="text" tabindex="-1" autocomplete="off" />
         </div>
-        <p class="booking-form__summary" role="alert" data-booking-summary data-message={data.errors.summary}></p>
+        <p class="booking-form__summary" role="alert" data-booking-summary data-message={data.errors.summary} data-sending-error={data.errors.sending}></p>
+        <noscript><p>This demo form requires JavaScript. No appointment can be booked here.</p></noscript>
       </form>
 
       <div class="booking-success" data-booking-success hidden>

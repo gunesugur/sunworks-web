@@ -3,13 +3,29 @@ import { gsap, ScrollTrigger } from './tokens';
 import { prefersReducedMotion } from './media';
 
 let lenis: Lenis | null = null;
+const tick = (time: number): void => { lenis?.raf(time * 1000); };
+let watchingMotion = false;
 
 /** Lenis synced to gsap.ticker + ScrollTrigger. Disabled under reduced motion (native scroll). */
 export function initSmoothScroll(): Lenis | null {
+  if (!watchingMotion) {
+    watchingMotion = true;
+    window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', () => {
+      if (prefersReducedMotion()) {
+        lenis?.destroy();
+        lenis = null;
+        gsap.ticker.remove(tick);
+      } else {
+        initSmoothScroll();
+        if (document.documentElement.classList.contains('is-locked')) lenis?.stop();
+      }
+      ScrollTrigger.refresh();
+    });
+  }
   if (lenis || prefersReducedMotion()) return lenis;
   lenis = new Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1, anchors: false });
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => lenis?.raf(time * 1000));
+  gsap.ticker.add(tick);
   gsap.ticker.lagSmoothing(0);
   return lenis;
 }

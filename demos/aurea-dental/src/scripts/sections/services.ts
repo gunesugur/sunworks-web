@@ -75,6 +75,7 @@ export function init(root: HTMLElement): () => void {
       p.trigger.setAttribute('aria-expanded', String(open));
     });
   };
+  setState(current);
 
   const clearFlip = (): void => {
     flip?.kill();

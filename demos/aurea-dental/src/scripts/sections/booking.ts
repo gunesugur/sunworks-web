@@ -3,7 +3,7 @@
  * MaskedMedia), built by motion/scenes.ts; heading lines + field stagger come from the generic reveals.
  * Form: native validation is replaced by inline, accessible errors (aria-invalid + aria-describedby,
  * focus to the first invalid field, role=alert summary). Honeypot filled → silent fake success.
- * No backend yet: submit is intercepted and the success state shown. When `data-endpoint="live"`
+ * No backend yet: submit shows a labelled demo confirmation without sending data. When `data-endpoint="live"`
  * is set on the form, the data is POSTed to its action (e.g. the parent repo's D1 + Turnstile stack).
  */
 import { gsap, EASE, DURATION, ScrollTrigger } from '../../motion/tokens';
@@ -23,6 +23,7 @@ export function init(root: HTMLElement): () => void {
 
   form.noValidate = true; // JS takes over; without JS the browser validates natively
   const submitBtn = form.querySelector<HTMLButtonElement>('[data-booking-submit]');
+  if (submitBtn) submitBtn.disabled = false;
   const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]');
   const summary = form.querySelector<HTMLElement>('[data-booking-summary]');
   const successTitle = success.querySelector<HTMLElement>('[data-booking-success-title]');
@@ -35,7 +36,10 @@ export function init(root: HTMLElement): () => void {
   const check = (name: FieldName): boolean => {
     const value = (input(name)?.value ?? '').trim();
     if (name === 'name') return value.length >= 2;
-    if (name === 'phone') return /^[+0-9 ()-]+$/.test(value) && value.replace(/\D/g, '').length >= 7;
+    if (name === 'phone') {
+      const digits = value.replace(/\D/g, '').length;
+      return /^[+0-9 ()-]+$/.test(value) && value.length <= 20 && digits >= 7 && digits <= 15;
+    }
     return EMAIL.test(value);
   };
   const paint = (name: FieldName, ok: boolean): void => {
@@ -123,7 +127,7 @@ export function init(root: HTMLElement): () => void {
         if (!res.ok) throw new Error(String(res.status));
       } catch {
         setSending(false);
-        form.submit(); // fall back to a regular POST
+        if (summary) summary.textContent = summary.dataset.sendingError ?? '';
         return;
       }
     } else {
@@ -135,6 +139,7 @@ export function init(root: HTMLElement): () => void {
   const onAgain = (): void => {
     form.reset();
     attempted = false;
+    if (summary) summary.textContent = '';
     fields.forEach((n) => paint(n, true));
     success.hidden = true;
     form.hidden = false;

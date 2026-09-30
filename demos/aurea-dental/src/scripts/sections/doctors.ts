@@ -62,15 +62,16 @@ export function init(root: HTMLElement): () => void {
     } else run();
 
     // text: out quickly, in with a small rise
-    const outParts = parts(infos[prev]!);
+    const outParts = infos.filter((_, i) => i !== next && !infos[i]!.hidden).flatMap(parts);
     const inParts = parts(infos[next]!);
-    gsap.killTweensOf([...outParts, ...inParts]);
+    gsap.killTweensOf(infos.flatMap(parts));
     gsap.to(outParts, {
       opacity: 0,
       duration: DURATION.fast,
       ease: EASE.soft,
       onComplete: () => {
-        infos[prev]!.hidden = true;
+        if (token !== switches) return;
+        infos.forEach((info, i) => { info.hidden = i !== next; });
         gsap.set(outParts, { clearProps: 'opacity,transform' });
       },
     });
@@ -125,6 +126,8 @@ export function init(root: HTMLElement): () => void {
   warm.observe(root);
 
   return () => {
+    switches++;
+    gsap.killTweensOf(infos.flatMap(parts));
     warm.disconnect();
     wipe?.kill();
     tablist.removeEventListener('click', onClick);

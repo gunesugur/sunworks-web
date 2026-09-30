@@ -329,7 +329,14 @@ button:hover .media-zoom img {
   }
 }
 
-/* Safety net: if the motion bundle fails, show everything. main.ts sets this class. */
+/* Content stays readable when the module is blocked or cannot load. */
+html:not(.motion-enabled) [data-reveal],
+html:not(.motion-enabled) [data-reveal] .mask-line__inner,
+html:not(.motion-enabled) [data-intro],
+html:not(.motion-enabled) [data-grow],
+html:not(.motion-enabled) [data-mm-inner],
+html:not(.motion-enabled) .hero__media,
+html:not(.motion-enabled) .hero__scrim,
 .motion-fallback [data-reveal],
 .motion-fallback [data-reveal] .mask-line__inner,
 .motion-fallback [data-intro] {
@@ -337,6 +344,16 @@ button:hover .media-zoom img {
   transform: none !important;
   clip-path: none !important;
 }
+html:not(.motion-enabled) [data-ink] { --ink: 1 !important; }
+html:not(.motion-enabled) .scene {
+  height: auto !important;
+  margin-top: 0 !important;
+}
+html:not(.motion-enabled) .scene > .scene__pin {
+  position: relative !important;
+  height: auto !important;
+}
+html:not(.motion-enabled) .site-header__toggle { display: none; }
 
 /* ---- Lenis ---- */
 html.lenis,

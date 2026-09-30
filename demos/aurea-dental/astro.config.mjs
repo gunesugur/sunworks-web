@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://aurea-dental.example',
+  site: process.env.SITE_URL || 'https://aurea-dental.0ugurgunes0.workers.dev',
   output: 'static',
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },

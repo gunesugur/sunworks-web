@@ -67,11 +67,15 @@ Motion `--ease-primary|soft`, `--duration-fast|ui|medium|large`; scene lengths `
 ## Booking form
 
 `BookingCTA` posts `name, phone, email, interest[], message` (+ honeypot `company`, must stay empty) to
-`POST /api/booking`. Without JS the browser validates natively and submits; with JS `booking.ts` validates inline
-and — since no backend exists in this demo — intercepts the submit and shows the success state. To go live, add
-`data-endpoint="live"` to the form: it then `fetch`es the action and falls back to a normal POST on failure.
+`POST /api/booking` only when configured for a real backend. The submit button stays disabled until JS initializes.
+In this demo, `booking.ts` validates inline and shows a clearly labelled demo confirmation without sending data.
+To go live, implement the endpoint, replace the demo copy, and add `data-endpoint="live"` to the form:
+it then `fetch`es the action and preserves the entered details with an inline error on failure.
 The parent Sunworks repo's form stack (Worker route + D1 storage + Turnstile verification) can back this endpoint;
 add the Turnstile widget inside the form and allow `challenges.cloudflare.com` in `public/_headers` CSP.
+
+`SITE_URL` can override the public canonical / Open Graph origin for a preview build. Privacy, cookies and legal
+links lead to static demo information pages. Content remains readable if JavaScript is unavailable.
 
 ## Security / deploy
 

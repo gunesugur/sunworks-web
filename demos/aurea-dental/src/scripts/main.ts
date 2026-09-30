@@ -2,12 +2,13 @@
  * Boot: smooth scroll → section modules (DOM order) → generic reveals → ScrollTrigger refresh.
  */
 import { ScrollTrigger } from '../motion/tokens';
-import { initSmoothScroll, bindAnchorLinks, getLenis } from '../motion/smooth-scroll';
+import { initSmoothScroll, bindAnchorLinks, getLenis, scrollToTarget } from '../motion/smooth-scroll';
 import { initReveals } from '../motion/reveal';
 import { initScenes } from '../motion/scenes';
 import { registry } from './sections/registry';
 
 const root = document.documentElement;
+root.classList.add('motion-enabled');
 
 function debounce(fn: () => void, ms: number): () => void {
   let t = 0;
@@ -31,6 +32,7 @@ async function boot(): Promise<void> {
         return await loader();
       } catch (error) {
         console.error(`[aurea] failed to load section "${el.dataset.section}"`, error);
+        el.classList.add('motion-fallback');
         return null;
       }
     }),
@@ -61,6 +63,8 @@ async function boot(): Promise<void> {
   });
   keepScrollAcrossBreakpoints();
   root.classList.add('is-ready');
+  const target = document.getElementById(window.location.hash.slice(1));
+  if (target) scrollToTarget(target, { immediate: true });
 }
 
 /**
@@ -84,4 +88,5 @@ function keepScrollAcrossBreakpoints(): void {
 boot().catch((error: unknown) => {
   console.error('[aurea] motion boot failed', error);
   root.classList.add('motion-fallback');
+  root.classList.remove('motion-enabled');
 });

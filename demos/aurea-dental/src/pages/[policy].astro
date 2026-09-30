@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+
+const pages = {
+  privacy: {
+    title: 'Privacy',
+    text: 'This is a demonstration website. The consultation form validates sample details in your browser; it does not send or store submissions. Please do not enter personal or medical information. Hosting providers may process ordinary request logs when you visit the site.',
+  },
+  cookies: {
+    title: 'Cookies',
+    text: 'This demo does not set application cookies or use analytics or advertising trackers. Fonts and images are served by this site. Hosting infrastructure may apply its own security measures.',
+  },
+  legal: {
+    title: 'Demo information',
+    text: 'AUREA Dental is a design demonstration, not an operating clinic. Clinicians, testimonials, statistics, contact details and treatment results are sample content. Nothing here constitutes medical advice or a confirmed appointment.',
+  },
+};
+export function getStaticPaths() {
+  return ['privacy', 'cookies', 'legal'].map((policy) => ({ params: { policy } }));
+}
+const policy = Astro.params.policy as keyof typeof pages;
+const { title, text } = pages[policy];
+---
+<Base title={`${title} — AUREA Dental`} description={text}>
+  <main class="policy container" id="main">
+    <a class="link-line" href="/">← Back to AUREA Dental</a>
+    <p class="label">AUREA Dental / Demo</p>
+    <h1>{title}</h1>
+    <p>{text}</p>
+  </main>
+</Base>
+<style>
+  .policy { display: grid; gap: 24px; padding-block: 80px; max-width: 760px; }
+  .policy h1 { font-size: var(--fs-h2); }
+  .policy > p:last-child { color: var(--text-secondary); }
+</style>
