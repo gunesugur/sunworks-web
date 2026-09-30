@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '@/content/schema';
 import { getPages, getSettings } from '@/lib/cms';
-import { routes } from '@/i18n/routes';
+import { legalSlugs, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Base from '@/layouts/Base.astro';
 import PageHeader from '@/components/PageHeader.astro';
@@ -24,13 +24,13 @@ const bbox = [lng - d, lat - d * 0.6, lng + d, lat + d * 0.6].map((n) => n.toFix
 const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${lat},${lng}`;
 ---
 
-<Base lang={lang} title={page.seo.title ?? page.title} description={page.seo.description ?? page.intro} alternates={{ tr: routes.contact.tr, en: routes.contact.en }}>
+<Base lang={lang} title={page.seo.title ?? page.title} description={page.seo.description ?? page.intro} alternates={routes.contact}>
   <PageHeader lang={lang} title={page.title} intro={page.intro} />
   <section class="container contact" aria-label={page.title}>
     <div class="contact__form">
       <h2 class="h3">{s.formTitle}</h2>
       <PortableText value={page.body} class="contact__note" />
-      <ContactForm lang={lang} email={settings.email} privacySlug={privacy?.slug.current ?? (lang === 'tr' ? 'gizlilik' : 'privacy')} />
+      <ContactForm lang={lang} email={settings.email} privacySlug={privacy?.slug.current ?? legalSlugs.privacy[lang]} />
     </div>
     <aside class="contact__aside">
       <dl class="facts">

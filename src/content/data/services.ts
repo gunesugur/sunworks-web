@@ -639,4 +639,317 @@ We cover the most common causes of a slow site in [why is your site slow](/en/bl
       description: 'We make your website faster and set it up properly for Google: speed audits, image and code optimization, meta tags, sitemaps and Search Console.',
     },
   },
+
+  // ---------- Deutsch ----------
+  {
+    _id: 'service-wordpress-de',
+    _type: 'service',
+    language: 'de',
+    translationKey: 'service-wordpress',
+    title: 'WordPress',
+    headline: 'WordPress-Websites für Unternehmen',
+    slug: slug('wordpress-unternehmenswebsite'),
+    order: 1,
+    icon: 'wordpress',
+    excerpt: 'Firmenwebsites, die Ihr Unternehmen klar und ansprechend zeigen. Texte und Fotos pflegen Sie danach selbst, ohne auf jemanden angewiesen zu sein.',
+    image: img('service-wordpress', 'Ein Laptop mit einem schlichten Website-Layout, daneben Pflanzen und ein Notizbuch'),
+    deliverables: [
+      'Seitenstruktur und Inhaltsplan',
+      'Theme-Einrichtung und Anpassung an Ihre Marke',
+      'Auswahl und Konfiguration der Plugins',
+      'Formulare, Backups, Caching und Sicherheit',
+      'SEO-Grundlagen: Titel, Beschreibungen, Sitemap',
+      'Updates und Wartung nach dem Livegang',
+    ],
+    body: pt(
+      'wp',
+      `## Für wen
+
+Unternehmen, Selbstständige, Vereine und Organisationen, die eine Website brauchen, die ihre Arbeit erklärt. Auch das Aufräumen einer bestehenden WordPress-Website, die mit der Zeit unübersichtlich geworden ist, gehört dazu.
+
+## Wovon wir ausgehen
+
+Bevor wir ein Theme wählen, schauen wir auf die Inhalte. Welche Seiten braucht es, was suchen die Besucher und wer pflegt die Website? Die Struktur folgt diesen Antworten, das Theme folgt der Struktur. Nicht umgekehrt.
+
+Jedes Plugin bedeutet Wartung. Wir installieren nur die, die sich lohnen. Wenn das Theme die Aufgabe schon erfüllt, kommt kein weiteres Plugin dazu.
+
+## So arbeiten wir
+
+1. **Gespräch:** Wir sprechen über Ziele, Seiten und Inhalte und halten den Umfang in einem schriftlichen Angebot fest.
+2. **Umsetzung:** Wir bauen auf einer Testumgebung und zeigen Ihnen den Stand über einen Vorschau-Link.
+3. **Prüfung:** Gemeinsam prüfen wir Geschwindigkeit, mobile Darstellung, Formulare und SEO-Einstellungen.
+4. **Livegang:** Wir erstellen ein Backup, schalten die Website live und behalten sie in den ersten Tagen genau im Blick.
+
+## Nach dem Livegang
+
+Wir halten WordPress, das Theme und die Plugins aktuell, mit einem Backup vor jedem Update. Wenn etwas nicht funktioniert, kümmert sich dasselbe Team im [technischen Support](/de/leistungen/technischer-support) darum. Für eine schnelle Website, die in der Suche gut dasteht, arbeiten wir auch an [Ladezeit und SEO](/de/leistungen/ladezeit-und-seo).
+
+Sie stehen kurz vor dem Start? Unsere [WordPress-Checkliste vor dem Livegang](/de/blog/wordpress-checkliste-vor-dem-livegang) ist ein guter Anfang.`,
+    ),
+    faq: faq('wpq', [
+      ['Wie lange dauert eine WordPress-Website?', 'Das hängt vom Umfang ab. Eine kleine Firmenwebsite dauert meist zwei bis vier Wochen. Den Zeitplan erhalten Sie schriftlich mit dem Angebot.'],
+      ['Nutzen Sie ein fertiges Theme oder ein eigenes Design?', 'Was das Projekt braucht. Für die meisten Firmenwebsites reicht ein gutes Theme, das an Ihre Marke angepasst wird. Wenn nicht, ergänzen wir eigene Komponenten.'],
+      ['Auf wessen Namen laufen Hosting und Domain?', 'Auf Ihren. Die Zugänge gehören Ihnen. Auf Wunsch richten wir sie für Sie ein.'],
+      ['Kann ich die Website später selbst pflegen?', 'Ja. Bei der Übergabe gehen wir den Admin-Bereich gemeinsam durch und zeigen Ihnen alles, was Sie brauchen.'],
+    ]),
+    seo: {
+      title: 'WordPress-Firmenwebsite: Einrichtung und Wartung',
+      description: 'WordPress-Websites, geplant nach Ihren Inhalten: Einrichtung, Theme-Anpassung, Plugin-Konfiguration, SEO-Grundlagen und laufende Wartung.',
+    },
+  },
+  {
+    _id: 'service-shopify-de',
+    _type: 'service',
+    language: 'de',
+    translationKey: 'service-shopify',
+    title: 'Shopify',
+    headline: 'Shopify-Shop: Einrichtung und Entwicklung',
+    slug: slug('shopify-shop-einrichten'),
+    order: 2,
+    icon: 'cart',
+    excerpt: 'Onlineshops, in denen Sie Ihre Produkte einfach zeigen und verkaufen und Bestellungen sogar vom Handy aus verfolgen.',
+    image: img('service-shopify', 'Eine Ladentheke mit gefalteter Kleidung und einem Tablet mit Produktkacheln'),
+    deliverables: [
+      'Shop-Einrichtung und Theme-Anpassung',
+      'Struktur für Produkte, Varianten und Kollektionen',
+      'Auswahl und Anbindung von Apps',
+      'Produktkonfiguratoren für Print on Demand',
+      'Zahlung, Versand, Steuern und Rechtstexte',
+      'Testbestellungen vor dem Start',
+    ],
+    body: pt(
+      'sh',
+      `## Für wen
+
+Kleine Marken, die online verkaufen wollen, und Shop-Betreiber, die Ordnung in einen bestehenden Shopify-Shop bringen möchten.
+
+## Wie wir einen Shop aufbauen
+
+Vor dem Theme schauen wir auf die Produkte. Wie finden Kunden ein Produkt, was vergleichen sie und was wollen sie vor dem Kauf wissen? Kollektionen, Filter und Produktseiten folgen diesen Antworten.
+
+Apps sind schnell installiert und schwer wieder loszuwerden. Jede macht den Shop etwas langsamer und kostet monatlich. Deshalb prüfen wir zuerst, ob das Theme und die Bordmittel von Shopify den Bedarf schon abdecken.
+
+## Personalisierte Produkte
+
+Für Print-on-Demand-Produkte bauen wir Konfiguratoren, in denen Kunden Farbe, Größe oder Motiv wählen. Jede Auswahl ist mit der Preislogik verknüpft, damit die Bestellung mit den richtigen Angaben in die Produktion geht.
+
+## So arbeiten wir
+
+1. **Gespräch:** Wir sprechen über Produktstruktur, Verkaufskanäle und Versand.
+2. **Einrichtung:** Wir installieren und passen das Theme an und ordnen Produkte und Kollektionen.
+3. **Anbindung:** Wir verbinden die nötigen Apps und schließen Zahlungs- und Versandeinstellungen ab.
+4. **Test und Start:** Wir spielen eine echte Bestellung von Anfang bis Ende durch und eröffnen dann den Shop.
+
+Vor dem Start lohnt sich ein Blick auf [5 Dinge vor der Eröffnung Ihres Shopify-Shops](/de/blog/vor-der-eroeffnung-ihres-shopify-shops).`,
+    ),
+    faq: faq('shq', [
+      ['Shopify oder WooCommerce?', 'Das hängt von Ihrem Sortiment, Ihrem Budget und davon ab, wer den Shop betreibt. Wenn Sie sich nicht um Server und Updates kümmern möchten, braucht Shopify meist weniger Wartung. Wir entscheiden gemeinsam.'],
+      ['Können Sie meinen bestehenden Shop übernehmen?', 'Ja. Zuerst prüfen wir den Shop und zeigen Ihnen ungenutzte Apps und alles, was ihn bremst.'],
+      ['Laden Sie die Produkte hoch?', 'Wenn Sie möchten. Für größere Mengen bereiten wir die Produktliste mit Ihnen vor oder geben Ihnen eine Vorlage zum Ausfüllen.'],
+    ]),
+    seo: {
+      title: 'Shopify-Shop einrichten und Theme anpassen',
+      description: 'Shopify-Shops, aufgebaut rund um Ihre Produkte: Theme-Anpassung, App-Anbindungen, Katalogstruktur und Produktkonfiguratoren für Print on Demand.',
+    },
+  },
+  {
+    _id: 'service-support-de',
+    _type: 'service',
+    language: 'de',
+    translationKey: 'service-support',
+    title: 'Technischer Support',
+    headline: 'Technischer Support für WordPress und Shopify',
+    slug: slug('technischer-support'),
+    order: 3,
+    icon: 'wrench',
+    excerpt: 'Praktische Hilfe bei fehlerhaften Seiten, einer langsamen Website oder anderen technischen Problemen, damit Sie sich nicht darum kümmern müssen.',
+    image: img('service-support', 'Eine Person zeigt auf eine Stelle auf einem Laptop-Bildschirm'),
+    deliverables: [
+      'Fehler nachstellen und die Ursache finden',
+      'Konflikte zwischen Theme und Plugins lösen',
+      'Probleme mit Cache und Ladezeit beheben',
+      'Kleine Korrekturen an Code und Layout',
+      'Support-Anfragen bei Theme, Plugin und Hosting',
+      'Ein kurzer Bericht zu Ursache und Änderungen',
+    ],
+    body: pt(
+      'su',
+      `## Welche Probleme?
+
+- Seiten, die nach einem Update nicht mehr funktionieren, oder ein weißer Bildschirm
+- Plugins oder Apps, die sich gegenseitig stören
+- Ein Cache, der Ihre Änderungen verdeckt
+- Formulare, die nicht senden, und E-Mails, die nicht ankommen
+- Bereiche, die auf dem Handy verrutschen oder überstehen
+- Seiten, die plötzlich langsam laden
+
+## So arbeiten wir
+
+Wir suchen die Ursache, nicht das Symptom. Zuerst stellen wir den Fehler nach und finden heraus, welche Änderung ihn ausgelöst hat. Wo möglich, testen wir die Lösung auf einer Kopie. Sonst erstellen wir vorher ein Backup.
+
+Liegt das Problem bei einem Theme, einem Plugin oder dem Hoster, übernehmen wir die Abstimmung mit deren Support. Sie müssen nicht dazwischen stehen.
+
+## Was Sie bekommen
+
+Eine funktionierende Website und einen kurzen Bericht: was das Problem war, warum es auftrat und was geändert wurde. Taucht etwas Ähnliches wieder auf, ist klar, wo man suchen muss.
+
+Ihre Website ist langsam? Die fünf häufigsten Ursachen zeigen wir in [warum ist Ihre Website langsam](/de/blog/warum-ist-ihre-website-langsam).`,
+    ),
+    faq: faq('suq', [
+      ['Wie schnell reagieren Sie bei dringenden Problemen?', 'Wir antworten innerhalb von 24 Stunden. Ist die Website komplett ausgefallen, hat das Vorrang.'],
+      ['Arbeiten Sie auch an Websites, die jemand anderes gebaut hat?', 'Ja. Die meisten Support-Anfragen kommen von Websites, die jemand anderes gebaut hat. Wir beginnen mit einer kurzen Prüfung.'],
+      ['Wie wird abgerechnet?', 'Nach Umfang. Ein Festpreis für einmalige Korrekturen, ein Monatspaket für laufenden Support.'],
+    ]),
+    seo: {
+      title: 'Technischer Support für WordPress und Shopify',
+      description: 'Fehlerhafte Seiten, Plugin-Konflikte, Probleme mit Cache und Ladezeit. Technischer Support für WordPress und Shopify, der die Ursache findet und behebt.',
+    },
+  },
+  {
+    _id: 'service-ai-de',
+    _type: 'service',
+    language: 'de',
+    translationKey: 'service-ai',
+    title: 'KI-gestützte Entwicklung',
+    headline: 'KI-gestützte Webentwicklung',
+    slug: slug('ki-gestuetzte-entwicklung'),
+    order: 4,
+    icon: 'ai',
+    excerpt: 'Kleine, clevere Lösungen, die Ihren Alltag erleichtern, Kunden auf Ihrer Website helfen oder Ihre Abläufe beschleunigen.',
+    image: img('service-ai', 'Ein Laptop mit weichen, fließenden Wellenformen, daneben eine Tasse'),
+    deliverables: [
+      'Ein Plan, wo KI wirklich hilft',
+      'Schnelle Prototypen und Oberflächen-Tests',
+      'Eigene Plugins, Integrationen und Automationen',
+      'KI-Funktionen auf Ihrer Website: Suche, Assistenten, Inhalte',
+      'Code-Review und Tests durch Menschen',
+      'Prüfung von Datenschutz und Datenverarbeitung',
+    ],
+    body: pt(
+      'ai',
+      `## Was das bedeutet
+
+KI-Werkzeuge machen manche Arbeit deutlich schneller: Recherche, erste Entwürfe, wiederkehrender Code, Testfälle. Genau dort setzen wir sie ein. Was gebaut wird, wie es gebaut wird und ob es stimmt, entscheiden weiterhin wir.
+
+KI ersetzt kein Urteilsvermögen. Die gesparte Zeit fließt in Gestaltung, Tests und Details.
+
+## Was wir machen
+
+- **Prototypen:** Wir machen aus einer Idee in Stunden statt Tagen ein klickbares Beispiel, damit Sie es sehen, bevor Sie entscheiden.
+- **Eigene Entwicklung:** WordPress-Plugins, Anbindungen an Shopify-Apps, kleine Automationen und API-Verbindungen.
+- **KI-Funktionen:** Eine intelligente Suche, ein Assistent, der Fragen beantwortet, oder Abläufe zur Bearbeitung von Inhalten auf Ihrer Website.
+- **Bestehenden Code verstehen:** Wir erfassen ein undokumentiertes Theme oder Plugin schnell und ändern es dann sicher.
+
+## Wie wir die Kontrolle behalten
+
+Jede Zeile KI-generierter Code wird von einem Entwickler geprüft. Wir führen die Tests aus und messen Ladezeit und Barrierefreiheit. Kundendaten und Zugangsdaten geben wir nicht an KI-Werkzeuge weiter.
+
+## Für wen
+
+Aufgaben, bei denen ein fertiges Theme oder Plugin nicht reicht, ein großes Softwareprojekt aber übertrieben wäre. Meist ist das Teil eines Projekts mit [WordPress](/de/leistungen/wordpress-unternehmenswebsite) oder [Shopify](/de/leistungen/shopify-shop-einrichten).`,
+    ),
+    faq: faq('aiq', [
+      ['Schreibt die KI den ganzen Code?', 'Nein. Die KI hilft bei Entwürfen und wiederkehrenden Teilen. Architektur, Entscheidungen und die letzte Prüfung liegen bei uns. Jede Änderung wird geprüft und getestet.'],
+      ['Werden meine Daten an KI-Werkzeuge weitergegeben?', 'Nein. Kundendaten, Passwörter und Zugangsdaten geben wir nicht an KI-Werkzeuge. Bei Bedarf arbeiten wir mit anonymisierten Beispieldaten.'],
+      ['Können Sie einen KI-Assistenten auf meiner Website einbauen?', 'Ja. Wir können einen Assistenten bauen, der sich auf die Inhalte Ihrer Website stützt und klare Grenzen hat. Vorher prüfen wir gemeinsam, ob er wirklich hilft.'],
+    ]),
+    seo: {
+      title: 'KI-gestützte Webentwicklung',
+      description: 'Webentwicklung mit KI für Prototypen, eigene Lösungen und Automationen. Jede Zeile wird von einem Entwickler geprüft, bevor sie live geht.',
+    },
+  },
+  {
+    _id: 'service-hosting-de',
+    _type: 'service',
+    language: 'de',
+    translationKey: 'service-hosting',
+    title: 'Domain und Hosting',
+    headline: 'Domain, Hosting und E-Mail einrichten',
+    slug: slug('domain-und-hosting'),
+    order: 5,
+    icon: 'server',
+    excerpt: 'Domain, DNS, SSL und geschäftliche E-Mail. Wir ziehen Ihre Website ohne Ausfall auf einen neuen Server um. Die Zugänge laufen auf Ihren Namen.',
+    image: img('service-hosting', 'Ein kleiner Server mit Statusleuchten neben einem Laptop'),
+    deliverables: [
+      'Ein Hosting-Tarif, der zur Website passt',
+      'Domain- und DNS-Konfiguration',
+      'Einrichtung der Website in cPanel oder Plesk',
+      'SSL-Zertifikat und HTTPS-Weiterleitung',
+      'Geschäftliche E-Mail mit SPF, DKIM und DMARC',
+      'Umzug Ihrer Website auf einen neuen Server',
+    ],
+    body: pt(
+      'ho',
+      `## Was wir machen
+
+Wir verbinden Ihre Domain mit dem richtigen Server, richten Ihre Website in cPanel oder Plesk ein und aktivieren SSL. Wir legen E-Mail-Postfächer auf Ihrer Domain an und ergänzen die DNS-Einträge, damit Ihre E-Mails nicht im Spam landen.
+
+## Umzug
+
+Bevor wir eine bestehende Website auf einen neuen Server umziehen, erstellen wir ein vollständiges Backup. Wir richten die Website auf dem neuen Server ein, prüfen sie und stellen dann die DNS um. Besucher merken keinen Ausfall und keine E-Mail geht verloren.
+
+## Wem gehören die Zugänge?
+
+Ihnen. Hosting und Domain laufen auf Ihren Namen, die Passwörter bleiben bei Ihnen. Bei der Wahl des Tarifs vergleichen wir einige Angebote und empfehlen nicht mehr, als die Website braucht.
+
+Bei einer neuen Website ist dieser Schritt meist Teil eines [WordPress](/de/leistungen/wordpress-unternehmenswebsite)-Projekts.`,
+    ),
+    faq: faq('hoq', [
+      ['Welchen Hoster empfehlen Sie?', 'Wir sind an keinen gebunden. Je nach Art der Website, Besucherzahl und Budget schlagen wir einige Optionen vor.'],
+      ['Ist die Website während des Umzugs offline?', 'Nein. Wir bereiten die Website auf dem neuen Server vor und prüfen sie, bevor wir umschalten.'],
+      ['Warum landen meine E-Mails im Spam?', 'Meist fehlen SPF-, DKIM- und DMARC-Einträge oder sie sind falsch. Wir richten sie korrekt ein.'],
+    ]),
+    seo: {
+      title: 'Domain, Hosting, SSL und E-Mail einrichten',
+      description: 'Domain und DNS, Einrichtung in cPanel und Plesk, SSL, geschäftliche E-Mail und Umzug ohne Ausfall. Die Zugänge bleiben auf Ihrem Namen.',
+    },
+  },
+  {
+    _id: 'service-seo-de',
+    _type: 'service',
+    language: 'de',
+    translationKey: 'service-seo',
+    title: 'Ladezeit und SEO',
+    headline: 'Ladezeit und technisches SEO',
+    slug: slug('ladezeit-und-seo'),
+    order: 6,
+    icon: 'search',
+    excerpt: 'Wir machen Ihre Website schneller und richten sie so ein, dass Google sie richtig liest. Weder Besucher noch Suchmaschinen müssen warten.',
+    image: img('service-speed', 'Hände tippen auf einem Laptop mit steigenden Balkendiagrammen'),
+    deliverables: [
+      'Messung der Ladezeit: LCP, INP und CLS',
+      'Optimierung von Bildern, Code und Plugins',
+      'Caching und CDN-Einstellungen',
+      'Überschriften, Meta-Titel und Beschreibungen',
+      'Sitemap, Weiterleitungen und strukturierte Daten',
+      'Einrichtung und Beobachtung der Search Console',
+    ],
+    body: pt(
+      'seo',
+      `## Warum das wichtig ist
+
+Besucher warten nicht auf eine langsame Seite. Auch Google berücksichtigt die Nutzererfahrung beim Ranking. Eine schnelle, gut strukturierte Website hält Besucher und ist in der Suche leichter zu finden.
+
+## Was wir machen
+
+- **Ladezeit:** Wir messen Ihre Seiten und finden, was sie am meisten bremst. Wir passen Bildgrößen an, entfernen unnötige Plugins und unnötigen Code und richten das Caching richtig ein.
+- **Technisches SEO:** Wir ordnen Überschriften, Meta-Titel und Beschreibungen, Sitemap und Weiterleitungen und ergänzen strukturierte Daten, damit Google Ihre Seiten versteht.
+- **Beobachtung:** Wir richten die Google Search Console ein und verfolgen gemeinsam, wie sich die Website in der Suche entwickelt.
+
+## So arbeiten wir
+
+Zuerst messen wir den aktuellen Stand und geben Ihnen eine verständliche Zusammenfassung. Gemeinsam wählen wir den Schritt, der am meisten bringt. Nach jeder Änderung messen wir erneut, damit Sie den Unterschied sehen.
+
+Die häufigsten Ursachen einer langsamen Website zeigen wir in [warum ist Ihre Website langsam](/de/blog/warum-ist-ihre-website-langsam). Liegt es an einem Fehler, kümmert sich unser [technischer Support](/de/leistungen/technischer-support) darum.`,
+    ),
+    faq: faq('seoq', [
+      ['Muss der Lighthouse-Wert 100 sein?', 'Nein. Der Wert ist ein Werkzeug, nicht das Ziel. Entscheidend ist die Erfahrung echter Besucher. Ab 90 ist es trotzdem ein gutes Zeichen.'],
+      ['Bringt mich SEO sofort nach oben?', 'Das kann niemand versprechen. Technisches SEO sorgt dafür, dass Ihre Website richtig gelesen wird und schnell lädt. Über das Ranking entscheiden auch Inhalte und Zeit.'],
+      ['Kann diese Arbeit meiner Website schaden?', 'Nein. Vor jeder Änderung erstellen wir ein Backup und testen, wo möglich, zuerst auf einer Kopie.'],
+    ]),
+    seo: {
+      title: 'Ladezeit und technisches SEO',
+      description: 'Wir machen Ihre Website schneller und richten sie für Google ein: Ladezeit-Analyse, Optimierung von Bildern und Code, Meta-Tags, Sitemaps und Search Console.',
+    },
+  },
 ];

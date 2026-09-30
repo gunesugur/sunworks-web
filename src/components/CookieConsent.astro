@@ -4,6 +4,7 @@
  * The choices really gate optional features: see scripts/consent.ts and scripts/map.ts.
  */
 import type { Locale } from '@/content/schema';
+import { legalSlugs, pagePath } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Asterisk from './Asterisk.astro';
 
@@ -12,7 +13,7 @@ interface Props {
 }
 const { lang } = Astro.props;
 const s = t(lang);
-const policy = lang === 'tr' ? '/cerez-politikasi' : '/en/cookies';
+const policy = pagePath(lang, legalSlugs.cookies[lang]);
 ---
 
 <section class="consent scheme-invert" role="dialog" aria-modal="false" aria-labelledby="consent-title" aria-describedby="consent-text" hidden data-consent transition:persist={`consent-${lang}`}>

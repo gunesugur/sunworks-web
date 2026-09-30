@@ -14,13 +14,13 @@ export default defineConfig({
   build: { inlineStylesheets: 'always', format: 'file' },
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   i18n: {
-    locales: ['tr', 'en'],
+    locales: ['tr', 'en', 'de'],
     defaultLocale: 'tr',
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
     sitemap({
-      i18n: { defaultLocale: 'tr', locales: { tr: 'tr-TR', en: 'en-US' } },
+      i18n: { defaultLocale: 'tr', locales: { tr: 'tr-TR', en: 'en-US', de: 'de-DE' } },
       filter: (page) => !page.includes('/404'),
     }),
   ],

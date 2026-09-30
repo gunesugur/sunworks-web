@@ -9,6 +9,7 @@ const sun = readFileSync('public/favicon.svg', 'utf8');
 const copy = {
   tr: { line: 'WordPress ve Shopify için özenli web işçiliği', meta: 'Bursa · Web tasarım ve geliştirme stüdyosu' },
   en: { line: 'Careful web work for WordPress and Shopify', meta: 'Bursa · Web design and development studio' },
+  de: { line: 'Sorgfältige Webarbeit für WordPress und Shopify', meta: 'Bursa · Studio für Webdesign und Entwicklung' },
 };
 
 const page = (lang) => `<!doctype html><html><head><style>
@@ -25,7 +26,7 @@ h1{font-size:76px;line-height:1.12;font-weight:500;max-width:900px;letter-spacin
 
 const browser = await chromium.launch(process.env.PW_CHROMIUM_PATH ? { executablePath: process.env.PW_CHROMIUM_PATH } : {});
 const p = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-for (const lang of ['tr', 'en']) {
+for (const lang of ['tr', 'en', 'de']) {
   await p.setContent(page(lang));
   await p.evaluate(() => document.fonts.ready);
   await p.screenshot({ path: `public/og/${lang}.png` });

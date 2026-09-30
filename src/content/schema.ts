@@ -5,7 +5,7 @@
  */
 import { z } from 'zod';
 
-export const LOCALES = ['tr', 'en'] as const;
+export const LOCALES = ['tr', 'en', 'de'] as const;
 export const localeSchema = z.enum(LOCALES);
 export type Locale = z.infer<typeof localeSchema>;
 

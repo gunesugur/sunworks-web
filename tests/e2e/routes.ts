@@ -1,6 +1,6 @@
 export interface RouteCase {
   path: string;
-  lang: 'tr-TR' | 'en-US';
+  lang: 'tr-TR' | 'en-US' | 'de-DE';
   alt?: string;
 }
 
@@ -23,6 +23,16 @@ export const ROUTES: RouteCase[] = [
   { path: '/en/terms', lang: 'en-US', alt: '/kullanim-kosullari' },
   { path: '/cerez-politikasi', lang: 'tr-TR', alt: '/en/cookies' },
   { path: '/en/cookies', lang: 'en-US', alt: '/cerez-politikasi' },
+  { path: '/kunye', lang: 'tr-TR', alt: '/de/impressum' },
+  { path: '/de', lang: 'de-DE', alt: '/' },
+  { path: '/de/leistungen', lang: 'de-DE', alt: '/hizmetler' },
+  { path: '/de/leistungen/technischer-support', lang: 'de-DE', alt: '/hizmetler/teknik-destek' },
+  { path: '/de/blog', lang: 'de-DE', alt: '/blog' },
+  { path: '/de/blog/vor-der-eroeffnung-ihres-shopify-shops', lang: 'de-DE', alt: '/blog/shopify-magaza-acmadan-once' },
+  { path: '/de/kontakt', lang: 'de-DE', alt: '/iletisim' },
+  { path: '/de/impressum', lang: 'de-DE', alt: '/kunye' },
+  { path: '/de/datenschutz', lang: 'de-DE', alt: '/gizlilik' },
+  { path: '/de/cookie-richtlinie', lang: 'de-DE', alt: '/cerez-politikasi' },
 ];
 
 /** Skip the first-visit intro so tests start from the settled page. */

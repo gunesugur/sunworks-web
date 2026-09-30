@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '@/content/schema';
 import { formMessages, t } from '@/i18n/ui';
-import { pagePath } from '@/i18n/routes';
+import { legalSlugs, pagePath } from '@/i18n/routes';
 import Icon from './Icon.astro';
 import FormExtras from './FormExtras.astro';
 
@@ -33,7 +33,7 @@ const s = t(lang);
     </button>
   </div>
   <p class="nl__privacy">
-    {s.newsletterPrivacy} <a href={pagePath(lang, lang === 'tr' ? 'gizlilik' : 'privacy')}>{s.privacyLink}</a>
+    {s.newsletterPrivacy} <a href={pagePath(lang, legalSlugs.privacy[lang])}>{s.privacyLink}</a>
   </p>
   <FormExtras idPrefix="nl" />
   <p id="nl-status" class="form-status" role="status" aria-live="polite" data-status></p>

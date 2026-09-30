@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getPages } from '@/lib/cms';
+import LegalPage from '@/templates/LegalPage.astro';
+
+export const getStaticPaths = (async () => {
+  const pages = await getPages('de', 'legal');
+  return pages.map((page) => ({ params: { page: page.slug.current }, props: { page } }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { page } = Astro.props as Props;
+---
+
+<LegalPage lang="de" page={page} />

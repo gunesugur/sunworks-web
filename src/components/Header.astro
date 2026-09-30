@@ -1,7 +1,7 @@
 ---
 import type { Locale, Navigation } from '@/content/schema';
 import { getNavigation } from '@/lib/cms';
-import { cleanPath, otherLocale, routes } from '@/i18n/routes';
+import { cleanPath, localeNames, routes } from '@/i18n/routes';
 import { t } from '@/i18n/ui';
 import Button from './Button.astro';
 import Logo from './Logo.astro';
@@ -12,18 +12,17 @@ interface Props {
   lang: Locale;
   nav: Navigation;
   siteName: string;
-  altHref: string;
+  langLinks: { lang: Locale; href: string }[];
 }
-const { lang, nav, siteName, altHref } = Astro.props;
+const { lang, nav, siteName, langLinks } = Astro.props;
 const s = t(lang);
 const path = cleanPath(Astro.url.pathname);
 const isActive = (href: string) => {
   if (href === routes.home[lang]) return path === href;
   return path === href || path.startsWith(`${href}/`);
 };
-const altLang = otherLocale(lang);
-// Labels of the other language, index-aligned, so every label keeps the width of its longer version.
-const altNav = await getNavigation(altLang);
+// Labels of the other languages, index-aligned, so every label keeps the width of its longest version.
+const altNavs = await Promise.all(langLinks.map((l) => getNavigation(l.lang)));
 ---
 
 <header class="site-header" transition:name="site-header" data-header>
@@ -36,14 +35,26 @@ const altNav = await getNavigation(altLang);
           nav.header.map((item, i) => (
             <li style={`--i:${i}`}>
               <a href={item.href} class="site-nav__link" data-index={String(i + 1).padStart(2, '0')} aria-current={isActive(item.href) ? 'page' : undefined}>
-                <Swap text={item.label} alt={altNav.header[i]?.label} class="site-nav__label" />
+                <Swap text={item.label} alt={altNavs.map((n) => n.header[i]?.label)} class="site-nav__label" />
               </a>
             </li>
           ))
         }
       </ul>
       <div class="site-nav__extra">
-        <Button href={nav.cta.href} variant="outline"><Swap text={nav.cta.label} alt={altNav.cta.label} /></Button>
+        <Button href={nav.cta.href} variant="outline"><Swap text={nav.cta.label} alt={altNavs.map((n) => n.cta.label)} /></Button>
+        <!-- Phones: the header row has no room for every language, so they sit in the menu. -->
+        <ul class="menu-langs">
+          {
+            langLinks.map((l) => (
+              <li>
+                <a href={l.href} class="menu-lang" hreflang={l.lang} lang={l.lang}>
+                  {localeNames[l.lang].name}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </nav>
 
@@ -51,7 +62,18 @@ const altNav = await getNavigation(altLang);
 
     <!-- The language switch sits with the theme toggle so neither moves when the CTA's label length changes. -->
     <div class="site-header__tools">
-      <a href={altHref} class="lang" hreflang={altLang}>{s.langSwitchShort}<span class="sr-only" lang={altLang}>, {s.langSwitchLabel}</span></a>
+      <ul class="langs">
+        {
+          langLinks.map((l) => (
+            <li>
+              <a href={l.href} class="lang" hreflang={l.lang} lang={l.lang}>
+                <span aria-hidden="true">{localeNames[l.lang].short}</span>
+                <span class="sr-only">{localeNames[l.lang].version}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
       <ThemeToggle lang={lang} />
       <button
         type="button"
@@ -194,6 +216,13 @@ const altNav = await getNavigation(altLang);
     gap: 1.25rem;
   }
 
+  .langs {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
   .lang {
     display: inline-grid;
     place-items: center;
@@ -208,6 +237,23 @@ const altNav = await getNavigation(altLang);
 
   .lang:hover {
     background: var(--c-band);
+  }
+
+  .menu-langs {
+    display: none;
+    gap: 1.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu-lang {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--c-dark);
+    font-size: var(--fs-small);
+    font-weight: 700;
   }
 
   .menu-toggle,
@@ -409,7 +455,16 @@ const altNav = await getNavigation(altLang);
     }
 
     .site-nav__extra {
+      flex-wrap: wrap;
       justify-content: space-between;
+    }
+
+    .site-header__tools .langs {
+      display: none;
+    }
+
+    .menu-langs {
+      display: flex;
     }
   }
 </style>
