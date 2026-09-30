@@ -9,7 +9,7 @@
         "http://127.0.0.1:8788/blog/wordpress-yayin-oncesi-kontrol-listesi",
         "http://127.0.0.1:8788/iletisim"
       ],
-      "numberOfRuns": 1,
+      "numberOfRuns": 2,
       "settings": {
         "preset": "desktop",
         "chromeFlags": "--no-sandbox --headless=new"
