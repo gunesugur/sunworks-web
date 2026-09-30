@@ -441,7 +441,7 @@ export const home: HomePage[] = [
     seo: {},
     hero: {
       title: 'Lassen Sie uns Ihr Projekt gemeinsam umsetzen',
-      note: 'Wir besprechen, was Sie brauchen, und bauen eine Lösung, die sich leicht pflegen lässt.',
+      note: 'Wir klären Ihren Bedarf und bauen eine Lösung, die leicht zu pflegen ist.',
       image: img('hero-studio', 'Ein aufgeklappter Laptop auf einem ruhigen Schreibtisch mit Schreibtischlampe und Tasse'),
       smallImage: img('duo-sketch', 'Eine Hand skizziert neben einem Laptop ein Website-Layout auf Papier'),
       tags: ['WordPress', 'Shopify', 'KI-gestützte Entwicklung', 'Technischer Support', 'Wartung'],
