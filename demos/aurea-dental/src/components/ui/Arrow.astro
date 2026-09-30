@@ -1,0 +1,20 @@
+---
+/** Thin arrow glyph (decorative). direction rotates it. */
+interface Props {
+  direction?: 'right' | 'up-right' | 'down' | 'left' | 'up';
+  class?: string;
+}
+const { direction = 'right', class: className } = Astro.props;
+const rotate = { right: 0, 'up-right': -45, down: 90, left: 180, up: -90 }[direction];
+---
+<svg
+  class:list={['arrow', className]}
+  viewBox="0 0 16 16"
+  width="16"
+  height="16"
+  aria-hidden="true"
+  focusable="false"
+  style={rotate ? `transform: rotate(${rotate}deg)` : undefined}
+>
+  <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>

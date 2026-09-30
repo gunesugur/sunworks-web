@@ -1,0 +1,123 @@
+/* AUREA Dental — design tokens. Every section consumes these; do not hard-code values. */
+:root {
+  /* ---- palette (near-monochrome) ---- */
+  --color-bg: #f4f4f1;
+  --color-bg-alt: #f8f8f6;
+  --color-white: #fcfcfa;
+  --color-panel: #fafaf8;
+  --color-surface: #ecece8;
+  --color-footer: #e8e6e1;
+  --color-border: rgba(20, 20, 20, 0.1);
+  --color-border-soft: rgba(20, 20, 20, 0.08);
+  --color-border-strong: rgba(20, 20, 20, 0.22);
+  --color-text: #141414;
+  --color-text-2: #686864;
+  --color-text-3: #8c8c87; /* inactive/decorative only — not for body copy */
+  --color-cta: #111111;
+  --color-cta-hover: #242424;
+  --color-cta-text: #ffffff;
+  --color-accent: #b5a994; /* warm metal — tiny states only (active dot, progress) */
+  --color-card: rgba(245, 245, 242, 0.92);
+  --color-header: rgba(248, 248, 246, 0.88);
+  --color-scrim: rgba(20, 20, 20, 0.12);
+
+  /* ---- type ---- */
+  --font-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --fs-hero: clamp(2.625rem, 0.9rem + 5.2vw, 6rem); /* 42 → 96 (≈6vw on desktop) */
+  --fs-h2: clamp(2.25rem, 1.35rem + 3.1vw, 4.5rem); /* 36 → 72 */
+  --fs-statement: clamp(1.75rem, 1rem + 2.35vw, 3.25rem); /* 28 → 52 */
+  --fs-h3: clamp(1.375rem, 1.15rem + 0.8vw, 2rem); /* 22 → 32 */
+  --fs-h4: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem); /* 18 → 21 */
+  --fs-stat: clamp(2rem, 1.5rem + 1.6vw, 3rem);
+  --fs-body-lg: clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem); /* 17 → 19 */
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-button: 0.8125rem; /* 13 */
+  --fs-label: 0.6875rem; /* 11 */
+
+  --fw-regular: 400;
+  --fw-book: 450;
+  --fw-medium: 520;
+  --fw-display: 480;
+
+  --lh-display: 0.95;
+  --lh-heading: 1.02;
+  --lh-snug: 1.2;
+  --lh-body: 1.55;
+
+  --ls-display: -0.045em;
+  --ls-heading: -0.035em;
+  --ls-tight: -0.015em;
+  --ls-label: 0.12em;
+
+  /* ---- spacing ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+  --section-pad: clamp(5rem, 3rem + 8vw, 12rem);
+  --section-pad-sm: clamp(3.5rem, 2.5rem + 4vw, 7rem);
+
+  /* ---- layout ---- */
+  --container-max: 1560px;
+  --gutter: 20px; /* mobile 18–24 */
+  --grid-cols: 12;
+  --grid-gap: 16px;
+  --header-h: 64px;
+
+  /* ---- radii (soft, not pills) ---- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 24px;
+  --radius-xl: 30px;
+  --radius-round: 999px;
+
+  /* ---- motion (the only allowed values) ---- */
+  --ease-primary: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --duration-fast: 220ms;
+  --duration-ui: 320ms;
+  --duration-medium: 650ms;
+  --duration-large: 1100ms;
+
+  /* ---- layers ---- */
+  --z-base: 1;
+  --z-panel: 2;
+  --z-header: 50;
+  --z-menu: 60;
+  --z-skip: 100;
+
+  /* overlap used by `.panel-rise` (Services rises over the pinned Benefits scene) */
+  --panel-rise-overlap: 0px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --gutter: 32px; /* tablet */
+    --grid-gap: 20px;
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --gutter: clamp(48px, 4.4vw, 72px); /* desktop 48–72 */
+    --grid-gap: 24px;
+    --header-h: 76px;
+  }
+}
+@media (min-width: 1600px) {
+  :root {
+    --gutter: clamp(80px, 5.2vw, 96px); /* large 80–96 */
+  }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  :root {
+    --panel-rise-overlap: 100svh;
+  }
+}

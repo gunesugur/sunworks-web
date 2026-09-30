@@ -1,0 +1,43 @@
+---
+/**
+ * Responsive <picture> (AVIF + WebP + JPG fallback) from an image key.
+ * priority → eager + fetchpriority=high (hero only). Everything else lazy.
+ * cover → fills its (sized) parent with object-fit: cover.
+ */
+import { Picture } from 'astro:assets';
+import { images, type ImageKey } from '../../lib/images';
+
+interface Props {
+  image: ImageKey;
+  alt: string;
+  sizes: string;
+  widths?: number[];
+  priority?: boolean;
+  cover?: boolean;
+  position?: string;
+  class?: string;
+  imgClass?: string;
+  quality?: number;
+}
+const { image, alt, sizes, widths, priority = false, cover = false, position, class: className, imgClass, quality = 72 } = Astro.props;
+const src = images[image];
+const candidates = widths ?? [480, 768, 1080, 1440, 1920, 2400];
+let ws = candidates.filter((w) => w <= src.width);
+if (ws.length === 0) ws = [src.width];
+const pictureClass = ['picture', cover ? 'picture--cover' : '', className ?? ''].filter(Boolean).join(' ');
+---
+<Picture
+  src={src}
+  alt={alt}
+  sizes={sizes}
+  widths={ws}
+  formats={['avif', 'webp']}
+  fallbackFormat="jpg"
+  quality={quality}
+  loading={priority ? 'eager' : 'lazy'}
+  decoding={priority ? 'sync' : 'async'}
+  fetchpriority={priority ? 'high' : 'auto'}
+  class:list={['img', { 'img--cover': cover }, imgClass]}
+  style={position ? `object-position: ${position}` : undefined}
+  pictureAttributes={{ class: pictureClass }}
+/>

@@ -1,0 +1,39 @@
+---
+/**
+ * Multi-line heading/paragraph with per-line masks. Motion: reveal.ts ([data-reveal="lines"]).
+ * Pass lines as an array; each line becomes .mask-line > .mask-line__inner.
+ * manual → the section module plays it (revealElement), not the scroll trigger.
+ */
+interface Props {
+  lines: readonly string[];
+  as?: 'h1' | 'h2' | 'h3' | 'p' | 'div' | 'blockquote';
+  class?: string;
+  delay?: number;
+  start?: string;
+  manual?: boolean;
+  id?: string;
+  /** scoped-style attributes from the parent (data-astro-cid-*) */
+  [key: `data-${string}`]: unknown;
+}
+const { lines, as: Tag = 'h2', class: className, delay, start, manual = false, id, ...rest } = Astro.props;
+---
+<Tag
+  class:list={['reveal-text', className]}
+  id={id}
+  data-reveal="lines"
+  data-reveal-delay={delay}
+  data-reveal-start={start}
+  data-reveal-trigger={manual ? 'manual' : undefined}
+  {...rest}
+>
+  {
+    lines.map((line, i) => (
+      <span class="mask-line">
+        <span class="mask-line__inner">
+          {line}
+          {i < lines.length - 1 ? ' ' : ''}
+        </span>
+      </span>
+    ))
+  }
+</Tag>

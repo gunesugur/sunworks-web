@@ -1,0 +1,25 @@
+---
+/**
+ * STUB — TODO(section agent): build ServiceAccordion (§7–8): overlapping panel, 8 rows, one expanded, FLIP-like height interpolation, hover intent 120ms, scroll auto-activation.
+ * Keep: id="services", data-section="services", class "panel-rise" (rises over the Benefits scene).
+ * Data: site.services in src/content/site.ts. Motion: src/scripts/sections/services.ts + one line in registry.ts.
+ */
+import { site } from '../../content/site';
+import RevealText from '../ui/RevealText.astro';
+
+const data = site.services;
+---
+<section class="panel-rise services" id="services" data-section="services" aria-labelledby="services-title">
+  <div class="container stub">
+    <p class="label">{data.label}</p>
+    <RevealText as="h2" id="services-title" class="t-h2" lines={data.titleLines} />
+  </div>
+</section>
+
+<style>
+  .stub {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--section-pad);
+  }
+</style>

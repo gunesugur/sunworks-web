@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/sections/Header.astro';
+import HeroIntro from '../components/sections/HeroIntro.astro';
+import ClinicStatement from '../components/sections/ClinicStatement.astro';
+import HorizontalBenefitsScene from '../components/sections/HorizontalBenefitsScene.astro';
+import ServicesSection from '../components/sections/ServicesSection.astro';
+import TreatmentJourney from '../components/sections/TreatmentJourney.astro';
+import DoctorsShowcase from '../components/sections/DoctorsShowcase.astro';
+import ResultsSection from '../components/sections/ResultsSection.astro';
+import FAQSection from '../components/sections/FAQSection.astro';
+import BookingCTA from '../components/sections/BookingCTA.astro';
+import Footer from '../components/sections/Footer.astro';
+---
+<Base>
+  <Header />
+  <main id="main" tabindex="-1">
+    <HeroIntro />
+    <ClinicStatement />
+    <HorizontalBenefitsScene />
+    <ServicesSection />
+    <TreatmentJourney />
+    <DoctorsShowcase />
+    <ResultsSection />
+    <FAQSection />
+    <BookingCTA />
+  </main>
+  <Footer />
+</Base>

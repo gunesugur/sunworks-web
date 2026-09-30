@@ -1,0 +1,349 @@
+/* AUREA Dental — reset, typography, shared primitives. */
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-padding-top: var(--header-h);
+}
+body {
+  margin: 0;
+  min-height: 100svh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-body);
+  font-feature-settings: 'ss01', 'cv11';
+  overflow-x: clip;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-weight: var(--fw-display);
+  letter-spacing: var(--ls-heading);
+  line-height: var(--lh-heading);
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+::selection {
+  background: var(--color-text);
+  color: var(--color-white);
+}
+[hidden] {
+  display: none !important;
+}
+
+/* ---- focus ---- */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.on-dark :focus-visible,
+:where(.btn--primary):focus-visible {
+  outline-color: var(--color-text);
+}
+
+/* ---- skip link ---- */
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: var(--z-skip);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-cta);
+  color: var(--color-cta-text);
+  font-size: var(--fs-small);
+  border-radius: var(--radius-sm);
+  transform: translateY(-160%);
+  transition: transform var(--duration-ui) var(--ease-primary);
+}
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* ---- layout primitives ---- */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+/* Hidden 12-col grid. Children place themselves with grid-column. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  column-gap: var(--grid-gap);
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.rule {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--color-border);
+}
+
+/* ---- typography helpers ---- */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--color-text-2);
+}
+.label--dark {
+  color: var(--color-text);
+}
+.t-hero {
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.t-h2 {
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-display);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+}
+.t-statement {
+  font-size: var(--fs-statement);
+  font-weight: var(--fw-book);
+  line-height: 1.12;
+  letter-spacing: var(--ls-heading);
+}
+.t-h3 {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-tight);
+}
+.t-body-lg {
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body);
+}
+.t-muted {
+  color: var(--color-text-2);
+}
+
+/* Link with an underline that grows left → right */
+.link-line {
+  position: relative;
+  display: inline-block;
+  padding-block: 2px;
+}
+.link-line::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-ui) var(--ease-primary);
+}
+.link-line:hover::after,
+.link-line:focus-visible::after,
+.link-line[aria-current='true']::after {
+  transform: scaleX(1);
+}
+
+/* ---- line masks (RevealText) ---- */
+.mask-line {
+  display: block;
+  overflow: hidden;
+  /* room for descenders without clipping */
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.mask-line__inner {
+  display: block;
+  will-change: transform;
+}
+
+/* ---- media helpers ---- */
+.picture {
+  display: block;
+}
+.picture--cover,
+.img--cover {
+  width: 100%;
+  height: 100%;
+}
+.img--cover {
+  object-fit: cover;
+}
+/* Interactive image zoom: wrap in .media-zoom (overflow hidden) */
+.media-zoom {
+  overflow: hidden;
+}
+.media-zoom img {
+  transition: transform 800ms var(--ease-soft);
+}
+.media-zoom:hover img,
+a:hover .media-zoom img,
+button:hover .media-zoom img {
+  transform: scale(1.025);
+}
+
+/* ---- Services panel rising over the Benefits scene ---- */
+.panel-rise {
+  position: relative;
+  z-index: var(--z-panel);
+  margin-top: calc(var(--panel-rise-overlap) * -1);
+  background: var(--color-panel);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+/* ---- initial reveal states (set in CSS to avoid a flash; reveal.ts animates them in) ---- */
+[data-reveal='fade'] {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+}
+[data-reveal='lines'] .mask-line__inner {
+  transform: translate3d(0, 110%, 0);
+}
+[data-reveal='clip'] {
+  clip-path: inset(0 100% 0 0);
+}
+[data-reveal='clip'][data-reveal-from='right'] {
+  clip-path: inset(0 0 0 100%);
+}
+[data-reveal='clip'][data-reveal-from='center-y'] {
+  clip-path: inset(50% 0 50% 0);
+}
+
+/* Reduced motion: no transforms/clip — opacity only (reveal.ts fades). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+  [data-reveal='fade'],
+  [data-reveal='clip'] {
+    transform: none;
+    clip-path: none;
+    opacity: 0;
+  }
+  [data-reveal='lines'] .mask-line__inner {
+    transform: none;
+  }
+  [data-reveal='lines'] {
+    opacity: 0;
+  }
+  .media-zoom img,
+  .link-line::after {
+    transition: none;
+  }
+}
+
+/* Safety net: if the motion bundle fails, show everything. main.ts sets this class. */
+.motion-fallback [data-reveal],
+.motion-fallback [data-reveal] .mask-line__inner,
+.motion-fallback [data-intro] {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+/* ---- Lenis ---- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+html.is-locked {
+  overflow: hidden;
+}
+
+/* Intro-choreographed elements (header, hero details) start hidden; hero.ts plays them in. */
+[data-intro] {
+  opacity: 0;
+}

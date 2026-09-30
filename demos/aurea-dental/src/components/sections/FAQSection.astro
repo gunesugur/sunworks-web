@@ -1,0 +1,25 @@
+---
+/**
+ * STUB — TODO(section agent): build §12: quiet accordion, one open at a time, ARIA.
+ * Keep: id="faq", data-section="faq".
+ * Data: site.faq in src/content/site.ts. Motion: src/scripts/sections/faq.ts + one line in registry.ts.
+ */
+import { site } from '../../content/site';
+import RevealText from '../ui/RevealText.astro';
+
+const data = site.faq;
+---
+<section class="faq" id="faq" data-section="faq" aria-labelledby="faq-title">
+  <div class="container stub">
+    <p class="label">{data.label}</p>
+    <RevealText as="h2" id="faq-title" class="t-h2" lines={data.titleLines} />
+  </div>
+</section>
+
+<style>
+  .stub {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--section-pad);
+  }
+</style>

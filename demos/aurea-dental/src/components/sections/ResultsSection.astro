@@ -1,0 +1,25 @@
+---
+/**
+ * STUB — TODO(section agent): build §11: before/after slider (role=slider, keyboard), testimonial.
+ * Keep: id="results", data-section="results".
+ * Data: site.results in src/content/site.ts. Motion: src/scripts/sections/results.ts + one line in registry.ts.
+ */
+import { site } from '../../content/site';
+import RevealText from '../ui/RevealText.astro';
+
+const data = site.results;
+---
+<section class="results" id="results" data-section="results" aria-labelledby="results-title">
+  <div class="container stub">
+    <p class="label">{data.label}</p>
+    <RevealText as="h2" id="results-title" class="t-h2" lines={data.titleLines} />
+  </div>
+</section>
+
+<style>
+  .stub {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--section-pad);
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+/**
+ * STUB — TODO(section agent): build §13: portrait clip reveal, typographic form, chips, round submit.
+ * Keep: id="booking", data-section="booking".
+ * Data: site.booking in src/content/site.ts. Motion: src/scripts/sections/booking.ts + one line in registry.ts.
+ */
+import { site } from '../../content/site';
+import RevealText from '../ui/RevealText.astro';
+
+const data = site.booking;
+---
+<section class="booking" id="booking" data-section="booking" aria-labelledby="booking-title">
+  <div class="container stub">
+    <p class="label">{data.label}</p>
+    <RevealText as="h2" id="booking-title" class="t-h2" lines={data.titleLines} />
+  </div>
+</section>
+
+<style>
+  .stub {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--section-pad);
+  }
+</style>

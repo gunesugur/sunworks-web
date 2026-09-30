@@ -1,0 +1,161 @@
+---
+/** §5 Quiet statement. Slides over the sticky hero (desktop). Reveals are data-attribute driven. */
+import { site } from '../../content/site';
+import Button from '../ui/Button.astro';
+import Img from '../ui/Img.astro';
+import RevealText from '../ui/RevealText.astro';
+
+const { statement } = site;
+---
+<section class="statement" id="about" data-section="statement" aria-labelledby="statement-title">
+  <div class="statement__inner container">
+    <div class="statement__aside">
+      <p class="label label--dark" data-reveal="fade">{statement.label}</p>
+      <figure class="statement__media" data-reveal="clip" data-reveal-from="left">
+        <div class="statement__media-inner" data-statement-parallax>
+          <Img image={statement.image} alt={statement.imageAlt} sizes="(min-width: 1024px) 22vw, 60vw" cover widths={[480, 768, 1080]} />
+        </div>
+      </figure>
+      <dl class="statement__stats" data-reveal="stagger" data-reveal-start="top 92%">
+        {
+          statement.stats.map((stat) => (
+            <div class="statement__stat">
+              <dt class="label">{stat.label}</dt>
+              <dd class="statement__stat-value">{stat.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <RevealText as="h2" id="statement-title" class="statement__title t-statement" lines={statement.lines} start="top 82%" />
+
+    <div class="statement__secondary" data-reveal="fade" data-reveal-delay="0.15">
+      <p>{statement.secondary}</p>
+      <Button href={statement.link.href} variant="link">{statement.link.label}</Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .statement {
+    position: relative;
+    z-index: var(--z-panel);
+    margin-top: calc(var(--radius-xl) * -1);
+    background: var(--color-white);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding-block: var(--section-pad-sm) var(--section-pad);
+  }
+  .statement__inner {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--grid-gap);
+    row-gap: var(--space-7);
+  }
+  .statement__aside {
+    display: contents;
+  }
+  .statement__aside > .label {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .statement__title {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .statement__media {
+    grid-column: 5 / -1;
+    grid-row: 3;
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+  .statement__media-inner {
+    position: absolute;
+    inset: -5% 0;
+  }
+  .statement__media-inner :global(.picture) {
+    height: 100%;
+  }
+  .statement__secondary {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    display: grid;
+    gap: var(--space-5);
+    justify-items: start;
+    max-width: 34rem;
+    color: var(--color-text-2);
+  }
+  .statement__stats {
+    grid-column: 1 / -1;
+    grid-row: 5;
+    border-top: 1px solid var(--color-border);
+  }
+  .statement__stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .statement__stat dt {
+    order: 2;
+  }
+  .statement__stat-value {
+    font-size: var(--fs-stat);
+    font-weight: var(--fw-book);
+    letter-spacing: var(--ls-heading);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 640px) {
+    .statement__media {
+      grid-column: 7 / -1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .statement {
+      margin-top: 0;
+      padding-block: clamp(96px, 11vw, 176px) var(--section-pad);
+    }
+    .statement__inner {
+      grid-template-rows: auto auto 1fr;
+      row-gap: 0;
+    }
+    .statement__aside {
+      grid-column: 1 / 5;
+      grid-row: 1 / 4;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+    }
+    .statement__media {
+      grid-column: auto;
+      grid-row: auto;
+      width: min(100%, 300px);
+    }
+    .statement__stats {
+      grid-column: auto;
+      grid-row: auto;
+      margin-top: var(--space-7);
+      max-width: 360px;
+    }
+    .statement__title {
+      grid-column: 6 / -1;
+      grid-row: 1 / 3;
+      align-self: start;
+      margin-top: -0.15em;
+    }
+    .statement__secondary {
+      grid-column: 9 / -1;
+      grid-row: 3;
+      align-self: end;
+      max-width: 27rem;
+    }
+  }
+</style>

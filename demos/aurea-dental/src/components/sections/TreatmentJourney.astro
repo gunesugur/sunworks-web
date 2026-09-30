@@ -1,0 +1,25 @@
+---
+/**
+ * STUB — TODO(section agent): build §9 signature: 400–500vh outer, sticky 100vh stage, 5 steps, model crossfade w/ perspective, masked number roll, progress line.
+ * Keep: id="journey", data-section="journey".
+ * Data: site.journey in src/content/site.ts. Motion: src/scripts/sections/journey.ts + one line in registry.ts.
+ */
+import { site } from '../../content/site';
+import RevealText from '../ui/RevealText.astro';
+
+const data = site.journey;
+---
+<section class="journey" id="journey" data-section="journey" aria-labelledby="journey-title">
+  <div class="container stub">
+    <p class="label">{data.label}</p>
+    <RevealText as="h2" id="journey-title" class="t-h2" lines={data.titleLines} />
+  </div>
+</section>
+
+<style>
+  .stub {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--section-pad);
+  }
+</style>

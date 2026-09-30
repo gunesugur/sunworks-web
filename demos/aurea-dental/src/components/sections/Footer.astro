@@ -1,0 +1,225 @@
+---
+/** §14 Footer — very quiet. Warm grey, faint photographic texture, fades only. */
+import { site } from '../../content/site';
+import Img from '../ui/Img.astro';
+
+const { footer, wordmark } = site;
+---
+<footer class="footer" data-section="footer">
+  <div class="footer__texture" data-footer-texture aria-hidden="true">
+    <Img image={footer.texture} alt="" sizes="100vw" widths={[768, 1440]} cover quality={45} />
+  </div>
+
+  <div class="footer__inner container">
+    <div class="footer__top">
+      <p class="footer__wordmark">{wordmark}</p>
+      <p class="footer__tagline" data-reveal="fade">{footer.tagline}</p>
+    </div>
+
+    <div class="footer__cols" data-reveal="stagger" data-reveal-start="top 95%">
+      <nav class="footer__col" aria-labelledby="footer-nav-title">
+        <h2 class="label" id="footer-nav-title">Navigate</h2>
+        <ul>
+          {
+            footer.nav.map((link) => (
+              <li>
+                <a class="link-line" href={link.href}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="footer__col">
+        <h2 class="label">{footer.hours.title}</h2>
+        <dl class="footer__hours">
+          {
+            footer.hours.rows.map((row) => (
+              <div>
+                <dt>{row.days}</dt>
+                <dd>{row.time}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="label">{footer.address.title}</h2>
+        <p>
+          {footer.address.lines.map((line) => <span class="footer__line">{line}</span>)}
+        </p>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="label">{footer.contact.title}</h2>
+        <address>
+          <a class="link-line" href={footer.contact.phone.href}>{footer.contact.phone.label}</a>
+          <a class="link-line" href={footer.contact.email.href}>{footer.contact.email.label}</a>
+        </address>
+      </div>
+
+      <div class="footer__col">
+        <h2 class="label">Follow</h2>
+        <ul>
+          {
+            footer.social.map((link) => (
+              <li>
+                <a class="link-line" href={link.href} rel="noopener noreferrer" target="_blank">
+                  {link.label}
+                  <span class="visually-hidden"> (opens in a new tab)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <p>{footer.copyright}</p>
+      <ul class="footer__legal">
+        {
+          footer.legal.map((link) => (
+            <li>
+              <a class="link-line" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="footer__top-link link-line" href="#top">{footer.backToTop} ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: var(--z-panel);
+    overflow: hidden;
+    background: var(--color-footer);
+    color: var(--color-text);
+    font-size: var(--fs-small);
+    isolation: isolate;
+  }
+  .footer__texture {
+    position: absolute;
+    inset: -10% 0 0;
+    z-index: -1;
+    opacity: 0.05;
+    filter: grayscale(1) contrast(1.1);
+    pointer-events: none;
+  }
+  .footer__texture :global(.picture) {
+    height: 100%;
+  }
+  .footer__inner {
+    display: grid;
+    gap: var(--space-8);
+    padding-top: clamp(4rem, 3rem + 5vw, 8rem);
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+  }
+  .footer__top {
+    display: grid;
+    gap: var(--space-5);
+    padding-bottom: var(--space-7);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .footer__wordmark {
+    font-size: 0.8125rem;
+    font-weight: 560;
+    letter-spacing: 0.2em;
+  }
+  .footer__tagline {
+    font-size: var(--fs-h2);
+    font-weight: var(--fw-display);
+    letter-spacing: var(--ls-display);
+    line-height: var(--lh-heading);
+    color: var(--color-text-2);
+  }
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7) var(--space-5);
+  }
+  .footer__col {
+    display: grid;
+    align-content: start;
+    gap: var(--space-4);
+  }
+  .footer__col ul,
+  .footer__col address {
+    display: grid;
+    justify-items: start;
+    gap: 6px;
+    font-style: normal;
+  }
+  .footer__line {
+    display: block;
+  }
+  .footer__hours {
+    display: grid;
+    gap: 6px;
+  }
+  .footer__hours div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    max-width: 15rem;
+  }
+  .footer__hours dt {
+    color: var(--color-text-2);
+  }
+  .footer__hours dd {
+    font-variant-numeric: tabular-nums;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.8125rem;
+    color: var(--color-text-2);
+  }
+  .footer__legal {
+    display: flex;
+    gap: var(--space-5);
+  }
+  .footer__top-link {
+    margin-left: auto;
+    color: var(--color-text);
+  }
+
+  @media (min-width: 640px) {
+    .footer__cols {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .footer__top {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--grid-gap);
+      align-items: start;
+    }
+    .footer__wordmark {
+      grid-column: 1 / 5;
+      padding-top: 0.9em;
+    }
+    .footer__tagline {
+      grid-column: 6 / -1;
+    }
+    .footer__cols {
+      grid-template-columns: 1.1fr 1fr 1fr 1.25fr 0.7fr;
+      gap: var(--grid-gap);
+    }
+    .footer__bottom {
+      gap: var(--space-7);
+    }
+  }
+</style>

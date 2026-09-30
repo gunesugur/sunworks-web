@@ -1,0 +1,65 @@
+/**
+ * Boot: smooth scroll → section modules (DOM order) → generic reveals → ScrollTrigger refresh.
+ */
+import { ScrollTrigger } from '../motion/tokens';
+import { initSmoothScroll, bindAnchorLinks } from '../motion/smooth-scroll';
+import { initReveals } from '../motion/reveal';
+import { registry } from './sections/registry';
+
+const root = document.documentElement;
+
+function debounce(fn: () => void, ms: number): () => void {
+  let t = 0;
+  return () => {
+    window.clearTimeout(t);
+    t = window.setTimeout(fn, ms);
+  };
+}
+
+async function boot(): Promise<void> {
+  initSmoothScroll();
+  bindAnchorLinks();
+
+  const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-section]'));
+  // Fetch all modules in parallel, then init strictly in DOM order (pins must be created top → bottom).
+  const modules = await Promise.all(
+    sections.map(async (el) => {
+      const loader = registry[el.dataset.section ?? ''];
+      if (!loader) return null;
+      try {
+        return await loader();
+      } catch (error) {
+        console.error(`[aurea] failed to load section "${el.dataset.section}"`, error);
+        return null;
+      }
+    }),
+  );
+  sections.forEach((el, i) => {
+    const mod = modules[i];
+    if (!mod) return;
+    try {
+      mod.init(el);
+    } catch (error) {
+      console.error(`[aurea] section "${el.dataset.section}" failed to init`, error);
+      el.classList.add('motion-fallback');
+    }
+  });
+
+  initReveals(document);
+  ScrollTrigger.sort();
+  ScrollTrigger.refresh();
+
+  // Layout can shift after fonts/images settle — refresh (debounced), never measure in scroll loops.
+  const refresh = debounce(() => ScrollTrigger.refresh(), 150);
+  void document.fonts?.ready.then(refresh);
+  window.addEventListener('load', refresh, { once: true });
+  document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => {
+    if (!img.complete) img.addEventListener('load', refresh, { once: true });
+  });
+  root.classList.add('is-ready');
+}
+
+boot().catch((error: unknown) => {
+  console.error('[aurea] motion boot failed', error);
+  root.classList.add('motion-fallback');
+});

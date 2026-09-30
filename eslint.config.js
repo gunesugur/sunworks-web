@@ -7,7 +7,7 @@ import security from 'eslint-plugin-security';
 import globals from 'globals';
 
 export default tseslint.config(
-  { ignores: ['dist/', '.astro/', '.wrangler/', 'node_modules/', 'studio/node_modules/', 'studio/dist/', 'playwright-report/', 'test-results/', 'shot.tmp.mjs'] },
+  { ignores: ['demos/**', 'dist/', '.astro/', '.wrangler/', 'node_modules/', 'studio/node_modules/', 'studio/dist/', 'playwright-report/', 'test-results/', 'shot.tmp.mjs'] },
   js.configs.recommended,
   ...tseslint.configs.strict,
   ...astro.configs.recommended,

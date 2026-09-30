@@ -1,0 +1,84 @@
+---
+/**
+ * Small circular control with an arrow. Decorative by default (span, aria-hidden);
+ * pass `as="button"` + `label` for an interactive control, or `href` for a link.
+ * Hover: scale 1.08 over 220ms.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import Arrow from './Arrow.astro';
+
+type Props = {
+  as?: 'span' | 'button' | 'a';
+  href?: string;
+  label?: string;
+  size?: 'sm' | 'md' | 'lg';
+  tone?: 'dark' | 'light' | 'line';
+  direction?: 'right' | 'up-right' | 'down' | 'left' | 'up';
+  class?: string;
+} & Omit<HTMLAttributes<'button'>, 'class'>;
+
+const { as = 'span', href, label, size = 'md', tone = 'line', direction = 'right', class: className, ...rest } = Astro.props;
+const Tag = href ? 'a' : as;
+const decorative = Tag === 'span';
+---
+<Tag
+  class:list={['circle-arrow', `circle-arrow--${size}`, `circle-arrow--${tone}`, className]}
+  href={href}
+  type={Tag === 'button' ? 'button' : undefined}
+  aria-label={decorative ? undefined : label}
+  aria-hidden={decorative ? 'true' : undefined}
+  {...rest}
+>
+  <Arrow direction={direction} class="circle-arrow__glyph" />
+</Tag>
+
+<style>
+  .circle-arrow {
+    --size: 44px;
+    display: inline-grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    flex: none;
+    border-radius: 50%;
+    transition:
+      transform var(--duration-fast) var(--ease-primary),
+      background-color var(--duration-ui) var(--ease-primary),
+      color var(--duration-ui) var(--ease-primary),
+      box-shadow var(--duration-ui) var(--ease-primary);
+  }
+  .circle-arrow--sm {
+    --size: 34px;
+  }
+  .circle-arrow--lg {
+    --size: 64px;
+  }
+  .circle-arrow--lg :global(.circle-arrow__glyph) {
+    width: 20px;
+    height: 20px;
+  }
+  .circle-arrow--dark {
+    background: var(--color-cta);
+    color: var(--color-cta-text);
+  }
+  .circle-arrow--light {
+    background: var(--color-white);
+    color: var(--color-text);
+  }
+  .circle-arrow--line {
+    color: var(--color-text);
+    box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  }
+  :global(a:hover) > .circle-arrow,
+  :global(button:hover) > .circle-arrow,
+  a.circle-arrow:hover,
+  button.circle-arrow:hover,
+  .circle-arrow:focus-visible {
+    transform: scale(1.08);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .circle-arrow {
+      transition: none;
+    }
+  }
+</style>
