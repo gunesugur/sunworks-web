@@ -2,29 +2,42 @@
 import { site } from '../../content/site';
 import SceneFrame from '../scene/SceneFrame.astro';
 import MaskedMedia from '../scene/MaskedMedia.astro';
-const { benefits } = site;
+const { benefits }=site;
 ---
-<SceneFrame name="benefits" id="technology" labelledby="benefits-title" class="benefits" stageClass="benefits__stage">
-  <header class="benefits__head">
-    <p class="label">Our approach</p>
-    <h2 id="benefits-title" class="t-h2">{benefits.titleLines.join(' ')}</h2>
-    <p>{benefits.intro}</p>
-  </header>
-  <MaskedMedia image={benefits.image} alt="Daylit dental treatment room with digital equipment" sizes="(min-width:1024px) 40vw, 100vw" widths={[768,1080,1440]} ratio="4 / 5" class="benefits__media" />
-  <ol class="benefits__list">
-    {benefits.items.map(item => <li><span class="benefit__number">{item.index}</span><div><h3>{item.title}</h3><p>{item.copy}</p></div></li>)}
-  </ol>
+<SceneFrame name="benefits" section="benefits" id="technology" labelledby="benefits-title" class="benefits" stageClass="benefits__stage">
+ <MaskedMedia image={benefits.image} alt="Daylit dental treatment room with digital equipment" sizes="100vw" widths={[768,1080,1440,1920]} fill class="benefits__media" />
+ <div class="benefits__veil" aria-hidden="true"></div>
+ <header class="benefits__head"><p class="label">The details that matter</p><h2 id="benefits-title" class="t-h2">{benefits.titleLines.join(' ')}</h2><p>{benefits.intro}</p></header>
+ <div class="benefits__viewport" tabindex="0" role="region" aria-label="Six commitments to your care" data-benefits-viewport>
+  <ol class="benefits__track" data-benefits-track>{benefits.items.map(item=><li class="benefit-card" data-benefit-card><span class="benefit-card__index">{item.index}</span><h3>{item.title}</h3><p>{item.copy}</p></li>)}</ol>
+ </div>
+ <div class="benefits__progress" aria-hidden="true"><span data-benefits-progress></span></div>
 </SceneFrame>
 <style is:global>
-  .scene.benefits .benefits__stage { height: auto; background: var(--bg-soft); padding: var(--stage-pad-y) var(--stage-pad-x); display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px 64px; }
-  .benefits__head { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1.6fr; gap: 20px 64px; align-items: start; }
-  .benefits__head h2 { max-width: 20ch; }
-  .benefits__head > p:last-child { grid-column: 2; color: var(--text-secondary); }
-  .benefits__media { align-self: stretch; }
-  .benefits__list { display: grid; align-content: start; }
-  .benefits__list li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; padding: 22px 0; border-top: 1px solid var(--border-soft); }
-  .benefit__number { color: var(--text-secondary); font-size: 13px; padding-top: 5px; }
-  .benefits__list h3 { font: 500 21px/1.3 var(--font-sans); }
-  .benefits__list p { font-size: 16px; color: var(--text-secondary); margin-top: 8px; }
-  @media(max-width:1023.98px) { .scene.benefits .benefits__stage { grid-template-columns: 1fr; gap: 32px; } .benefits__media { aspect-ratio: 16 / 9 !important; } .benefits__head { grid-template-columns: 1fr; gap: 18px; } .benefits__head > p:last-child { grid-column: 1; } }
+ .scene.benefits .benefits__stage { height:auto; background:var(--bg-soft); }
+ .benefits .benefits__media { position:relative; inset:auto; height:40svh; border-radius:0; }
+ .benefits__veil { display:none; }
+ .benefits__head { display:grid; gap:18px; padding:32px var(--stage-pad-x); max-width:48rem; }
+ .benefits__head p:last-child { color:var(--text-secondary); font-size:17px; }
+ .benefits__viewport { overflow-x:auto; scroll-snap-type:x mandatory; overscroll-behavior-x:contain; scrollbar-width:thin; }
+ .benefits__track { display:flex; width:max-content; gap:20px; padding:0 var(--stage-pad-x) 32px; }
+ .benefit-card { width: min(80vw,360px); min-height:268px; display:flex; flex-direction:column; gap:24px; padding:28px; background:var(--surface); border:1px solid var(--border-soft); border-radius:8px; scroll-snap-align:center; }
+ .benefit-card__index { font-size:13px; color:var(--text-secondary); }
+ .benefit-card h3 { font:500 24px/1.15 var(--font-sans); max-width:14ch; }
+ .benefit-card p { font-size:16px; color:var(--text-secondary); margin-top:auto; }
+ .benefits__progress { display:none; }
+ @media(min-width:1024px) and (prefers-reduced-motion:no-preference) {
+  html.motion-enabled .scene.benefits { height:260svh; min-height:0; padding:0; display:block; }
+  html.motion-enabled .scene.benefits > .scene__pin { position:sticky; top:0; height:100svh; display:block; }
+  html.motion-enabled .scene.benefits .benefits__stage { width:100%; height:100svh; border-radius:0; }
+  html.motion-enabled .benefits .benefits__media { position:absolute; inset:0; height:100%; }
+  html.motion-enabled .benefits__veil { display:block; position:absolute; inset:0; background:linear-gradient(180deg,rgba(245,242,235,.96),rgba(245,242,235,.83) 32%,rgba(245,242,235,.08) 75%); }
+  html.motion-enabled .benefits__head { position:absolute; left:clamp(48px,8vw,140px); top:clamp(120px,14svh,160px); padding:0; width: min(52vw,680px); }
+  html.motion-enabled .benefits__viewport { position:absolute; inset: auto 0 max(80px,10svh); overflow:visible; scroll-snap-type:none; }
+  html.motion-enabled .benefits__track { padding:0 clamp(48px,8vw,140px); gap:28px; }
+  html.motion-enabled .benefit-card { width:360px; min-height:280px; background:rgba(255,253,248,.92); backdrop-filter:blur(18px); transform-origin:50% 100%; }
+  html.motion-enabled .benefit-card.is-active { background:var(--surface); }
+  html.motion-enabled .benefits__progress { display:block; position:absolute; bottom:40px; left:clamp(48px,8vw,140px); right:clamp(48px,8vw,140px); height:2px; background:rgba(32,62,56,.18); }
+  .benefits__progress span { display:block; height:100%; background:var(--text-primary); transform:scaleX(0); transform-origin:left; }
+ }
 </style>

@@ -45,7 +45,9 @@ export function lockScroll(locked: boolean): void {
 export function scrollToTarget(target: HTMLElement | string | number, opts: { immediate?: boolean } = {}): void {
   const el = typeof target === 'string' ? document.querySelector<HTMLElement>(target) : target;
   if (el === null) return;
-  const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const pin = typeof el === 'number' ? null : el.querySelector<HTMLElement>(':scope > .scene__pin');
+  const immersive = pin !== null && getComputedStyle(pin).position === 'sticky';
+  const padding = immersive ? 0 : parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
   const y = typeof el === 'number' ? el : el.getBoundingClientRect().top + window.scrollY - padding;
   if (lenis) {
     lenis.scrollTo(y, { immediate: opts.immediate ?? false, duration: 0.65 });
@@ -78,7 +80,7 @@ export function bindAnchorLinks(root: Document | HTMLElement = document): () => 
     const target = hashTarget(hash);
     if (!target) return;
     e.preventDefault();
-    scrollToTarget(target);
+    scrollToTarget(target, { immediate: true });
     history.pushState(null, '', hash);
   };
   root.addEventListener('click', onClick);

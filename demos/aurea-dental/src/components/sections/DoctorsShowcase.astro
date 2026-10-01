@@ -8,7 +8,7 @@ const first = data.items[0]!;
 <SceneFrame name="doctors" section="doctors" id="team" labelledby="team-title" class="doctors" stageClass="doctors__stage">
   <header class="doctors__head"><p class="label">Our team</p><h2 id="team-title" class="t-h2">Meet the people<br />behind your care.</h2></header>
   <div class="doctors__panel" id="doctors-panel" role="tabpanel" aria-labelledby={`doctor-tab-${first.id}`} data-doctors-panel>
-    <div class="doctors__portraits">
+    <div class="doctors__portraits" data-reveal="clip" data-reveal-from="left">
       {data.items.map((d,i)=><div class:list={['dlayer',{'is-active':i===0}]} data-dlayer={d.image} aria-hidden={i===0?undefined:'true'}><div class="dlayer__portrait"><Img image={d.image} alt={d.imageAlt} sizes="(min-width:1024px) 440px, 90vw" widths={[480,640,960]} cover position={data.focus[d.id]} /></div></div>)}
     </div>
     <div class="doctors__details">
@@ -27,7 +27,7 @@ const first = data.items[0]!;
   .dlayer__portrait, .dlayer__portrait .picture, .dlayer__portrait .img { width: 100%; height: 100%; }
   .doctors__details { display: grid; }
   .doctors .dinfo { grid-area: 1 / 1; }
-  .doctors .dinfo h3 { font: 400 clamp(28px,2.7vw,40px)/1.15 var(--font-display); }
+  .doctors .dinfo h3 { font: 500 clamp(28px,2.7vw,40px)/1.15 var(--font-display); }
   .dinfo__specialty { color: var(--text-secondary); margin-top: 12px; font-size: 17px; }
   .dinfo__biography { color: var(--text-secondary); margin-top: 32px; max-width: 32ch; font-size: var(--fs-body-lg); }
   .doctors__tabs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; border-top: 1px solid var(--border-soft); padding-top: 24px; }

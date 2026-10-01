@@ -1,3 +1,5 @@
+> Historical contract. Current implementation: [V5 design and motion kit](AUREA_DESIGN_MOTION_KIT_V5.md).
+
 > Archived V3 reference. Superseded on 2026-10-01 by [Design kit V4](AUREA_DESIGN_KIT_V4.md) and [Motion rule kit V4](AUREA_MOTION_RULE_KIT_V4.md). Do not use this file as the current implementation contract.
 
 # AUREA — Design kit V3 (implementation source of truth)

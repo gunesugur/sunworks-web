@@ -1,3 +1,5 @@
+> Historical contract. Current implementation: [V5 design and motion kit](AUREA_DESIGN_MOTION_KIT_V5.md).
+
 # AUREA — Motion rule kit V4
 
 Current behavior contract; supersedes V3's cinematic choreography.

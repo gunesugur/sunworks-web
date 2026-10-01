@@ -1,3 +1,5 @@
+> Historical contract. Current implementation: [V5 design and motion kit](AUREA_DESIGN_MOTION_KIT_V5.md).
+
 # AUREA — Design kit V4
 
 This is the current implementation contract. It replaces V3 and the reference-copying remediation brief following the owner's 2026-10-01 review. Borrow the calm, editorial character of the reference, not its composition or scroll choreography.

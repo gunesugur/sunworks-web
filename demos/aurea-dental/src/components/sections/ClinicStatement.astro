@@ -5,8 +5,8 @@ import Img from '../ui/Img.astro';
 const { statement } = site;
 ---
 <SceneFrame name="intro" id="about" labelledby="statement-title" frame="panel" class="intro">
-  <div class="clinic__photo"><Img image={statement.image} alt={statement.imageAlt} sizes="(min-width:1024px) 40vw, 100vw" widths={[480,960,1440]} cover /></div>
-  <div class="clinic__text"><p class="label">The clinic</p><h2 id="statement-title">A little more time.<br />A clearer understanding.</h2><p>We start by listening. Then we explain what we see, discuss the alternatives and build a plan with you.</p><ol>{statement.stats.map(s=><li><span>{s.value}</span>{s.label}</li>)}</ol></div>
+  <div class="clinic__photo" data-reveal="clip" data-reveal-from="left"><Img image={statement.image} alt={statement.imageAlt} sizes="(min-width:1024px) 40vw, 100vw" widths={[480,960,1440]} cover /></div>
+  <div class="clinic__text" data-reveal="fade"><p class="label">The clinic</p><h2 id="statement-title">A little more time.<br />A clearer understanding.</h2><p>We start by listening. Then we explain what we see, discuss the alternatives and build a plan with you.</p><ol>{statement.stats.map(s=><li><span>{s.value}</span>{s.label}</li>)}</ol></div>
 </SceneFrame>
 <style is:global>
   .scene.intro .panel { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; padding: var(--stage-pad-y) var(--stage-pad-x); background: var(--surface); }

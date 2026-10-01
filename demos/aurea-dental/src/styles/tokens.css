@@ -1,4 +1,4 @@
-/* AUREA Dental — design tokens V4 (docs/AUREA_DESIGN_KIT_V4.md). Every section consumes these; do not hard-code values.
+/* AUREA Dental — design tokens V5 (docs/AUREA_DESIGN_MOTION_KIT_V5.md). Final overrides below define the current palette.
    V3 names are canonical; the V2 `--color-*` names below are kept as aliases so existing sections keep working. */
 :root {
   /* ---- palette V3 (warm neutral; colour comes from photography) ---- */
@@ -224,3 +224,6 @@
 
 /* V4: editorial flow, no pinned ranges or overlapping sections. */
 :root { --font-display: Georgia, "Times New Roman", serif; --header-top: 16px; --header-h: 64px; --scroll-pad: 104px; --stage-radius: 4px; --panel-radius: 4px; --stage-pad-y: 48px; --fs-hero: clamp(3rem, 5.2vw, 5.5rem); --lh-display: 1.03; --ls-display: -0.035em; --fs-h2: clamp(2.25rem, 3.5vw, 3.75rem); }
+
+/* V5 cinematic identity: the same type voice in static and moving scenes. */
+:root { --font-display: var(--font-sans); --bg-main:#f3f1ec; --bg-soft:#ebede8; --surface:#fffefb; --surface-muted:#e8ece6; --text-primary:#222c27; --text-secondary:#5d665f; --black:#243e33; --fw-display:500; --fs-h2:clamp(36px,3.5vw,56px); }

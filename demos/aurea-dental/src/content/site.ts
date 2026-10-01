@@ -86,7 +86,7 @@ export const site = {
   },
 
   hero: {
-    titleLines: ['Good care starts', 'with a conversation.'],
+    titleLines: ['Care,', 'made clear.'],
     copy: 'From your first check-up to a longer treatment plan, we make time to explain your options and answer your questions.',
     primary: { label: 'Book a consultation', href: '#booking' } satisfies NavLink,
     secondary: { label: 'Explore treatments', href: '#services' } satisfies NavLink,

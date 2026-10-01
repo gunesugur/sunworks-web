@@ -5,42 +5,31 @@ import MaskedMedia from '../scene/MaskedMedia.astro';
 import Button from '../ui/Button.astro';
 const { hero } = site;
 ---
-<SceneFrame name="hero" id="top" labelledby="hero-title" class="hero" stageClass="hero__stage">
+<SceneFrame name="hero" section="hero" id="top" labelledby="hero-title" class="hero" stageClass="hero__stage">
+  <MaskedMedia image={hero.image} alt={hero.imageAlt} sizes="100vw" widths={[768,1080,1440,1920,2400]} priority fill radius="none" positions={{desktop:'62% 52%',tablet:'55% 55%',mobile:'62% 55%'}} class="hero__media" attrs={{'data-hero-image':''}} />
+  <div class="hero__veil" aria-hidden="true"></div>
   <div class="hero__content">
-    <p class="label">AUREA DENTAL · BURSA</p>
-    <h1 id="hero-title">{hero.titleLines.map(line => <span>{line}</span>)}</h1>
-    <p class="hero__copy">{hero.copy}</p>
-    <div class="hero__actions">
-      <Button href={hero.primary.href}>{hero.primary.label}</Button>
-      <Button href={hero.secondary.href} variant="link">{hero.secondary.label}</Button>
-    </div>
-    <p class="hero__note">A considered approach to everyday dentistry.</p>
+    <p class="label" data-hero-copy>AUREA DENTAL · BURSA</p>
+    <h1 id="hero-title">{hero.titleLines.map(line=><span class="hero__line"><span data-hero-line>{line}</span></span>)}</h1>
+    <p class="hero__copy" data-hero-copy>{hero.copy}</p>
+    <div class="hero__actions" data-hero-copy><Button href={hero.primary.href}>{hero.primary.label}</Button><Button href={hero.secondary.href} variant="link">{hero.secondary.label}</Button></div>
   </div>
-  <MaskedMedia image={hero.image} alt={hero.imageAlt} sizes="(min-width: 1024px) 50vw, 100vw" widths={[768,1080,1440,1920]} priority fill radius="none" position="55% 55%" class="hero__media" />
+  <div class="hero__foot" data-hero-copy><span>Care at your pace.</span><a href="#about">Scroll to discover <span aria-hidden="true">↓</span></a></div>
 </SceneFrame>
 <style is:global>
-  .scene.hero > .scene__pin { padding: 0; }
-  .scene.hero .hero__stage { width: 100%; height: auto; min-height: 100svh; border-radius: 0; background: var(--bg-main); display: grid; grid-template-columns: 1fr 1fr; }
-  .hero .hero__media { position: relative; inset: auto; min-height: 100svh; grid-column: 2; grid-row: 1; }
-  .hero__content { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; justify-content: center; align-items: start; padding: 132px clamp(28px,5vw,96px) 72px; }
-  .hero__content .label { color: var(--text-secondary); margin-bottom: 40px; }
-  .hero__content h1 { font: 400 var(--fs-hero)/1.03 var(--font-display); letter-spacing: -0.04em; max-width: 12ch; }
-  .hero__content h1 span { display: block; }
-  .hero__copy { margin-top: 32px; font-size: var(--fs-body-lg); color: var(--text-secondary); max-width: 38ch; }
-  .hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin-top: 40px; }
-  .hero__note { font-size: var(--fs-small); color: var(--text-secondary); border-top: 1px solid var(--border-soft); padding-top: 20px; margin-top: 64px; }
-  @media(max-width:1023.98px) {
-    .scene.hero .hero__stage { grid-template-columns: 1fr; }
-    .hero .hero__media { grid-column: 1; grid-row: 1; min-height: 100svh; }
-    .hero__content { position: relative; z-index: 2; min-height: 100svh; background: linear-gradient(90deg,rgba(245,242,235,.98),rgba(245,242,235,.92) 48%,rgba(245,242,235,.60)); max-width: none; }
-    .hero__content h1 { max-width: 14ch; }
-  }
-  @media(max-width:639.98px) {
-    .hero__content { padding: 116px 24px 36px; justify-content: flex-end; }
-    .hero__content .label { margin-bottom: 24px; }
-    .hero__content h1 { font-size: clamp(44px,12vw,64px); }
-    .hero__copy { margin-top: 24px; font-size: 17px; }
-    .hero__actions { margin-top: 28px; gap: 16px; }
-    .hero__note { margin-top: 36px; font-size: 14px; }
-  }
+ .scene.hero > .scene__pin { padding:0; }
+ .scene.hero .hero__stage { width:100%; height:auto; min-height:100svh; border-radius:0; background:var(--bg-main); }
+ .hero .hero__media { position:absolute; inset:0; min-height:100svh; }
+ .hero__veil { position:absolute; inset:0; background:linear-gradient(90deg,rgba(245,242,235,.97),rgba(245,242,235,.89) 27%,rgba(245,242,235,.25) 63%,transparent); }
+ .hero__content { position:relative; z-index:2; display:flex; flex-direction:column; align-items:start; justify-content:center; min-height:100svh; padding:140px clamp(24px,8vw,140px) 150px; }
+ .hero__content .label { margin-bottom:32px; color:var(--text-secondary); }
+ .hero__content h1 { max-width:12ch; font:500 clamp(48px,5.5vw,82px)/1.04 var(--font-sans); letter-spacing:-.06em; }
+ .hero__line { display:block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+ .hero__line > span { display:block; }
+ .hero__copy { max-width:36ch; margin-top:28px; font-size:18px; color:var(--text-secondary); }
+ .hero__actions { display:flex; flex-wrap:wrap; align-items:center; gap:20px 28px; margin-top:36px; }
+ .hero__foot { position:absolute; z-index:2; bottom:40px; left:clamp(24px,8vw,140px); right:clamp(24px,8vw,140px); display:flex; justify-content:space-between; gap:24px; border-top:1px solid var(--border-soft); padding-top:20px; font-size:14px; color:var(--text-secondary); }
+ .hero__foot a { display:flex; gap:24px; }
+ @media(max-width:639.98px) { .hero__content { padding:124px 24px 144px; justify-content:center; } .hero__content h1 { font-size:clamp(44px,12vw,64px); } .hero__copy { font-size:17px; } .hero__veil { background:linear-gradient(90deg,rgba(245,242,235,.96),rgba(245,242,235,.86) 60%,rgba(245,242,235,.66)); } .hero__foot { bottom:28px; flex-wrap:wrap; gap:8px; } }
+ @media(prefers-reduced-motion:no-preference) { html.motion-enabled:not(.is-ready) .hero [data-hero-image] { clip-path:inset(6% 43% 6% 43% round 20px); } html.motion-enabled:not(.is-ready) .hero [data-hero-line] { transform:translateY(110%); } html.motion-enabled:not(.is-ready) .hero [data-hero-copy] { opacity:0; } }
 </style>
