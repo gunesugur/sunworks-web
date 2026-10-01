@@ -16,7 +16,7 @@ import { changeUnit, changeWeightUnit, hasWeightColumns } from "../lib/editor";
 import { chooseFigure, type FigureId } from "../lib/figures";
 import { fitColumns } from "../lib/fit";
 import { getMeasure } from "../lib/measures";
-import { hasFeature, PLANS } from "../lib/plans";
+import { chartCount, hasFeature, PLANS } from "../lib/plans";
 import { buildPublication } from "../lib/publish";
 import { effectiveSettings } from "../lib/settings";
 import { fitFinderAllowed, fitFinderFeature } from "../lib/templates";
@@ -348,7 +348,7 @@ export default function ChartEditor() {
       {data.paused && chart.status === "active" && (
         <s-banner tone="warning" heading="This chart is paused">
           <s-paragraph>
-            The {plan.name} plan shows {plan.chartLimit} size chart on your store, and another chart is higher in your list. Upgrade, or move
+            The {plan.name} plan shows {chartCount(plan.chartLimit)} on your store, and other charts are higher in your list. Upgrade, or move
             this chart to the top of the list.
           </s-paragraph>
           <s-button slot="secondary-actions" href="/app/plans">

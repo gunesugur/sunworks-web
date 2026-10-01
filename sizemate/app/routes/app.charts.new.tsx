@@ -8,7 +8,7 @@ import { FeatureBadge, valueOf } from "../components/ui";
 import { blankChart, type SizeChart } from "../lib/chart";
 import { importCsv } from "../lib/csv";
 import { chooseFigure, figureSvg } from "../lib/figures";
-import { canCreateChart, hasFeature, PLANS } from "../lib/plans";
+import { canCreateChart, chartCount, hasFeature, PLANS } from "../lib/plans";
 import { chartFromTemplate, ESSENTIAL_COUNT, getTemplate, templateAllowed, TEMPLATE_GROUPS, TEMPLATES } from "../lib/templates";
 import { countCharts, PlanLimitError, saveChart, ValidationError } from "../models/charts.server";
 import { adminContext } from "../models/context.server";
@@ -120,9 +120,9 @@ export default function NewChart() {
           Size charts
         </s-link>
         <s-section>
-          <s-empty-state heading={`You're using the ${PLANS[plan].chartLimit} size chart on the ${PLANS[plan].name} plan`}>
+          <s-empty-state heading={`You're using all ${chartCount(PLANS[plan].chartLimit)} on the ${PLANS[plan].name} plan`}>
             <s-paragraph slot="subheading">
-              Upgrade to Pro for unlimited charts, so each kind of product gets the right one. Your current chart stays as it is.
+              Upgrade to Pro for unlimited charts, so each kind of product gets the right one. Your current charts stay as they are.
             </s-paragraph>
             <s-button slot="primary-action" variant="primary" href="/app/plans">
               See plans

@@ -7,7 +7,7 @@ import { useFetcher, useLoaderData } from "react-router";
 import { SetupGuide, type SetupStep } from "../components/SetupGuide";
 import { formatDate, PlanBadge } from "../components/ui";
 import { SUPPORT_EMAIL } from "../lib/brand";
-import { PLANS } from "../lib/plans";
+import { chartCount, PLANS } from "../lib/plans";
 import { buildPublication } from "../lib/publish";
 import { listCharts } from "../models/charts.server";
 import { adminContext } from "../models/context.server";
@@ -136,7 +136,7 @@ export default function Home() {
       {data.paused > 0 && (
         <s-banner tone="warning" heading={`${data.paused} size ${data.paused === 1 ? "chart is" : "charts are"} paused`}>
           <s-paragraph>
-            The {plan.name} plan shows {plan.chartLimit} size chart on your store. Your other charts are saved and come back as soon as you upgrade.
+            The {plan.name} plan shows {chartCount(plan.chartLimit)} on your store. Your other charts are saved and come back as soon as you upgrade.
           </s-paragraph>
           <s-button slot="secondary-actions" href="/app/plans">
             See plans
@@ -194,7 +194,7 @@ export default function Home() {
               <s-text color="subdued">Plan</s-text>
               <s-stack direction="inline" gap="small-200" alignItems="center">
                 <PlanBadge plan={data.plan} />
-                <s-text>{Number.isFinite(plan.chartLimit) ? `${Math.min(data.total, plan.chartLimit)} of ${plan.chartLimit} chart used` : "Unlimited charts"}</s-text>
+                <s-text>{Number.isFinite(plan.chartLimit) ? `${Math.min(data.total, plan.chartLimit)} of ${plan.chartLimit} charts used` : "Unlimited charts"}</s-text>
               </s-stack>
               <s-link href="/app/plans">{data.plan === "plus" ? "Manage plan" : "Compare plans"}</s-link>
             </s-stack>

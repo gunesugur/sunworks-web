@@ -74,7 +74,8 @@ describe("charts repository", () => {
 
   it("enforces the Free plan limit on the server", async () => {
     await charts.saveChart(SHOP, tops(), "free");
-    await expect(charts.saveChart(SHOP, tops(), "free")).rejects.toBeInstanceOf(charts.PlanLimitError);
+    await charts.saveChart(SHOP, tops(), "free");
+    await expect(charts.saveChart(SHOP, tops(), "free")).rejects.toThrow("The Free plan includes 2 size charts.");
     // Editing the existing chart is still allowed.
     const [existing] = await charts.listCharts(SHOP);
     await expect(charts.saveChart(SHOP, { ...existing!.chart, name: "Renamed" }, "free")).resolves.toMatchObject({ name: "Renamed" });
@@ -138,11 +139,12 @@ describe("publishing", () => {
     expect(batches.map((c) => (c.variables!.metafields as unknown[]).length)).toEqual([25, 6]);
   });
 
-  it("publishes only the first active chart on Free", async () => {
+  it("publishes only the first two active charts on Free", async () => {
     const first = await charts.saveChart(SHOP, tops(), "pro");
-    const second = await charts.saveChart(SHOP, tops(), "pro");
-    expect(await publish(SHOP, fakeAdmin())).toEqual({ published: 1, paused: [second.id] });
-    expect(first.id).not.toBe(second.id);
+    await charts.saveChart(SHOP, tops(), "pro");
+    const third = await charts.saveChart(SHOP, tops(), "pro");
+    expect(await publish(SHOP, fakeAdmin())).toEqual({ published: 2, paused: [third.id] });
+    expect(first.id).not.toBe(third.id);
   });
 
   it("records Shopify errors so the merchant can see them", async () => {

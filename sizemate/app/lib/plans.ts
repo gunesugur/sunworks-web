@@ -54,10 +54,10 @@ export const PLANS: Record<PlanId, Plan> = {
     monthlyPrice: 0,
     yearlyPrice: 0,
     tagline: "A polished size chart that matches your theme.",
-    chartLimit: 1,
+    chartLimit: 2,
     features: [],
     highlights: [
-      "1 size chart on any number of products",
+      "2 size charts on any number of products",
       "11 essential templates",
       "Matches your theme's fonts and colours, light or dark",
       "How-to-measure guide with illustrations",
@@ -125,6 +125,11 @@ export function hasFeature(plan: PlanId, feature: Feature): boolean {
 export function planFor(feature: Feature): Plan {
   const id = PLAN_ORDER.find((planId) => hasFeature(planId, feature));
   return PLANS[id ?? "plus"];
+}
+
+/** "1 size chart", "2 size charts". */
+export function chartCount(count: number): string {
+  return `${count} size chart${count === 1 ? "" : "s"}`;
 }
 
 export function canCreateChart(plan: PlanId, existingCharts: number): boolean {

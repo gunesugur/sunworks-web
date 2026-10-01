@@ -38,12 +38,12 @@ describe("buildPublication", () => {
     expect(published.cols[1]).toMatchObject({ k: "measure", m: "bust", mk: "b" });
   });
 
-  it("applies the Free plan: one chart, branding, no fit finder, no translations, default styling", () => {
+  it("applies the Free plan: two charts, branding, no fit finder, no translations, default styling", () => {
     const settings = { ...DEFAULT_SETTINGS, accentColor: "#123456" };
-    const all = charts();
+    const all = [...charts(), chartFromTemplate(getTemplate("hats")!)];
     const result = buildPublication(all, settings, "free");
-    expect(result.config.rules).toHaveLength(1);
-    expect(result.paused).toEqual([all[2]!.id]);
+    expect(result.config.rules).toHaveLength(2);
+    expect(result.paused).toEqual([all[3]!.id]);
     expect(result.config.brand).toBe(true);
     expect(result.config.settings.accentColor).toBe("");
     const only = Object.values(result.charts)[0]!;
@@ -99,7 +99,7 @@ describe("buildPublication v2", () => {
     const shoes = chartFromTemplate(getTemplate("womens-shoes")!);
     const tops = chartFromTemplate(getTemplate("womens-tops")!);
     const fit = (plan: "free" | "pro" | "plus") => Object.values(buildPublication([tops, shoes], DEFAULT_SETTINGS, plan).charts).map((c) => c.fit);
-    expect(fit("free")).toEqual([false]);
+    expect(fit("free")).toEqual([false, false]);
     expect(fit("pro")).toEqual([true, false]);
     expect(fit("plus")).toEqual([true, true]);
   });

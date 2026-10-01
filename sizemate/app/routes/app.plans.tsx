@@ -16,7 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 const COMPARISON: { label: string; free: string | boolean; pro: string | boolean; plus: string | boolean }[] = [
-  { label: "Size charts", free: "1", pro: "Unlimited", plus: "Unlimited" },
+  { label: "Size charts", free: "2", pro: "Unlimited", plus: "Unlimited" },
   { label: "Products per chart", free: "Unlimited", pro: "Unlimited", plus: "Unlimited" },
   { label: "Templates", free: `${ESSENTIAL_COUNT} essentials`, pro: `All ${TEMPLATES.length}`, plus: `All ${TEMPLATES.length}` },
   { label: "Matches your theme's fonts and colours, light and dark", free: true, pro: true, plus: true },
@@ -48,7 +48,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "What happens to my charts if I downgrade?",
-    a: "Nothing is deleted. On Free, the chart at the top of your list stays live and the others are paused until you upgrade again.",
+    a: "Nothing is deleted. On Free, the two charts at the top of your list stay live and the others are paused until you upgrade again.",
   },
   {
     q: "Does Sizemate slow down my store?",

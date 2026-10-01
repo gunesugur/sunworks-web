@@ -2,7 +2,7 @@ import type { Chart } from "@prisma/client";
 
 import db from "../db.server";
 import { duplicateChart, validateChart, type SizeChart } from "../lib/chart";
-import { canCreateChart, PLANS, type PlanId } from "../lib/plans";
+import { canCreateChart, chartCount, PLANS, type PlanId } from "../lib/plans";
 import { getShop } from "./shop.server";
 
 export interface StoredChart {
@@ -46,7 +46,7 @@ export async function countCharts(shop: string): Promise<number> {
 
 export class PlanLimitError extends Error {
   constructor(readonly plan: PlanId) {
-    super(`The ${PLANS[plan].name} plan includes ${PLANS[plan].chartLimit} size chart. Upgrade to add more.`);
+    super(`The ${PLANS[plan].name} plan includes ${chartCount(PLANS[plan].chartLimit)}. Upgrade to add more.`);
     this.name = "PlanLimitError";
   }
 }

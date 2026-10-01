@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { canCreateChart, hasFeature, planFor, planFromSubscriptions, PLANS } from "~/lib/plans";
+import { canCreateChart, chartCount, hasFeature, planFor, planFromSubscriptions, PLANS } from "~/lib/plans";
 import { applyPreset, DEFAULT_SETTINGS, effectiveSettings, isProChoice, lockedSettingsInUse, parseSettings, PRESETS } from "~/lib/settings";
 
 describe("plans", () => {
-  it("limits Free to one chart", () => {
-    expect(canCreateChart("free", 0)).toBe(true);
-    expect(canCreateChart("free", 1)).toBe(false);
+  it("limits Free to two charts", () => {
+    expect(canCreateChart("free", 1)).toBe(true);
+    expect(canCreateChart("free", 2)).toBe(false);
+    expect(chartCount(1)).toBe("1 size chart");
+    expect(chartCount(2)).toBe("2 size charts");
     expect(canCreateChart("pro", 500)).toBe(true);
   });
 

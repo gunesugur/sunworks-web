@@ -6,7 +6,7 @@ import { useFetcher, useLoaderData } from "react-router";
 
 import { formatDate } from "../components/ui";
 import { describeAssignment } from "../lib/chart";
-import { canCreateChart, PLANS } from "../lib/plans";
+import { canCreateChart, chartCount, PLANS } from "../lib/plans";
 import { buildPublication } from "../lib/publish";
 import { deleteChart, duplicate, listCharts, move, PlanLimitError, setStatus } from "../models/charts.server";
 import { adminContext } from "../models/context.server";
@@ -108,7 +108,7 @@ export default function Charts() {
       </s-button>
 
       {!canCreate && (
-        <s-banner tone="info" heading={`The ${PLANS[plan].name} plan includes ${PLANS[plan].chartLimit} size chart`}>
+        <s-banner tone="info" heading={`The ${PLANS[plan].name} plan includes ${chartCount(PLANS[plan].chartLimit)}`}>
           <s-paragraph>Upgrade to Pro for unlimited charts, so tops, trousers and shoes each get the right one.</s-paragraph>
           <s-button slot="secondary-actions" href="/app/plans">
             See plans

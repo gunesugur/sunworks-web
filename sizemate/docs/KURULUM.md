@@ -53,17 +53,24 @@ Bir sorun çıkarsa ekran görüntüsüyle bana yaz, hemen düzeltirim.
 
 Partner Dashboard'da **Apps › Sizemate › Distribution** altında **Shopify App Store**'u seç. Sonra **Pricing › Manage pricing** yolunu izle ve **Managed pricing**'i aç. Şu planları oluştur (isimler birebir aynı olmalı, çünkü uygulama planı isimden tanıyor):
 
-| Plan adı | Aylık | Yıllık | Deneme |
-| --- | --- | --- | --- |
-| Free | 0 | — | — |
-| Pro | 4.99 USD | 49.90 USD | 7 gün |
-| Plus | 9.99 USD | 99.90 USD | 7 gün |
+| Plan adı | Aylık | Yıllık | Deneme | Özet |
+| --- | --- | --- | --- | --- |
+| Free | 0 | — | — | 2 tablo, 11 temel şablon, tema uyumu, tüm birimler, erişilebilirlik |
+| Pro | 4.99 USD | 49.90 USD | 7 gün | Sınırsız tablo, 60 şablon, tasarım stüdyosu, giyimde Fit Finder |
+| Plus | 9.99 USD | 99.90 USD | 7 gün | Her tabloda Fit Finder, çeviriler, Insights |
 
 Özellik listesini `app/lib/plans.ts` dosyasındaki `highlights` satırlarından kopyalayabilirsin. Uygulamadaki **Plans** sayfası mağaza sahibini doğrudan Shopify'ın plan seçme sayfasına götürür.
 
 Planlar, Dev Dashboard'da uygulama **Public distribution (Shopify App Store)** olarak ayarlandıktan sonra açılan **Pricing** bölümünde oluşturuluyor. Listeyi yayına göndermen gerekmiyor; taslak liste yeterli. Aynı organizasyona ait geliştirme mağazaları her planı **0 USD'ye** deneyebiliyor. Yani Plans sayfasındaki "Start 7-day free trial" düğmesine basıp onaylarsan uygulama planı algılamalı ve paralı özellikler açılmalı. Abonelik sistemini uçtan uca test etmenin yolu bu.
 
 Plan oluşturmadan da paralı planları ödeme yapmadan denemek için uygulamayı `SIZEMATE_DEV_PLAN=plus npm run dev` komutuyla başlat (Windows PowerShell'de: `$env:SIZEMATE_DEV_PLAN="plus"; npm run dev`). Bu ayar sadece geliştirme ortamında çalışır, canlıda etkisizdir.
+
+## v2 ile gelen değişiklikler (güncelleme yapıyorsan)
+
+- **Yeni izin:** Foto kartı için `write_files` izni eklendi. `npm run dev` sonrası uygulamayı açınca Shopify yeni izni onaylamanı isteyecek.
+- **App proxy:** Insights (Plus) sayıları `/apps/sizemate/e` adresinden geliyor. `npm run dev` bu adresi tünele kendisi bağlar; canlıda `shopify.app.toml` içindeki `[app_proxy]` adresini güncelle.
+- **Veritabanı:** Yeni bir tablo var (`InsightDay`). `npm run dev` ve `npm run setup` migration'ı kendisi uygular.
+- **Tema eklentisi:** Eski `diagram-*.svg` dosyaları kalktı, çizimler artık temanın renklerini alan SVG. `npm run dev` açıkken tema editöründe bir kez **Save** demen yeterli.
 
 ## 5. Sunucuya yükleme
 
@@ -74,7 +81,7 @@ Uygulamanın her zaman açık bir sunucuda çalışması gerekiyor. Mağaza tara
 - **Sunucu**: Fly.io, Render veya Railway (aylık yaklaşık 5–10 USD). Klasörde bir `Dockerfile` hazır.
 - **Veritabanı**: Canlıda SQLite yerine Postgres kullan (Neon ve Supabase'in ücretsiz planları yeterli). `prisma/schema.prisma` dosyasında `provider = "postgresql"` ve `url = env("DATABASE_URL")` yap. Sonra `npx prisma migrate dev --name postgres` ile migration'ları yeniden oluştur.
 - **Ortam değişkenleri**: `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, `SHOPIFY_APP_URL`, `SCOPES=read_products,read_themes,read_locales,write_files`, `DATABASE_URL`, `NODE_ENV=production`.
-- **Son adım**: Sunucu adresini `shopify.app.toml` içindeki `application_url` ve `redirect_urls` alanlarına yaz. Ardından `npm run deploy` ile uygulama ayarlarını ve tema eklentisini Shopify'a gönder.
+- **Son adım**: Sunucu adresini `shopify.app.toml` içindeki `application_url`, `redirect_urls` ve `[app_proxy] url` alanlarına yaz (app proxy için: `https://SUNUCU/proxy`). Ardından `npm run deploy` ile uygulama ayarlarını ve tema eklentisini Shopify'a gönder.
 
 ## 6. App Store başvurusu
 
@@ -98,8 +105,11 @@ Zorunlu gizlilik webhook'ları (`customers/data_request`, `customers/redact`, `s
 | Hazır şablonlar | `app/lib/templates.ts` |
 | Beden önerici (Fit Finder) | `app/lib/fit.ts` |
 | Mağazada görünen HTML | `extensions/sizemate-theme/snippets/sizemate-core.liquid` |
-| Mağaza stili | `extensions/sizemate-theme/assets/sizemate.css` |
+| Mağaza stili (kaynağı) | `app/storefront/sizemate.css` |
+| Tema uyumu | `app/storefront/theme.ts` |
+| Ölçü çizimleri | `app/lib/figures.ts` |
+| Görünüm ayarları ve stiller | `app/lib/settings.ts` |
 | Mağaza çevirileri | `extensions/sizemate-theme/locales/*.json` |
 | Yönetim sayfaları | `app/routes/app.*.tsx` |
 
-Kodda değişiklik yaptıktan sonra `npm test` ve `npm run test:e2e` komutlarını çalıştır. Mağaza script'ini değiştirdiysen `npm run build:storefront` da çalıştırman gerekiyor.
+Kodda değişiklik yaptıktan sonra `npm test` ve `npm run test:e2e` komutlarını çalıştır. `app/storefront/` veya `app/lib/figures.ts` dosyalarını değiştirdiysen `npm run build:storefront` da çalıştırman gerekiyor.

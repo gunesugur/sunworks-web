@@ -1,31 +1,38 @@
 # Sizemate: size charts and Fit Finder for Shopify
 
-Sizemate is a Shopify app built by SUN | WORKS. Merchants create size charts, choose which products show them, and shoppers get a size chart button on the product page with a cm/inch switch, a "How to measure" guide and a Fit Finder that recommends a size.
+Sizemate is a Shopify app built by SUN | WORKS. Merchants create size charts from 60 templates, choose which products show them, and shoppers get a size chart that matches the store's theme (fonts, colours, light or dark) with a metric/imperial switch, numbered measuring illustrations and a Fit Finder that recommends a size.
 
 Turkish setup guide (Partner account, dev store, plans, launch): [docs/KURULUM.md](docs/KURULUM.md)
 
-![Size chart on a product page](docs/screenshots/storefront-chart.png)
+![Size chart on a product page](docs/screenshots/v2-theme-light.png)
+
+| Dark theme | Picture card | Imperial |
+| --- | --- | --- |
+| ![](docs/screenshots/v2-theme-dark.png) | ![](docs/screenshots/v2-split.png) | ![](docs/screenshots/v2-imperial.png) |
 
 ## What's in the box
 
 | Area | What it does |
 | --- | --- |
-| Admin (`app/`) | Embedded app on React Router + Polaris web components: Home with setup guide, Size charts list, chart editor with live preview, Appearance, Plans |
-| Storefront (`extensions/sizemate-theme/`) | Theme app extension: an app embed (automatic placement) and an app block (exact placement). No theme code edits |
-| Data | Charts live in the app database (Prisma). A compact copy is published to app-data metafields, so the storefront never calls the app server |
+| Admin (`app/`) | Embedded app on React Router + Polaris web components: Home with setup guide, Size charts, chart editor with undo/redo and a live preview, template gallery, Appearance (styles and design studio), Insights, Plans |
+| Storefront (`extensions/sizemate-theme/`) | Theme app extension: an app embed (automatic placement) and an app block (exact placement). No theme code edits. A 2.5 KB page script; the runtime loads when a shopper reaches for the chart |
+| Theme matching | `app/storefront/theme.ts` reads the theme's fonts, colours, button colour and corners in the browser; `sizemate.css` layers merchant choices, light/dark mode and the theme as CSS variables |
+| Illustrations | `app/lib/figures.ts` is the single source of the measuring figures; the build generates `snippets/sizemate-figure.liquid` from it |
+| Data | Charts live in the app database (Prisma). A compact copy is published to app-data metafields, so the storefront never needs the app server. Insights counts arrive through the app proxy |
 | Billing | Shopify managed pricing: Free, Pro and Plus, with a 7-day trial. Limits are enforced on the server |
 
 ### Plans
 
 | | Free | Pro ($4.99/mo) | Plus ($9.99/mo) |
 | --- | --- | --- | --- |
-| Size charts | 1 | Unlimited | Unlimited |
-| Templates, cm/inch, measuring guide, 8 languages | ✓ | ✓ | ✓ |
-| Colours, icon, drawer layout | | ✓ | ✓ |
-| CSV import/export | | ✓ | ✓ |
-| No "Powered by Sizemate" | | ✓ | ✓ |
-| Fit Finder | | | ✓ |
-| Chart translations | | | ✓ |
+| Size charts | 2 | Unlimited | Unlimited |
+| Templates | 11 essentials | All 60 | All 60 |
+| Theme matching, light/dark, accessibility, all units, illustrations, 8 languages | ✓ | ✓ | ✓ |
+| Styles | 3 | 7 + design studio | 7 + design studio |
+| Drawer, in-page and picture-card layouts, photo card, fit scale | | ✓ | ✓ |
+| CSV import/export, no "Powered by Sizemate" | | ✓ | ✓ |
+| Fit Finder | | Clothing (women, men, unisex, kids) | Every chart |
+| Chart translations, Insights | | | ✓ |
 
 Plans are defined in `app/lib/plans.ts`. The names there must match the plan names in the Partner Dashboard.
 
@@ -45,10 +52,10 @@ npm run dev              # shopify app dev: tunnel, dev store install, extension
 
 | Command | What it runs |
 | --- | --- |
-| `npm test` | Unit, Liquid and integration tests (Vitest, 158 tests) |
-| `npm run test:e2e` | Storefront in a real browser: placement, dialog, units, Fit Finder, mobile, axe accessibility (Playwright) |
+| `npm test` | Unit, Liquid, admin component and integration tests (Vitest, 327 tests) |
+| `npm run test:e2e` | Storefront in a real browser: placement, theme matching, dark mode, layouts, units, Fit Finder, lazy loading, mobile, axe accessibility (Playwright, 28 tests) |
 | `npm run lint` / `npm run typecheck` | ESLint, TypeScript |
-| `npm run build:storefront` | Rebuilds `extensions/sizemate-theme/assets/sizemate.js` from `app/storefront/sizemate.ts`. CI fails if it is stale |
+| `npm run build:storefront` | Rebuilds the extension's scripts, stylesheet and figure snippet from `app/`. CI fails if they are stale |
 | `npm run screenshots` | Refreshes `docs/screenshots` |
 | `npm run deploy` | Deploys app config and the theme extension to Shopify |
 
@@ -62,11 +69,11 @@ app/
   models/         Server code: database, Admin API, publishing, billing, theme status
   components/     Admin UI pieces (table editor, assignment, preview, translations, setup guide)
   routes/         Admin pages and webhooks
-  storefront/     Source of the storefront script (bundled into the extension's assets)
+  storefront/     Storefront source: page script, runtime, theme reader, stylesheet (built into the extension)
 extensions/sizemate-theme/
   blocks/         size-chart (app block), sizemate-embed (app embed)
-  snippets/       sizemate-core (matching + markup), sizemate-icon
-  assets/         Built script, stylesheet (also used by the admin preview), diagrams
+  snippets/       sizemate-core (matching + markup), guide, fit, fitscale, icon, figure (generated)
+  assets/         Built scripts and stylesheet (the admin preview renders the same Liquid and CSS)
   locales/        en, de, fr, es, it, nl, pt-BR, tr
 prisma/           Schema and migrations
 tests/            unit, integration, e2e
@@ -74,4 +81,4 @@ tests/            unit, integration, e2e
 
 ## Privacy
 
-Sizemate stores charts and settings per shop, and no customer data. The Fit Finder runs in the shopper's browser. `shop/redact` deletes all of a shop's data; the customer webhooks have nothing to return or delete.
+Sizemate stores charts and settings per shop, and no customer data. The Fit Finder runs in the shopper's browser. Insights (Plus) keeps anonymous daily counts per chart: views, recommended sizes, results outside the chart. `shop/redact` deletes all of a shop's data; the customer webhooks have nothing to return or delete.
