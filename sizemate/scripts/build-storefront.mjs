@@ -10,7 +10,7 @@ const root = fileURLToPath(new URL("..", import.meta.url));
 const outfile = `${root}extensions/sizemate-theme/assets/sizemate.js`;
 
 const result = await build({
-  entryPoints: [`${root}extensions/sizemate-theme/src/sizemate.ts`],
+  entryPoints: [`${root}app/storefront/sizemate.ts`],
   bundle: true,
   format: "iife",
   target: ["es2020", "safari15"],
@@ -18,7 +18,7 @@ const result = await build({
   minify: true,
   legalComments: "none",
   write: false,
-  banner: { js: "/* Sizemate storefront script. Built from extensions/sizemate-theme/src/sizemate.ts */" },
+  banner: { js: "/* Sizemate storefront script. Built from app/storefront/sizemate.ts */" },
 });
 const code = result.outputFiles[0].text;
 

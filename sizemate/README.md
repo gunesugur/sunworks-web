@@ -48,7 +48,7 @@ npm run dev              # shopify app dev: tunnel, dev store install, extension
 | `npm test` | Unit, Liquid and integration tests (Vitest, 158 tests) |
 | `npm run test:e2e` | Storefront in a real browser: placement, dialog, units, Fit Finder, mobile, axe accessibility (Playwright) |
 | `npm run lint` / `npm run typecheck` | ESLint, TypeScript |
-| `npm run build:storefront` | Rebuilds `extensions/sizemate-theme/assets/sizemate.js` from `src/sizemate.ts`. CI fails if it is stale |
+| `npm run build:storefront` | Rebuilds `extensions/sizemate-theme/assets/sizemate.js` from `app/storefront/sizemate.ts`. CI fails if it is stale |
 | `npm run screenshots` | Refreshes `docs/screenshots` |
 | `npm run deploy` | Deploys app config and the theme extension to Shopify |
 
@@ -62,10 +62,10 @@ app/
   models/         Server code: database, Admin API, publishing, billing, theme status
   components/     Admin UI pieces (table editor, assignment, preview, translations, setup guide)
   routes/         Admin pages and webhooks
+  storefront/     Source of the storefront script (bundled into the extension's assets)
 extensions/sizemate-theme/
   blocks/         size-chart (app block), sizemate-embed (app embed)
   snippets/       sizemate-core (matching + markup), sizemate-icon
-  src/            Storefront script source
   assets/         Built script, stylesheet (also used by the admin preview), diagrams
   locales/        en, de, fr, es, it, nl, pt-BR, tr
 prisma/           Schema and migrations

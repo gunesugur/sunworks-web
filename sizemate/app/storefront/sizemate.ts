@@ -1,13 +1,13 @@
 /**
  * Storefront behaviour for the Sizemate theme extension.
  *
- * Source of assets/sizemate.js (built by scripts/build-storefront.mjs; do not
+ * Source of extensions/sizemate-theme/assets/sizemate.js (built by scripts/build-storefront.mjs; do not
  * edit the built file). Everything the script needs is read from the markup
  * rendered by snippets/sizemate-core.liquid, so there is no network request.
  */
 
-import { fitColumns, recommendSize, type FitChart, type FitPreference, type FitResult } from "../../../app/lib/fit";
-import { convertCell, type Unit } from "../../../app/lib/units";
+import { fitColumns, recommendSize, type FitChart, type FitPreference, type FitResult } from "../lib/fit";
+import { convertCell, type Unit } from "../lib/units";
 
 const UNIT_KEY = "sizemate:unit";
 const INITIALISED = "sizemateReady";
