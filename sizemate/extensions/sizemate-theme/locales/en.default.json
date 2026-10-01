@@ -5,6 +5,10 @@
     "units": "Units",
     "cm": "cm",
     "in": "in",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Size chart",
       "guide": "How to measure",
@@ -54,7 +58,30 @@
       "garment_chest": "Lay the garment flat and measure straight across, just below the armholes.",
       "garment_waist": "Lay the garment flat and measure straight across the waistband.",
       "garment_length": "Lay the garment flat and measure from the highest point of the shoulder to the bottom hem.",
-      "sleeve": "Measure from the shoulder seam to the end of the sleeve."
+      "sleeve": "Measure from the shoulder seam to the end of the sleeve.",
+      "weight": "Weigh yourself without shoes, ideally in the morning.",
+      "calf": "Measure around the widest part of your calf.",
+      "wrist": "Wrap the tape snugly around your wrist just below the wrist bone.",
+      "finger": "Wrap a strip of paper around the base of your finger, mark where it overlaps and measure its length.",
+      "pet_weight": "Weigh yourself holding your pet, then subtract your own weight.",
+      "garment_shoulder": "Lay the garment flat and measure straight across from one shoulder seam to the other.",
+      "garment_hips": "Lay the trousers flat and measure straight across the widest part of the hips.",
+      "garment_inseam": "Lay the trousers flat and measure from the crotch seam to the bottom of the leg.",
+      "rise": "Measure from the crotch seam up to the top of the waistband.",
+      "ring_diameter": "Measure straight across the inside of a ring that fits you well.",
+      "ring_circumference": "The distance around the inside of the ring. Compare it with your finger measurement."
+    },
+    "text_size": "Larger text",
+    "fitscale": {
+      "label": "Fit",
+      "small": "Runs small",
+      "true": "True to size",
+      "large": "Runs large",
+      "s0": "True to size.",
+      "s1": "Runs slightly small.",
+      "s2": "Runs small. We recommend one size up.",
+      "l1": "Runs slightly large.",
+      "l2": "Runs large. Consider one size down."
     }
   }
 }

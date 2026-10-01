@@ -1,0 +1,37 @@
+{%- comment -%}
+  "How to measure": the numbered illustration and instructions for each measurement.
+  Params: chart, tr, uid, use_tabs, guide_text, has_figure, media_is_figure
+{%- endcomment -%}
+<section class="sizemate-section" id="{{ uid }}-panel-guide" data-sizemate-panel="guide" {% if use_tabs %}role="tabpanel" aria-labelledby="{{ uid }}-tab-guide" hidden{% else %}aria-labelledby="{{ uid }}-guide-title"{% endif %}>
+  {%- unless use_tabs -%}<h3 class="sizemate-section-title" id="{{ uid }}-guide-title">{{ 'sizemate.tabs.guide' | t }}</h3>{%- endunless -%}
+  <div class="sizemate-guide{% if has_figure and media_is_figure == false %} sizemate-guide--figure{% endif %}">
+    {%- if has_figure and media_is_figure == false -%}
+      <div class="sizemate-guide-figure">{%- render 'sizemate-figure', chart: chart -%}</div>
+    {%- endif -%}
+    <div class="sizemate-guide-text">
+      {%- if guide_text != blank -%}
+        <p>{{ guide_text | escape | newline_to_br }}</p>
+      {%- endif -%}
+      <ol class="sizemate-howto">
+        {%- assign listed = ',' -%}
+        {%- for col in chart.cols -%}
+          {%- assign key = ',' | append: col.m | append: ',' -%}
+          {%- if col.k == 'measure' and col.m != 'other' and col.m != blank -%}
+            {%- unless listed contains key -%}
+              {%- assign listed = listed | append: col.m | append: ',' -%}
+              {%- assign col_label = tr.cols[forloop.index0] | default: col.l -%}
+              {%- assign how_key = 'sizemate.how.' | append: col.m -%}
+              <li class="sizemate-howto-item">
+                {%- if col.n > 0 -%}<span class="sizemate-num" aria-hidden="true">{{ col.n }}</span>{%- else -%}<span class="sizemate-num sizemate-num--empty" aria-hidden="true"></span>{%- endif -%}
+                <div>
+                  <strong>{{ col_label | escape }}</strong>
+                  <p>{{ how_key | t }}</p>
+                </div>
+              </li>
+            {%- endunless -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+  </div>
+</section>

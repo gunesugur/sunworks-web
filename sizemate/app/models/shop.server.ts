@@ -64,6 +64,7 @@ export async function recordPublish(shop: string, error: string | null): Promise
 export async function deleteShopData(shop: string): Promise<void> {
   await db.$transaction([
     db.chart.deleteMany({ where: { shop } }),
+    db.insightDay.deleteMany({ where: { shop } }),
     db.shop.deleteMany({ where: { shop } }),
     db.session.deleteMany({ where: { shop } }),
   ]);

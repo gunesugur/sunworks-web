@@ -6,8 +6,8 @@
  */
 
 import { createColumn, createRow, LIMITS, type ChartColumn, type ChartRow, type SizeChart } from "./chart";
-import { MEASURES, type MeasureKey } from "./measures";
-import { parseMeasurement, type Unit } from "./units";
+import { isWeightMeasure, MEASURES, type MeasureKey } from "./measures";
+import { parseMeasurement, type LengthUnit, type WeightUnit } from "./units";
 
 const SEPARATORS = [",", ";", "\t"] as const;
 
@@ -72,16 +72,26 @@ function escapeCell(value: string): string {
 }
 
 export function chartToCsv(chart: SizeChart): string {
-  const header = chart.columns.map((c) => (c.kind === "measure" ? `${c.label} (${chart.unit})` : c.label));
+  const unitOf = (measure: string | undefined) => (measure && isWeightMeasure(measure) ? chart.weightUnit : chart.unit);
+  const header = chart.columns.map((c) => (c.kind === "measure" ? `${c.label} (${unitOf(c.measure)})` : c.label));
   const lines = [header, ...chart.rows.map((row) => chart.columns.map((c) => row.cells[c.id] ?? ""))];
   return lines.map((line) => line.map(escapeCell).join(",")).join("\r\n") + "\r\n";
 }
 
-const UNIT_IN_HEADER = /\(\s*(cm|in|inch|inches|")\s*\)\s*$/i;
+const UNIT_IN_HEADER = /\(\s*(cm|mm|in|inch|inches|"|kg|lb|lbs)\s*\)\s*$/i;
+
+function unitFromHeader(text: string): LengthUnit | WeightUnit {
+  const unit = text.toLowerCase();
+  if (unit === "cm" || unit === "mm" || unit === "kg") return unit;
+  if (unit === "lb" || unit === "lbs") return "lb";
+  return "in";
+}
 
 function guessMeasure(header: string): MeasureKey {
   const text = header.toLowerCase();
   const aliases: [RegExp, MeasureKey][] = [
+    [/weight|gewicht|poids|peso|kilo|\bkg\b|\blbs?\b|ağırlık|kilo/, "weight"],
+    [/diameter|durchmesser|diamètre|\bçap\b/, "ring_diameter"],
     [/foot|feet|fuß|pied|\bpie\b|ayak/, "foot_length"],
     [/under ?bust|unterbrust/, "underbust"],
     [/chest width|pit to pit|\bflat\b|breite/, "garment_chest"],
@@ -98,6 +108,9 @@ function guessMeasure(header: string): MeasureKey {
     [/head|kopf|tête|\bbaş\b/, "head"],
     [/\bhand|\bmain\b|\bel\b/, "hand"],
     [/thigh|oberschenkel|cuisse|uyluk/, "thigh"],
+    [/calf|wade|mollet|baldır/, "calf"],
+    [/wrist|handgelenk|poignet|bilek/, "wrist"],
+    [/rise|leibhöhe|ağ\b/, "rise"],
   ];
   const match = aliases.find(([pattern]) => pattern.test(text));
   if (match) return match[1];
@@ -106,7 +119,7 @@ function guessMeasure(header: string): MeasureKey {
 }
 
 export type CsvImport =
-  | { ok: true; columns: ChartColumn[]; rows: ChartRow[]; unit: Unit | null; warnings: string[] }
+  | { ok: true; columns: ChartColumn[]; rows: ChartRow[]; unit: LengthUnit | null; weightUnit: WeightUnit | null; warnings: string[] }
   | { ok: false; error: string };
 
 export function importCsv(text: string): CsvImport {
@@ -121,21 +134,30 @@ export function importCsv(text: string): CsvImport {
   const headers = header.slice(0, LIMITS.columns);
   const rowsIn = body.slice(0, LIMITS.rows);
 
-  let unit: Unit | null = null;
+  let unit: LengthUnit | null = null;
+  let weightUnit: WeightUnit | null = null;
   const columns = headers.map((raw, index) => {
     const unitMatch = UNIT_IN_HEADER.exec(raw);
     const label = raw.replace(UNIT_IN_HEADER, "").trim().slice(0, LIMITS.label) || `Column ${index + 1}`;
     if (index === 0) return createColumn("size", label);
-    if (unitMatch && !unit) unit = unitMatch[1]!.toLowerCase() === "cm" ? "cm" : "in";
+    const headerUnit = unitMatch ? unitFromHeader(unitMatch[1]!) : null;
     const values = rowsIn.map((r) => r[index] ?? "").filter(Boolean);
     const numeric = values.filter((v) => parseMeasurement(v)).length;
     const isMeasure = values.length > 0 && numeric / values.length >= 0.6;
-    return isMeasure || unitMatch ? createColumn("measure", label, guessMeasure(label)) : createColumn("text", label);
+    if (!isMeasure && !headerUnit) return createColumn("text", label);
+    let measure = guessMeasure(label);
+    if (headerUnit === "kg" || headerUnit === "lb") {
+      if (!isWeightMeasure(measure)) measure = "weight";
+      weightUnit ??= headerUnit;
+    } else if (headerUnit) {
+      unit ??= headerUnit;
+    }
+    return createColumn("measure", label, measure);
   });
 
   const rows = rowsIn
     .filter((r) => (r[0] ?? "").trim() !== "")
     .map((r) => createRow(Object.fromEntries(columns.map((c, i) => [c.id, (r[i] ?? "").slice(0, LIMITS.cell)]))));
   if (!rows.length) return { ok: false, error: "No sizes found. The first column should hold the size names." };
-  return { ok: true, columns, rows, unit, warnings };
+  return { ok: true, columns, rows, unit, weightUnit, warnings };
 }

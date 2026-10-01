@@ -6,7 +6,6 @@ import {
   describeAssignment,
   duplicateChart,
   emptyAssignment,
-  resolveDiagram,
   validateChart,
   type SizeChart,
 } from "~/lib/chart";
@@ -100,25 +99,5 @@ describe("describeAssignment", () => {
         tags: ["x"],
       }),
     ).toBe("2 collections, 1 tag");
-  });
-});
-
-describe("resolveDiagram", () => {
-  it.each([
-    ["womens-tops", "torso"],
-    ["bottoms", "legs"],
-    ["tshirt-flat", "garment"],
-    ["mens-shoes", "foot"],
-    ["hats", "head"],
-    ["gloves", "hand"],
-    ["pets", "pet"],
-  ])("%s → %s", (key, diagram) => {
-    expect(resolveDiagram(chartFromTemplate(getTemplate(key)!))).toBe(diagram);
-  });
-
-  it("respects an explicit choice", () => {
-    const chart = blankChart();
-    chart.guide.diagram = "none";
-    expect(resolveDiagram(chart)).toBe("none");
   });
 });

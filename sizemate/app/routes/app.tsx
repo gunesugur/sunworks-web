@@ -31,6 +31,7 @@ export default function App() {
         </a>
         <a href="/app/charts">Size charts</a>
         <a href="/app/settings">Appearance</a>
+        <a href="/app/insights">Insights</a>
         <a href="/app/plans">Plans</a>
       </NavMenu>
       <Outlet />

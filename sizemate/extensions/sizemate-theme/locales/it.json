@@ -5,6 +5,10 @@
     "units": "Unità",
     "cm": "cm",
     "in": "in",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Guida alle taglie",
       "guide": "Come misurarsi",
@@ -54,7 +58,30 @@
       "garment_chest": "Stendi il capo e misura in orizzontale, appena sotto gli scalfi.",
       "garment_waist": "Stendi il capo e misura in orizzontale lungo la cintura.",
       "garment_length": "Stendi il capo e misura dal punto più alto della spalla all'orlo.",
-      "sleeve": "Misura dalla cucitura della spalla alla fine della manica."
+      "sleeve": "Misura dalla cucitura della spalla alla fine della manica.",
+      "weight": "Pesati senza scarpe, preferibilmente al mattino.",
+      "calf": "Misura la circonferenza del polpaccio nel punto più largo.",
+      "wrist": "Avvolgi il metro intorno al polso, appena sotto l'osso.",
+      "finger": "Avvolgi una striscia di carta alla base del dito, segna il punto di sovrapposizione e misura la lunghezza.",
+      "pet_weight": "Pesati tenendo in braccio il tuo animale, poi sottrai il tuo peso.",
+      "garment_shoulder": "Stendi il capo e misura in linea retta da una cucitura della spalla all'altra.",
+      "garment_hips": "Stendi i pantaloni e misura in linea retta il punto più largo dei fianchi.",
+      "garment_inseam": "Stendi i pantaloni e misura dalla cucitura del cavallo all'orlo.",
+      "rise": "Misura dalla cucitura del cavallo al bordo superiore della cintura.",
+      "ring_diameter": "Misura il diametro interno di un anello che ti sta bene.",
+      "ring_circumference": "La circonferenza interna dell'anello. Confrontala con la misura del tuo dito."
+    },
+    "text_size": "Testo più grande",
+    "fitscale": {
+      "label": "Vestibilità",
+      "small": "Veste piccolo",
+      "true": "Veste regolare",
+      "large": "Veste grande",
+      "s0": "Veste regolare.",
+      "s1": "Veste leggermente piccolo.",
+      "s2": "Veste piccolo. Consigliamo una taglia in più.",
+      "l1": "Veste leggermente grande.",
+      "l2": "Veste grande. Valuta una taglia in meno."
     }
   }
 }

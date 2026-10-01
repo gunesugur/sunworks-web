@@ -79,3 +79,22 @@ describe("chartToCsv", () => {
     expect(chartToCsv(chart)).toContain(`"'=HYPERLINK(""x"")"`);
   });
 });
+
+describe("CSV with millimetres and weights", () => {
+  it("reads mm, kg and lb from the headers", () => {
+    const result = importCsv("Size,Inside diameter (mm),Weight (kg)\nS,16,10-12\nM,17,12-14\n");
+    if (!result.ok) throw new Error(result.error);
+    expect(result.unit).toBe("mm");
+    expect(result.weightUnit).toBe("kg");
+    expect(result.columns.map((c) => c.measure)).toEqual([undefined, "ring_diameter", "weight"]);
+    const pounds = importCsv("Size,Height (in),Weight (lbs)\n2T,33-35,28-30\n3T,35-38,31-33\n");
+    if (!pounds.ok) throw new Error(pounds.error);
+    expect(pounds.unit).toBe("in");
+    expect(pounds.weightUnit).toBe("lb");
+  });
+
+  it("exports weight columns in the weight unit", () => {
+    const csv = chartToCsv(chartFromTemplate(getTemplate("kids-height-weight")!));
+    expect(csv.split("\r\n")[0]).toBe("EU size,Age,Height (cm),Weight (kg)");
+  });
+});

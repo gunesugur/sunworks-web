@@ -5,6 +5,10 @@
     "units": "Unidades",
     "cm": "cm",
     "in": "pol.",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Tabela de medidas",
       "guide": "Como medir",
@@ -54,7 +58,30 @@
       "garment_chest": "Estenda a peça e meça de um lado ao outro, logo abaixo das cavas.",
       "garment_waist": "Estenda a peça e meça o cós de um lado ao outro.",
       "garment_length": "Estenda a peça e meça do ponto mais alto do ombro até a barra.",
-      "sleeve": "Meça da costura do ombro até o fim da manga."
+      "sleeve": "Meça da costura do ombro até o fim da manga.",
+      "weight": "Pese-se sem sapatos, de preferência pela manhã.",
+      "calf": "Meça ao redor da parte mais larga da panturrilha.",
+      "wrist": "Passe a fita ao redor do pulso, logo abaixo do osso.",
+      "finger": "Enrole uma tira de papel na base do dedo, marque onde ela se sobrepõe e meça o comprimento.",
+      "pet_weight": "Pese-se segurando seu pet e subtraia o seu próprio peso.",
+      "garment_shoulder": "Estenda a peça e meça em linha reta de uma costura do ombro à outra.",
+      "garment_hips": "Estenda a calça e meça em linha reta a parte mais larga do quadril.",
+      "garment_inseam": "Estenda a calça e meça da costura do gancho até a barra.",
+      "rise": "Meça da costura do gancho até o topo do cós.",
+      "ring_diameter": "Meça o diâmetro interno de um anel que sirva bem em você.",
+      "ring_circumference": "A medida ao redor do interior do anel. Compare com a medida do seu dedo."
+    },
+    "text_size": "Texto maior",
+    "fitscale": {
+      "label": "Caimento",
+      "small": "Veste pequeno",
+      "true": "Veste normal",
+      "large": "Veste grande",
+      "s0": "Veste normal.",
+      "s1": "Veste um pouco pequeno.",
+      "s2": "Veste pequeno. Recomendamos um tamanho acima.",
+      "l1": "Veste um pouco grande.",
+      "l2": "Veste grande. Considere um tamanho abaixo."
     }
   }
 }

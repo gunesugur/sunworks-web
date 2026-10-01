@@ -31,7 +31,12 @@ describe("sizemate-core.liquid", () => {
     const dom = parse(await renderSnippet(en, { publication: publication(), product }));
     expect(dom.querySelector(".sizemate-trigger")?.textContent?.trim()).toBe("Size chart");
     expect(dom.querySelector(".sizemate-title")?.textContent).toBe("Women's size chart");
-    expect([...dom.querySelectorAll("thead th")].map((th) => th.textContent?.replace(/\s+/g, " ").trim())).toEqual([
+    const headerText = (th: Element) => {
+      const copy = th.cloneNode(true) as Element;
+      copy.querySelector(".sizemate-num")?.remove();
+      return copy.textContent?.replace(/\s+/g, " ").trim();
+    };
+    expect([...dom.querySelectorAll("thead th")].map(headerText)).toEqual([
       "Size",
       "Bust (cm)",
       "Waist (cm)",
@@ -44,8 +49,11 @@ describe("sizemate-core.liquid", () => {
       "How to measure",
       "Find my size",
     ]);
-    expect(dom.querySelector(".sizemate-howto dd")?.textContent).toMatch(/fullest part of your bust/);
-    expect(dom.querySelector(".sizemate-diagram")?.getAttribute("src")).toBe("/assets/diagram-torso.svg");
+    expect(dom.querySelector(".sizemate-howto-item p")?.textContent).toMatch(/fullest part of your bust/);
+    expect(dom.querySelector(".sizemate-guide-figure svg.sizemate-figure--body-f")).not.toBeNull();
+    expect(dom.querySelectorAll(".sizemate-guide-figure .sizemate-fig-badge")).toHaveLength(3);
+    expect([...dom.querySelectorAll("thead .sizemate-num")].map((n) => n.textContent)).toEqual(["1", "2", "3"]);
+    expect(dom.querySelector("[data-sizemate]")?.getAttribute("data-runtime")).toBe("/assets/sizemate-runtime.js");
     expect(dom.querySelector(".sizemate-footer")).toBeNull();
   });
 
@@ -67,27 +75,103 @@ describe("sizemate-core.liquid", () => {
     const dom = parse(
       await renderSnippet(en, {
         publication: publication({
-          settings: { buttonLabel: "Find your fit", buttonStyle: "filled", alignment: "center", accentColor: "#aa0000", layout: "drawer", icon: "none" },
+          settings: {
+            buttonLabel: "Find your fit",
+            buttonStyle: "filled",
+            alignment: "center",
+            accentColor: "#aa0000",
+            container: "drawer",
+            icon: "none",
+            textScale: 125,
+            tableStyle: "striped",
+            colorMode: "dark",
+          },
         }),
         product,
       }),
     );
     const root = dom.querySelector<HTMLElement>("[data-sizemate]")!;
     expect(root.className).toContain("sizemate--align-center");
-    expect(root.getAttribute("style")).toContain("--sizemate-accent: #aa0000");
+    expect(root.getAttribute("style")).toContain("--sm-c-accent:#aa0000;");
+    expect(root.getAttribute("style")).toContain("--sm-scale:1.25;");
+    expect(root.dataset.table).toBe("striped");
+    expect(root.dataset.mode).toBe("dark");
     expect(dom.querySelector(".sizemate-trigger")?.className).toContain("sizemate-trigger--filled");
     expect(dom.querySelector(".sizemate-trigger")?.textContent?.trim()).toBe("Find your fit");
     expect(dom.querySelector(".sizemate-icon")).toBeNull();
     expect(dom.querySelector("dialog")?.className).toContain("sizemate-dialog--drawer");
   });
 
-  it("picks inches for US shoppers and centimetres elsewhere", async () => {
+  it("picks imperial for US shoppers and metric elsewhere", async () => {
     const us = parse(await renderSnippet(en, { publication: publication(), product, country: "US" }));
     const de = parse(await renderSnippet(en, { publication: publication(), product, country: "DE" }));
-    expect(us.querySelector("[data-sizemate]")?.getAttribute("data-default-unit")).toBe("in");
-    expect(de.querySelector("[data-sizemate]")?.getAttribute("data-default-unit")).toBe("cm");
-    const fixed = parse(await renderSnippet(en, { publication: publication({ settings: { defaultUnit: "cm" } }), product, country: "US" }));
-    expect(fixed.querySelector("[data-sizemate]")?.getAttribute("data-default-unit")).toBe("cm");
+    expect(us.querySelector("[data-sizemate]")?.getAttribute("data-default-system")).toBe("imperial");
+    expect(de.querySelector("[data-sizemate]")?.getAttribute("data-default-system")).toBe("metric");
+    const fixed = parse(await renderSnippet(en, { publication: publication({ settings: { defaultUnit: "metric" } }), product, country: "US" }));
+    expect(fixed.querySelector("[data-sizemate]")?.getAttribute("data-default-system")).toBe("metric");
+  });
+
+  it("labels the unit switch with the chart's own units", async () => {
+    const labels = async (key: string) => {
+      const dom = parse(await renderSnippet(en, { publication: publication({ key }), product }));
+      return [...dom.querySelectorAll("[data-sizemate-system]")].map((b) => b.textContent);
+    };
+    expect(await labels("womens-tops")).toEqual(["cm", "in"]);
+    expect(await labels("rings")).toEqual(["mm", "in"]);
+    expect(await labels("kids-height-weight")).toEqual(["cm · kg", "in · lb"]);
+    const dom = parse(await renderSnippet(en, { publication: publication({ key: "kids-height-weight" }), product }));
+    expect([...dom.querySelectorAll("thead [data-sizemate-unit-label]")].map((l) => l.textContent)).toEqual(["(cm)", "(kg)"]);
+    expect(dom.querySelector("td[data-dim='w']")?.getAttribute("data-raw")).toBe("14–16");
+  });
+
+  it("puts everything on one page in the stacked layout", async () => {
+    const dom = parse(await renderSnippet(en, { publication: publication({ settings: { arrangement: "stacked" } }), product }));
+    expect(dom.querySelector("[role='tablist']")).toBeNull();
+    expect([...dom.querySelectorAll(".sizemate-section-title")].map((h) => h.textContent)).toEqual(["How to measure", "Find my size"]);
+    expect([...dom.querySelectorAll<HTMLElement>("[data-sizemate-panel]")].every((p) => !p.hidden)).toBe(true);
+  });
+
+  it("shows the illustration, or the chart's photo, beside the chart in the split layout", async () => {
+    const split = parse(await renderSnippet(en, { publication: publication({ settings: { arrangement: "split" } }), product }));
+    expect(split.querySelector(".sizemate-layout--split .sizemate-media svg.sizemate-figure")).not.toBeNull();
+    // The figure moved to the card, so the guide doesn't repeat it.
+    expect(split.querySelector(".sizemate-guide-figure")).toBeNull();
+
+    const chart = chartFromTemplate(getTemplate("womens-tops")!);
+    chart.image = { url: "https://cdn.shopify.com/s/files/1/model.jpg?v=1", alt: "Model wearing size S" };
+    const withPhoto = parse(
+      await renderSnippet(en, { publication: buildPublication([chart], { ...DEFAULT_SETTINGS, arrangement: "split" }, "pro"), product }),
+    );
+    const img = withPhoto.querySelector<HTMLImageElement>(".sizemate-media img.sizemate-photo")!;
+    expect(img.getAttribute("src")).toBe("https://cdn.shopify.com/s/files/1/model.jpg?v=1&width=720");
+    expect(img.alt).toBe("Model wearing size S");
+    expect(withPhoto.querySelector(".sizemate-guide-figure svg")).not.toBeNull();
+  });
+
+  it("opens in place with the inline container", async () => {
+    const dom = parse(await renderSnippet(en, { publication: publication({ settings: { container: "inline" } }), product }));
+    expect(dom.querySelector("dialog")).toBeNull();
+    const region = dom.querySelector<HTMLElement>("[data-sizemate-dialog]")!;
+    expect(region.getAttribute("role")).toBe("region");
+    expect(region.hidden).toBe(true);
+    expect(dom.querySelector(".sizemate-trigger")?.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("shows the fit scale on Pro", async () => {
+    const chart = chartFromTemplate(getTemplate("womens-tops")!);
+    chart.fitScale = -1;
+    const pro = parse(await renderSnippet(en, { publication: buildPublication([chart], DEFAULT_SETTINGS, "pro"), product }));
+    expect(pro.querySelector(".sizemate-fitscale-text")?.textContent).toBe("Fit: Runs slightly small.");
+    expect(pro.querySelector<HTMLElement>(".sizemate-fitscale-dot")?.getAttribute("style")).toBe("--sm-pos: 25%");
+    const free = parse(await renderSnippet(en, { publication: buildPublication([chart], DEFAULT_SETTINGS, "free"), product }));
+    expect(free.querySelector(".sizemate-fitscale")).toBeNull();
+  });
+
+  it("offers the larger-text button unless switched off", async () => {
+    const on = parse(await renderSnippet(en, { publication: publication(), product }));
+    expect(on.querySelector("[data-sizemate-textsize]")?.getAttribute("aria-label")).toBe("Larger text");
+    const off = parse(await renderSnippet(en, { publication: publication({ settings: { textSizeToggle: false } }), product }));
+    expect(off.querySelector("[data-sizemate-textsize]")).toBeNull();
   });
 
   it("shows the merchant's translations and translated interface text", async () => {

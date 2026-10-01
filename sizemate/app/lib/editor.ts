@@ -5,8 +5,8 @@
  */
 
 import { createColumn, createRow, LIMITS, type ChartColumn, type ColumnKind, type SizeChart } from "./chart";
-import { getMeasure, type MeasureKey } from "./measures";
-import { convertRange, formatRange, parseMeasurement, type Unit } from "./units";
+import { getMeasure, isWeightMeasure, type MeasureKey } from "./measures";
+import { convertRange, formatRange, parseMeasurement, type LengthUnit, type WeightUnit } from "./units";
 
 export function setCell(chart: SizeChart, rowId: string, columnId: string, value: string): SizeChart {
   return {
@@ -88,24 +88,44 @@ export function setColumnType(chart: SizeChart, columnId: string, type: "text" |
   };
 }
 
-/** Switches the chart's unit, optionally converting every measurement cell. */
-export function changeUnit(chart: SizeChart, unit: Unit, convert: boolean): SizeChart {
+/**
+ * Switches the unit of the chart's length columns (cm, mm, in), optionally
+ * converting every length cell. Weight columns are left alone.
+ */
+export function changeUnit(chart: SizeChart, unit: LengthUnit, convert: boolean): SizeChart {
   if (chart.unit === unit) return chart;
   if (!convert) return { ...chart, unit };
-  const measureIds = new Set(chart.columns.filter((c) => c.kind === "measure").map((c) => c.id));
+  const ids = chart.columns.filter((c) => c.kind === "measure" && !isWeightMeasure(c.measure ?? "")).map((c) => c.id);
+  return { ...convertColumns(chart, ids, chart.unit, unit), unit };
+}
+
+/** Switches the unit of the chart's weight columns (kg, lb), optionally converting them. */
+export function changeWeightUnit(chart: SizeChart, weightUnit: WeightUnit, convert: boolean): SizeChart {
+  if (chart.weightUnit === weightUnit) return chart;
+  if (!convert) return { ...chart, weightUnit };
+  const ids = chart.columns.filter((c) => c.kind === "measure" && isWeightMeasure(c.measure ?? "")).map((c) => c.id);
+  return { ...convertColumns(chart, ids, chart.weightUnit, weightUnit), weightUnit };
+}
+
+function convertColumns(chart: SizeChart, columnIds: string[], from: LengthUnit | WeightUnit, to: LengthUnit | WeightUnit): SizeChart {
+  const ids = new Set(columnIds);
   return {
     ...chart,
-    unit,
     rows: chart.rows.map((row) => ({
       ...row,
       cells: Object.fromEntries(
         Object.entries(row.cells).map(([key, value]) => {
-          const range = measureIds.has(key) ? parseMeasurement(value) : null;
-          return [key, range ? formatRange(convertRange(range, chart.unit, unit)) : value];
+          const range = ids.has(key) ? parseMeasurement(value) : null;
+          return [key, range ? formatRange(convertRange(range, from, to), to) : value];
         }),
       ),
     })),
   };
+}
+
+/** True when the chart has at least one weight column (height & weight charts, pets). */
+export function hasWeightColumns(chart: SizeChart): boolean {
+  return chart.columns.some((c) => c.kind === "measure" && isWeightMeasure(c.measure ?? ""));
 }
 
 /** Pastes a block of cells (e.g. copied from a spreadsheet) starting at a cell. */

@@ -11,11 +11,16 @@ export type PlanId = "free" | "pro" | "plus";
 
 export type Feature =
   | "unlimitedCharts"
+  | "allTemplates"
   | "removeBranding"
   | "customStyle"
+  | "chartImage"
+  | "fitScale"
   | "csv"
   | "fitFinder"
-  | "translations";
+  | "fitFinderAll"
+  | "translations"
+  | "insights";
 
 export interface Plan {
   id: PlanId;
@@ -31,20 +36,33 @@ export interface Plan {
 
 export const TRIAL_DAYS = 7;
 
+const PRO_FEATURES: readonly Feature[] = [
+  "unlimitedCharts",
+  "allTemplates",
+  "removeBranding",
+  "customStyle",
+  "chartImage",
+  "fitScale",
+  "csv",
+  "fitFinder",
+];
+
 export const PLANS: Record<PlanId, Plan> = {
   free: {
     id: "free",
     name: "Free",
     monthlyPrice: 0,
     yearlyPrice: 0,
-    tagline: "One great size chart for a focused store.",
+    tagline: "A polished size chart that matches your theme.",
     chartLimit: 1,
     features: [],
     highlights: [
       "1 size chart on any number of products",
-      "10 ready-made templates",
-      "cm / inch switch for shoppers",
-      "Measuring guide with diagrams",
+      "11 essential templates",
+      "Matches your theme's fonts and colours, light or dark",
+      "How-to-measure guide with illustrations",
+      "Metric and imperial: cm, mm, inches, feet, kg and lb",
+      "Accessible: keyboard, screen readers, larger text",
       "Shopper-facing text in 8 languages",
     ],
   },
@@ -53,15 +71,16 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Pro",
     monthlyPrice: 4.99,
     yearlyPrice: 49.9,
-    tagline: "For stores with more than one kind of product.",
+    tagline: "Every template, your design and a size finder for clothing.",
     chartLimit: Number.POSITIVE_INFINITY,
-    features: ["unlimitedCharts", "removeBranding", "customStyle", "csv"],
+    features: PRO_FEATURES,
     highlights: [
-      "Unlimited size charts",
-      "Rules by collection, type, vendor, tag or product",
-      "Your colours, icon and drawer layout",
-      "No Sizemate branding",
-      "CSV import and export",
+      "Unlimited size charts and rules",
+      "The full library: 60 templates",
+      "Fit Finder for women's, men's, unisex and kids' clothing",
+      "Design studio: 7 styles, colours, fonts, drawer and inline layouts",
+      "Photo card next to the chart and a runs small / large scale",
+      "No Sizemate branding, CSV import and export",
     ],
   },
   plus: {
@@ -69,13 +88,14 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Plus",
     monthlyPrice: 9.99,
     yearlyPrice: 99.9,
-    tagline: "Help shoppers pick the right size and cut returns.",
+    tagline: "Size advice on every product, in every language, with insights.",
     chartLimit: Number.POSITIVE_INFINITY,
-    features: ["unlimitedCharts", "removeBranding", "customStyle", "csv", "fitFinder", "translations"],
+    features: [...PRO_FEATURES, "fitFinderAll", "translations", "insights"],
     highlights: [
       "Everything in Pro",
-      "Fit Finder: size recommendations from shopper measurements",
+      "Fit Finder on every chart: shoes, bras, rings, pets and your own",
       "Translate charts for every store language",
+      "Insights: chart views, Fit Finder use and the sizes shoppers get",
       "Priority support",
     ],
   },
@@ -85,11 +105,16 @@ export const PLAN_ORDER: readonly PlanId[] = ["free", "pro", "plus"];
 
 export const FEATURE_LABELS: Record<Feature, string> = {
   unlimitedCharts: "Unlimited size charts",
+  allTemplates: "Full template library",
   removeBranding: "Remove Sizemate branding",
-  customStyle: "Custom colours, icon and drawer layout",
+  customStyle: "Design studio",
+  chartImage: "Photo card",
+  fitScale: "Fit scale",
   csv: "CSV import and export",
-  fitFinder: "Fit Finder",
+  fitFinder: "Fit Finder for clothing",
+  fitFinderAll: "Fit Finder on every chart",
   translations: "Chart translations",
+  insights: "Insights",
 };
 
 export function hasFeature(plan: PlanId, feature: Feature): boolean {

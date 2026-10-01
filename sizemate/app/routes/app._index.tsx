@@ -205,12 +205,30 @@ export default function Home() {
         </s-box>
       </s-section>
 
-      {data.plan !== "plus" && (
-        <s-section heading="Cut size-related returns with the Fit Finder">
+      {data.plan === "free" && (
+        <s-section heading="Do more with Pro">
+          <s-stack gap="base">
+            <s-unordered-list>
+              <s-list-item>Fit Finder: shoppers enter their measurements and get their size from your chart, with one click to select it.</s-list-item>
+              <s-list-item>The full template library, from plus sizes and jeans to bras, rings and dog harnesses.</s-list-item>
+              <s-list-item>Design studio: 7 styles, your colours and fonts, drawer and in-page layouts, a photo card beside the chart.</s-list-item>
+              <s-list-item>Unlimited charts, a fit scale, CSV import and no Sizemate branding.</s-list-item>
+            </s-unordered-list>
+            <s-stack direction="inline" gap="base">
+              <s-button variant="primary" href="/app/plans">
+                Try Pro free for 7 days
+              </s-button>
+            </s-stack>
+          </s-stack>
+        </s-section>
+      )}
+
+      {data.plan === "pro" && (
+        <s-section heading="Size advice on every product with Plus">
           <s-stack gap="base">
             <s-paragraph>
-              Shoppers enter their measurements and get a size recommendation from your own chart, with one click to select that size.
-              No AI guesswork, and measurements never leave the shopper&apos;s device.
+              Add the Fit Finder to shoes, bras, rings, pet products and your own charts, translate charts into every store language, and
+              see Insights: how often shoppers open your charts and which sizes they get.
             </s-paragraph>
             <s-stack direction="inline" gap="base">
               <s-button href="/app/plans">See the Plus plan</s-button>
@@ -230,7 +248,7 @@ export default function Home() {
       <s-section slot="aside" heading="Built to stay out of your way">
         <s-unordered-list>
           <s-list-item>Never edits your theme code. Uninstalling leaves nothing behind.</s-list-item>
-          <s-list-item>Loads from Shopify&apos;s CDN with no extra requests, so pages stay fast.</s-list-item>
+          <s-list-item>Loads from Shopify&apos;s CDN and matches your theme, light or dark, with no setup.</s-list-item>
           <s-list-item>Stores no shopper data.</s-list-item>
         </s-unordered-list>
       </s-section>

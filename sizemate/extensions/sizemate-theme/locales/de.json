@@ -5,6 +5,10 @@
     "units": "Einheiten",
     "cm": "cm",
     "in": "in",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Größentabelle",
       "guide": "Richtig messen",
@@ -54,7 +58,30 @@
       "garment_chest": "Lege das Kleidungsstück flach hin und miss gerade von Seite zu Seite, knapp unter den Armlöchern.",
       "garment_waist": "Lege das Kleidungsstück flach hin und miss gerade über den Bund.",
       "garment_length": "Lege das Kleidungsstück flach hin und miss vom höchsten Punkt der Schulter bis zum unteren Saum.",
-      "sleeve": "Miss von der Schulternaht bis zum Ärmelende."
+      "sleeve": "Miss von der Schulternaht bis zum Ärmelende.",
+      "weight": "Wiegen Sie sich ohne Schuhe, am besten morgens.",
+      "calf": "Messen Sie um die breiteste Stelle Ihrer Wade.",
+      "wrist": "Legen Sie das Maßband eng um das Handgelenk, direkt unterhalb des Knöchels.",
+      "finger": "Wickeln Sie einen Papierstreifen um den Fingeransatz, markieren Sie die Überlappung und messen Sie die Länge.",
+      "pet_weight": "Wiegen Sie sich mit Ihrem Tier auf dem Arm und ziehen Sie Ihr eigenes Gewicht ab.",
+      "garment_shoulder": "Legen Sie das Kleidungsstück flach hin und messen Sie gerade von Schulternaht zu Schulternaht.",
+      "garment_hips": "Legen Sie die Hose flach hin und messen Sie gerade über die breiteste Stelle der Hüfte.",
+      "garment_inseam": "Legen Sie die Hose flach hin und messen Sie von der Schrittnaht bis zum Saum.",
+      "rise": "Messen Sie von der Schrittnaht bis zur Oberkante des Bundes.",
+      "ring_diameter": "Messen Sie den Innendurchmesser eines Rings, der Ihnen gut passt.",
+      "ring_circumference": "Der Umfang innen im Ring. Vergleichen Sie ihn mit Ihrem Fingerumfang."
+    },
+    "text_size": "Größere Schrift",
+    "fitscale": {
+      "label": "Passform",
+      "small": "Fällt klein aus",
+      "true": "Normal",
+      "large": "Fällt groß aus",
+      "s0": "Fällt normal aus.",
+      "s1": "Fällt etwas klein aus.",
+      "s2": "Fällt klein aus. Wir empfehlen eine Größe größer.",
+      "l1": "Fällt etwas groß aus.",
+      "l2": "Fällt groß aus. Eine Größe kleiner könnte besser passen."
     }
   }
 }

@@ -1,14 +1,15 @@
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { boundary } from "@shopify/shopify-app-react-router/server";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ActionFunctionArgs, HeadersFunction, LoaderFunctionArgs } from "react-router";
-import { useFetcher, useLoaderData } from "react-router";
+import { useFetcher, useLoaderData, useNavigate } from "react-router";
 
-import { FeatureBadge } from "../components/ui";
+import { FeatureBadge, valueOf } from "../components/ui";
 import { blankChart, type SizeChart } from "../lib/chart";
 import { importCsv } from "../lib/csv";
+import { chooseFigure, figureSvg } from "../lib/figures";
 import { canCreateChart, hasFeature, PLANS } from "../lib/plans";
-import { chartFromTemplate, getTemplate, TEMPLATES } from "../lib/templates";
+import { chartFromTemplate, ESSENTIAL_COUNT, getTemplate, templateAllowed, TEMPLATE_GROUPS, TEMPLATES } from "../lib/templates";
 import { countCharts, PlanLimitError, saveChart, ValidationError } from "../models/charts.server";
 import { adminContext } from "../models/context.server";
 import { publish } from "../models/publisher.server";
@@ -20,14 +21,20 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     plan,
     canCreate: canCreateChart(plan, count),
     csvAllowed: hasFeature(plan, "csv"),
-    templates: TEMPLATES.map((t) => ({
-      key: t.key,
-      name: t.name,
-      group: t.group,
-      description: t.description,
-      columns: t.columns.map((c) => c.label),
-      rows: t.rows.slice(0, 3),
-    })),
+    templates: TEMPLATES.map((t) => {
+      const measures = t.columns.flatMap((c) => (c.measure ? [c.measure] : []));
+      const figure = chooseFigure(measures, t.key);
+      return {
+        key: t.key,
+        name: t.name,
+        group: t.group,
+        description: t.description,
+        locked: !templateAllowed(plan, t),
+        columns: t.columns.map((c) => c.label),
+        rows: t.rows.slice(0, 3),
+        figure: figure ? figureSvg(figure, []) : null,
+      };
+    }),
   };
 };
 
@@ -50,10 +57,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       columns: imported.columns,
       rows: imported.rows,
       unit: imported.unit ?? "cm",
+      weightUnit: imported.weightUnit ?? "kg",
     };
   } else {
     const template = getTemplate(String(form.get("template") ?? ""));
     if (!template) return { ok: false, message: "Template not found" };
+    if (!templateAllowed(plan, template)) return { ok: false, message: `“${template.name}” is in the Pro template library.` };
     chart = chartFromTemplate(template);
   }
 
@@ -72,6 +81,7 @@ export default function NewChart() {
   const { templates, canCreate, csvAllowed, plan } = useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
   const shopify = useAppBridge();
+  const navigate = useNavigate();
   const busy = fetcher.state !== "idle";
 
   useEffect(() => {
@@ -80,7 +90,17 @@ export default function NewChart() {
     }
   }, [fetcher.state, fetcher.data, shopify]);
 
-  const groups = [...new Set(templates.map((t) => t.group))];
+  const [group, setGroup] = useState<string>("All");
+  const [query, setQuery] = useState("");
+  const visible = useMemo(() => {
+    const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+    return templates.filter((t) => {
+      if (group !== "All" && t.group !== group) return false;
+      const haystack = `${t.name} ${t.description} ${t.group} ${t.columns.join(" ")}`.toLowerCase();
+      return words.every((word) => haystack.includes(word));
+    });
+  }, [templates, group, query]);
+  const lockedCount = templates.filter((t) => t.locked).length;
 
   const onFile = async (event: Event) => {
     const files = (event.currentTarget as unknown as { files?: readonly File[] }).files ?? [];
@@ -122,52 +142,96 @@ export default function NewChart() {
         Size charts
       </s-link>
 
-      {groups.map((group) => (
-        <s-section key={group} heading={group}>
-          <s-grid gridTemplateColumns="repeat(auto-fill, minmax(240px, 1fr))" gap="base">
-            {templates
-              .filter((t) => t.group === group)
-              .map((template) => (
-                <s-clickable
-                  key={template.key}
-                  border="base"
-                  borderRadius="base"
-                  padding="base"
-                  disabled={busy}
-                  accessibilityLabel={`Use the ${template.name} template`}
-                  onClick={() => fetcher.submit({ intent: "template", template: template.key }, { method: "post" })}
-                >
+      {lockedCount > 0 && (
+        <s-banner tone="info" heading={`${templates.length - lockedCount} templates are on your plan, ${lockedCount} more with Pro`}>
+          <s-paragraph>
+            Free includes {ESSENTIAL_COUNT} essentials. Pro unlocks the full library: plus sizes, jeans, bras, swimwear, suits, rings,
+            pet harnesses and more, each with real measurements to start from.
+          </s-paragraph>
+          <s-button slot="secondary-actions" href="/app/plans">
+            See plans
+          </s-button>
+        </s-banner>
+      )}
+
+      <s-section>
+        <s-stack gap="base">
+          <s-text-field
+            label="Search templates"
+            labelAccessibilityVisibility="exclusive"
+            icon="search"
+            placeholder="Search: jeans, bra, ring, dog…"
+            value={query}
+            onInput={(e) => setQuery(valueOf(e))}
+          />
+          <div className="sm-chips" role="group" aria-label="Category">
+            {["All", ...TEMPLATE_GROUPS].map((name) => (
+              <button key={name} type="button" aria-pressed={group === name} onClick={() => setGroup(name)}>
+                {name}
+              </button>
+            ))}
+          </div>
+          {visible.length === 0 && <s-text color="subdued">No templates match. Try another word, or start from a blank chart.</s-text>}
+          <s-grid gridTemplateColumns="repeat(auto-fill, minmax(260px, 1fr))" gap="base">
+            {visible.map((template) => (
+              <s-clickable
+                key={template.key}
+                border="base"
+                borderRadius="base"
+                padding="base"
+                disabled={busy}
+                accessibilityLabel={template.locked ? `${template.name}, on the Pro plan` : `Use the ${template.name} template`}
+                onClick={() =>
+                  template.locked
+                    ? shopify.toast.show(`“${template.name}” is in the Pro template library`, { action: "See plans", onAction: () => navigate("/app/plans") })
+                    : fetcher.submit({ intent: "template", template: template.key }, { method: "post" })
+                }
+              >
+                <div className="sm-template">
+                  {template.figure ? (
+                    <div className="sizemate sm-template-figure" aria-hidden="true" dangerouslySetInnerHTML={{ __html: template.figure }} />
+                  ) : (
+                    <div className="sm-template-figure sm-template-figure--empty" aria-hidden="true" />
+                  )}
                   <s-stack gap="small-200">
-                    <s-text type="strong">{template.name}</s-text>
+                    <s-stack direction="inline" gap="small-200" alignItems="center">
+                      <s-text type="strong">{template.name}</s-text>
+                      {template.locked && (
+                        <s-badge tone="info" icon="lock">
+                          Pro
+                        </s-badge>
+                      )}
+                    </s-stack>
                     <s-text color="subdued">{template.description}</s-text>
-                    {template.key !== "blank" && (
-                      <s-box paddingBlockStart="small-200">
-                        <table className="sm-template-table" aria-hidden="true">
-                          <thead>
-                            <tr>
-                              {template.columns.map((label) => (
-                                <th key={label}>{label}</th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {template.rows.map((row) => (
-                              <tr key={row[0]}>
-                                {row.map((cell, i) => (
-                                  <td key={i}>{cell}</td>
-                                ))}
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </s-box>
-                    )}
                   </s-stack>
-                </s-clickable>
-              ))}
+                </div>
+                {template.key !== "blank" && (
+                  <s-box paddingBlockStart="small-200">
+                    <table className="sm-template-table" aria-hidden="true">
+                      <thead>
+                        <tr>
+                          {template.columns.map((label) => (
+                            <th key={label}>{label}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {template.rows.map((row) => (
+                          <tr key={row[0]}>
+                            {row.map((cell, i) => (
+                              <td key={i}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </s-box>
+                )}
+              </s-clickable>
+            ))}
           </s-grid>
-        </s-section>
-      ))}
+        </s-stack>
+      </s-section>
 
       <s-section heading="Import from a spreadsheet">
         <s-stack gap="base">

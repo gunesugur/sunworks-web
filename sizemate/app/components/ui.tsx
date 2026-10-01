@@ -130,3 +130,31 @@ export function Select<T extends string>({
     </s-select>
   );
 }
+
+/** Small segmented toggle for view options (preview theme, device). */
+export function Segmented<T extends string>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: readonly Option<T>[];
+  onChange: (value: T) => void;
+}) {
+  return (
+    <div className="sm-segmented" role="group" aria-label={label}>
+      {options.map((option) => (
+        <button key={option.value} type="button" aria-pressed={option.value === value} onClick={() => onChange(option.value)}>
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Adds a "Pro" marker to option labels that need the design studio. */
+export function proLabel(label: string, locked: boolean): string {
+  return locked ? `${label} (Pro)` : label;
+}

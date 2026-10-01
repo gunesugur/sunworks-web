@@ -20,6 +20,8 @@ export interface StoreOptions {
   withEmbed?: boolean;
   country?: string;
   locale?: string;
+  /** Extra CSS standing in for the theme's own styles. */
+  themeCss?: string;
 }
 
 export function womensChart(): SizeChart {
@@ -46,6 +48,7 @@ export async function productPage(options: StoreOptions = {}): Promise<string> {
   <title>${PRODUCT.title}</title>
   <link rel="stylesheet" href="/assets/sizemate.css">
   <style>body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; color: #121212; } main { max-width: 480px; }</style>
+  <style>${options.themeCss ?? ""}</style>
 </head>
 <body>
   <main>

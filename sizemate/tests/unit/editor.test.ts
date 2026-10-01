@@ -5,7 +5,9 @@ import {
   addColumn,
   addRow,
   changeUnit,
+  changeWeightUnit,
   clipboardGrid,
+  hasWeightColumns,
   moveColumn,
   moveRow,
   pasteGrid,
@@ -109,5 +111,30 @@ describe("table edits", () => {
     expect(unreadableCells(chart)).toEqual([
       { rowId: chart.rows[1]!.id, columnId: chart.columns[2]!.id, column: "Waist", size: "S" },
     ]);
+  });
+});
+
+describe("weight columns", () => {
+  it("switches the weight unit without touching lengths", () => {
+    const kids = chartFromTemplate(getTemplate("kids-height-weight")!);
+    expect(hasWeightColumns(kids)).toBe(true);
+    const pounds = changeWeightUnit(kids, "lb", true);
+    const height = kids.columns.find((c) => c.measure === "height")!.id;
+    const weight = kids.columns.find((c) => c.measure === "weight")!.id;
+    expect(pounds.weightUnit).toBe("lb");
+    expect(pounds.rows[0]!.cells[weight]).toBe("30.9–35.3");
+    expect(pounds.rows[0]!.cells[height]).toBe(kids.rows[0]!.cells[height]);
+    const inches = changeUnit(kids, "in", true);
+    expect(inches.rows[0]!.cells[weight]).toBe(kids.rows[0]!.cells[weight]);
+    expect(inches.rows[0]!.cells[height]).toBe("36.6–38.6");
+    expect(changeWeightUnit(kids, "lb", false).rows).toBe(kids.rows);
+  });
+
+  it("formats millimetres without decimals", () => {
+    const shoes = chartFromTemplate(getTemplate("womens-shoes")!);
+    const mm = changeUnit(shoes, "mm", true);
+    const foot = shoes.columns.find((c) => c.measure === "foot_length")!.id;
+    expect(mm.rows[0]!.cells[foot]).toMatch(/^\d+(–\d+)?$/);
+    expect(hasWeightColumns(shoes)).toBe(false);
   });
 });

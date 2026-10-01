@@ -1,8 +1,18 @@
 import { describe, expect, it } from "vitest";
 
 import { validateChart } from "~/lib/chart";
+import { isBodyMeasure } from "~/lib/measures";
 import { PLANS } from "~/lib/plans";
-import { chartFromTemplate, TEMPLATES } from "~/lib/templates";
+import {
+  chartFromTemplate,
+  ESSENTIAL_COUNT,
+  fitFinderAllowed,
+  fitFinderFeature,
+  getTemplate,
+  templateAllowed,
+  TEMPLATE_GROUPS,
+  TEMPLATES,
+} from "~/lib/templates";
 import { parseMeasurement } from "~/lib/units";
 
 describe("templates", () => {
@@ -21,10 +31,14 @@ describe("templates", () => {
     }
   });
 
-  it("measurement ranges grow with the size", () => {
+  // Regular and tall lengths repeat the chest range, so sizes aren't in one order.
+  const MIXED_ORDER = new Set(["mens-big-tall"]);
+
+  it("body measurements grow with the size (the Fit Finder relies on it)", () => {
     for (const template of TEMPLATES) {
+      if (MIXED_ORDER.has(template.key)) continue;
       template.columns.forEach((column, index) => {
-        if (column.kind !== "measure") return;
+        if (column.kind !== "measure" || !column.measure || !isBodyMeasure(column.measure)) return;
         const mins = template.rows.map((row) => parseMeasurement(row[index] ?? "")?.min).filter((v) => v !== undefined);
         expect([...mins].sort((a, b) => a! - b!), `${template.key} ${column.label}`).toEqual(mins);
       });
@@ -35,9 +49,37 @@ describe("templates", () => {
     expect(new Set(TEMPLATES.map((t) => t.key)).size).toBe(TEMPLATES.length);
   });
 
-  it("matches the template count advertised on the Free plan", () => {
+  it("matches the template counts advertised on the plans", () => {
+    const essentials = ESSENTIAL_COUNT - 1; // the blank chart isn't a template to advertise
     const readyMade = TEMPLATES.filter((t) => t.key !== "blank").length;
-    expect(PLANS.free.highlights).toContain(`${readyMade} ready-made templates`);
+    expect(PLANS.free.highlights).toContain(`${essentials} essential templates`);
+    expect(PLANS.pro.highlights).toContain(`The full library: ${readyMade} templates`);
+  });
+
+  it("covers every group, with essentials for the main kinds of products", () => {
+    for (const group of TEMPLATE_GROUPS) expect(TEMPLATES.some((t) => t.group === group), group).toBe(true);
+    const essentialGroups = new Set(TEMPLATES.filter((t) => t.essential).map((t) => t.group));
+    for (const group of ["Women", "Men", "Kids & baby", "Footwear", "Start fresh"] as const) expect(essentialGroups.has(group), group).toBe(true);
+  });
+
+  it("gates the full library on Pro and keeps essentials free", () => {
+    expect(templateAllowed("free", getTemplate("womens-tops")!)).toBe(true);
+    expect(templateAllowed("free", getTemplate("blank")!)).toBe(true);
+    expect(templateAllowed("free", getTemplate("bras-cup")!)).toBe(false);
+    expect(templateAllowed("pro", getTemplate("bras-cup")!)).toBe(true);
+  });
+
+  it("puts the Fit Finder for clothing on Pro and for everything else on Plus", () => {
+    expect(fitFinderFeature("womens-tops")).toBe("fitFinder");
+    expect(fitFinderFeature("kids")).toBe("fitFinder");
+    expect(fitFinderFeature("unisex-tops")).toBe("fitFinder");
+    expect(fitFinderFeature("womens-shoes")).toBe("fitFinderAll");
+    expect(fitFinderFeature("rings")).toBe("fitFinderAll");
+    expect(fitFinderFeature("custom")).toBe("fitFinderAll");
+    expect(fitFinderAllowed("free", "womens-tops")).toBe(false);
+    expect(fitFinderAllowed("pro", "mens-tops")).toBe(true);
+    expect(fitFinderAllowed("pro", "dog-harness")).toBe(false);
+    expect(fitFinderAllowed("plus", "dog-harness")).toBe(true);
   });
 
   it("enables the Fit Finder only where body measurements exist", () => {

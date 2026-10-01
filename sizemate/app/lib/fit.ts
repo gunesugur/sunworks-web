@@ -6,8 +6,18 @@
  * extensions/sizemate-theme/assets/sizemate.js).
  */
 
-import { isBodyMeasure } from "./measure-kinds";
-import { convertRange, convertValue, parseMeasurement, type Range, type Unit } from "./units";
+import { isBodyMeasure, WEIGHT_MEASURE_KEYS } from "./measure-kinds";
+import {
+  convertRange,
+  convertValue,
+  displayUnit,
+  parseMeasurement,
+  type LengthUnit,
+  type Range,
+  type Unit,
+  type UnitSystem,
+  type WeightUnit,
+} from "./units";
 
 export type FitPreference = "snug" | "regular" | "relaxed";
 
@@ -19,9 +29,25 @@ export interface FitColumn {
 }
 
 export interface FitChart {
-  unit: Unit;
+  unit: LengthUnit;
+  weightUnit?: WeightUnit;
   columns: FitColumn[];
   rows: { id: string; cells: Record<string, string> }[];
+}
+
+/** The unit a column's values are stored in. */
+export function columnUnit(chart: FitChart, measure: string | undefined): Unit {
+  return measure && WEIGHT_MEASURE_KEYS.has(measure) ? (chart.weightUnit ?? "kg") : chart.unit;
+}
+
+/** The unit a shopper types a measurement in, for their unit system. */
+export function inputUnit(chart: FitChart, measure: string | undefined, system: UnitSystem): Unit {
+  return displayUnit(columnUnit(chart, measure), system);
+}
+
+/** Comparisons happen in centimetres and kilograms. */
+function baseUnit(unit: Unit): Unit {
+  return unit === "kg" || unit === "lb" ? "kg" : "cm";
 }
 
 export type MeasureStatus = "good" | "tight" | "loose";
@@ -87,7 +113,8 @@ function buildCandidates(chart: FitChart, columns: FitColumn[]): Candidate[] {
   for (const column of columns) {
     const parsed = chart.rows.flatMap((row, index) => {
       const range = parseMeasurement(row.cells[column.id] ?? "");
-      return range ? [{ index, range: convertRange(range, chart.unit, "cm") }] : [];
+      const unit = columnUnit(chart, column.measure);
+      return range ? [{ index, range: convertRange(range, unit, baseUnit(unit)) }] : [];
     });
     for (const [index, range] of widenPoints(parsed)) {
       candidates[index]!.ranges.set(column.measure!, range);
@@ -109,10 +136,14 @@ function offCentre(value: number, range: Range): number {
   return Math.abs(value - (range.min + range.max) / 2) / half;
 }
 
+/**
+ * @param measurements Values keyed by measure, in the shopper's unit system
+ *   (see inputUnit): cm or mm and kg for metric, in and lb for imperial.
+ */
 export function recommendSize(
   chart: FitChart,
   measurements: Record<string, number>,
-  inputUnit: Unit,
+  system: UnitSystem,
   preference: FitPreference = "regular",
 ): FitResult | null {
   const columns = fitColumns(chart).filter((c) => {
@@ -121,7 +152,12 @@ export function recommendSize(
   });
   if (!columns.length) return null;
 
-  const body = new Map(columns.map((c) => [c.measure!, convertValue(measurements[c.measure!]!, inputUnit, "cm")]));
+  const body = new Map(
+    columns.map((c) => {
+      const unit = inputUnit(chart, c.measure, system);
+      return [c.measure!, convertValue(measurements[c.measure!]!, unit, baseUnit(unit))] as const;
+    }),
+  );
   const labels = new Map(columns.map((c) => [c.measure!, c.label]));
 
   // A size is only comparable if it has a value for every measurement given.

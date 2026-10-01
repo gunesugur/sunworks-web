@@ -5,6 +5,7 @@ import { useLoaderData } from "react-router";
 
 import { PlanBadge } from "../components/ui";
 import { FEATURE_LABELS, PLAN_ORDER, PLANS, TRIAL_DAYS } from "../lib/plans";
+import { ESSENTIAL_COUNT, TEMPLATES } from "../lib/templates";
 import { pricingPageUrl } from "../models/billing.server";
 import { countCharts } from "../models/charts.server";
 import { adminContext } from "../models/context.server";
@@ -17,16 +18,22 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 const COMPARISON: { label: string; free: string | boolean; pro: string | boolean; plus: string | boolean }[] = [
   { label: "Size charts", free: "1", pro: "Unlimited", plus: "Unlimited" },
   { label: "Products per chart", free: "Unlimited", pro: "Unlimited", plus: "Unlimited" },
-  { label: "Ready-made templates", free: true, pro: true, plus: true },
-  { label: "cm / inch switch for shoppers", free: true, pro: true, plus: true },
-  { label: "Measuring guide with pictures", free: true, pro: true, plus: true },
-  { label: "Interface in 8 languages", free: true, pro: true, plus: true },
+  { label: "Templates", free: `${ESSENTIAL_COUNT} essentials`, pro: `All ${TEMPLATES.length}`, plus: `All ${TEMPLATES.length}` },
+  { label: "Matches your theme's fonts and colours, light and dark", free: true, pro: true, plus: true },
+  { label: "Numbered measuring illustrations", free: true, pro: true, plus: true },
+  { label: "Metric and imperial: cm, mm, in, ft, kg, lb", free: true, pro: true, plus: true },
+  { label: "Accessibility: keyboard, screen readers, larger text, high contrast", free: true, pro: true, plus: true },
+  { label: "Styles", free: "3", pro: "7 + design studio", plus: "7 + design studio" },
+  { label: "Drawer, in-page and picture card layouts", free: false, pro: true, plus: true },
+  { label: FEATURE_LABELS.chartImage, free: false, pro: true, plus: true },
+  { label: "Fit scale (runs small / large)", free: false, pro: true, plus: true },
   { label: "Rules by collection, type, vendor, tag or product", free: true, pro: true, plus: true },
-  { label: FEATURE_LABELS.customStyle, free: false, pro: true, plus: true },
   { label: FEATURE_LABELS.csv, free: false, pro: true, plus: true },
   { label: FEATURE_LABELS.removeBranding, free: false, pro: true, plus: true },
-  { label: FEATURE_LABELS.fitFinder, free: false, pro: false, plus: true },
+  { label: "Fit Finder: women's, men's, unisex and kids' clothing", free: false, pro: true, plus: true },
+  { label: "Fit Finder: shoes, bras, rings, pets and your own charts", free: false, pro: false, plus: true },
   { label: FEATURE_LABELS.translations, free: false, pro: false, plus: true },
+  { label: FEATURE_LABELS.insights, free: false, pro: false, plus: true },
 ];
 
 function Cell({ value }: { value: string | boolean }) {
@@ -45,7 +52,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Does Sizemate slow down my store?",
-    a: "No. It never edits your theme code, and everything loads from Shopify's own CDN with no extra requests to our servers.",
+    a: "No. It never edits your theme code, and everything loads from Shopify's own CDN. The chart works even if our servers are down.",
   },
   {
     q: "Is the Fit Finder AI?",

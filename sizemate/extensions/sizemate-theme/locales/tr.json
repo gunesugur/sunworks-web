@@ -5,6 +5,10 @@
     "units": "Birimler",
     "cm": "cm",
     "in": "inç",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Beden tablosu",
       "guide": "Nasıl ölçülür",
@@ -54,7 +58,30 @@
       "garment_chest": "Ürünü düz bir zemine ser ve kol altlarının hemen altından bir yandan diğerine düz ölç.",
       "garment_waist": "Ürünü düz bir zemine ser ve bel kısmını bir yandan diğerine düz ölç.",
       "garment_length": "Ürünü düz bir zemine ser ve omzun en yüksek noktasından etek ucuna kadar ölç.",
-      "sleeve": "Omuz dikişinden kol ucuna kadar ölç."
+      "sleeve": "Omuz dikişinden kol ucuna kadar ölç.",
+      "weight": "Ayakkabısız, tercihen sabah tartılın.",
+      "calf": "Baldırınızın en geniş yerinin çevresini ölçün.",
+      "wrist": "Mezurayı bilek kemiğinin hemen altından bileğinize sarın.",
+      "finger": "Parmağınızın dibine bir kağıt şerit sarın, üst üste geldiği yeri işaretleyin ve uzunluğu ölçün.",
+      "pet_weight": "Evcil hayvanınızı kucağınıza alıp tartılın, sonra kendi kilonuzu çıkarın.",
+      "garment_shoulder": "Ürünü düz bir yere serin ve bir omuz dikişinden diğerine düz ölçün.",
+      "garment_hips": "Pantolonu düz serin ve kalçanın en geniş yerini düz ölçün.",
+      "garment_inseam": "Pantolonu düz serin ve ağ dikişinden paça ucuna kadar ölçün.",
+      "rise": "Ağ dikişinden bel bandının üst kenarına kadar ölçün.",
+      "ring_diameter": "Size iyi oturan bir yüzüğün iç çapını ölçün.",
+      "ring_circumference": "Yüzüğün iç çevresi. Parmak ölçünüzle karşılaştırın."
+    },
+    "text_size": "Daha büyük yazı",
+    "fitscale": {
+      "label": "Kalıp",
+      "small": "Dar kalıp",
+      "true": "Standart kalıp",
+      "large": "Geniş kalıp",
+      "s0": "Standart kalıp.",
+      "s1": "Biraz dar kalıp.",
+      "s2": "Dar kalıp. Bir beden büyüğünü öneririz.",
+      "l1": "Biraz geniş kalıp.",
+      "l2": "Geniş kalıp. Bir beden küçüğünü düşünebilirsiniz."
     }
   }
 }

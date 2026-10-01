@@ -5,6 +5,10 @@
     "units": "Unidades",
     "cm": "cm",
     "in": "pulg.",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Guía de tallas",
       "guide": "Cómo medir",
@@ -54,7 +58,30 @@
       "garment_chest": "Extiende la prenda y mide de lado a lado, justo debajo de las sisas.",
       "garment_waist": "Extiende la prenda y mide la cintura de lado a lado.",
       "garment_length": "Extiende la prenda y mide desde el punto más alto del hombro hasta el bajo.",
-      "sleeve": "Mide desde la costura del hombro hasta el final de la manga."
+      "sleeve": "Mide desde la costura del hombro hasta el final de la manga.",
+      "weight": "Pésate sin zapatos, preferiblemente por la mañana.",
+      "calf": "Mide alrededor de la parte más ancha de la pantorrilla.",
+      "wrist": "Rodea la muñeca con la cinta justo debajo del hueso.",
+      "finger": "Rodea la base del dedo con una tira de papel, marca dónde se superpone y mide su longitud.",
+      "pet_weight": "Pésate con tu mascota en brazos y resta tu propio peso.",
+      "garment_shoulder": "Extiende la prenda y mide en línea recta de una costura del hombro a la otra.",
+      "garment_hips": "Extiende el pantalón y mide en línea recta la parte más ancha de la cadera.",
+      "garment_inseam": "Extiende el pantalón y mide desde la costura de la entrepierna hasta el bajo.",
+      "rise": "Mide desde la costura de la entrepierna hasta el borde superior de la cintura.",
+      "ring_diameter": "Mide el diámetro interior de un anillo que te quede bien.",
+      "ring_circumference": "La medida alrededor del interior del anillo. Compárala con la medida de tu dedo."
+    },
+    "text_size": "Texto más grande",
+    "fitscale": {
+      "label": "Ajuste",
+      "small": "Talla pequeño",
+      "true": "Talla normal",
+      "large": "Talla grande",
+      "s0": "Talla normal.",
+      "s1": "Talla un poco pequeño.",
+      "s2": "Talla pequeño. Te recomendamos una talla más.",
+      "l1": "Talla un poco grande.",
+      "l2": "Talla grande. Considera una talla menos."
     }
   }
 }

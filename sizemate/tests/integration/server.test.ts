@@ -13,6 +13,7 @@ const { publish, PublishError } = await import("~/models/publisher.server");
 const { syncPlan, pricingPageUrl } = await import("~/models/billing.server");
 const { chartFromTemplate, getTemplate } = await import("~/lib/templates");
 const { emptyAssignment } = await import("~/lib/chart");
+const insights = await import("~/models/insights.server");
 
 const SHOP = "demo.myshopify.com";
 
@@ -65,7 +66,7 @@ beforeEach(async () => {
 describe("charts repository", () => {
   it("creates charts in order and lists them back validated", async () => {
     const a = await charts.saveChart(SHOP, tops(), "pro");
-    const b = await charts.saveChart(SHOP, chartFromTemplate(getTemplate("bottoms")!), "pro");
+    const b = await charts.saveChart(SHOP, chartFromTemplate(getTemplate("mens-bottoms")!), "pro");
     const listed = await charts.listCharts(SHOP);
     expect(listed.map((s) => s.chart.id)).toEqual([a.id, b.id]);
     expect(listed[0]!.chart.rows).toHaveLength(6);
@@ -183,5 +184,22 @@ describe("shop data", () => {
     const record = await shops.getShop(SHOP);
     expect(shops.settingsOf(record).buttonStyle).toBe("link");
     expect(shops.planOf(record)).toBe("free");
+  });
+});
+
+describe("insights", () => {
+  it("counts views and Fit Finder results per day and deletes them with the shop", async () => {
+    await shops.getShop(SHOP);
+    const now = new Date("2026-10-01T12:00:00Z");
+    await insights.recordEvent(SHOP, { type: "open", chartId: "c_abcd" }, now);
+    await insights.recordEvent(SHOP, { type: "open", chartId: "c_abcd" }, now);
+    await insights.recordEvent(SHOP, { type: "fit", chartId: "c_abcd", size: "M", status: "exact" }, now);
+    await insights.recordEvent(SHOP, { type: "fit", chartId: "c_abcd", size: "XL", status: "above" }, now);
+    await insights.recordEvent(SHOP, { type: "open", chartId: "c_abcd" }, new Date("2026-08-01T12:00:00Z"));
+    const result = await insights.loadInsights(SHOP, 30, now);
+    expect(result.totals).toEqual({ opens: 2, fits: 2 });
+    expect(result.charts[0]).toMatchObject({ chartId: "c_abcd", above: 1, sizes: [{ size: "M", count: 1 }, { size: "XL", count: 1 }] });
+    await shops.deleteShopData(SHOP);
+    expect(await db.insightDay.count({ where: { shop: SHOP } })).toBe(0);
   });
 });

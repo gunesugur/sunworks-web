@@ -12,8 +12,9 @@ automatically_update_urls_on_dev = true
 [access_scopes]
 # read_products: collection/product pickers and assignment suggestions
 # read_themes:   check whether the app embed is switched on (setup guide)
+# write_files:   upload chart photos to Content › Files (Pro photo card)
 # read_locales:  list store languages for chart translations
-scopes = "read_locales,read_products,read_themes"
+scopes = "read_locales,read_products,read_themes,write_files"
 
 [auth]
 redirect_urls = [ "https://example.com/auth/callback" ]
@@ -42,3 +43,10 @@ api_version = "2026-10"
 
 [pos]
 embedded = false
+
+# Insights (Plus): the storefront sends anonymous counts to /apps/sizemate/e.
+# `shopify app dev` points this at the dev tunnel; set your server URL before deploying.
+[app_proxy]
+url = "https://example.com/proxy"
+subpath = "sizemate"
+prefix = "apps"

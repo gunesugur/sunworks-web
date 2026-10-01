@@ -73,7 +73,7 @@ Uygulamanın her zaman açık bir sunucuda çalışması gerekiyor. Mağaza tara
 
 - **Sunucu**: Fly.io, Render veya Railway (aylık yaklaşık 5–10 USD). Klasörde bir `Dockerfile` hazır.
 - **Veritabanı**: Canlıda SQLite yerine Postgres kullan (Neon ve Supabase'in ücretsiz planları yeterli). `prisma/schema.prisma` dosyasında `provider = "postgresql"` ve `url = env("DATABASE_URL")` yap. Sonra `npx prisma migrate dev --name postgres` ile migration'ları yeniden oluştur.
-- **Ortam değişkenleri**: `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, `SHOPIFY_APP_URL`, `SCOPES=read_products,read_themes,read_locales`, `DATABASE_URL`, `NODE_ENV=production`.
+- **Ortam değişkenleri**: `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, `SHOPIFY_APP_URL`, `SCOPES=read_products,read_themes,read_locales,write_files`, `DATABASE_URL`, `NODE_ENV=production`.
 - **Son adım**: Sunucu adresini `shopify.app.toml` içindeki `application_url` ve `redirect_urls` alanlarına yaz. Ardından `npm run deploy` ile uygulama ayarlarını ve tema eklentisini Shopify'a gönder.
 
 ## 6. App Store başvurusu

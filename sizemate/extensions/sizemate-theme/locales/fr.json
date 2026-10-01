@@ -5,6 +5,10 @@
     "units": "Unités",
     "cm": "cm",
     "in": "po",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Guide des tailles",
       "guide": "Comment mesurer",
@@ -54,7 +58,30 @@
       "garment_chest": "Posez le vêtement à plat et mesurez d'un côté à l'autre, juste sous les emmanchures.",
       "garment_waist": "Posez le vêtement à plat et mesurez la ceinture d'un côté à l'autre.",
       "garment_length": "Posez le vêtement à plat et mesurez du point le plus haut de l'épaule jusqu'à l'ourlet.",
-      "sleeve": "Mesurez de la couture d'épaule jusqu'au bout de la manche."
+      "sleeve": "Mesurez de la couture d'épaule jusqu'au bout de la manche.",
+      "weight": "Pesez-vous sans chaussures, idéalement le matin.",
+      "calf": "Mesurez le tour de mollet à l'endroit le plus large.",
+      "wrist": "Placez le mètre autour du poignet, juste sous l'os.",
+      "finger": "Entourez la base du doigt d'une bande de papier, marquez le chevauchement et mesurez la longueur.",
+      "pet_weight": "Pesez-vous en tenant votre animal, puis soustrayez votre propre poids.",
+      "garment_shoulder": "Posez le vêtement à plat et mesurez d'une couture d'épaule à l'autre.",
+      "garment_hips": "Posez le pantalon à plat et mesurez en ligne droite la partie la plus large des hanches.",
+      "garment_inseam": "Posez le pantalon à plat et mesurez de la couture d'entrejambe jusqu'à l'ourlet.",
+      "rise": "Mesurez de la couture d'entrejambe jusqu'au haut de la ceinture.",
+      "ring_diameter": "Mesurez le diamètre intérieur d'une bague qui vous va bien.",
+      "ring_circumference": "Le tour intérieur de la bague. Comparez-le à votre tour de doigt."
+    },
+    "text_size": "Texte plus grand",
+    "fitscale": {
+      "label": "Coupe",
+      "small": "Taille petit",
+      "true": "Taille normalement",
+      "large": "Taille grand",
+      "s0": "Taille normalement.",
+      "s1": "Taille légèrement petit.",
+      "s2": "Taille petit. Nous conseillons la taille au-dessus.",
+      "l1": "Taille légèrement grand.",
+      "l2": "Taille grand. Envisagez la taille en dessous."
     }
   }
 }

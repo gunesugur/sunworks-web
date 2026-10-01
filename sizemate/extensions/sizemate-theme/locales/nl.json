@@ -5,6 +5,10 @@
     "units": "Eenheden",
     "cm": "cm",
     "in": "inch",
+    "mm": "mm",
+    "ft": "ft",
+    "kg": "kg",
+    "lb": "lb",
     "tabs": {
       "chart": "Maattabel",
       "guide": "Zo meet je",
@@ -54,7 +58,30 @@
       "garment_chest": "Leg het kledingstuk plat en meet recht van zij naar zij, net onder de armsgaten.",
       "garment_waist": "Leg het kledingstuk plat en meet recht over de tailleband.",
       "garment_length": "Leg het kledingstuk plat en meet van het hoogste punt van de schouder tot de zoom.",
-      "sleeve": "Meet van de schoudernaad tot het einde van de mouw."
+      "sleeve": "Meet van de schoudernaad tot het einde van de mouw.",
+      "weight": "Weeg jezelf zonder schoenen, het liefst 's ochtends.",
+      "calf": "Meet rond het breedste deel van je kuit.",
+      "wrist": "Leg het meetlint strak om je pols, net onder het botje.",
+      "finger": "Wikkel een strookje papier om de basis van je vinger, markeer waar het overlapt en meet de lengte.",
+      "pet_weight": "Weeg jezelf met je huisdier in je armen en trek je eigen gewicht eraf.",
+      "garment_shoulder": "Leg het kledingstuk plat en meet recht van de ene schoudernaad naar de andere.",
+      "garment_hips": "Leg de broek plat en meet recht over het breedste deel van de heupen.",
+      "garment_inseam": "Leg de broek plat en meet van de kruisnaad tot de zoom.",
+      "rise": "Meet van de kruisnaad tot de bovenkant van de tailleband.",
+      "ring_diameter": "Meet de binnendiameter van een ring die goed past.",
+      "ring_circumference": "De omtrek aan de binnenkant van de ring. Vergelijk die met je vingermaat."
+    },
+    "text_size": "Grotere tekst",
+    "fitscale": {
+      "label": "Pasvorm",
+      "small": "Valt klein",
+      "true": "Valt normaal",
+      "large": "Valt groot",
+      "s0": "Valt normaal.",
+      "s1": "Valt iets klein.",
+      "s2": "Valt klein. We raden een maat groter aan.",
+      "l1": "Valt iets groot.",
+      "l2": "Valt groot. Overweeg een maat kleiner."
     }
   }
 }

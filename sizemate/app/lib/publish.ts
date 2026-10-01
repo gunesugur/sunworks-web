@@ -9,11 +9,14 @@
  *   sizemate.chart_<id>    one per published chart, loaded only when matched
  */
 
-import { resolveDiagram, type SizeChart } from "./chart";
-import { getMeasure } from "./measures";
+import type { SizeChart } from "./chart";
+import { chooseFigure, FIGURES } from "./figures";
+import { getMeasure, isWeightMeasure, type MeasureKey } from "./measures";
 import { hasFeature, PLANS, type PlanId } from "./plans";
 import { numericId, type PublishedRule } from "./rules";
 import { effectiveSettings, type AppearanceSettings } from "./settings";
+import { fitFinderAllowed } from "./templates";
+import type { LengthUnit, WeightUnit } from "./units";
 
 export const METAFIELD_NAMESPACE = "sizemate";
 export const CONFIG_KEY = "config";
@@ -31,28 +34,41 @@ export interface PublishedColumn {
   m: string;
   /** "b" body, "g" garment, "" otherwise. */
   mk: string;
+  /** Dimension of a measure column: "l" length, "w" weight, "" otherwise. */
+  d: string;
+  /** Number of this measurement in the figure, 0 when it isn't drawn. */
+  n: number;
 }
 
 export interface PublishedChart {
   id: string;
   t: string;
-  u: "cm" | "in";
+  /** Unit of length columns. */
+  u: LengthUnit;
+  /** Unit of weight columns. */
+  wu: WeightUnit;
   cols: PublishedColumn[];
   /** Cells aligned with cols. */
   rows: string[][];
   note: string;
+  /** d: the figure to draw (see figures.ts), "none" for no figure. */
   guide: { on: boolean; text: string; d: string };
   fit: boolean;
+  /** Fit scale: -2 runs small … 2 runs large, null when hidden. */
+  fs: number | null;
+  img: { url: string; alt: string } | null;
   tr: Record<string, { t?: string; note?: string; guide?: string; cols?: string[] }>;
 }
 
 export interface PublishedConfig {
-  v: 1;
+  v: 2;
   plan: PlanId;
   rules: PublishedRule[];
   settings: AppearanceSettings;
   /** Show "Powered by Sizemate". */
   brand: boolean;
+  /** Send anonymous usage counts for Insights. */
+  ins: boolean;
 }
 
 export interface PublishResult {
@@ -95,24 +111,42 @@ function toPublishedChart(chart: SizeChart, plan: PlanId): PublishedChart {
       if (Object.keys(entry).length) translations[locale.toLowerCase()] = entry;
     }
   }
+  const measures = chart.columns.flatMap((c) => (c.kind === "measure" && c.measure ? [c.measure] : []));
+  const forced = chart.guide.diagram === "auto" ? undefined : chart.guide.diagram;
+  const figure = chooseFigure(measures, chart.category, forced);
+  const numbers = new Map<string, number>();
+  if (figure) {
+    for (const measure of measures) {
+      if (FIGURES[figure].marks[measure as MeasureKey] && !numbers.has(measure)) numbers.set(measure, numbers.size + 1);
+    }
+  }
+  const numbered = new Set<string>();
   return {
     id: chart.id,
     t: chart.title,
     u: chart.unit,
+    wu: chart.weightUnit,
     cols: chart.columns.map((c) => {
       const measure = c.measure ? getMeasure(c.measure) : undefined;
+      // A measurement repeated in two columns is numbered once.
+      const n = c.measure && !numbered.has(c.measure) ? (numbers.get(c.measure) ?? 0) : 0;
+      if (n) numbered.add(c.measure!);
       return {
         id: c.id,
         l: c.label,
         k: c.kind,
         m: c.measure ?? "",
         mk: measure ? (measure.kind === "body" ? "b" : "g") : "",
+        d: c.kind === "measure" ? (isWeightMeasure(c.measure ?? "") ? "w" : "l") : "",
+        n,
       };
     }),
     rows: chart.rows.map((row) => chart.columns.map((c) => row.cells[c.id] ?? "")),
     note: chart.note,
-    guide: { on: chart.guide.enabled, text: chart.guide.text, d: resolveDiagram(chart) },
-    fit: chart.fitFinder && hasFeature(plan, "fitFinder"),
+    guide: { on: chart.guide.enabled, text: chart.guide.text, d: figure ?? "none" },
+    fit: chart.fitFinder && fitFinderAllowed(plan, chart.category),
+    fs: hasFeature(plan, "fitScale") ? chart.fitScale : null,
+    img: hasFeature(plan, "chartImage") ? chart.image : null,
     tr: translations,
   };
 }
@@ -127,11 +161,12 @@ export function buildPublication(charts: readonly SizeChart[], settings: Appeara
   const paused = active.slice(limit).map((chart) => chart.id);
   return {
     config: {
-      v: 1,
+      v: 2,
       plan,
       rules: published.map(toRule),
       settings: effectiveSettings(settings, plan),
       brand: !hasFeature(plan, "removeBranding"),
+      ins: hasFeature(plan, "insights"),
     },
     charts: Object.fromEntries(published.map((chart) => [chartKey(chart.id), toPublishedChart(chart, plan)])),
     paused,

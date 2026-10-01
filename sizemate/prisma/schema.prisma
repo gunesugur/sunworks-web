@@ -64,3 +64,21 @@ model Chart {
 
   @@index([shop, position])
 }
+
+/// Anonymous daily counts for Insights (Plus). No shopper data is stored.
+model InsightDay {
+  shop    String
+  chartId String
+  /// UTC day, YYYY-MM-DD.
+  day     String
+  opens   Int    @default(0)
+  fits    Int    @default(0)
+  /// Fit Finder results above the largest / below the smallest size.
+  above   Int    @default(0)
+  below   Int    @default(0)
+  /// JSON: recommended size → count.
+  sizes   String @default("{}")
+
+  @@id([shop, chartId, day])
+  @@index([shop, day])
+}

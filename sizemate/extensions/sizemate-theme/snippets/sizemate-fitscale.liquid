@@ -1,0 +1,19 @@
+{%- comment -%}
+  Fit scale: how the product fits compared with its size.
+  Params: fs (-2 runs small … 0 true to size … 2 runs large)
+{%- endcomment -%}
+{%- assign fs_pos = fs | plus: 2 | times: 25 -%}
+{%- assign fs_key = 'sizemate.fitscale.s' | append: fs -%}
+{%- if fs > 0 -%}{%- assign fs_key = 'sizemate.fitscale.l' | append: fs -%}{%- endif -%}
+{%- if fs < 0 -%}{%- assign fs_abs = fs | abs -%}{%- assign fs_key = 'sizemate.fitscale.s' | append: fs_abs -%}{%- endif -%}
+<div class="sizemate-fitscale">
+  <p class="sizemate-fitscale-text"><strong>{{ 'sizemate.fitscale.label' | t }}:</strong> {{ fs_key | t }}</p>
+  <div class="sizemate-fitscale-track" aria-hidden="true">
+    <span class="sizemate-fitscale-dot" style="--sm-pos: {{ fs_pos }}%"></span>
+  </div>
+  <div class="sizemate-fitscale-ends" aria-hidden="true">
+    <span>{{ 'sizemate.fitscale.small' | t }}</span>
+    <span>{{ 'sizemate.fitscale.true' | t }}</span>
+    <span>{{ 'sizemate.fitscale.large' | t }}</span>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+{%- comment -%}
+  Fit Finder form. Fields are added by the runtime from the chart's body measurements.
+  Params: uid, use_tabs
+{%- endcomment -%}
+<section
+  class="sizemate-section"
+  id="{{ uid }}-panel-fit"
+  data-sizemate-panel="fit"
+  {% if use_tabs %}role="tabpanel" aria-labelledby="{{ uid }}-tab-fit" hidden{% else %}aria-labelledby="{{ uid }}-fit-title"{% endif %}
+  data-t-exact="{{ 'sizemate.fit.exact' | t | escape }}"
+  data-t-between="{{ 'sizemate.fit.between' | t | escape }}"
+  data-t-closest="{{ 'sizemate.fit.closest' | t | escape }}"
+  data-t-above="{{ 'sizemate.fit.above' | t | escape }}"
+  data-t-below="{{ 'sizemate.fit.below' | t | escape }}"
+  data-t-empty="{{ 'sizemate.fit.empty' | t | escape }}"
+  data-t-select="{{ 'sizemate.fit.select' | t | escape }}"
+  data-t-selected="{{ 'sizemate.fit.selected' | t | escape }}"
+  data-t-tight="{{ 'sizemate.fit.tight' | t | escape }}"
+  data-t-loose="{{ 'sizemate.fit.loose' | t | escape }}"
+  data-t-good="{{ 'sizemate.fit.good' | t | escape }}"
+>
+  {%- unless use_tabs -%}<h3 class="sizemate-section-title" id="{{ uid }}-fit-title">{{ 'sizemate.tabs.fit' | t }}</h3>{%- endunless -%}
+  <form class="sizemate-fit" data-sizemate-fit novalidate>
+    <p class="sizemate-fit-intro">{{ 'sizemate.fit.intro' | t }}</p>
+    <div class="sizemate-fit-fields" data-sizemate-fit-fields></div>
+    <fieldset class="sizemate-fit-preference">
+      <legend>{{ 'sizemate.fit.preference' | t }}</legend>
+      <div class="sizemate-segmented">
+        <label><input type="radio" name="preference" value="snug"><span>{{ 'sizemate.fit.snug' | t }}</span></label>
+        <label><input type="radio" name="preference" value="regular" checked><span>{{ 'sizemate.fit.regular' | t }}</span></label>
+        <label><input type="radio" name="preference" value="relaxed"><span>{{ 'sizemate.fit.relaxed' | t }}</span></label>
+      </div>
+    </fieldset>
+    <button type="submit" class="sizemate-fit-submit">{{ 'sizemate.fit.submit' | t }}</button>
+    <div class="sizemate-fit-result" data-sizemate-fit-result aria-live="polite"></div>
+    <p class="sizemate-fit-privacy">
+      <svg viewBox="0 0 20 20" width="14" height="14" aria-hidden="true" focusable="false"><path d="M6 9V7a4 4 0 1 1 8 0v2M5 9h10v8H5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      {{ 'sizemate.fit.privacy' | t }}
+    </p>
+  </form>
+</section>

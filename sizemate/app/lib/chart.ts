@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createId } from "./ids";
 import { isMeasureKey, type Diagram, type MeasureKey } from "./measures";
-import type { Unit } from "./units";
+import type { LengthUnit, WeightUnit } from "./units";
 
 export const LIMITS = {
   columns: 12,
@@ -21,7 +21,7 @@ export const LIMITS = {
 export const COLUMN_KINDS = ["size", "measure", "text"] as const;
 export type ColumnKind = (typeof COLUMN_KINDS)[number];
 
-export const DIAGRAMS = ["auto", "torso", "legs", "foot", "head", "hand", "garment", "pet", "none"] as const;
+export const DIAGRAMS = ["auto", "torso", "legs", "foot", "head", "hand", "wrist", "ring", "garment", "pants", "pet", "none"] as const;
 export type GuideDiagram = "auto" | Diagram;
 
 export interface ChartColumn {
@@ -66,12 +66,19 @@ export interface SizeChart {
   title: string;
   status: "active" | "draft";
   category: string;
-  unit: Unit;
+  /** Unit of the length columns. */
+  unit: LengthUnit;
+  /** Unit of the weight columns (kids by weight, pets). */
+  weightUnit: WeightUnit;
   columns: ChartColumn[];
   rows: ChartRow[];
   note: string;
   guide: { enabled: boolean; text: string; diagram: GuideDiagram };
   fitFinder: boolean;
+  /** How the product fits compared with its size: -2 runs small … 0 true to size … 2 runs large. null hides it. */
+  fitScale: number | null;
+  /** Optional photo for the split layout (model shot, flat lay). Uploaded to Shopify Files. */
+  image: { url: string; alt: string } | null;
   assignment: Assignment;
   translations: Record<string, ChartTranslation>;
 }
@@ -113,7 +120,8 @@ export const chartSchema = z
     title: trimmed(LIMITS.title),
     status: z.enum(["active", "draft"]),
     category: trimmed(40),
-    unit: z.enum(["cm", "in"]),
+    unit: z.enum(["cm", "mm", "in"]),
+    weightUnit: z.enum(["kg", "lb"]).default("kg"),
     columns: z.array(columnSchema).min(1).max(LIMITS.columns),
     rows: z
       .array(z.object({ id: idString, cells: z.record(z.string(), trimmed(LIMITS.cell)) }))
@@ -125,6 +133,14 @@ export const chartSchema = z
       diagram: z.enum(DIAGRAMS),
     }),
     fitFinder: z.boolean(),
+    fitScale: z.number().int().min(-2).max(2).nullable().default(null),
+    image: z
+      .object({
+        url: z.string().url().regex(/^https:\/\/cdn\.shopify\.com\//, "Images must be uploaded to Shopify"),
+        alt: trimmed(200),
+      })
+      .nullable()
+      .default(null),
     assignment: z.object({
       mode: z.enum(["all", "conditions"]),
       products: z.array(resource).max(LIMITS.resources),
@@ -219,11 +235,14 @@ export function blankChart(): SizeChart {
     status: "active",
     category: "custom",
     unit: "cm",
+    weightUnit: "kg",
     columns: [size, chest, waist],
     rows: ["S", "M", "L"].map((label) => createRow({ [size.id]: label })),
     note: "",
     guide: { enabled: true, text: "", diagram: "auto" },
     fitFinder: true,
+    fitScale: null,
+    image: null,
     assignment: emptyAssignment("all"),
     translations: {},
   };
@@ -263,17 +282,4 @@ export function describeAssignment(assignment: Assignment): string {
   add(assignment.vendors.length, "vendor", "vendors");
   add(assignment.tags.length, "tag", "tags");
   return parts.length ? parts.join(", ") : "Not assigned";
-}
-
-export function resolveDiagram(chart: SizeChart): Diagram {
-  if (chart.guide.diagram !== "auto") return chart.guide.diagram;
-  const measures = chart.columns.flatMap((c) => (c.measure ? [c.measure] : []));
-  if (measures.some((m) => m.startsWith("pet_"))) return "pet";
-  if (measures.some((m) => m.startsWith("garment_") || m === "sleeve")) return "garment";
-  if (measures.includes("foot_length") || measures.includes("foot_width")) return "foot";
-  if (measures.includes("head")) return "head";
-  if (measures.includes("hand")) return "hand";
-  if (measures.some((m) => ["chest", "bust", "underbust", "neck", "shoulder", "arm"].includes(m))) return "torso";
-  if (measures.some((m) => ["waist", "hips", "inseam", "thigh", "height"].includes(m))) return "legs";
-  return "none";
 }

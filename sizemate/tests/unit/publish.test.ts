@@ -82,3 +82,43 @@ describe("buildPublication", () => {
     expect(chartKey("c_ab12cd34")).toBe("chart_c_ab12cd34");
   });
 });
+
+describe("buildPublication v2", () => {
+  it("publishes units, the figure, the fit scale and the photo per plan", () => {
+    const chart = chartFromTemplate(getTemplate("kids-height-weight")!);
+    chart.fitScale = 1;
+    chart.image = { url: "https://cdn.shopify.com/s/files/kid.jpg", alt: "Kid" };
+    const pro = Object.values(buildPublication([chart], DEFAULT_SETTINGS, "pro").charts)[0]!;
+    expect(pro).toMatchObject({ u: "cm", wu: "kg", fs: 1, img: { url: "https://cdn.shopify.com/s/files/kid.jpg", alt: "Kid" } });
+    expect(pro.guide.d).toBe("body-m");
+    const free = Object.values(buildPublication([chart], DEFAULT_SETTINGS, "free").charts)[0]!;
+    expect(free).toMatchObject({ fs: null, img: null });
+  });
+
+  it("offers the Fit Finder for clothing on Pro and for everything on Plus", () => {
+    const shoes = chartFromTemplate(getTemplate("womens-shoes")!);
+    const tops = chartFromTemplate(getTemplate("womens-tops")!);
+    const fit = (plan: "free" | "pro" | "plus") => Object.values(buildPublication([tops, shoes], DEFAULT_SETTINGS, plan).charts).map((c) => c.fit);
+    expect(fit("free")).toEqual([false]);
+    expect(fit("pro")).toEqual([true, false]);
+    expect(fit("plus")).toEqual([true, true]);
+  });
+
+  it("turns Insights counting on for Plus only", () => {
+    expect(buildPublication(charts(), DEFAULT_SETTINGS, "plus").config.ins).toBe(true);
+    expect(buildPublication(charts(), DEFAULT_SETTINGS, "pro").config.ins).toBe(false);
+    expect(buildPublication(charts(), DEFAULT_SETTINGS, "plus").config.v).toBe(2);
+  });
+
+  it("falls back to free styling on Free", () => {
+    const settings = { ...DEFAULT_SETTINGS, preset: "bold" as const, container: "drawer" as const, headerStyle: "solid" as const };
+    const free = buildPublication(charts(), settings, "free").config.settings;
+    expect(free).toMatchObject({ preset: "theme", container: "modal", headerStyle: "tinted" });
+    expect(buildPublication(charts(), settings, "pro").config.settings).toEqual(settings);
+  });
+
+  it("keeps the largest template comfortably under the metafield limit", () => {
+    const sizes = buildPublication([chartFromTemplate(getTemplate("bras-band")!)], DEFAULT_SETTINGS, "plus");
+    for (const chart of Object.values(sizes.charts)) expect(byteSize(chart)).toBeLessThan(20_000);
+  });
+});
