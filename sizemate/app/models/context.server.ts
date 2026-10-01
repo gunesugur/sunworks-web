@@ -1,5 +1,6 @@
 import type { AdminApiContext } from "@shopify/shopify-app-react-router/server";
 
+import type { Access } from "../lib/access";
 import type { PlanId } from "../lib/plans";
 import { authenticate } from "../shopify.server";
 import { syncPlan } from "./billing.server";
@@ -10,6 +11,8 @@ export interface AdminContext {
   admin: AdminGraphql & AdminApiContext;
   shop: string;
   plan: PlanId;
+  /** Why the plan applies and until when (welcome, paid period). */
+  access: Access;
   redirect: Awaited<ReturnType<typeof authenticate.admin>>["redirect"];
 }
 
@@ -17,10 +20,10 @@ export interface AdminContext {
 export async function adminContext(request: Request): Promise<AdminContext> {
   const { admin, session, redirect } = await authenticate.admin(request);
   const graphql = admin as AdminGraphql & AdminApiContext;
-  const { plan, changed } = await syncPlan(session.shop, graphql);
+  const { plan, changed, access } = await syncPlan(session.shop, graphql);
   if (changed) {
     // A plan change turns paid features on or off on the storefront.
     await publish(session.shop, graphql).catch((error: unknown) => console.error("Republish after plan change failed", error));
   }
-  return { admin: graphql, shop: session.shop, plan, redirect };
+  return { admin: graphql, shop: session.shop, plan, access, redirect };
 }

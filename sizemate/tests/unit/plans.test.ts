@@ -16,7 +16,7 @@ describe("plans", () => {
     expect(planFor("csv").id).toBe("pro");
     expect(planFor("allTemplates").id).toBe("pro");
     expect(planFor("fitFinder").id).toBe("pro");
-    expect(planFor("fitFinderAll").id).toBe("plus");
+    expect(planFor("sizeMemory").id).toBe("plus");
     expect(planFor("insights").id).toBe("plus");
     expect(hasFeature("plus", "csv")).toBe(true);
     expect(hasFeature("free", "removeBranding")).toBe(false);

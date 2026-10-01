@@ -6,8 +6,6 @@ import { PLANS } from "~/lib/plans";
 import {
   chartFromTemplate,
   ESSENTIAL_COUNT,
-  fitFinderAllowed,
-  fitFinderFeature,
   getTemplate,
   templateAllowed,
   TEMPLATE_GROUPS,
@@ -53,7 +51,7 @@ describe("templates", () => {
     const essentials = ESSENTIAL_COUNT - 1; // the blank chart isn't a template to advertise
     const readyMade = TEMPLATES.filter((t) => t.key !== "blank").length;
     expect(PLANS.free.highlights).toContain(`${essentials} essential templates`);
-    expect(PLANS.pro.highlights).toContain(`The full library: ${readyMade} templates`);
+    expect(PLANS.pro.highlights.some((h) => h.includes(`the full library: ${readyMade} templates`))).toBe(true);
   });
 
   it("covers every group, with essentials for the main kinds of products", () => {
@@ -69,18 +67,6 @@ describe("templates", () => {
     expect(templateAllowed("pro", getTemplate("bras-cup")!)).toBe(true);
   });
 
-  it("puts the Fit Finder for clothing on Pro and for everything else on Plus", () => {
-    expect(fitFinderFeature("womens-tops")).toBe("fitFinder");
-    expect(fitFinderFeature("kids")).toBe("fitFinder");
-    expect(fitFinderFeature("unisex-tops")).toBe("fitFinder");
-    expect(fitFinderFeature("womens-shoes")).toBe("fitFinderAll");
-    expect(fitFinderFeature("rings")).toBe("fitFinderAll");
-    expect(fitFinderFeature("custom")).toBe("fitFinderAll");
-    expect(fitFinderAllowed("free", "womens-tops")).toBe(false);
-    expect(fitFinderAllowed("pro", "mens-tops")).toBe(true);
-    expect(fitFinderAllowed("pro", "dog-harness")).toBe(false);
-    expect(fitFinderAllowed("plus", "dog-harness")).toBe(true);
-  });
 
   it("enables the Fit Finder only where body measurements exist", () => {
     const byKey = Object.fromEntries(TEMPLATES.map((t) => [t.key, chartFromTemplate(t)]));

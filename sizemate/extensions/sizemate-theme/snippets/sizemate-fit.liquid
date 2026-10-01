@@ -1,6 +1,6 @@
 {%- comment -%}
   Fit Finder form. Fields are added by the runtime from the chart's body measurements.
-  Params: uid, use_tabs
+  Params: uid, use_tabs, memory (size memory: offer to remember the measurements)
 {%- endcomment -%}
 <section
   class="sizemate-section"
@@ -31,6 +31,12 @@
         <label><input type="radio" name="preference" value="relaxed"><span>{{ 'sizemate.fit.relaxed' | t }}</span></label>
       </div>
     </fieldset>
+    {%- if memory -%}
+      <div class="sizemate-fit-memory">
+        <label class="sizemate-check"><input type="checkbox" name="remember" checked> {{ 'sizemate.memory.remember' | t }}</label>
+        <button type="button" class="sizemate-link" data-sizemate-forget hidden>{{ 'sizemate.memory.forget' | t }}</button>
+      </div>
+    {%- endif -%}
     <button type="submit" class="sizemate-fit-submit">{{ 'sizemate.fit.submit' | t }}</button>
     <div class="sizemate-fit-result" data-sizemate-fit-result aria-live="polite"></div>
     <p class="sizemate-fit-privacy">

@@ -1206,22 +1206,6 @@ export function chartFromTemplate(template: ChartTemplate): SizeChart {
   };
 }
 
-const CLOTHING_GROUPS: readonly TemplateGroup[] = ["Women", "Men", "Unisex", "Kids & baby"];
-
-/**
- * Which plan feature the Fit Finder needs on a chart: clothing charts made from
- * a women's, men's, unisex or kids' template need Pro, everything else
- * (footwear, lingerie, rings, pets, charts started from scratch) needs Plus.
- */
-export function fitFinderFeature(category: string): "fitFinder" | "fitFinderAll" {
-  const group = getTemplate(category)?.group;
-  return group && CLOTHING_GROUPS.includes(group) ? "fitFinder" : "fitFinderAll";
-}
-
-export function fitFinderAllowed(plan: PlanId, category: string): boolean {
-  return hasFeature(plan, fitFinderFeature(category));
-}
-
 export function templateAllowed(plan: PlanId, template: ChartTemplate): boolean {
   return Boolean(template.essential) || hasFeature(plan, "allTemplates");
 }

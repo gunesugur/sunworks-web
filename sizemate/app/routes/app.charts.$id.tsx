@@ -19,7 +19,6 @@ import { getMeasure } from "../lib/measures";
 import { chartCount, hasFeature, PLANS } from "../lib/plans";
 import { buildPublication } from "../lib/publish";
 import { effectiveSettings } from "../lib/settings";
-import { fitFinderAllowed, fitFinderFeature } from "../lib/templates";
 import type { LengthUnit, WeightUnit } from "../lib/units";
 import { getCatalog } from "../models/catalog.server";
 import { deleteChart, duplicate, getChart, listCharts, PlanLimitError, saveChart, ValidationError } from "../models/charts.server";
@@ -204,8 +203,7 @@ export default function ChartEditor() {
   const saving = fetcher.state !== "idle" && pending === "save";
   const uploading = fetcher.state !== "idle" && fetcher.formData !== undefined;
   const plan = PLANS[data.plan];
-  const fitFeature = fitFinderFeature(chart.category);
-  const fitAllowed = fitFinderAllowed(data.plan, chart.category);
+  const fitAllowed = hasFeature(data.plan, "fitFinder");
   const csvAllowed = hasFeature(data.plan, "csv");
   const translationsAllowed = hasFeature(data.plan, "translations");
   const imageAllowed = hasFeature(data.plan, "chartImage");
@@ -542,7 +540,7 @@ export default function ChartEditor() {
             <s-paragraph>
               Shoppers enter their measurements and get a size recommendation from this chart, with one click to select that size.
             </s-paragraph>
-            <FeatureBadge feature={fitFeature} plan={data.plan} />
+            <FeatureBadge feature="fitFinder" plan={data.plan} />
           </s-stack>
           {fitAllowed ? (
             <>
@@ -562,12 +560,8 @@ export default function ChartEditor() {
               )}
             </>
           ) : (
-            <UpgradeCallout feature={fitFeature}>
-              <s-paragraph>
-                {fitFeature === "fitFinder"
-                  ? "Fewer “wrong size” returns: shoppers get a recommendation from your own chart before they buy."
-                  : "Pro covers women's, men's, unisex and kids' clothing. Plus adds the Fit Finder to every chart: shoes, bras, rings, pets and charts you build yourself."}
-              </s-paragraph>
+            <UpgradeCallout feature="fitFinder">
+              <s-paragraph>Fewer “wrong size” returns: shoppers get a recommendation from your own chart before they buy.</s-paragraph>
             </UpgradeCallout>
           )}
         </s-stack>

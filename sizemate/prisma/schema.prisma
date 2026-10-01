@@ -35,9 +35,21 @@ model Session {
 
 model Shop {
   shop          String    @id
-  /// free | pro | plus, refreshed from Shopify billing.
+  /// The plan whose features are on (see app/lib/access.ts): free | pro | plus.
   plan          String    @default("free")
   planCheckedAt DateTime?
+  /// The plan of the active Shopify subscription.
+  subscribedPlan String   @default("free")
+  /// Last paid plan and the end of its paid period; a cancellation keeps it until then.
+  paidPlan      String?
+  paidUntil     DateTime?
+  /// Shopify froze the subscription for non-payment.
+  frozen        Boolean   @default(false)
+  /// End of Shopify's free trial, and the next renewal, for display.
+  trialEndsAt   DateTime?
+  renewsAt      DateTime?
+  /// New installs try every Plus feature until this date (null for shops installed before it existed).
+  welcomeUntil  DateTime?
   /// JSON AppearanceSettings.
   settings      String    @default("{}")
   /// JSON onboarding state (dismissed cards, completed steps).

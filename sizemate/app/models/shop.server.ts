@@ -1,7 +1,8 @@
 import type { Shop } from "@prisma/client";
 
 import db from "../db.server";
-import { isPlanId, type PlanId } from "../lib/plans";
+import type { AccessFacts } from "../lib/access";
+import { isPlanId, WELCOME_DAYS, type PlanId } from "../lib/plans";
 import { parseSettings, type AppearanceSettings } from "../lib/settings";
 
 export interface Onboarding {
@@ -13,8 +14,23 @@ export interface Onboarding {
   guideDismissed?: boolean;
 }
 
-export async function getShop(shop: string): Promise<Shop> {
-  return db.shop.upsert({ where: { shop }, create: { shop }, update: {} });
+/** The shop's record, created on first use with its welcome period starting now. */
+export async function getShop(shop: string, now = new Date()): Promise<Shop> {
+  return db.shop.upsert({
+    where: { shop },
+    create: { shop, welcomeUntil: new Date(now.getTime() + WELCOME_DAYS * 86_400_000) },
+    update: {},
+  });
+}
+
+export function factsOf(record: Shop): AccessFacts {
+  return {
+    subscribed: isPlanId(record.subscribedPlan) ? record.subscribedPlan : "free",
+    paidPlan: record.paidPlan && isPlanId(record.paidPlan) ? record.paidPlan : null,
+    paidUntil: record.paidUntil,
+    welcomeUntil: record.welcomeUntil,
+    frozen: record.frozen,
+  };
 }
 
 export function planOf(record: Shop): PlanId {
@@ -49,8 +65,37 @@ export async function updateOnboarding(shop: string, patch: Onboarding): Promise
   return next;
 }
 
-export async function setPlan(shop: string, plan: PlanId): Promise<void> {
-  await db.shop.update({ where: { shop }, data: { plan, planCheckedAt: new Date() } });
+export interface PlanRecord {
+  plan: PlanId;
+  subscribedPlan: PlanId;
+  paidPlan: PlanId | null;
+  paidUntil: Date | null;
+  frozen: boolean;
+  trialEndsAt: Date | null;
+  renewsAt: Date | null;
+  checkedAt: Date;
+}
+
+export async function savePlan(shop: string, record: PlanRecord): Promise<void> {
+  const { checkedAt, ...data } = record;
+  await db.shop.update({ where: { shop }, data: { ...data, planCheckedAt: checkedAt } });
+}
+
+/** Only the effective plan, keeping what is known about the subscription. */
+export async function setPlan(shop: string, plan: PlanId, checkedAt: Date | null = new Date()): Promise<void> {
+  await db.shop.update({ where: { shop }, data: { plan, ...(checkedAt ? { planCheckedAt: checkedAt } : {}) } });
+}
+
+/**
+ * The app was uninstalled: Shopify cancels the subscription at once, and a
+ * reinstall starts from Free (Shopify treats it as a fresh install). Charts
+ * and settings stay until shop/redact.
+ */
+export async function resetSubscription(shop: string): Promise<void> {
+  await db.shop.updateMany({
+    where: { shop },
+    data: { plan: "free", subscribedPlan: "free", paidPlan: null, paidUntil: null, frozen: false, trialEndsAt: null, renewsAt: null, planCheckedAt: null },
+  });
 }
 
 export async function recordPublish(shop: string, error: string | null): Promise<void> {

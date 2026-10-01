@@ -15,7 +15,6 @@ import { getMeasure, isWeightMeasure, type MeasureKey } from "./measures";
 import { hasFeature, PLANS, type PlanId } from "./plans";
 import { numericId, type PublishedRule } from "./rules";
 import { effectiveSettings, type AppearanceSettings } from "./settings";
-import { fitFinderAllowed } from "./templates";
 import type { LengthUnit, WeightUnit } from "./units";
 
 export const METAFIELD_NAMESPACE = "sizemate";
@@ -69,6 +68,8 @@ export interface PublishedConfig {
   brand: boolean;
   /** Send anonymous usage counts for Insights. */
   ins: boolean;
+  /** Remember shoppers' measurements on their device and show their size on every product. */
+  mem: boolean;
 }
 
 export interface PublishResult {
@@ -144,7 +145,7 @@ function toPublishedChart(chart: SizeChart, plan: PlanId): PublishedChart {
     rows: chart.rows.map((row) => chart.columns.map((c) => row.cells[c.id] ?? "")),
     note: chart.note,
     guide: { on: chart.guide.enabled, text: chart.guide.text, d: figure ?? "none" },
-    fit: chart.fitFinder && fitFinderAllowed(plan, chart.category),
+    fit: chart.fitFinder && hasFeature(plan, "fitFinder"),
     fs: hasFeature(plan, "fitScale") ? chart.fitScale : null,
     img: hasFeature(plan, "chartImage") ? chart.image : null,
     tr: translations,
@@ -167,6 +168,7 @@ export function buildPublication(charts: readonly SizeChart[], settings: Appeara
       settings: effectiveSettings(settings, plan),
       brand: !hasFeature(plan, "removeBranding"),
       ins: hasFeature(plan, "insights"),
+      mem: hasFeature(plan, "sizeMemory"),
     },
     charts: Object.fromEntries(published.map((chart) => [chartKey(chart.id), toPublishedChart(chart, plan)])),
     paused,

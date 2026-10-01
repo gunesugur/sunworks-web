@@ -253,6 +253,7 @@
     {% if settings.stickyColumn != false %}data-sticky{% endif %}
     {% if settings.crosshair != false %}data-crosshair{% endif %}
     {% if config.ins %}data-insights="/apps/sizemate/e"{% endif %}
+    {% if config.mem %}data-memory data-t-yoursize="{{ 'sizemate.memory.your_size' | t | escape }}"{% endif %}
     {% if style != '' %}style="{{ style }}"{% endif %}
     {% if source == 'embed' %}hidden{% endif %}
     {{ shopify_attributes }}
@@ -266,6 +267,7 @@
     >
       {%- render 'sizemate-icon', icon: settings.icon -%}
       <span>{{ label | escape }}</span>
+      {%- if config.mem -%}<span class="sizemate-yoursize" data-sizemate-yoursize hidden></span>{%- endif -%}
     </button>
 
     {%- if container == 'inline' -%}
@@ -373,7 +375,7 @@
             {%- endif -%}
 
             {%- if has_fit -%}
-              {%- render 'sizemate-fit', uid: uid, use_tabs: use_tabs -%}
+              {%- render 'sizemate-fit', uid: uid, use_tabs: use_tabs, memory: config.mem -%}
             {%- endif -%}
           </div>
         </div>

@@ -28,11 +28,12 @@ Turkish setup guide (Partner account, dev store, plans, launch): [docs/KURULUM.m
 | Size charts | 2 | Unlimited | Unlimited |
 | Templates | 11 essentials | All 60 | All 60 |
 | Theme matching, light/dark, accessibility, all units, illustrations, 8 languages | ✓ | ✓ | ✓ |
-| Styles | 3 | 7 + design studio | 7 + design studio |
-| Drawer, in-page and picture-card layouts, photo card, fit scale | | ✓ | ✓ |
+| Fit Finder (unlimited, every chart) | | ✓ | ✓ |
+| Design studio: 7 styles, drawer, in-page and picture-card layouts, photo card, fit scale | | ✓ | ✓ |
 | CSV import/export, no "Powered by Sizemate" | | ✓ | ✓ |
-| Fit Finder | | Clothing (women, men, unisex, kids) | Every chart |
-| Chart translations, Insights | | | ✓ |
+| Size memory (returning shoppers see their size), Insights, chart translations | | | ✓ |
+
+New installs get every Plus feature for 14 days ("welcome", no card), then choose. A cancelled or downgraded plan stays on until the end of the period the merchant paid for. The rules live in `app/lib/access.ts`; an hourly job (`app/models/reconcile.server.ts`) ends periods on time even when nobody opens the app. `tests/integration/plans.test.ts` plays every timeline (welcome, upgrade, cancel, downgrade, frozen payment, uninstall) through the real routes and checks what the storefront receives.
 
 Plans are defined in `app/lib/plans.ts`. The names there must match the plan names in the Partner Dashboard.
 
@@ -52,8 +53,8 @@ npm run dev              # shopify app dev: tunnel, dev store install, extension
 
 | Command | What it runs |
 | --- | --- |
-| `npm test` | Unit, Liquid, admin component and integration tests (Vitest, 327 tests) |
-| `npm run test:e2e` | Storefront in a real browser: placement, theme matching, dark mode, layouts, units, Fit Finder, lazy loading, mobile, axe accessibility (Playwright, 28 tests) |
+| `npm test` | Unit, Liquid, admin component and integration tests (Vitest, 359 tests) |
+| `npm run test:e2e` | Storefront in a real browser: placement, theme matching, dark mode, layouts, units, Fit Finder, lazy loading, mobile, axe accessibility (Playwright, 31 tests) |
 | `npm run lint` / `npm run typecheck` | ESLint, TypeScript |
 | `npm run build:storefront` | Rebuilds the extension's scripts, stylesheet and figure snippet from `app/`. CI fails if they are stale |
 | `npm run screenshots` | Refreshes `docs/screenshots` |

@@ -82,6 +82,11 @@
       "s2": "Taille petit. Nous conseillons la taille au-dessus.",
       "l1": "Taille légèrement grand.",
       "l2": "Taille grand. Envisagez la taille en dessous."
+    },
+    "memory": {
+      "remember": "Mémoriser mes mesures sur cet appareil",
+      "forget": "Effacer mes mesures",
+      "your_size": "Votre taille : [size]"
     }
   }
 }

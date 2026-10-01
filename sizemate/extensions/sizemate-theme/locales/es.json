@@ -82,6 +82,11 @@
       "s2": "Talla pequeño. Te recomendamos una talla más.",
       "l1": "Talla un poco grande.",
       "l2": "Talla grande. Considera una talla menos."
+    },
+    "memory": {
+      "remember": "Recordar mis medidas en este dispositivo",
+      "forget": "Olvidar mis medidas",
+      "your_size": "Tu talla: [size]"
     }
   }
 }

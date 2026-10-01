@@ -20,6 +20,14 @@ declare global {
 }
 
 const BOUND = "sizemateBound";
+
+function hasProfile(): boolean {
+  try {
+    return window.localStorage.getItem("sizemate:profile") !== null;
+  } catch {
+    return false;
+  }
+}
 let loading: Promise<Runtime> | null = null;
 
 function loadRuntime(src: string): Promise<Runtime> {
@@ -63,6 +71,17 @@ function bind(root: HTMLElement): void {
       .finally(() => trigger.removeAttribute("aria-busy"));
   };
   trigger.addEventListener("click", first);
+
+  // Size memory: a returning shopper sees their size on the button right away.
+  if (root.hasAttribute("data-memory") && hasProfile()) {
+    loadRuntime(src)
+      .then((runtime) => {
+        trigger.removeEventListener("click", first);
+        runtime.init(root);
+      })
+      .catch(() => undefined);
+    return;
+  }
 
   // Fetch it in the background once the page has settled, so the first click is instant.
   const idle = window.requestIdleCallback ?? ((callback: () => void) => window.setTimeout(callback, 2500));

@@ -18,6 +18,41 @@ import { applyTheme, ensureReadableAccent } from "./theme";
 const SYSTEM_KEY = "sizemate:system";
 const LEGACY_UNIT_KEY = "sizemate:unit";
 const LARGE_KEY = "sizemate:large";
+const PROFILE_KEY = "sizemate:profile";
+
+/** Measurements a shopper chose to remember (Plus: size memory), in cm and kg. Stays on their device. */
+export interface SizeProfile {
+  v: 1;
+  measures: Record<string, number>;
+  preference: FitPreference;
+  savedAt: number;
+}
+
+export function readProfile(): SizeProfile | null {
+  try {
+    const value = JSON.parse(window.localStorage.getItem(PROFILE_KEY) ?? "null") as SizeProfile | null;
+    if (!value || value.v !== 1 || typeof value.measures !== "object") return null;
+    const measures = Object.fromEntries(Object.entries(value.measures).filter(([, n]) => typeof n === "number" && n > 0 && n < 1000));
+    const preference = value.preference === "snug" || value.preference === "relaxed" ? value.preference : "regular";
+    return Object.keys(measures).length ? { v: 1, measures, preference, savedAt: Number(value.savedAt) || 0 } : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveProfile(measures: Record<string, number>, preference: FitPreference): void {
+  // Merge, so measurements from a shoe chart and a shirt chart add up to one profile.
+  const merged = { ...(readProfile()?.measures ?? {}), ...measures };
+  write(PROFILE_KEY, JSON.stringify({ v: 1, measures: merged, preference, savedAt: Date.now() } satisfies SizeProfile));
+}
+
+function forgetProfile(): void {
+  try {
+    window.localStorage.removeItem(PROFILE_KEY);
+  } catch {
+    // nothing stored
+  }
+}
 const INITIALISED = "sizemateReady";
 
 function read(key: string): string | null {
@@ -294,6 +329,10 @@ export function init(root: HTMLElement, options: InitOptions = {}): void {
     // Typed values are kept in centimetres / kilograms so switching units keeps them.
     const values = new Map<string, number>();
     const base = (measure: string): Unit => (inputUnit(chart, measure, "metric") === "kg" ? "kg" : "cm");
+    const memory = root.hasAttribute("data-memory") && !options.preview;
+    const remember = form.querySelector<HTMLInputElement>("input[name='remember']");
+    const forget = root.querySelector<HTMLButtonElement>("[data-sizemate-forget]");
+    const yourSize = root.querySelector<HTMLElement>("[data-sizemate-yoursize]");
 
     const numberInput = (id: string, name: string, suffix: string, value: number | undefined, step = "0.1") => {
       const wrap = document.createElement("span");
@@ -412,6 +451,45 @@ export function init(root: HTMLElement, options: InitOptions = {}): void {
       }
     };
 
+    /** "Your size: M" on the button, from remembered measurements. */
+    const showYourSize = (result: FitResult | null) => {
+      if (!yourSize) return;
+      yourSize.hidden = !result;
+      yourSize.textContent = result ? fill(root.dataset.tYoursize ?? "[size]", { size: result.size }) : "";
+    };
+
+    if (memory) {
+      const profile = readProfile();
+      if (profile) {
+        for (const column of columns) {
+          const value = profile.measures[column.measure!];
+          if (value !== undefined) values.set(column.measure!, value);
+        }
+        const preferenceInput = form.querySelector<HTMLInputElement>(`input[name='preference'][value='${profile.preference}']`);
+        if (preferenceInput) preferenceInput.checked = true;
+        if (values.size) {
+          // recommendSize takes metric input units (cm, mm, kg): convert from the stored cm / kg.
+          const measurements = Object.fromEntries(
+            [...values].map(([measure, value]) => [measure, convertValue(value, base(measure), inputUnit(chart, measure, "metric"))]),
+          );
+          const remembered = recommendSize(chart, measurements, "metric", profile.preference);
+          showYourSize(remembered);
+          if (remembered) showResult(remembered);
+        }
+        if (forget) forget.hidden = false;
+      }
+      forget?.addEventListener("click", () => {
+        forgetProfile();
+        values.clear();
+        renderFields();
+        showYourSize(null);
+        resultBox.replaceChildren();
+        for (const row of Array.from(table.tBodies[0]?.rows ?? [])) row.classList.remove("is-recommended");
+        forget.hidden = true;
+        if (remember) remember.checked = false;
+      });
+    }
+
     renderFields();
     onSystemChange = () => {
       collect();
@@ -424,6 +502,11 @@ export function init(root: HTMLElement, options: InitOptions = {}): void {
       const result = recommendSize(chart, collect(), system, preference);
       showResult(result);
       if (result) track(root, "fit", { s: result.size, st: result.status });
+      if (memory && result && remember?.checked) {
+        saveProfile(Object.fromEntries(values), preference);
+        showYourSize(result);
+        if (forget) forget.hidden = false;
+      }
     });
   }
 

@@ -4,7 +4,9 @@ import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prism
 
 import prisma from "./db.server";
 import { syncPlan } from "./models/billing.server";
+import type { AdminGraphql } from "./models/graphql.server";
 import { publish } from "./models/publisher.server";
+import { startReconcileJob } from "./models/reconcile.server";
 import { getShop } from "./models/shop.server";
 
 export const apiVersion = ApiVersion.July26;
@@ -42,3 +44,13 @@ export const unauthenticated = shopify.unauthenticated;
 export const login = shopify.login;
 export const registerWebhooks = shopify.registerWebhooks;
 export const sessionStorage = shopify.sessionStorage;
+
+// Ends paid periods and the welcome period on time, even for merchants who never open the app.
+startReconcileJob(async (shop) => {
+  try {
+    const { admin } = await shopify.unauthenticated.admin(shop);
+    return admin as unknown as AdminGraphql;
+  } catch {
+    return null; // no offline session: the app is uninstalled
+  }
+});

@@ -56,8 +56,12 @@ Partner Dashboard'da **Apps › Sizemate › Distribution** altında **Shopify A
 | Plan adı | Aylık | Yıllık | Deneme | Özet |
 | --- | --- | --- | --- | --- |
 | Free | 0 | — | — | 2 tablo, 11 temel şablon, tema uyumu, tüm birimler, erişilebilirlik |
-| Pro | 4.99 USD | 49.90 USD | 7 gün | Sınırsız tablo, 60 şablon, tasarım stüdyosu, giyimde Fit Finder |
-| Plus | 9.99 USD | 99.90 USD | 7 gün | Her tabloda Fit Finder, çeviriler, Insights |
+| Pro | 4.99 USD | 49.90 USD | 7 gün | Her tabloda sınırsız Fit Finder, sınırsız tablo, 60 şablon, tasarım stüdyosu, markasız |
+| Plus | 9.99 USD | 99.90 USD | 7 gün | Pro + beden hafızası, Insights, çeviriler, öncelikli destek |
+
+**Hoş geldin dönemi:** Yeni kuran her mağaza 14 gün boyunca Plus'ın tüm özelliklerini kartsız kullanır. Bitmeden birkaç gün önce uygulama, o mağazanın kendi kullanımına göre neyin kapanacağını gösterir ("Fit Finder 3 tabloda kapanacak" gibi).
+
+**İptal ve plan düşürme:** Müşteri iptal ederse ya da daha ucuz plana geçerse, ödediği dönemin sonuna kadar planı açık kalır. Uygulama tarihi ve kapanacakları gösterir. Tarih gelince saatlik kontrol, uygulama hiç açılmasa bile mağazayı günceller. Shopify ödenmemiş bir faturayı dondurursa (FROZEN), ücretli özellikler hemen kapanır ve ödeme yapılınca geri açılır.
 
 Özellik listesini `app/lib/plans.ts` dosyasındaki `highlights` satırlarından kopyalayabilirsin. Uygulamadaki **Plans** sayfası mağaza sahibini doğrudan Shopify'ın plan seçme sayfasına götürür.
 

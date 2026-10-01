@@ -4,24 +4,28 @@ import { useEffect } from "react";
 import type { ActionFunctionArgs, HeadersFunction, LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData } from "react-router";
 
+import { AccessBanner } from "../components/AccessBanner";
 import { SetupGuide, type SetupStep } from "../components/SetupGuide";
 import { formatDate, PlanBadge } from "../components/ui";
 import { SUPPORT_EMAIL } from "../lib/brand";
 import { chartCount, PLANS } from "../lib/plans";
 import { buildPublication } from "../lib/publish";
 import { listCharts } from "../models/charts.server";
+import { accessNotice } from "../models/access.server";
 import { adminContext } from "../models/context.server";
 import { publish } from "../models/publisher.server";
 import { getShop, onboardingOf, settingsOf, updateOnboarding } from "../models/shop.server";
 import { getThemeStatus, themeEditorLinks } from "../models/theme.server";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { admin, shop, plan } = await adminContext(request);
+  const { admin, shop, plan, access } = await adminContext(request);
   const [record, stored, theme] = await Promise.all([getShop(shop), listCharts(shop), getThemeStatus(admin)]);
+  const notice = await accessNotice(shop, access, record);
   const charts = stored.map((s) => s.chart);
   const publication = buildPublication(charts, settingsOf(record), plan);
   return {
     plan,
+    notice,
     total: charts.length,
     live: publication.config.rules.length,
     paused: publication.paused.length,
@@ -124,6 +128,8 @@ export default function Home() {
         Create size chart
       </s-button>
 
+      <AccessBanner notice={data.notice} />
+
       {data.publishError && (
         <s-banner tone="critical" heading="Your latest changes aren't on your store yet">
           <s-paragraph>{data.publishError}</s-paragraph>
@@ -206,32 +212,32 @@ export default function Home() {
       </s-section>
 
       {data.plan === "free" && (
-        <s-section heading="Do more with Pro">
+        <s-section heading="Cut size returns with Pro">
           <s-stack gap="base">
             <s-unordered-list>
-              <s-list-item>Fit Finder: shoppers enter their measurements and get their size from your chart, with one click to select it.</s-list-item>
-              <s-list-item>The full template library, from plus sizes and jeans to bras, rings and dog harnesses.</s-list-item>
+              <s-list-item>Fit Finder on every chart: shoppers enter their measurements and get their size, with one click to select it.</s-list-item>
+              <s-list-item>Unlimited charts and the full library of 60 templates, from plus sizes and jeans to bras, rings and dog harnesses.</s-list-item>
               <s-list-item>Design studio: 7 styles, your colours and fonts, drawer and in-page layouts, a photo card beside the chart.</s-list-item>
-              <s-list-item>Unlimited charts, a fit scale, CSV import and no Sizemate branding.</s-list-item>
+              <s-list-item>No Sizemate branding, a runs small / large scale and CSV import.</s-list-item>
             </s-unordered-list>
             <s-stack direction="inline" gap="base">
               <s-button variant="primary" href="/app/plans">
-                Try Pro free for 7 days
+                See Pro
               </s-button>
             </s-stack>
           </s-stack>
         </s-section>
       )}
 
-      {data.plan === "pro" && (
-        <s-section heading="Size advice on every product with Plus">
+      {data.plan === "pro" && data.notice.source === "subscription" && (
+        <s-section heading="Turn returning shoppers into buyers with Plus">
           <s-stack gap="base">
             <s-paragraph>
-              Add the Fit Finder to shoes, bras, rings, pet products and your own charts, translate charts into every store language, and
-              see Insights: how often shoppers open your charts and which sizes they get.
+              Size memory shows returning shoppers their size on every product, without measuring again. Insights show which sizes shoppers
+              get and when your chart is missing one, and charts can be translated for every store language.
             </s-paragraph>
             <s-stack direction="inline" gap="base">
-              <s-button href="/app/plans">See the Plus plan</s-button>
+              <s-button href="/app/plans">See Plus</s-button>
             </s-stack>
           </s-stack>
         </s-section>

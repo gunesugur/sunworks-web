@@ -82,6 +82,11 @@
       "s2": "Veste piccolo. Consigliamo una taglia in più.",
       "l1": "Veste leggermente grande.",
       "l2": "Veste grande. Valuta una taglia in meno."
+    },
+    "memory": {
+      "remember": "Ricorda le mie misure su questo dispositivo",
+      "forget": "Dimentica le mie misure",
+      "your_size": "La tua taglia: [size]"
     }
   }
 }

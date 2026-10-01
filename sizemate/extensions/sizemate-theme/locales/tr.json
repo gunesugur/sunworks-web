@@ -82,6 +82,11 @@
       "s2": "Dar kalıp. Bir beden büyüğünü öneririz.",
       "l1": "Biraz geniş kalıp.",
       "l2": "Geniş kalıp. Bir beden küçüğünü düşünebilirsiniz."
+    },
+    "memory": {
+      "remember": "Ölçülerimi bu cihazda hatırla",
+      "forget": "Ölçülerimi unut",
+      "your_size": "Bedeniniz: [size]"
     }
   }
 }

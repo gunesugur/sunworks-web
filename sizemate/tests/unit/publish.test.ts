@@ -50,14 +50,14 @@ describe("buildPublication", () => {
     expect(only.fit).toBe(false);
   });
 
-  it("includes translations and the fit finder on Plus only", () => {
+  it("includes translations on Plus only, the Fit Finder from Pro", () => {
     const all = charts();
     const plus = buildPublication(all, DEFAULT_SETTINGS, "plus").charts[chartKey(all[2]!.id)]!;
     expect(plus.tr.de).toEqual({ t: "Schuhgrößen", cols: ["EU", "US", "UK", "Fußlänge"] });
     expect(plus.fit).toBe(true);
     const pro = buildPublication(all, DEFAULT_SETTINGS, "pro").charts[chartKey(all[2]!.id)]!;
     expect(pro.tr).toEqual({});
-    expect(pro.fit).toBe(false);
+    expect(pro.fit).toBe(true);
   });
 
   it("keeps a typical chart well under the metafield limit", () => {
@@ -95,18 +95,19 @@ describe("buildPublication v2", () => {
     expect(free).toMatchObject({ fs: null, img: null });
   });
 
-  it("offers the Fit Finder for clothing on Pro and for everything on Plus", () => {
+  it("offers the Fit Finder on every chart from Pro up", () => {
     const shoes = chartFromTemplate(getTemplate("womens-shoes")!);
     const tops = chartFromTemplate(getTemplate("womens-tops")!);
     const fit = (plan: "free" | "pro" | "plus") => Object.values(buildPublication([tops, shoes], DEFAULT_SETTINGS, plan).charts).map((c) => c.fit);
     expect(fit("free")).toEqual([false, false]);
-    expect(fit("pro")).toEqual([true, false]);
+    expect(fit("pro")).toEqual([true, true]);
     expect(fit("plus")).toEqual([true, true]);
   });
 
-  it("turns Insights counting on for Plus only", () => {
-    expect(buildPublication(charts(), DEFAULT_SETTINGS, "plus").config.ins).toBe(true);
-    expect(buildPublication(charts(), DEFAULT_SETTINGS, "pro").config.ins).toBe(false);
+  it("turns Insights counting and size memory on for Plus only", () => {
+    expect(buildPublication(charts(), DEFAULT_SETTINGS, "plus").config).toMatchObject({ ins: true, mem: true });
+    expect(buildPublication(charts(), DEFAULT_SETTINGS, "pro").config).toMatchObject({ ins: false, mem: false });
+    expect(buildPublication(charts(), DEFAULT_SETTINGS, "free").config).toMatchObject({ ins: false, mem: false });
     expect(buildPublication(charts(), DEFAULT_SETTINGS, "plus").config.v).toBe(2);
   });
 

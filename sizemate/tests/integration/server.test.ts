@@ -156,12 +156,15 @@ describe("publishing", () => {
 
 describe("billing", () => {
   it("reads the plan from Shopify and caches it briefly", async () => {
+    // A shop from before the welcome period, so the subscription alone decides.
+    await db.shop.create({ data: { shop: SHOP, welcomeUntil: null } });
     const admin = fakeAdmin({ subscriptions: [{ name: "Plus", status: "ACTIVE" }] });
-    expect(await syncPlan(SHOP, admin)).toEqual({ plan: "plus", changed: true });
-    expect(await syncPlan(SHOP, admin)).toEqual({ plan: "plus", changed: false });
+    expect(await syncPlan(SHOP, admin)).toMatchObject({ plan: "plus", changed: true });
+    expect(await syncPlan(SHOP, admin)).toMatchObject({ plan: "plus", changed: false });
     expect(admin.graphql).toHaveBeenCalledTimes(1);
     const downgrade = fakeAdmin({ subscriptions: [] });
-    expect(await syncPlan(SHOP, downgrade, { force: true })).toEqual({ plan: "free", changed: true });
+    // No paid period was reported (no currentPeriodEnd), so nothing to keep.
+    expect(await syncPlan(SHOP, downgrade, { force: true })).toMatchObject({ plan: "free", changed: true });
   });
 
   it("links to Shopify's plan picker", () => {

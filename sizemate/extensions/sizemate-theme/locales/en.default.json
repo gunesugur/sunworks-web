@@ -82,6 +82,11 @@
       "s2": "Runs small. We recommend one size up.",
       "l1": "Runs slightly large.",
       "l2": "Runs large. Consider one size down."
+    },
+    "memory": {
+      "remember": "Remember my measurements on this device",
+      "forget": "Forget my measurements",
+      "your_size": "Your size: [size]"
     }
   }
 }

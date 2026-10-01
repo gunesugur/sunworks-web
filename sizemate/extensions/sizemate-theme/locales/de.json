@@ -82,6 +82,11 @@
       "s2": "Fällt klein aus. Wir empfehlen eine Größe größer.",
       "l1": "Fällt etwas groß aus.",
       "l2": "Fällt groß aus. Eine Größe kleiner könnte besser passen."
+    },
+    "memory": {
+      "remember": "Meine Maße auf diesem Gerät merken",
+      "forget": "Meine Maße löschen",
+      "your_size": "Deine Größe: [size]"
     }
   }
 }

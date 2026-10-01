@@ -82,6 +82,11 @@
       "s2": "Valt klein. We raden een maat groter aan.",
       "l1": "Valt iets groot.",
       "l2": "Valt groot. Overweeg een maat kleiner."
+    },
+    "memory": {
+      "remember": "Mijn maten op dit apparaat onthouden",
+      "forget": "Mijn maten vergeten",
+      "your_size": "Jouw maat: [size]"
     }
   }
 }

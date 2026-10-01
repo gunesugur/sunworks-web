@@ -1,6 +1,7 @@
 import type { ActionFunctionArgs } from "react-router";
 
 import db from "../db.server";
+import { resetSubscription } from "../models/shop.server";
 import { authenticate } from "../shopify.server";
 
 /**
@@ -13,5 +14,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   console.log(`Received ${topic} webhook for ${shop}`);
   // Webhooks can arrive more than once, and after the session is already gone.
   if (session) await db.session.deleteMany({ where: { shop } });
+  // Shopify cancels the subscription on uninstall; a reinstall starts from Free.
+  await resetSubscription(shop);
   return new Response();
 };

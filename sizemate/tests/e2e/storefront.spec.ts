@@ -300,6 +300,55 @@ test.describe("v2 features", () => {
   });
 });
 
+test.describe("size memory (Plus)", () => {
+  test("remembers the shopper's measurements and shows their size on the button", async ({ page }) => {
+    await openStore(page, { plan: "plus" });
+    const trigger = page.getByRole("button", { name: /Size chart/ });
+    await trigger.click();
+    await page.getByRole("tab", { name: "Find my size" }).click();
+    await expect(page.getByLabel("Remember my measurements on this device")).toBeChecked();
+    await page.getByLabel("Bust").fill("90");
+    await page.getByLabel("Waist").fill("72");
+    await page.getByLabel("Hips").fill("96");
+    await page.getByRole("button", { name: "Find my size" }).click();
+    await expect(page.getByText("We recommend size M.")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.locator("[data-sizemate-yoursize]")).toHaveText("Your size: M");
+
+    // Another visit (or another product): the size is there before anything is clicked.
+    await page.reload();
+    await expect(page.locator("[data-sizemate-yoursize]")).toHaveText("Your size: M");
+    await expect(trigger).toHaveAccessibleName(/Your size: M/);
+    await trigger.click();
+    await page.getByRole("tab", { name: "Find my size" }).click();
+    await expect(page.getByLabel("Bust")).toHaveValue("90");
+    await expect(page.locator("tbody tr.is-recommended th")).toHaveText("M");
+
+    await page.getByRole("button", { name: "Forget my measurements" }).click();
+    await expect(page.locator("[data-sizemate-yoursize]")).toBeHidden();
+    expect(await page.evaluate(() => localStorage.getItem("sizemate:profile"))).toBeNull();
+  });
+
+  test("doesn't store anything when the shopper unticks the box", async ({ page }) => {
+    await openStore(page, { plan: "plus" });
+    await page.getByRole("button", { name: /Size chart/ }).click();
+    await page.getByRole("tab", { name: "Find my size" }).click();
+    await page.getByLabel("Remember my measurements on this device").uncheck();
+    await page.getByLabel("Bust").fill("90");
+    await page.getByRole("button", { name: "Find my size" }).click();
+    await expect(page.getByText(/We recommend size/)).toBeVisible();
+    expect(await page.evaluate(() => localStorage.getItem("sizemate:profile"))).toBeNull();
+  });
+
+  test("is not offered on Pro", async ({ page }) => {
+    await openStore(page, { plan: "pro" });
+    await page.getByRole("button", { name: "Size chart" }).click();
+    await page.getByRole("tab", { name: "Find my size" }).click();
+    await expect(page.getByLabel("Remember my measurements on this device")).toHaveCount(0);
+    await expect(page.locator("[data-sizemate-yoursize]")).toHaveCount(0);
+  });
+});
+
 test.describe("accessibility", () => {
   for (const tab of ["Size chart", "How to measure", "Find my size"]) {
     test(`has no axe violations on the "${tab}" tab`, async ({ page }) => {

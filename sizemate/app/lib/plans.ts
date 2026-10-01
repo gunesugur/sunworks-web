@@ -18,7 +18,7 @@ export type Feature =
   | "fitScale"
   | "csv"
   | "fitFinder"
-  | "fitFinderAll"
+  | "sizeMemory"
   | "translations"
   | "insights";
 
@@ -34,7 +34,10 @@ export interface Plan {
   highlights: readonly string[];
 }
 
+/** Shopify's free trial on paid plans (set in the Partner Dashboard). */
 export const TRIAL_DAYS = 7;
+/** New installs get every Plus feature for this long, no card needed (a "reverse trial"). */
+export const WELCOME_DAYS = 14;
 
 const PRO_FEATURES: readonly Feature[] = [
   "unlimitedCharts",
@@ -47,6 +50,17 @@ const PRO_FEATURES: readonly Feature[] = [
   "fitFinder",
 ];
 
+/*
+ * How the plans are cut:
+ * - Free is a complete, good-looking size chart (it earns installs and reviews)
+ *   but stops where a store grows: a third chart, more templates, its own look,
+ *   and the Fit Finder, the feature that pays for itself in fewer returns.
+ * - Pro is the plan most stores need: everything to sell more and return less.
+ * - Plus is for stores with traffic and more than one market: features that
+ *   pay off with scale (size memory for returning shoppers, insights,
+ *   translations) and hands-on help.
+ * Readability (accessibility, units, dark mode) is never paywalled.
+ */
 export const PLANS: Record<PlanId, Plan> = {
   free: {
     id: "free",
@@ -60,7 +74,7 @@ export const PLANS: Record<PlanId, Plan> = {
       "2 size charts on any number of products",
       "11 essential templates",
       "Matches your theme's fonts and colours, light or dark",
-      "How-to-measure guide with illustrations",
+      "Numbered how-to-measure illustrations",
       "Metric and imperial: cm, mm, inches, feet, kg and lb",
       "Accessible: keyboard, screen readers, larger text",
       "Shopper-facing text in 8 languages",
@@ -71,15 +85,14 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Pro",
     monthlyPrice: 4.99,
     yearlyPrice: 49.9,
-    tagline: "Every template, your design and a size finder for clothing.",
+    tagline: "Everything to sell more and cut size returns.",
     chartLimit: Number.POSITIVE_INFINITY,
     features: PRO_FEATURES,
     highlights: [
-      "Unlimited size charts and rules",
-      "The full library: 60 templates",
-      "Fit Finder for women's, men's, unisex and kids' clothing",
-      "Design studio: 7 styles, colours, fonts, drawer and inline layouts",
-      "Photo card next to the chart and a runs small / large scale",
+      "Fit Finder on every chart: shoppers get their size, unlimited",
+      "Unlimited size charts and the full library: 60 templates",
+      "Design studio: 7 styles, colours, fonts, drawer and in-page layouts",
+      "Photo card beside the chart and a runs small / large scale",
       "No Sizemate branding, CSV import and export",
     ],
   },
@@ -88,15 +101,15 @@ export const PLANS: Record<PlanId, Plan> = {
     name: "Plus",
     monthlyPrice: 9.99,
     yearlyPrice: 99.9,
-    tagline: "Size advice on every product, in every language, with insights.",
+    tagline: "For stores with returning shoppers and more than one market.",
     chartLimit: Number.POSITIVE_INFINITY,
-    features: [...PRO_FEATURES, "fitFinderAll", "translations", "insights"],
+    features: [...PRO_FEATURES, "sizeMemory", "translations", "insights"],
     highlights: [
       "Everything in Pro",
-      "Fit Finder on every chart: shoes, bras, rings, pets and your own",
+      "Size memory: returning shoppers see their size on every product",
+      "Insights: chart views, the sizes shoppers get, missing-size alerts",
       "Translate charts for every store language",
-      "Insights: chart views, Fit Finder use and the sizes shoppers get",
-      "Priority support",
+      "Priority support, and we set up your first charts for you",
     ],
   },
 };
@@ -111,8 +124,8 @@ export const FEATURE_LABELS: Record<Feature, string> = {
   chartImage: "Photo card",
   fitScale: "Fit scale",
   csv: "CSV import and export",
-  fitFinder: "Fit Finder for clothing",
-  fitFinderAll: "Fit Finder on every chart",
+  fitFinder: "Fit Finder",
+  sizeMemory: "Size memory",
   translations: "Chart translations",
   insights: "Insights",
 };
