@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import type { ChartTranslation, SizeChart } from "../lib/chart";
-import { valueOf } from "./ui";
+import { Select, valueOf } from "./ui";
 
 export interface StoreLanguage {
   locale: string;
@@ -38,14 +38,16 @@ export function TranslationsEditor({
 
   return (
     <s-stack gap="base">
-      <s-select label="Language" value={locale} onChange={(e) => setLocale(valueOf(e))} disabled={locked}>
-        {languages.map((language) => (
-          <s-option key={language.locale} value={language.locale}>
-            {language.name}
-            {translated(chart.translations[language.locale]) ? " ✓" : ""}
-          </s-option>
-        ))}
-      </s-select>
+      <Select
+        label="Language"
+        value={locale}
+        disabled={locked}
+        options={languages.map((language) => ({
+          value: language.locale,
+          label: `${language.name}${translated(chart.translations[language.locale]) ? " ✓" : ""}`,
+        }))}
+        onChange={setLocale}
+      />
       <s-text-field
         label="Title"
         placeholder={chart.title}

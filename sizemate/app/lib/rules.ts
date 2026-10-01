@@ -2,7 +2,7 @@
  * Which chart does a product get?
  *
  * This is the reference implementation of the storefront matching done in
- * extensions/sizemate-theme/snippets/sizemate-match.liquid. Both work on the
+ * extensions/sizemate-theme/snippets/sizemate-core.liquid. Both work on the
  * published rules (see publish.ts), and tests/liquid-parity.test.ts checks
  * that they always agree.
  *

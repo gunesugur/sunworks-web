@@ -12,6 +12,8 @@ Bu rehber uygulamayı sıfırdan yayına almak için yapman gerekenleri sırayla
 
 > Bu adımı senin yerine yapamadım: hesap senin adına açılıyor, e-posta doğrulaması ve yasal sözleşme onayı gerekiyor, ödeme ve vergi bilgisi de senin bilgilerin.
 
+**App Store kaydı (19 USD, bir kez):** Uygulamayı App Store'da yayınlayıp ücret almak için Partner hesabını bir kereye mahsus 19 USD ödeyerek App Store'a kaydetmen gerekiyor. Geliştirme ve test için bu ödemeye gerek yok. Shopify, 1 Ocak 2025'ten itibaren kazandığın ilk 1.000.000 USD'nin tamamını sana bırakıyor, üstü için %15 komisyon alıyor. Ödemelerden ayrıca %2,9 işlem ücreti kesiliyor.
+
 ## 2. Geliştirme mağazası (2 dakika)
 
 Partner Dashboard'da **Stores › Add store › Create development store** yolunu izle. Amacı olarak "Test an app or theme" seç. Bu mağaza ücretsiz. Test ödemeleri gerçek para çekmez.
@@ -19,6 +21,10 @@ Partner Dashboard'da **Stores › Add store › Create development store** yolun
 ## 3. Uygulamayı bilgisayarında çalıştır (15 dakika)
 
 Gerekenler: Node.js 22.12 veya üstü, Git ve Shopify CLI (`npm install -g @shopify/cli`).
+
+> **Windows:** PowerShell "running scripts is disabled" hatası verirse bir kez `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned` çalıştır. Zip'i açınca iç içe iki `sizemate` klasörü oluşursa `package.json` dosyasının bulunduğu klasöre gir.
+>
+> **Mağaza şifresi:** `npm run dev` "store password" sorarsa, geliştirme mağazasının vitrin şifresini gir. Şifre **Online Mağaza › Tercihler › Mağaza erişimi › Parola** alanında. Mağazayı açıkça belirtmek için: `npm run dev -- --store MAGAZAN.myshopify.com`
 
 ```bash
 git clone https://github.com/gunesugur/sunworks-web.git
@@ -55,7 +61,9 @@ Partner Dashboard'da **Apps › Sizemate › Distribution** altında **Shopify A
 
 Özellik listesini `app/lib/plans.ts` dosyasındaki `highlights` satırlarından kopyalayabilirsin. Uygulamadaki **Plans** sayfası mağaza sahibini doğrudan Shopify'ın plan seçme sayfasına götürür.
 
-Geliştirme mağazasında paralı planları ödeme yapmadan denemek için uygulamayı `SIZEMATE_DEV_PLAN=plus npm run dev` komutuyla başlat. Bu ayar sadece geliştirme ortamında çalışır, canlıda etkisizdir.
+Planlar, Dev Dashboard'da uygulama **Public distribution (Shopify App Store)** olarak ayarlandıktan sonra açılan **Pricing** bölümünde oluşturuluyor. Listeyi yayına göndermen gerekmiyor; taslak liste yeterli. Aynı organizasyona ait geliştirme mağazaları her planı **0 USD'ye** deneyebiliyor. Yani Plans sayfasındaki "Start 7-day free trial" düğmesine basıp onaylarsan uygulama planı algılamalı ve paralı özellikler açılmalı. Abonelik sistemini uçtan uca test etmenin yolu bu.
+
+Plan oluşturmadan da paralı planları ödeme yapmadan denemek için uygulamayı `SIZEMATE_DEV_PLAN=plus npm run dev` komutuyla başlat (Windows PowerShell'de: `$env:SIZEMATE_DEV_PLAN="plus"; npm run dev`). Bu ayar sadece geliştirme ortamında çalışır, canlıda etkisizdir.
 
 ## 5. Sunucuya yükleme
 

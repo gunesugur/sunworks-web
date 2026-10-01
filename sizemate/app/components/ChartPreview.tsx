@@ -5,13 +5,13 @@
  */
 import { useId, useMemo, useState } from "react";
 
-import foot from "../../extensions/sizemate-theme/assets/diagram-foot.svg?url";
-import garment from "../../extensions/sizemate-theme/assets/diagram-garment.svg?url";
-import hand from "../../extensions/sizemate-theme/assets/diagram-hand.svg?url";
-import head from "../../extensions/sizemate-theme/assets/diagram-head.svg?url";
-import legs from "../../extensions/sizemate-theme/assets/diagram-legs.svg?url";
-import pet from "../../extensions/sizemate-theme/assets/diagram-pet.svg?url";
-import torso from "../../extensions/sizemate-theme/assets/diagram-torso.svg?url";
+import foot from "../storefront/diagrams/foot.svg?url";
+import garment from "../storefront/diagrams/garment.svg?url";
+import hand from "../storefront/diagrams/hand.svg?url";
+import head from "../storefront/diagrams/head.svg?url";
+import legs from "../storefront/diagrams/legs.svg?url";
+import pet from "../storefront/diagrams/pet.svg?url";
+import torso from "../storefront/diagrams/torso.svg?url";
 import { resolveDiagram, type SizeChart } from "../lib/chart";
 import { fitColumns, recommendSize, type FitPreference, type FitResult } from "../lib/fit";
 import { getMeasure } from "../lib/measures";

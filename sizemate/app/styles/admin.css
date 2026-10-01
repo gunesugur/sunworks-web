@@ -37,11 +37,12 @@
   border-radius: 8px;
 }
 
-/* The preview reuses the storefront stylesheet; show the dialog inline. */
+/* The preview reuses the storefront stylesheet; show the dialog inline and compact. */
 .sizemate-preview {
   flex-direction: column;
   gap: 12px;
   margin: 0;
+  font-size: 13px;
 }
 
 .sizemate-preview .sizemate-dialog {
@@ -49,22 +50,32 @@
   display: block;
   width: 100%;
   max-height: none;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
   animation: none;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .sizemate-preview .sizemate-panel { max-height: none; }
-.sizemate-preview .sizemate-header { padding: 16px 16px 8px; }
-.sizemate-preview .sizemate-tabs { padding: 0 8px; }
-.sizemate-preview .sizemate-body { padding: 12px 16px 16px; }
-.sizemate-preview .sizemate-guide { grid-template-columns: 1fr; }
-.sizemate-preview .sizemate-diagram { max-width: 140px; }
-.sizemate-preview .sizemate-trigger { align-self: var(--sm-align, flex-start); pointer-events: none; }
+.sizemate-preview .sizemate-header { padding: 14px 14px 6px; }
+.sizemate-preview .sizemate-title { font-size: 15px; }
+.sizemate-preview .sizemate-tabs { padding: 0 6px; gap: 0; }
+.sizemate-preview .sizemate-tab { padding: 8px 8px; font-size: 13px; }
+.sizemate-preview .sizemate-body { padding: 12px 14px 14px; }
+.sizemate-preview .sizemate-units { margin-bottom: 10px; }
+.sizemate-preview .sizemate-unit-button { min-width: 40px; padding: 3px 10px; font-size: 12px; }
+.sizemate-preview .sizemate-table { font-size: 12.5px; }
+.sizemate-preview .sizemate-table thead th { font-size: 12px; }
+.sizemate-preview .sizemate-table th,
+.sizemate-preview .sizemate-table td { padding: 7px 9px; }
+.sizemate-preview .sizemate-note { font-size: 12px; }
+.sizemate-preview .sizemate-guide { grid-template-columns: 1fr; gap: 12px; }
+.sizemate-preview .sizemate-diagram { max-width: 120px; }
+.sizemate-preview .sizemate-fit-fields { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+.sizemate-preview .sizemate-footer { padding: 8px 14px; }
+.sizemate-preview .sizemate-trigger { align-self: flex-start; pointer-events: none; }
 .sizemate-preview.sizemate--align-center .sizemate-trigger { align-self: center; }
 .sizemate-preview.sizemate--align-end .sizemate-trigger { align-self: flex-end; }
-.sizemate-preview .sizemate-table th,
-.sizemate-preview .sizemate-table td { padding: 8px 10px; }
 
 .sm-template-table {
   width: 100%;

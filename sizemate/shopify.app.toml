@@ -1,26 +1,25 @@
-# Shopify app configuration. `shopify app config link` fills in client_id
-# and the URLs for your own app; see docs/SETUP.tr.md.
-client_id = ""
-name = "Sizemate"
-handle = "sizemate"
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "d7df366dcc87d5b1dc6e0666dd08e584"
+name = "sizemate"
 application_url = "https://example.com"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true
 include_config_on_deploy = true
+automatically_update_urls_on_dev = true
 
 [access_scopes]
 # read_products: collection/product pickers and assignment suggestions
 # read_themes:   check whether the app embed is switched on (setup guide)
 # read_locales:  list store languages for chart translations
-scopes = "read_products,read_themes,read_locales"
+scopes = "read_locales,read_products,read_themes"
 
 [auth]
-redirect_urls = ["https://example.com/auth/callback"]
+redirect_urls = [ "https://example.com/auth/callback" ]
 
 [webhooks]
-api_version = "2026-07"
+api_version = "2026-10"
 
   [[webhooks.subscriptions]]
   topics = ["app/uninstalled"]

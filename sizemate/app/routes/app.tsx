@@ -5,7 +5,8 @@ import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 
 import adminStyles from "../styles/admin.css?url";
-import storefrontStyles from "../../extensions/sizemate-theme/assets/sizemate.css?url";
+import storefrontStyles from "../storefront/sizemate.css?url";
+import { useInAppLinks } from "../components/useInAppLinks";
 import { adminContext } from "../models/context.server";
 
 export const links: LinksFunction = () => [
@@ -20,6 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
+  useInAppLinks();
 
   return (
     <AppProvider apiKey={apiKey}>

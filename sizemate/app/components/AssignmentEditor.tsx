@@ -2,7 +2,7 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { useState } from "react";
 
 import { LIMITS, type Assignment, type ResourceRef } from "../lib/chart";
-import { valueOf, valuesOf } from "./ui";
+import { Choices, valueOf } from "./ui";
 
 export interface Suggestions {
   productTypes: string[];
@@ -131,17 +131,16 @@ export function AssignmentEditor({
   const set = (patch: Partial<Assignment>) => onChange({ ...assignment, ...patch });
   return (
     <s-stack gap="base">
-      <s-choice-list
+      <Choices
         label="Show this chart on"
-        labelAccessibilityVisibility="exclusive"
-        values={[assignment.mode]}
-        onChange={(e) => set({ mode: valuesOf(e)[0] === "conditions" ? "conditions" : "all" })}
-      >
-        <s-choice value="all">All products</s-choice>
-        <s-choice value="conditions">
-          Selected products, collections, types, vendors or tags
-        </s-choice>
-      </s-choice-list>
+        hideLabel
+        value={assignment.mode}
+        options={[
+          { value: "all", label: "All products" },
+          { value: "conditions", label: "Selected products, collections, types, vendors or tags" },
+        ]}
+        onChange={(mode) => set({ mode })}
+      />
 
       {assignment.mode === "conditions" && (
         <s-stack gap="base">

@@ -53,3 +53,80 @@ export function formatDate(value: string | Date | null | undefined): string {
   const date = typeof value === "string" ? new Date(value) : value;
   return new Intl.DateTimeFormat("en", { dateStyle: "medium", timeStyle: "short" }).format(date);
 }
+
+export interface Option<T extends string> {
+  value: T;
+  label: string;
+}
+
+/**
+ * Radio-style choice list. The current value is marked on each choice
+ * (`selected`) rather than through the list's `values` array, which is lost
+ * when React renders before the Polaris script has upgraded the element.
+ */
+export function Choices<T extends string>({
+  label,
+  hideLabel = false,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  hideLabel?: boolean;
+  value: T;
+  options: readonly Option<T>[];
+  onChange: (value: T) => void;
+}) {
+  return (
+    <s-choice-list
+      label={label}
+      labelAccessibilityVisibility={hideLabel ? "exclusive" : "visible"}
+      onChange={(e) => {
+        const next = valuesOf(e)[0];
+        if (next) onChange(next as T);
+      }}
+    >
+      {options.map((option) => (
+        <s-choice key={option.value} value={option.value} selected={option.value === value}>
+          {option.label}
+        </s-choice>
+      ))}
+    </s-choice-list>
+  );
+}
+
+/** Select whose current option is marked with `selected`, for the same reason as Choices. */
+export function Select<T extends string>({
+  label,
+  hideLabel = false,
+  details,
+  value,
+  options,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  hideLabel?: boolean;
+  details?: string;
+  value: T;
+  options: readonly Option<T>[];
+  disabled?: boolean;
+  onChange: (value: T) => void;
+}) {
+  return (
+    <s-select
+      label={label}
+      labelAccessibilityVisibility={hideLabel ? "exclusive" : "visible"}
+      details={details}
+      value={value}
+      disabled={disabled}
+      onChange={(e) => onChange(valueOf(e) as T)}
+    >
+      {options.map((option) => (
+        <s-option key={option.value} value={option.value} selected={option.value === value}>
+          {option.label}
+        </s-option>
+      ))}
+    </s-select>
+  );
+}

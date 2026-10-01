@@ -8,7 +8,7 @@ import { AssignmentEditor } from "../components/AssignmentEditor";
 import { ChartPreview } from "../components/ChartPreview";
 import { TableEditor } from "../components/TableEditor";
 import { TranslationsEditor } from "../components/TranslationsEditor";
-import { checkedOf, FeatureBadge, UpgradeCallout, valueOf } from "../components/ui";
+import { checkedOf, FeatureBadge, Select, UpgradeCallout, valueOf } from "../components/ui";
 import { DIAGRAMS, resolveDiagram, type GuideDiagram, type SizeChart } from "../lib/chart";
 import { chartToCsv, importCsv } from "../lib/csv";
 import { changeUnit } from "../lib/editor";
@@ -204,7 +204,7 @@ export default function ChartEditor() {
   const autoDiagram = resolveDiagram({ ...chart, guide: { ...chart.guide, diagram: "auto" } });
 
   return (
-    <s-page heading={chart.name || "Size chart"}>
+    <s-page heading={chart.name || "Size chart"} inlineSize="large">
       <s-link slot="breadcrumb-actions" href="/app/charts">
         Size charts
       </s-link>
@@ -286,14 +286,15 @@ export default function ChartEditor() {
             </s-stack>
           )}
           <s-grid gridTemplateColumns="repeat(auto-fit, minmax(220px, 1fr))" gap="base" alignItems="end">
-            <s-select
+            <Select
               label="Measurements are in"
               value={chart.unit}
-              onChange={(e) => setChart((current) => changeUnit(current, valueOf(e) === "in" ? "in" : "cm", convertOnSwitch))}
-            >
-              <s-option value="cm">Centimetres (cm)</s-option>
-              <s-option value="in">Inches (in)</s-option>
-            </s-select>
+              options={[
+                { value: "cm", label: "Centimetres (cm)" },
+                { value: "in", label: "Inches (in)" },
+              ]}
+              onChange={(unit) => setChart((current) => changeUnit(current, unit, convertOnSwitch))}
+            />
             <s-checkbox
               label="Convert the numbers when I switch"
               checked={convertOnSwitch}
@@ -328,17 +329,15 @@ export default function ChartEditor() {
           />
           {chart.guide.enabled && (
             <>
-              <s-select
+              <Select
                 label="Picture"
                 value={chart.guide.diagram}
-                onChange={(e) => update({ guide: { ...chart.guide, diagram: valueOf(e) as GuideDiagram } })}
-              >
-                {DIAGRAMS.map((d) => (
-                  <s-option key={d} value={d}>
-                    {d === "auto" ? `Automatic (${DIAGRAM_LABELS[autoDiagram].toLowerCase()})` : DIAGRAM_LABELS[d]}
-                  </s-option>
-                ))}
-              </s-select>
+                options={DIAGRAMS.map((d) => ({
+                  value: d,
+                  label: d === "auto" ? `Automatic (${DIAGRAM_LABELS[autoDiagram].toLowerCase()})` : DIAGRAM_LABELS[d],
+                }))}
+                onChange={(diagram) => update({ guide: { ...chart.guide, diagram } })}
+              />
               <s-text-area
                 label="Your own tips (optional)"
                 rows={3}
@@ -412,15 +411,16 @@ export default function ChartEditor() {
       </s-section>
 
       <s-section slot="aside" heading="Status">
-        <s-select
+        <Select
           label="Status"
-          labelAccessibilityVisibility="exclusive"
+          hideLabel
           value={chart.status}
-          onChange={(e) => update({ status: valueOf(e) === "draft" ? "draft" : "active" })}
-        >
-          <s-option value="active">Active</s-option>
-          <s-option value="draft">Draft</s-option>
-        </s-select>
+          options={[
+            { value: "active", label: "Active" },
+            { value: "draft", label: "Draft" },
+          ]}
+          onChange={(status) => update({ status })}
+        />
         <s-box paddingBlockStart="small-200">
           <s-text color="subdued">{chart.status === "draft" ? "Drafts are hidden from shoppers." : "Shown on your store after you save."}</s-text>
         </s-box>

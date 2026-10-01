@@ -27,28 +27,32 @@ function ColumnTypeSelect({ value, label, onChange }: { value: string; label: st
     <s-select label={`Type of ${label || "column"}`} labelAccessibilityVisibility="exclusive" value={value} onChange={(e) => onChange(valueOf(e))}>
       <s-option-group label="Body measurements">
         {BODY.map((m) => (
-          <s-option key={m.key} value={m.key}>
+          <s-option key={m.key} value={m.key} selected={m.key === value}>
             {m.label}
           </s-option>
         ))}
       </s-option-group>
       <s-option-group label="Garment measurements">
         {GARMENT.map((m) => (
-          <s-option key={m.key} value={m.key}>
+          <s-option key={m.key} value={m.key} selected={m.key === value}>
             {m.label}
           </s-option>
         ))}
       </s-option-group>
       <s-option-group label="Pets">
         {PET.map((m) => (
-          <s-option key={m.key} value={m.key}>
+          <s-option key={m.key} value={m.key} selected={m.key === value}>
             {m.label}
           </s-option>
         ))}
       </s-option-group>
       <s-option-group label="Other">
-        <s-option value="other">Other measurement</s-option>
-        <s-option value="text">Text (not converted)</s-option>
+        <s-option value="other" selected={value === "other"}>
+          Other measurement
+        </s-option>
+        <s-option value="text" selected={value === "text"}>
+          Text (not converted)
+        </s-option>
       </s-option-group>
     </s-select>
   );
