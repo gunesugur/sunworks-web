@@ -50,7 +50,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
 
     <Notched corner="tr" nw="calc(var(--aside) + var(--hero-gap))" nh="var(--hero-nh)" class="hero__media" hover={false}>
       <div class="hero__img" data-parallax="0.06">
-        <Img image={home.hero.image} widths={[640, 960, 1284, 1920, 2400]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
+        <Img image={home.hero.image} widths={[640, 960, 1284, 1920, 2568]} sizes="(max-width: 1440px) 92vw, 1284px" priority />
       </div>
       <ul class="hero__tags" slot="overlay" aria-label={s.tags}>
         {
@@ -125,7 +125,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   <!-- Two notched images -->
   <section class="duo container" aria-label={`${home.duo.firstTag} / ${home.duo.secondTag}`}>
     <Notched corner="tr" class="duo__a" ratio="1 / 1">
-      <Img image={home.duo.first} widths={[400, 800]} sizes="(max-width: 900px) 92vw, 401px" />
+      <Img image={home.duo.first} widths={[400, 800, 1200, 1600]} sizes="(max-width: 900px) 92vw, 401px" />
       <ArrowButton slot="corner" href={home.duo.link.href} label={home.duo.link.label} />
       <Tag slot="overlay" variant="solid" class="duo__tag duo__tag--a">{home.duo.firstTag}</Tag>
     </Notched>
@@ -139,7 +139,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   <section class="approach container section" aria-labelledby="approach-title">
     <div class="approach__media" data-reveal="scale">
       <Notched corner="tl" ratio="591 / 627" fit>
-        <Img image={home.approach.image} widths={[480, 800, 1200]} sizes="(max-width: 900px) 92vw, 591px" />
+        <Img image={home.approach.image} widths={[480, 800, 1200, 1600]} sizes="(max-width: 900px) 92vw, 591px" />
         <Tag slot="corner" variant="outline">{home.approach.tag}</Tag>
       </Notched>
     </div>
@@ -347,7 +347,7 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
   <section class="closing container" aria-labelledby="closing-title">
     <Notched corner="tr" fit class="closing__media" ratio="1284 / 574">
       <div class="closing__img" data-parallax="0.05">
-        <Img image={home.closing.image} widths={[640, 960, 1284, 1920, 2400]} sizes="(max-width: 1440px) 92vw, 1284px" />
+        <Img image={home.closing.image} widths={[640, 960, 1284, 1920, 2568]} sizes="(max-width: 1440px) 92vw, 1284px" />
       </div>
       <div slot="corner" class="closing__text">
         <h2 id="closing-title" class="closing__title">{home.closing.title}</h2>
