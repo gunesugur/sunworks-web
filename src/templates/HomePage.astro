@@ -1234,7 +1234,9 @@ const ratios = ['1 / 1', '4 / 5', '5 / 4', '4 / 3', '1 / 1', '4 / 5'];
     display: grid;
     gap: 0.25rem;
     margin-bottom: var(--section);
+    /* Clip the sideways drift only: letters like g, p and y hang below the line box. */
     overflow: hidden;
+    overflow: clip visible;
     user-select: none;
   }
 
