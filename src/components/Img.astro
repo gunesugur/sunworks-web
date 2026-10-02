@@ -17,8 +17,8 @@ const dark = resolveDarkImage(image);
 
 /** AVIF first (smallest), WebP for the rest; quality tuned per codec to look the same. */
 const FORMATS = [
-  { format: 'avif', type: 'image/avif', quality: 58 },
-  { format: 'webp', type: 'image/webp', quality: 80 },
+  { format: 'avif', type: 'image/avif', quality: 64 },
+  { format: 'webp', type: 'image/webp', quality: 84 },
 ] as const;
 
 const build = async (img: ResolvedImage) =>

@@ -76,3 +76,5 @@ Her iki kaynak da `src/content/schema.ts` içindeki aynı şemayla doğrulanır.
 ## Görseller
 
 Fotoğraflar SUN | WORKS için özel olarak üretildi. Her görselin açık ve koyu tema için iki sürümü var (`src/assets/images/<ad>.webp` ve `<ad>-dark.webp`). Sanity'de koyu sürüm, görsel alanındaki "Dark mode image" alanına yüklenir.
+
+Yeni görsel yüklerken genişliği en az 2500 piksel olsun; retina ekranlarda büyük görseller ancak böyle net görünür. Mevcut görseller orijinal PNG'lerden yapay zekâyla 2 kat büyütüldü ve bir kez, kalite 92 WebP olarak kaydedildi. Site her derlemede bunlardan AVIF ve WebP boyları üretir.
